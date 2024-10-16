@@ -22,5 +22,20 @@ namespace TimerTracker.Models
 		public Project Project { get; set; }
 		public string Description { get; set; }
 
+		public RecordActivity()
+		{
+			GuidId = Guid.NewGuid();
+		}
+		public RecordActivity(DateTime startTime, int activityId, int projectId, string description = "") : this()
+		{
+			StartTime = startTime;
+			ActivityId = activityId;
+			ProjectId = projectId;
+			Description = description;
+		}
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int projectId, string description = "") : this(startTime, activityId, projectId, description)
+		{
+			GuidId = guidId;
+		}
 	}
 }

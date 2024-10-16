@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using TimerTracker.Models;
 using TimerTracker.Providers;
 
@@ -26,10 +28,25 @@ namespace TimerTracker
 
 		private void btnActivate_Click(object sender, RoutedEventArgs e)
 		{
-			lblActivity.Content = ((Activity)cmbActivities.SelectedItem).Name;
-			lblProject.Content = ((Project)cmbProjects.SelectedItem).Name;
-			lblStartTime_time.Content = DateTime.Now.ToString("HH:mm:ss");
-			lblStartTime_date.Content = DateTime.Now.ToString("dd.MM.yyyy");
+			var dateActivity = DateTime.Now;
+			var activity = ((Activity)cmbActivities.SelectedItem);
+			var project = ((Project)cmbProjects.SelectedItem);
+
+			lblActivity.Content = activity.Name;
+			lblProject.Content = project.Name;
+			lblStartTime_time.Content = dateActivity.ToString("HH:mm:ss");
+			lblStartTime_date.Content = dateActivity.ToString("dd.MM.yyyy");
+
+			var description = getTextFromRichTextBox(rtbDescription);
+
+			var record = new RecordActivity(dateActivity, activity.Id, project.Id, description);
+			_databaseProvider.SaveRecord(record);
+		}
+
+		private string getTextFromRichTextBox(RichTextBox richTextBox)
+		{
+			TextRange textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+			return textRange.Text;
 		}
 	}
 }

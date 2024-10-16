@@ -20,5 +20,11 @@ namespace TimerTracker.Providers
 		{
 			return _mainDatacontext.Projects.ToList();
 		}
+
+		public void SaveRecord(RecordActivity recordActivity)
+		{
+			_mainDatacontext.RecordActivities.Add(recordActivity);
+			_mainDatacontext.SaveChanges();
+		}
 	}
 }
