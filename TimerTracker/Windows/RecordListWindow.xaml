@@ -1,0 +1,20 @@
+﻿<Window x:Class="TimerTracker.Windows.RecordListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimerTracker.Windows"
+        mc:Ignorable="d"
+        Title="RecordListWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" x:Name="dtgRecordActivities"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label Content="Rows"/>
+            <Label Content="0" x:Name="lblCount"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,9 +1,7 @@
 ﻿using Ninject;
-using System.Configuration;
-using System.Data;
-using System.Threading;
 using System.Windows;
 using TimerTracker.DataAccess;
+using TimerTracker.Windows;
 
 namespace TimerTracker
 {
@@ -23,7 +21,7 @@ namespace TimerTracker
 		{
 			configureContainer();
 
-			var aaa= _container.Get<MainDatacontext>(); 
+			//var aaa= _container.Get<MainDatacontext>(); 
 			Current.MainWindow = _container.Get<MainWindow>();
 			Current.MainWindow.Show();
 		}
@@ -33,7 +31,9 @@ namespace TimerTracker
 			_container = new StandardKernel();
 
 			_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
+
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
+			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 		}
 	}
 

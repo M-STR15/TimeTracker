@@ -1,4 +1,7 @@
-﻿using TimerTracker.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System.Windows;
+using TimerTracker.DataAccess;
 using TimerTracker.Models;
 
 namespace TimerTracker.Providers
@@ -19,6 +22,15 @@ namespace TimerTracker.Providers
 		public List<Project> GetProjects()
 		{
 			return _mainDatacontext.Projects.ToList();
+		}
+
+		public List<RecordActivity> GetRecords()
+		{
+			var recordActivities = _mainDatacontext.RecordActivities
+				.Include(x => x.Project)
+				.Include(x => x.Activity).ToList();
+
+			return recordActivities;
 		}
 
 		public void SaveRecord(RecordActivity recordActivity)

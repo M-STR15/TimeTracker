@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using TimerTracker.Models;
 using TimerTracker.Providers;
+using TimerTracker.Windows;
 
 namespace TimerTracker
 {
@@ -47,6 +48,12 @@ namespace TimerTracker
 		{
 			TextRange textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 			return textRange.Text;
+		}
+
+		private void mbtnRecordList_Click(object sender, RoutedEventArgs e)
+		{
+			var report = new RecordListWindow(_databaseProvider);
+			report.ShowDialog();
 		}
 	}
 }
