@@ -11,7 +11,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" x:Name="dtgRecordActivities"/>
+        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" x:Name="dtgRecordActivities" IsReadOnly="True"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label Content="Rows"/>
             <Label Content="0" x:Name="lblCount"/>
