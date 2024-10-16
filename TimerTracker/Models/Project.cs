@@ -13,5 +13,15 @@ namespace TimerTracker.Models
 		public string Description { get; set; }
 
 		public ICollection<RecordActivity> Activities { get; set; }
+
+		public Project()
+		{ }
+
+		public Project(int id, string name, string description = "")
+		{
+			Id = id;
+			Name = name;
+			Description = description;
+		}
 	}
 }

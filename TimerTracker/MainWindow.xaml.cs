@@ -1,13 +1,6 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using TimerTracker.Models;
+using TimerTracker.Providers;
 
 namespace TimerTracker
 {
@@ -16,9 +9,27 @@ namespace TimerTracker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public MainWindow()
+		private DatabaseProvider _databaseProvider;
+		public MainWindow(DatabaseProvider databaseProvider)
 		{
 			InitializeComponent();
+			_databaseProvider = databaseProvider;
+
+			cmbActivities.ItemsSource = _databaseProvider.GetActivities();
+			cmbActivities.DisplayMemberPath = "Name";
+			cmbActivities.SelectedIndex = 0;
+
+			cmbProjects.ItemsSource = _databaseProvider.GetProjects();
+			cmbProjects.DisplayMemberPath = "Name";
+			cmbProjects.SelectedIndex = 0;
+		}
+
+		private void btnActivate_Click(object sender, RoutedEventArgs e)
+		{
+			lblActivity.Content = ((Activity)cmbActivities.SelectedItem).Name;
+			lblProject.Content = ((Project)cmbProjects.SelectedItem).Name;
+			lblStartTime_time.Content = DateTime.Now.ToString("HH:mm:ss");
+			lblStartTime_date.Content = DateTime.Now.ToString("dd.MM.yyyy");
 		}
 	}
 }

@@ -1,18 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 using TimerTracker.Models;
 
 namespace TimerTracker.DataAccess
 {
-	internal class MainDatacontext : DbContext
+	public class MainDatacontext : DbContext
 	{
+		private ModelBuilder _modelBuilder { get; set; }
+
 		public DbSet<Activity> Activities { get; set; }
 		public DbSet<Project> Projects { get; set; }
+		public DbSet<RecordActivity> RecordActivities { get; set; }
 
 		public string DbPath { get; }
 
@@ -27,5 +24,32 @@ namespace TimerTracker.DataAccess
 		// special "local" folder for your platform.
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
 			=> options.UseSqlite($"Data Source={DbPath}");
+
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			_modelBuilder = modelBuilder;
+			insertDefaultValues_Activities();
+			insertDefaultValues_Projects();
+		}
+
+		private void insertDefaultValues_Activities()
+		{
+			_modelBuilder.Entity<Activity>()
+				.HasData(
+				new Activity(1, "Start"),
+				new Activity(2, "Pause"),
+				new Activity(3, "Stop")
+				);
+		}
+
+		private void insertDefaultValues_Projects()
+		{
+			_modelBuilder.Entity<Project>()
+				.HasData(
+				new Project(1, "Project 1"),
+				new Project(2, "Project 2")
+				);
+		}
 	}
 }

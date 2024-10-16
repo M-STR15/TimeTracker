@@ -1,12 +1,139 @@
-﻿<Window x:Class="TimerTracker.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TimerTracker"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+﻿<Window
+    x:Class="TimerTracker.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:TimerTracker"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Timer tracker"
+    Width="255"
+    Height="325"
+    mc:Ignorable="d">
 
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style x:Key="lblMainTitle" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style x:Key="lblTitle" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+
+        <Style x:Key="lblGrid" TargetType="Label">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label
+            Grid.Row="0"
+            Content="Project"
+            Style="{StaticResource lblMainTitle}" />
+        <ComboBox x:Name="cmbProjects" Grid.Row="1" />
+        <Label
+            Grid.Row="2"
+            Content="Activity"
+            Style="{StaticResource lblMainTitle}" />
+        <ComboBox x:Name="cmbActivities" Grid.Row="3" />
+        <Button
+            x:Name="btnActivate"
+            Grid.Row="4"
+            Click="btnActivate_Click"
+            Content="Activate" />
+        <Label
+            Grid.Row="5"
+            Content="Current setting"
+            Style="{StaticResource lblMainTitle}" />
+        <Border
+            Grid.Row="6"
+            Margin="5"
+            BorderBrush="Gray"
+            BorderThickness="2">
+            <Grid Grid.Row="6">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="Project"
+                    Style="{StaticResource lblTitle}" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Content="Activity"
+                    Style="{StaticResource lblTitle}" />
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Content="Start time"
+                    Style="{StaticResource lblTitle}" />
+
+                <Label
+                    x:Name="lblProject"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Style="{StaticResource lblGrid}"
+                    Content="xxxxx" />
+                <Label
+                    x:Name="lblActivity"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                       Style="{StaticResource lblGrid}"
+                    Content="xxxxx" />
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Label
+                        x:Name="lblStartTime_time"
+                        Grid.Row="0"
+                        Margin="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="xxxxx" />
+                    <Label
+                        x:Name="lblStartTime_date"
+                        Grid.Row="1"
+                        Margin="0"
+                        HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                        Content="xxxxx" />
+                </Grid>
+
+            </Grid>
+        </Border>
     </Grid>
 </Window>
