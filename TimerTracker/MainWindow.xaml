@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Timer tracker"
     Width="270"
-    Height="495"
+    Height="430"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -20,6 +20,7 @@
         </Style>
         <Style x:Key="lblTitle" TargetType="Label">
             <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="5" />
@@ -44,9 +45,6 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Reports">
@@ -56,29 +54,38 @@
                     Header="Record list" />
             </MenuItem>
         </Menu>
-
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Project" Style="{StaticResource lblMainTitle}" />
+            <ComboBox x:Name="cmbProjects" Grid.Row="1" />
+            <Label
+                Grid.Column="1"
+                Content="Activity"
+                Style="{StaticResource lblMainTitle}" />
+            <ComboBox
+                x:Name="cmbActivities"
+                Grid.Row="1"
+                Grid.Column="1" />
+        </Grid>
         <Label
-            Grid.Row="1"
-            Content="Project"
-            Style="{StaticResource lblMainTitle}" />
-        <ComboBox x:Name="cmbProjects" Grid.Row="2" />
-        <Label
-            Grid.Row="3"
-            Content="Activity"
-            Style="{StaticResource lblMainTitle}" />
-        <ComboBox x:Name="cmbActivities" Grid.Row="4" />
-        <Label
-            Grid.Row="5"
+            Grid.Row="2"
             Content="Description"
             Style="{StaticResource lblMainTitle}" />
         <RichTextBox
             x:Name="rtbDescription"
-            Grid.Row="6"
+            Grid.Row="3"
             Height="40"
             Margin="5" />
         <Button
             x:Name="btnActivate"
-            Grid.Row="7"
+            Grid.Row="4"
             Height="30"
             Click="btnActivate_Click">
             <StackPanel Orientation="Horizontal">
@@ -87,11 +94,11 @@
             </StackPanel>
         </Button>
         <Label
-            Grid.Row="8"
+            Grid.Row="5"
             Content="Current setting"
             Style="{StaticResource lblMainTitle}" />
         <Border
-            Grid.Row="9"
+            Grid.Row="6"
             Margin="5"
             BorderBrush="Gray"
             BorderThickness="2">
@@ -105,12 +112,12 @@
                     <Label Content="Project" Style="{StaticResource lblTitle}" />
                     <Label
                         x:Name="lblProject"
-                        Content="xxxxx"
+                        Content=" "
                         Style="{StaticResource lblGrid}" />
                     <Label Content="Activity" Style="{StaticResource lblTitle}" />
                     <Label
                         x:Name="lblActivity"
-                        Content="xxxxx"
+                        Content=" "
                         Style="{StaticResource lblGrid}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
@@ -124,13 +131,13 @@
                         Margin="0"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Content="xxxxx" />
+                        Content=" " />
                     <Label
                         x:Name="lblStartTime_date"
                         Margin="0"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Content="xxxxx" />
+                        Content=" " />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2">
@@ -144,12 +151,12 @@
                         Margin="0"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Content="xxxxx" />
+                        Content=" " />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <Grid Grid.Row="10">
+        <Grid Grid.Row="7">
             <Button
                 x:Name="btnPause"
                 Grid.Row="7"

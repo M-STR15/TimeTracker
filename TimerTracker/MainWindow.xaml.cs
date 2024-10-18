@@ -73,7 +73,7 @@ namespace TimerTracker
 			lblActivity.Content = activity.Name;
 			lblProject.Content = project.Name;
 			lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
-			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yyyy");
+			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
 
 			var record = new RecordActivity(_startTimeActivity, activity.Id, project.Id, description);
 			_databaseProvider.SaveRecord(record);
@@ -100,7 +100,7 @@ namespace TimerTracker
 			};
 			addActivite(activity, _project);
 
-			_dispatcherTimer.Stop();
+			_dispatcherTimer.Start();
 		}
 
 		private void btnEndShift_Click(object sender, RoutedEventArgs e)
