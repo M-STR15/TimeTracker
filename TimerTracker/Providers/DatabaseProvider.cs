@@ -14,28 +14,57 @@ namespace TimerTracker.Providers
 
 		public List<Activity> GetActivities()
 		{
-			return _mainDatacontext.Activities.ToList();
+			try
+			{
+				return _mainDatacontext.Activities.ToList();
+			}
+			catch (Exception)
+			{
+				return new();
+			}
 		}
 
 		public List<Project> GetProjects()
 		{
-			return _mainDatacontext.Projects.ToList();
+			try
+			{
+				return _mainDatacontext.Projects.ToList();
+			}
+			catch (Exception)
+			{
+				return new();
+			}
 		}
 
 		public List<RecordActivity> GetRecords()
 		{
-			var recordActivities = _mainDatacontext.RecordActivities
-				.Include(x => x.Project)
-				.Include(x => x.Activity)
-				.OrderBy(x=>x.StartTime).ToList();
+			try
+			{
+				var recordActivities = _mainDatacontext.RecordActivities
+					.Include(x => x.Project)
+					.Include(x => x.Activity)
+					.OrderBy(x => x.StartTime).ToList();
 
-			return recordActivities;
+				return recordActivities;
+			}
+			catch (Exception)
+			{
+				return new();
+			}
 		}
 
 		public void SaveRecord(RecordActivity recordActivity)
 		{
-			_mainDatacontext.RecordActivities.Add(recordActivity);
-			_mainDatacontext.SaveChanges();
+			try
+			{
+				_mainDatacontext.RecordActivities.Add(recordActivity);
+				_mainDatacontext.SaveChanges();
+
+			}
+			catch (Exception)
+			{
+
+			}
 		}
 	}
 }

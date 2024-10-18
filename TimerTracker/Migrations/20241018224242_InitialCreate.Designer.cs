@@ -11,7 +11,7 @@ using TimerTracker.DataAccess;
 namespace TimerTracker.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241016191918_InitialCreate")]
+    [Migration("20241018224242_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

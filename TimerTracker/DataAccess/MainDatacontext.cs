@@ -37,9 +37,9 @@ namespace TimerTracker.DataAccess
 		{
 			_modelBuilder.Entity<Activity>()
 				.HasData(
-				new Activity(1, "Start"),
-				new Activity(2, "Pause"),
-				new Activity(3, "Stop")
+				new Activity((int)eActivity.Start, eActivity.Start.ToString()),
+				new Activity((int)eActivity.Pause, eActivity.Pause.ToString()),
+				new Activity((int)eActivity.Stop, eActivity.Stop.ToString())
 				);
 		}
 
