@@ -46,15 +46,38 @@ namespace TimerTracker.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Shifts",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Guid_ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Start_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    ShiftGuidId = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shifts", x => x.Guid_ID);
+                    table.ForeignKey(
+                        name: "FK_Shifts_Shifts_ShiftGuidId",
+                        column: x => x.ShiftGuidId,
+                        principalSchema: "dbo",
+                        principalTable: "Shifts",
+                        principalColumn: "Guid_ID");
+                },
+                comment: "Tabulka slouží k naplánování směny.");
+
+            migrationBuilder.CreateTable(
                 name: "Record_activity",
                 schema: "dbo",
                 columns: table => new
                 {
                     Guid_ID = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Start_time = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Activity_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
                     Project_ID = table.Column<int>(type: "INTEGER", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
+                    Shift_GuidId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Start_time = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,6 +96,12 @@ namespace TimerTracker.Migrations
                         principalTable: "Project",
                         principalColumn: "Project_ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Record_activity_Shifts_Shift_GuidId",
+                        column: x => x.Shift_GuidId,
+                        principalSchema: "dbo",
+                        principalTable: "Shifts",
+                        principalColumn: "Guid_ID");
                 });
 
             migrationBuilder.InsertData(
@@ -107,6 +136,25 @@ namespace TimerTracker.Migrations
                 schema: "dbo",
                 table: "Record_activity",
                 column: "Project_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Record_activity_Shift_GuidId",
+                schema: "dbo",
+                table: "Record_activity",
+                column: "Shift_GuidId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shifts_ShiftGuidId",
+                schema: "dbo",
+                table: "Shifts",
+                column: "ShiftGuidId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shifts_Start_date",
+                schema: "dbo",
+                table: "Shifts",
+                column: "Start_date",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -122,6 +170,10 @@ namespace TimerTracker.Migrations
 
             migrationBuilder.DropTable(
                 name: "Project",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
+                name: "Shifts",
                 schema: "dbo");
         }
     }

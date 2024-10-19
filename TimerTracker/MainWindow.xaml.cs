@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.Models;
 using TimerTracker.Providers;
+using TimerTracker.Stories;
 using TimerTracker.Windows;
 
 namespace TimerTracker
@@ -13,12 +14,12 @@ namespace TimerTracker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private DatabaseProvider _databaseProvider;
+		private readonly DatabaseProvider _databaseProvider;
 		private Activity _activity;
 		private Project _prj;
 		private DispatcherTimer _dispatcherTimer;
 		private DateTime _startTimeActivity;
-
+		private readonly MainStory _mainStory;
 		private Project _project
 		{
 			get => _prj;
@@ -31,10 +32,11 @@ namespace TimerTracker
 			}
 		}
 
-		public MainWindow(DatabaseProvider databaseProvider)
+		public MainWindow(MainStory mainStory)
 		{
 			InitializeComponent();
-			_databaseProvider = databaseProvider;
+			_mainStory = mainStory;
+			_databaseProvider = mainStory.ContainerStore.GetDatabaseProvider();
 
 			cmbActivities.ItemsSource = _databaseProvider.GetActivities();
 			cmbActivities.DisplayMemberPath = "Name";
@@ -117,7 +119,7 @@ namespace TimerTracker
 
 		private void mbtnShifts_Click(object sender, RoutedEventArgs e)
 		{
-			var window = new ShiftsPlanWindow();
+			var window = new ShiftsPlanWindow(_mainStory);
 			window.ShowDialog();
 		}
 	}

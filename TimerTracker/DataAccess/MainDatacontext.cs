@@ -10,7 +10,7 @@ namespace TimerTracker.DataAccess
 		public DbSet<Activity> Activities { get; set; }
 		public DbSet<Project> Projects { get; set; }
 		public DbSet<RecordActivity> RecordActivities { get; set; }
-
+		public DbSet<Shift> Shifts { get; set; }
 		public string DbPath { get; }
 
 		public MainDatacontext()

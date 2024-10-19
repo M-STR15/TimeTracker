@@ -1,19 +1,23 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TimerTracker.Models;
+using TimerTracker.Providers;
+using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
-	/// <summary>
-	/// Interaction logic for ShiftsPlanWindow.xaml
-	/// </summary>
 	public partial class ShiftsPlanWindow : Window
 	{
 		private List<InfoOfDate> _daiesList = new();
-
-		public ShiftsPlanWindow()
+		private MainStory _mainStory;
+		private ShiftProviders _shiftProvider;
+		public ShiftsPlanWindow(MainStory mainStory)
 		{
 			InitializeComponent();
+
+			_mainStory = mainStory;
+			_shiftProvider = mainStory.ContainerStore.GetShiftProviders();
 
 			var monthAndShift = new List<string>();
 			var countMountBack = 6;
@@ -35,9 +39,24 @@ namespace TimerTracker.Windows
 		{
 			var btn = sender as Button;
 			var infoOfDate = (InfoOfDate)btn.Tag;
-			infoOfDate.IsPlanShiftInDay = !infoOfDate.IsPlanShiftInDay;
+			var setIsPlanShiftInDay = !infoOfDate.IsPlanShiftInDay;
+			infoOfDate.IsPlanShiftInDay = setIsPlanShiftInDay;
 
-			btn.Background = new SolidColorBrush(infoOfDate.IsPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
+			btn.Background = new SolidColorBrush(setIsPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
+		}
+
+		private void btnSave_Click(object sender, RoutedEventArgs e)
+		{
+			var shifts = new List<Shift>();
+
+			foreach (var item in _daiesList.Where(x => x.IsPlanShiftInDay).ToList())
+			{
+				var shift = new Shift(item.GuidId, item.Date);
+				shifts.Add(shift);
+			}
+			_shiftProvider.SaveShifts(shifts);
+
+			this.Close();
 		}
 
 		private void cmbMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -62,7 +81,7 @@ namespace TimerTracker.Windows
 					Width = 40,
 					Margin = new Thickness(5),
 					Tag = item,
-					Background = new SolidColorBrush(Colors.Gray)
+					Background = getColorButtom(item.IsPlanShiftInDay)
 				};
 
 				button.Click += btnDay_Click;
@@ -77,13 +96,26 @@ namespace TimerTracker.Windows
 		{
 			var firstDate = Convert.ToDateTime("01." + cmbMontAndYear.SelectedItem);
 			var days = DateTime.DaysInMonth(firstDate.Year, firstDate.Month);
+			var lastDate = Convert.ToDateTime(days + "." + cmbMontAndYear.SelectedItem);
 
+			var planShiftsInDB = _shiftProvider.GetShifts(firstDate, lastDate);
 			for (int i = 1; i <= days; i++)
 			{
-				var infoOfDay = new InfoOfDate(Convert.ToDateTime(i + "." + cmbMontAndYear.SelectedItem));
-				_daiesList.Add(infoOfDay);
+				var date = Convert.ToDateTime(i + "." + cmbMontAndYear.SelectedItem);
+				var anyShiftInDb = planShiftsInDB?.Any(x => x.StartDate == date) ?? false;
+				var shift = new Shift();
+				if (anyShiftInDb)
+					shift = planShiftsInDB.First(x => x.StartDate == date);
+
+				var guidId = anyShiftInDb ? shift.GuidId : Guid.Empty;
+				var infoOfDate = new InfoOfDate(date, guidId);
+				infoOfDate.IsPlanShiftInDay = anyShiftInDb;
+
+				_daiesList.Add(infoOfDate);
 			}
 		}
+
+		private SolidColorBrush getColorButtom(bool isPlanShiftInDay) => new SolidColorBrush(isPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
 		private void setHeaderGrid()
 		{
 			var daysList = Enum.GetValues(typeof(DayOfWeek))
@@ -103,19 +135,24 @@ namespace TimerTracker.Windows
 
 	internal class InfoOfDate
 	{
-		public InfoOfDate(DateTime date)
+		public InfoOfDate(DateTime date, Guid guidID, string? description = null)
 		{
+			GuidId = guidID;
 			Date = date;
 			Day = date.Day;
 			DayOfWeek = date.DayOfWeek;
 			WeekInMont = getWeekInMonth(date);
+			Description = description;
 		}
 
 		public DateTime Date { get; private set; }
 		public int Day { get; private set; }
 		public DayOfWeek DayOfWeek { get; private set; }
+		public string? Description { get; set; }
+		public Guid GuidId { get; private set; }
 		public bool IsPlanShiftInDay { get; set; }
 		public int WeekInMont { get; private set; }
+		public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
 
 		private static int getWeekInMonth(DateTime date)
 		{
@@ -127,6 +164,5 @@ namespace TimerTracker.Windows
 
 			return weekNumber;
 		}
-		public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
 	}
 }

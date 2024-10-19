@@ -24,5 +24,12 @@ namespace TimerTracker.Models
 		{
 
 		}
+
+		public Shift(Guid guidId, DateTime startDate, string? description = null)
+		{
+			GuidId = guidId;
+			StartDate = startDate;
+			Description = description;
+		}
 	}
 }

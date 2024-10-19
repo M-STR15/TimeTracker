@@ -96,12 +96,15 @@ namespace TimerTracker.Migrations
                         .HasColumnName("Activity_ID");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID");
+
+                    b.Property<Guid?>("ShiftGuidId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Shift_GuidId");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT")
@@ -113,7 +116,39 @@ namespace TimerTracker.Migrations
 
                     b.HasIndex("ProjectId");
 
+                    b.HasIndex("ShiftGuidId");
+
                     b.ToTable("Record_activity", "dbo");
+                });
+
+            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+                {
+                    b.Property<Guid>("GuidId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Guid_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ShiftGuidId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Start_date");
+
+                    b.HasKey("GuidId");
+
+                    b.HasIndex("ShiftGuidId");
+
+                    b.HasIndex("StartDate")
+                        .IsUnique();
+
+                    b.ToTable("Shifts", "dbo", t =>
+                        {
+                            t.HasComment("Tabulka slouží k naplánování směny.");
+                        });
                 });
 
             modelBuilder.Entity("TimerTracker.Models.RecordActivity", b =>
@@ -130,9 +165,22 @@ namespace TimerTracker.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TimerTracker.Models.Shift", "Shift")
+                        .WithMany()
+                        .HasForeignKey("ShiftGuidId");
+
                     b.Navigation("Activity");
 
                     b.Navigation("Project");
+
+                    b.Navigation("Shift");
+                });
+
+            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+                {
+                    b.HasOne("TimerTracker.Models.Shift", null)
+                        .WithMany("Shifts")
+                        .HasForeignKey("ShiftGuidId");
                 });
 
             modelBuilder.Entity("TimerTracker.Models.Activity", b =>
@@ -143,6 +191,11 @@ namespace TimerTracker.Migrations
             modelBuilder.Entity("TimerTracker.Models.Project", b =>
                 {
                     b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+                {
+                    b.Navigation("Shifts");
                 });
 #pragma warning restore 612, 618
         }

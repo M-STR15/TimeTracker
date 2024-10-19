@@ -46,10 +46,10 @@ namespace TimerTracker.Models
 		public int ProjectId { get; set; }
 
 		[ForeignKey("ShiftGuidId")]
-		public Shift Shift { get; set; }
+		public Shift? Shift { get; set; }
 
 		[Column("Shift_GuidId")]
-		public int ShiftGuidId { get; set; }
+		public Guid? ShiftGuidId { get; set; }
 
 		[Required]
 		[Column("Start_time")]

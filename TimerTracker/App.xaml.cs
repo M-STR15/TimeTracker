@@ -1,6 +1,7 @@
 ﻿using Ninject;
 using System.Windows;
 using TimerTracker.DataAccess;
+using TimerTracker.Stories;
 using TimerTracker.Windows;
 
 namespace TimerTracker
@@ -10,30 +11,17 @@ namespace TimerTracker
 	/// </summary>
 	public partial class App : Application
 	{
-		private IKernel _container;
-
-
+		private MainStory _mainStory;
 		public App()
 		{ }
 
 		[STAThread]
 		protected override void OnStartup(StartupEventArgs e)
 		{
-			configureContainer();
+			_mainStory = new MainStory();
 
-			//var aaa= _container.Get<MainDatacontext>(); 
-			Current.MainWindow = _container.Get<MainWindow>();
+			Current.MainWindow = _mainStory.ContainerStore.GetMainWindow();
 			Current.MainWindow.Show();
-		}
-
-		private void configureContainer()
-		{
-			_container = new StandardKernel();
-
-			_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
-
-			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
-			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 		}
 	}
 

@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label Content="Month" />
@@ -54,5 +55,7 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Grid>
+
+        <Button Grid.Row="2" Content="Save" x:Name="btnSave" Click="btnSave_Click" Margin="5"/>
     </Grid>
 </Window>
