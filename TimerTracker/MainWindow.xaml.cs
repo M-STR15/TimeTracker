@@ -5,7 +5,6 @@ using System.Windows.Threading;
 using TimerTracker.Models;
 using TimerTracker.Models.Database;
 using TimerTracker.Models.Database.Enums;
-using TimerTracker.Providers;
 using TimerTracker.Stories;
 using TimerTracker.Windows;
 
@@ -22,30 +21,43 @@ namespace TimerTracker
 		private ShiftCmb _selectShift;
 		private Activity _selectActivity;
 		private DateTime _startTimeActivity;
+		private List<ShiftCmb> _shiftCmbs;
 		public MainWindow(MainStory mainStory)
 		{
 			InitializeComponent();
 			_mainStory = mainStory;
 
-			cmbActivities.ItemsSource = mainStory.ContainerStore.GetActivityProvider().GetActivities();
-			cmbActivities.DisplayMemberPath = "Name";
-			cmbActivities.SelectedIndex = 0;
-
-			cmbProjects.ItemsSource = mainStory.ContainerStore.GetProjectProvider().GetProjects();
-			cmbProjects.DisplayMemberPath = "Name";
-			cmbProjects.SelectedIndex = 0;
-
-			var currentDate = DateTime.Now;
-			var getList = mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate);
-			var listForCmb = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
-			listForCmb.Add(new ShiftCmb());
-			cmbShift.ItemsSource = listForCmb.OrderByDescending(x => x.StartDate);
-			cmbShift.DisplayMemberPath = "StartDateStr";
-			cmbShift.SelectedIndex = 0;
+			//loadActivities();
+			loadProjects();
+			loadShifts();
 
 			_dispatcherTimer = new DispatcherTimer();
 			_dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
 			_dispatcherTimer.Tick += _dispatcherTimer_Tick;
+		}
+
+		//private void loadActivities()
+		//{
+		//	cmbActivities.ItemsSource = _mainStory.ContainerStore.GetActivityProvider().GetActivities();
+		//	cmbActivities.DisplayMemberPath = "Name";
+		//	cmbActivities.SelectedIndex = 0;
+		//}
+		private void loadProjects()
+		{
+			cmbProjects.ItemsSource = null;
+			cmbProjects.ItemsSource = _mainStory.ContainerStore.GetProjectProvider().GetProjects();
+			cmbProjects.DisplayMemberPath = "Name";
+			cmbProjects.SelectedIndex = 0;
+		}
+		private void loadShifts()
+		{
+			var currentDate = DateTime.Now;
+			var getList = _mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate);
+			_shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
+			_shiftCmbs.Add(new ShiftCmb());
+			cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
+			cmbShift.DisplayMemberPath = "StartDateStr";
+			cmbShift.SelectedIndex = 0;
 		}
 
 		private Project _selectProject
@@ -73,6 +85,7 @@ namespace TimerTracker
 			lblProject.Content = project?.Name ?? "";
 			lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
 			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
+			lblShift_date.Content = _selectShift.StartDateStr;
 
 			var record = new RecordActivity();
 			if (shift == null)
@@ -85,12 +98,17 @@ namespace TimerTracker
 
 		private void btnActivate_Click(object sender, RoutedEventArgs e)
 		{
-			_selectActivity = (Activity)cmbActivities.SelectedItem;
+			var activity = new Activity()
+			{
+				Id = (int)eActivity.Start,
+				Name = eActivity.Start.ToString()
+			};
+
 			_selectProject = (Project)cmbProjects.SelectedItem;
 			_selectShift = (ShiftCmb)cmbShift.SelectedItem;
 
 			var description = getTextFromRichTextBox(rtbDescription);
-			addActivite(_selectActivity, _selectProject, _selectShift, description);
+			addActivite(activity, _selectProject, _selectShift, description);
 
 			_dispatcherTimer.Start();
 		}
@@ -122,7 +140,7 @@ namespace TimerTracker
 
 		private string getTextFromRichTextBox(RichTextBox richTextBox)
 		{
-			TextRange textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+			var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
 			return textRange.Text;
 		}
 
@@ -134,7 +152,12 @@ namespace TimerTracker
 		private void mbtnShifts_Click(object sender, RoutedEventArgs e)
 		{
 			var window = new ShiftsPlanWindow(_mainStory);
-			window.ShowDialog();
+			var result = window.ShowDialog();
+
+			var curretnSeletDate = _selectShift.StartDate;
+			loadShifts();
+
+			cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
 		}
 	}
 }

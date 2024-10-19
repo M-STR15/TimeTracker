@@ -7,7 +7,7 @@ using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
-    public partial class ShiftsPlanWindow : Window
+	public partial class ShiftsPlanWindow : Window
 	{
 		private List<InfoOfDate> _daiesList = new();
 		private MainStory _mainStory;
