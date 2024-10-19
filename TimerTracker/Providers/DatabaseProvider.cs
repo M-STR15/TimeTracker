@@ -6,17 +6,18 @@ namespace TimerTracker.Providers
 {
 	public class DatabaseProvider
 	{
-		private readonly MainDatacontext _mainDatacontext;
-		public DatabaseProvider(MainDatacontext mainDatacontext)
+		public DatabaseProvider()
 		{
-			_mainDatacontext = mainDatacontext;
 		}
 
 		public List<Activity> GetActivities()
 		{
 			try
 			{
-				return _mainDatacontext.Activities.ToList();
+				using (var context = new MainDatacontext())
+				{
+					return context.Activities.ToList();
+				}
 			}
 			catch (Exception)
 			{
@@ -28,7 +29,10 @@ namespace TimerTracker.Providers
 		{
 			try
 			{
-				return _mainDatacontext.Projects.ToList();
+				using (var context = new MainDatacontext())
+				{
+					return context.Projects.ToList();
+				}
 			}
 			catch (Exception)
 			{
@@ -40,12 +44,15 @@ namespace TimerTracker.Providers
 		{
 			try
 			{
-				var recordActivities = _mainDatacontext.RecordActivities
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities
 					.Include(x => x.Project)
 					.Include(x => x.Activity)
 					.OrderBy(x => x.StartTime).ToList();
 
-				return recordActivities;
+					return recordActivities;
+				}
 			}
 			catch (Exception)
 			{
@@ -57,9 +64,11 @@ namespace TimerTracker.Providers
 		{
 			try
 			{
-				_mainDatacontext.RecordActivities.Add(recordActivity);
-				_mainDatacontext.SaveChanges();
-
+				using (var context = new MainDatacontext())
+				{
+					context.RecordActivities.Add(recordActivity);
+					context.SaveChanges();
+				}
 			}
 			catch (Exception)
 			{

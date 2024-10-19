@@ -108,8 +108,7 @@ namespace TimerTracker.Windows
 					shift = planShiftsInDB.First(x => x.StartDate == date);
 
 				var guidId = anyShiftInDb ? shift.GuidId : Guid.Empty;
-				var infoOfDate = new InfoOfDate(date, guidId);
-				infoOfDate.IsPlanShiftInDay = anyShiftInDb;
+				var infoOfDate = new InfoOfDate(date, guidId, anyShiftInDb);
 
 				_daiesList.Add(infoOfDate);
 			}
@@ -135,7 +134,11 @@ namespace TimerTracker.Windows
 
 	internal class InfoOfDate
 	{
-		public InfoOfDate(DateTime date, Guid guidID, string? description = null)
+		private string? _description;
+
+		private bool _isPlanShiftInDay;
+
+		public InfoOfDate(DateTime date, Guid guidID, bool isPlanShiftInDay, string? description = null)
 		{
 			GuidId = guidID;
 			Date = date;
@@ -143,14 +146,35 @@ namespace TimerTracker.Windows
 			DayOfWeek = date.DayOfWeek;
 			WeekInMont = getWeekInMonth(date);
 			Description = description;
+			IsPlanShiftInDay = isPlanShiftInDay;
+
+			IsEdited = false;
 		}
 
 		public DateTime Date { get; private set; }
 		public int Day { get; private set; }
 		public DayOfWeek DayOfWeek { get; private set; }
-		public string? Description { get; set; }
+		public string? Description
+		{
+			get => _description;
+			set
+			{
+				_description = value;
+				IsEdited = true;
+			}
+		}
 		public Guid GuidId { get; private set; }
-		public bool IsPlanShiftInDay { get; set; }
+		public bool IsEdited { get; private set; }
+
+		public bool IsPlanShiftInDay
+		{
+			get => _isPlanShiftInDay;
+			set
+			{
+				_isPlanShiftInDay = value;
+				IsEdited = true;
+			}
+		}
 		public int WeekInMont { get; private set; }
 		public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
 
