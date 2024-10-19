@@ -47,6 +47,9 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
+            <MenuItem Header="Shifts" x:Name="mbtnShifts" Click="mbtnShifts_Click">
+
+            </MenuItem>
             <MenuItem Header="Reports">
                 <MenuItem
                     x:Name="mbtnRecordList"

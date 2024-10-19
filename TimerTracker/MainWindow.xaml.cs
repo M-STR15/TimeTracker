@@ -114,5 +114,11 @@ namespace TimerTracker
 
 			_dispatcherTimer.Stop();
 		}
+
+		private void mbtnShifts_Click(object sender, RoutedEventArgs e)
+		{
+			var window = new ShiftsPlanWindow();
+			window.ShowDialog();
+		}
 	}
 }
