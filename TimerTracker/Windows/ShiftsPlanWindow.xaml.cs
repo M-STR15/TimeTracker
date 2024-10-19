@@ -11,13 +11,13 @@ namespace TimerTracker.Windows
 	{
 		private List<InfoOfDate> _daiesList = new();
 		private MainStory _mainStory;
-		private ShiftProviders _shiftProvider;
+		private ShiftProvider _shiftProvider;
 		public ShiftsPlanWindow(MainStory mainStory)
 		{
 			InitializeComponent();
 
 			_mainStory = mainStory;
-			_shiftProvider = mainStory.ContainerStore.GetShiftProviders();
+			_shiftProvider = mainStory.ContainerStore.GetShiftProvider();
 
 			var monthAndShift = new List<string>();
 			var countMountBack = 6;

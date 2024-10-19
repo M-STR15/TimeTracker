@@ -11,7 +11,7 @@ using TimerTracker.DataAccess;
 namespace TimerTracker.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241019130126_InitialCreate")]
+    [Migration("20241019194633_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -61,7 +61,6 @@ namespace TimerTracker.Migrations
                         .HasColumnName("Project_ID");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

@@ -14,7 +14,6 @@ namespace TimerTracker
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private readonly DatabaseProvider _databaseProvider;
 		private Activity _activity;
 		private Project _prj;
 		private DispatcherTimer _dispatcherTimer;
@@ -36,13 +35,12 @@ namespace TimerTracker
 		{
 			InitializeComponent();
 			_mainStory = mainStory;
-			_databaseProvider = mainStory.ContainerStore.GetDatabaseProvider();
 
-			cmbActivities.ItemsSource = _databaseProvider.GetActivities();
+			cmbActivities.ItemsSource = mainStory.ContainerStore.GetActivityProvider().GetActivities();
 			cmbActivities.DisplayMemberPath = "Name";
 			cmbActivities.SelectedIndex = 0;
 
-			cmbProjects.ItemsSource = _databaseProvider.GetProjects();
+			cmbProjects.ItemsSource = mainStory.ContainerStore.GetProjectProvider().GetProjects();
 			cmbProjects.DisplayMemberPath = "Name";
 			cmbProjects.SelectedIndex = 0;
 
@@ -78,7 +76,7 @@ namespace TimerTracker
 			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
 
 			var record = new RecordActivity(_startTimeActivity, activity.Id, project.Id, description);
-			_databaseProvider.SaveRecord(record);
+			_mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
 		}
 
 		private string getTextFromRichTextBox(RichTextBox richTextBox)
@@ -89,7 +87,7 @@ namespace TimerTracker
 
 		private void mbtnRecordList_Click(object sender, RoutedEventArgs e)
 		{
-			var report = new RecordListWindow(_databaseProvider);
+			var report = new RecordListWindow(_mainStory);
 			report.ShowDialog();
 		}
 

@@ -1,16 +1,15 @@
 ﻿using System.Windows;
 using TimerTracker.Providers;
+using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
 	public partial class RecordListWindow : Window
 	{
-		private DatabaseProvider _databaseProvider;
-		public RecordListWindow(DatabaseProvider databaseProvider)
+		public RecordListWindow(MainStory mainStore)
 		{
 			InitializeComponent();
-			_databaseProvider = databaseProvider;
-			var origList = _databaseProvider.GetRecords();
+			var origList = mainStore.ContainerStore.GetRecordProvider().GetRecords();
 			var list = origList.Select((record, index) => new reportObj()
 			{
 				StartTimeDt = record.StartTime,

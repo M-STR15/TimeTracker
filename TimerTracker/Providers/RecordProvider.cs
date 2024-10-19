@@ -4,40 +4,10 @@ using TimerTracker.Models;
 
 namespace TimerTracker.Providers
 {
-	public class DatabaseProvider
+	public class RecordProvider
 	{
-		public DatabaseProvider()
+		public RecordProvider()
 		{
-		}
-
-		public List<Activity> GetActivities()
-		{
-			try
-			{
-				using (var context = new MainDatacontext())
-				{
-					return context.Activities.ToList();
-				}
-			}
-			catch (Exception)
-			{
-				return new();
-			}
-		}
-
-		public List<Project> GetProjects()
-		{
-			try
-			{
-				using (var context = new MainDatacontext())
-				{
-					return context.Projects.ToList();
-				}
-			}
-			catch (Exception)
-			{
-				return new();
-			}
 		}
 
 		public List<RecordActivity> GetRecords()
@@ -70,7 +40,7 @@ namespace TimerTracker.Providers
 					context.SaveChanges();
 				}
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 
 			}

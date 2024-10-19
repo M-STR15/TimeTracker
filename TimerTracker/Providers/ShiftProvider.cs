@@ -4,9 +4,9 @@ using TimerTracker.Models;
 
 namespace TimerTracker.Providers
 {
-	public class ShiftProviders
+	public class ShiftProvider
 	{
-		public ShiftProviders()
+		public ShiftProvider()
 		{}
 
 		public List<Shift> GetShifts()

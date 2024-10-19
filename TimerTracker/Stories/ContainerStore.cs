@@ -28,8 +28,8 @@ namespace TimerTracker.Stories
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 
-			_container.Bind<DatabaseProvider>().To<DatabaseProvider>().InSingletonScope();
-			_container.Bind<ShiftProviders>().To<ShiftProviders>().InSingletonScope();
+			_container.Bind<RecordProvider>().To<RecordProvider>().InSingletonScope();
+			_container.Bind<ShiftProvider>().To<ShiftProvider>().InSingletonScope();
 		}
 
 		public MainWindow GetMainWindow()
@@ -37,14 +37,29 @@ namespace TimerTracker.Stories
 			return _container.Get<MainWindow>();
 		}
 
-		public DatabaseProvider GetDatabaseProvider()
+		public RecordProvider GetDatabaseProvider()
 		{
-			return _container.Get<DatabaseProvider>();
+			return _container.Get<RecordProvider>();
 		}
 
-		public ShiftProviders GetShiftProviders()
+		public ShiftProvider GetShiftProvider()
 		{
-			return _container.Get<ShiftProviders>();
+			return _container.Get<ShiftProvider>();
+		}
+
+		public ActivityProvider GetActivityProvider()
+		{
+			return _container.Get<ActivityProvider>();
+		}
+
+		public ProjectProvider GetProjectProvider()
+		{
+			return _container.Get<ProjectProvider>();
+		}
+
+		public RecordProvider GetRecordProvider()
+		{
+			return _container.Get<RecordProvider>();
 		}
 	}
 }

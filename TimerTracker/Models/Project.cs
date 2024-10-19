@@ -10,12 +10,14 @@ namespace TimerTracker.Models
 		[Column("Project_ID")]
 		public int Id { get; set; }
 		public string Name { get; set; }
-		public string Description { get; set; }
+		public string? Description { get; set; }
 
 		public ICollection<RecordActivity> Activities { get; set; }
 
 		public Project()
-		{ }
+		{
+			Name = "";
+		}
 
 		public Project(int id, string name, string description = "") : this()
 		{

@@ -14,7 +14,9 @@ namespace TimerTracker.Models
 		public ICollection<RecordActivity> Activities { get; set; }
 
 		public Activity()
-		{ }
+		{
+			Name = "";
+		}
 
 		public Activity(int id, string name) : this()
 		{
