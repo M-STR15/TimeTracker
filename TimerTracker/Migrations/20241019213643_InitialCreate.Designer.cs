@@ -11,7 +11,7 @@ using TimerTracker.DataAccess;
 namespace TimerTracker.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241019194633_InitialCreate")]
+    [Migration("20241019213643_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TimerTracker.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("TimerTracker.Models.Activity", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace TimerTracker.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Project", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace TimerTracker.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.RecordActivity", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.RecordActivity", b =>
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,8 @@ namespace TimerTracker.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int?>("ProjectId")
+                        .IsRequired()
                         .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID");
 
@@ -123,7 +124,7 @@ namespace TimerTracker.Migrations
                     b.ToTable("Record_activity", "dbo");
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Shift", b =>
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
@@ -153,21 +154,21 @@ namespace TimerTracker.Migrations
                         });
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.RecordActivity", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.RecordActivity", b =>
                 {
-                    b.HasOne("TimerTracker.Models.Activity", "Activity")
+                    b.HasOne("TimerTracker.Models.Database.Activity", "Activity")
                         .WithMany("Activities")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TimerTracker.Models.Project", "Project")
+                    b.HasOne("TimerTracker.Models.Database.Project", "Project")
                         .WithMany("Activities")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TimerTracker.Models.Shift", "Shift")
+                    b.HasOne("TimerTracker.Models.Database.Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftGuidId");
 
@@ -178,24 +179,24 @@ namespace TimerTracker.Migrations
                     b.Navigation("Shift");
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Shift", b =>
                 {
-                    b.HasOne("TimerTracker.Models.Shift", null)
+                    b.HasOne("TimerTracker.Models.Database.Shift", null)
                         .WithMany("Shifts")
                         .HasForeignKey("ShiftGuidId");
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Activity", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Activity", b =>
                 {
                     b.Navigation("Activities");
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Project", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Project", b =>
                 {
                     b.Navigation("Activities");
                 });
 
-            modelBuilder.Entity("TimerTracker.Models.Shift", b =>
+            modelBuilder.Entity("TimerTracker.Models.Database.Shift", b =>
                 {
                     b.Navigation("Shifts");
                 });

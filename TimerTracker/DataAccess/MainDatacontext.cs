@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimerTracker.Models.Database;
+using TimerTracker.Models.Database.Enums;
 
 namespace TimerTracker.DataAccess
 {

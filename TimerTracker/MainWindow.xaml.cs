@@ -4,34 +4,24 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.Models;
 using TimerTracker.Models.Database;
+using TimerTracker.Models.Database.Enums;
 using TimerTracker.Providers;
 using TimerTracker.Stories;
 using TimerTracker.Windows;
 
 namespace TimerTracker
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
 	{
-		private Activity _activity;
-		private Project _prj;
-		private DispatcherTimer _dispatcherTimer;
-		private DateTime _startTimeActivity;
 		private readonly MainStory _mainStory;
-		private Project _project
-		{
-			get => _prj;
-			set
-			{
-				_prj = value;
-				var isEditBtn = (value != null);
-				btnPause.IsEnabled = isEditBtn;
-				btnEndShift.IsEnabled = isEditBtn;
-			}
-		}
-
+		private DispatcherTimer _dispatcherTimer;
+		private Project _prj;
+		private ShiftCmb _selectShift;
+		private Activity _selectActivity;
+		private DateTime _startTimeActivity;
 		public MainWindow(MainStory mainStory)
 		{
 			InitializeComponent();
@@ -45,9 +35,12 @@ namespace TimerTracker
 			cmbProjects.DisplayMemberPath = "Name";
 			cmbProjects.SelectedIndex = 0;
 
-			var list = mainStory.ContainerStore.GetShiftProvider().GetShifts();
-			cmbShift.ItemsSource = list;
-			cmbShift.DisplayMemberPath = "StartDate";
+			var currentDate = DateTime.Now;
+			var getList = mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate);
+			var listForCmb = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
+			listForCmb.Add(new ShiftCmb());
+			cmbShift.ItemsSource = listForCmb.OrderByDescending(x => x.StartDate);
+			cmbShift.DisplayMemberPath = "StartDateStr";
 			cmbShift.SelectedIndex = 0;
 
 			_dispatcherTimer = new DispatcherTimer();
@@ -55,34 +48,76 @@ namespace TimerTracker
 			_dispatcherTimer.Tick += _dispatcherTimer_Tick;
 		}
 
+		private Project _selectProject
+		{
+			get => _prj;
+			set
+			{
+				_prj = value;
+				var isEditBtn = (value != null);
+				btnPause.IsEnabled = isEditBtn;
+				btnEndShift.IsEnabled = isEditBtn;
+			}
+		}
 		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
 		{
 			var time = (DateTime.Now - _startTimeActivity);
 			lblTime_time.Content = time.ToString(@"hh\:mm\:ss");
 		}
 
-		private void btnActivate_Click(object sender, RoutedEventArgs e)
-		{
-			_activity = ((Activity)cmbActivities.SelectedItem);
-			_project = ((Project)cmbProjects.SelectedItem);
-
-			var description = getTextFromRichTextBox(rtbDescription);
-			addActivite(_activity, _project, description);
-
-			_dispatcherTimer.Start();
-		}
-
-		private void addActivite(Activity activity, Project project, string description = "")
+		private void addActivite(Activity activity, Project? project = null, ShiftCmb? shift = null, string description = "")
 		{
 			_startTimeActivity = DateTime.Now;
 
 			lblActivity.Content = activity.Name;
-			lblProject.Content = project.Name;
+			lblProject.Content = project?.Name ?? "";
 			lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
 			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
 
-			var record = new RecordActivity(_startTimeActivity, activity.Id, project.Id, description);
+			var record = new RecordActivity();
+			if (shift == null)
+				record = new RecordActivity(_startTimeActivity, activity.Id, project?.Id ?? null, description);
+			else
+				record = new RecordActivity(_startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, description);
+
 			_mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
+		}
+
+		private void btnActivate_Click(object sender, RoutedEventArgs e)
+		{
+			_selectActivity = (Activity)cmbActivities.SelectedItem;
+			_selectProject = (Project)cmbProjects.SelectedItem;
+			_selectShift = (ShiftCmb)cmbShift.SelectedItem;
+
+			var description = getTextFromRichTextBox(rtbDescription);
+			addActivite(_selectActivity, _selectProject, _selectShift, description);
+
+			_dispatcherTimer.Start();
+		}
+		private void btnEndShift_Click(object sender, RoutedEventArgs e)
+		{
+			var activity = new Activity()
+			{
+				Id = (int)eActivity.Stop,
+				Name = eActivity.Stop.ToString()
+			};
+
+			addActivite(activity, _selectProject);
+
+			_dispatcherTimer.Stop();
+		}
+
+		private void btnPause_Click(object sender, RoutedEventArgs e)
+		{
+			var activity = new Activity()
+			{
+				Id = (int)eActivity.Pause,
+				Name = eActivity.Pause.ToString()
+			};
+
+			addActivite(activity, _selectProject);
+
+			_dispatcherTimer.Start();
 		}
 
 		private string getTextFromRichTextBox(RichTextBox richTextBox)
@@ -96,31 +131,6 @@ namespace TimerTracker
 			var report = new RecordListWindow(_mainStory);
 			report.ShowDialog();
 		}
-
-		private void btnPause_Click(object sender, RoutedEventArgs e)
-		{
-			var activity = new Activity()
-			{
-				Id = (int)eActivity.Pause,
-				Name = eActivity.Pause.ToString()
-			};
-			addActivite(activity, _project);
-
-			_dispatcherTimer.Start();
-		}
-
-		private void btnEndShift_Click(object sender, RoutedEventArgs e)
-		{
-			var activity = new Activity()
-			{
-				Id = (int)eActivity.Stop,
-				Name = eActivity.Stop.ToString()
-			};
-			addActivite(activity, _project);
-
-			_dispatcherTimer.Stop();
-		}
-
 		private void mbtnShifts_Click(object sender, RoutedEventArgs e)
 		{
 			var window = new ShiftsPlanWindow(_mainStory);

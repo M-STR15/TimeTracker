@@ -3,56 +3,76 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.Models.Database
 {
-    [Table("Record_activity", Schema = "dbo")]
-    public class RecordActivity
-    {
-        public RecordActivity()
-        {
-            GuidId = Guid.NewGuid();
-            Activity = new();
-            Project = new();
-        }
+	[Table("Record_activity", Schema = "dbo")]
+	public class RecordActivity
+	{
+		public RecordActivity()
+		{
+			GuidId = Guid.NewGuid();
+		}
 
-        public RecordActivity(DateTime startTime, int activityId, int projectId, string description = "") : this()
-        {
-            StartTime = startTime;
-            ActivityId = activityId;
-            ProjectId = projectId;
-            Description = description;
-        }
+		public RecordActivity(DateTime startTime, int activityId, string description = "") : this()
+		{
+			StartTime = startTime;
+			ActivityId = activityId;
+			Description = description;
+		}
 
-        public RecordActivity(Guid guidId, DateTime startTime, int activityId, int projectId, string description = "") : this(startTime, activityId, projectId, description)
-        {
-            GuidId = guidId;
-        }
+		public RecordActivity(DateTime startTime, int activityId, int? projectId = null, string description = "") : this()
+		{
+			StartTime = startTime;
+			ActivityId = activityId;
+			ProjectId = projectId;
+			Description = description;
+		}
 
-        [ForeignKey("ActivityId")]
-        public Activity Activity { get; set; }
+		public RecordActivity(DateTime startTime, int activityId, Guid shiftGuidId, int? projectId = null, string description = "") : this()
+		{
+			StartTime = startTime;
+			ActivityId = activityId;
+			ProjectId = projectId;
+			Description = description;
+			ShiftGuidId = shiftGuidId;
+		}
 
-        [Required]
-        [Column("Activity_ID")]
-        public int ActivityId { get; set; }
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int projectId, string description = "") : this(startTime, activityId, projectId, description)
+		{
+			GuidId = guidId;
+		}
 
-        public string? Description { get; set; }
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int projectId, Guid shiftGuidId, string description = "") : this(startTime, activityId, projectId, description)
+		{
+			GuidId = guidId;
+			ShiftGuidId = shiftGuidId;
+		}
 
-        [Key]
-        [Column("Guid_ID")]
-        public Guid GuidId { get; set; }
-        [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
+		[ForeignKey("ActivityId")]
+		public Activity Activity { get; set; }
 
-        [Required]
-        [Column("Project_ID")]
-        public int ProjectId { get; set; }
+		[Required]
+		[Column("Activity_ID")]
+		public int ActivityId { get; set; }
 
-        [ForeignKey("ShiftGuidId")]
-        public Shift? Shift { get; set; }
+		public string? Description { get; set; }
 
-        [Column("Shift_GuidId")]
-        public Guid? ShiftGuidId { get; set; }
+		[Key]
+		[Column("Guid_ID")]
+		public Guid GuidId { get; set; }
+		[ForeignKey("ProjectId")]
+		public Project? Project { get; set; }
 
-        [Required]
-        [Column("Start_time")]
-        public DateTime StartTime { get; set; }
-    }
+		[Required]
+		[Column("Project_ID")]
+		public int? ProjectId { get; set; }
+
+		[ForeignKey("ShiftGuidId")]
+		public Shift? Shift { get; set; }
+
+		[Column("Shift_GuidId")]
+		public Guid? ShiftGuidId { get; set; }
+
+		[Required]
+		[Column("Start_time")]
+		public DateTime StartTime { get; set; }
+	}
 }
