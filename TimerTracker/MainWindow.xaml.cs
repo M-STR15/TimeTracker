@@ -3,16 +3,17 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.Models;
+using TimerTracker.Models.Database;
 using TimerTracker.Providers;
 using TimerTracker.Stories;
 using TimerTracker.Windows;
 
 namespace TimerTracker
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
 	{
 		private Activity _activity;
 		private Project _prj;
@@ -43,6 +44,11 @@ namespace TimerTracker
 			cmbProjects.ItemsSource = mainStory.ContainerStore.GetProjectProvider().GetProjects();
 			cmbProjects.DisplayMemberPath = "Name";
 			cmbProjects.SelectedIndex = 0;
+
+			var list = mainStory.ContainerStore.GetShiftProvider().GetShifts();
+			cmbShift.ItemsSource = list;
+			cmbShift.DisplayMemberPath = "StartDate";
+			cmbShift.SelectedIndex = 0;
 
 			_dispatcherTimer = new DispatcherTimer();
 			_dispatcherTimer.Interval = TimeSpan.FromSeconds(1);

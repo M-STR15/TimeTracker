@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimerTracker.DataAccess;
-using TimerTracker.Models;
+using TimerTracker.Models.Database;
 
 namespace TimerTracker.Providers
 {
-	public class RecordProvider
+    public class RecordProvider
 	{
 		public RecordProvider()
 		{

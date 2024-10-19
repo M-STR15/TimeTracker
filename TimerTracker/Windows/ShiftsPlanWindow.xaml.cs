@@ -1,13 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using TimerTracker.Models;
+using TimerTracker.Models.Database;
 using TimerTracker.Providers;
 using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
-	public partial class ShiftsPlanWindow : Window
+    public partial class ShiftsPlanWindow : Window
 	{
 		private List<InfoOfDate> _daiesList = new();
 		private MainStory _mainStory;

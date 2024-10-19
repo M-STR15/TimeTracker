@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TimerTracker.Models;
+using TimerTracker.Models.Database;
 
 namespace TimerTracker.DataAccess
 {
-	public class MainDatacontext : DbContext
+    public class MainDatacontext : DbContext
 	{
 		private ModelBuilder _modelBuilder { get; set; }
 
