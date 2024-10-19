@@ -17,9 +17,9 @@ namespace TimerTracker
 	{
 		private readonly MainStory _mainStory;
 		private DispatcherTimer _dispatcherTimer;
-		private Project _prj;
-		private ShiftCmb _selectShift;
-		private Activity _selectActivity;
+		private Project? _prj;
+		private ShiftCmb? _selectShift;
+		private Activity? _selectActivity;
 		private DateTime _startTimeActivity;
 		private List<ShiftCmb> _shiftCmbs;
 		public MainWindow(MainStory mainStory)
@@ -60,7 +60,7 @@ namespace TimerTracker
 			cmbShift.SelectedIndex = 0;
 		}
 
-		private Project _selectProject
+		private Project? _selectProject
 		{
 			get => _prj;
 			set
@@ -88,17 +88,23 @@ namespace TimerTracker
 				record = new RecordActivity(startTimeActivity, activity.Id, project?.Id ?? null, description);
 
 			var result = _mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
-			if (result)
+			if (true)
 			{
+				_selectActivity = activity;
+				_selectProject = project;
 				_startTimeActivity = startTimeActivity;
-				lblActivity.Content = activity.Name;
-				lblProject.Content = project?.Name ?? "";
-				lblStartTime_time.Content = startTimeActivity.ToString("HH:mm:ss");
-				lblStartTime_date.Content = startTimeActivity.ToString("dd.MM.yy");
-				lblShift_date.Content = _selectShift.StartDateStr;
 			}
 
 			return result;
+		}
+
+		private void changeLabels()
+		{
+			lblActivity.Content = _selectActivity?.Name ?? "";
+			lblProject.Content = _selectProject?.Name ?? "";
+			lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
+			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
+			lblShift_date.Content = _selectShift.StartDateStr;
 		}
 
 		private void btnActivate_Click(object sender, RoutedEventArgs e)
@@ -115,7 +121,10 @@ namespace TimerTracker
 			var description = getTextFromRichTextBox(rtbDescription);
 			var result = addActivite(activity, _selectProject, _selectShift, description);
 			if (result)
+			{
+				changeLabels();
 				_dispatcherTimer.Start();
+			}
 		}
 		private void btnEndShift_Click(object sender, RoutedEventArgs e)
 		{
@@ -125,9 +134,12 @@ namespace TimerTracker
 				Name = eActivity.Stop.ToString()
 			};
 
-			var result = addActivite(activity, _selectProject);
+			var result = addActivite(activity);
 			if (result)
+			{
+				changeLabels();
 				_dispatcherTimer.Stop();
+			}
 		}
 
 		private void btnPause_Click(object sender, RoutedEventArgs e)
@@ -138,9 +150,12 @@ namespace TimerTracker
 				Name = eActivity.Pause.ToString()
 			};
 
-			var result = addActivite(activity, _selectProject);
+			var result = addActivite(activity);
 			if (result)
+			{
+				changeLabels();
 				_dispatcherTimer.Start();
+			}
 		}
 
 		private string getTextFromRichTextBox(RichTextBox richTextBox)
