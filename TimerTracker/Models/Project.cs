@@ -17,7 +17,7 @@ namespace TimerTracker.Models
 		public Project()
 		{ }
 
-		public Project(int id, string name, string description = "")
+		public Project(int id, string name, string description = "") : this()
 		{
 			Id = id;
 			Name = name;
