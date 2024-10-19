@@ -77,23 +77,28 @@ namespace TimerTracker
 			lblTime_time.Content = time.ToString(@"hh\:mm\:ss");
 		}
 
-		private void addActivite(Activity activity, Project? project = null, ShiftCmb? shift = null, string description = "")
+		private bool addActivite(Activity activity, Project? project = null, ShiftCmb? shift = null, string description = "")
 		{
-			_startTimeActivity = DateTime.Now;
-
-			lblActivity.Content = activity.Name;
-			lblProject.Content = project?.Name ?? "";
-			lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
-			lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
-			lblShift_date.Content = _selectShift.StartDateStr;
+			var startTimeActivity = DateTime.Now;
 
 			var record = new RecordActivity();
-			if (shift == null)
-				record = new RecordActivity(_startTimeActivity, activity.Id, project?.Id ?? null, description);
+			if (shift != null && shift.GuidId != Guid.Empty)
+				record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, description);
 			else
-				record = new RecordActivity(_startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, description);
+				record = new RecordActivity(startTimeActivity, activity.Id, project?.Id ?? null, description);
 
-			_mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
+			var result = _mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
+			if (result)
+			{
+				_startTimeActivity = startTimeActivity;
+				lblActivity.Content = activity.Name;
+				lblProject.Content = project?.Name ?? "";
+				lblStartTime_time.Content = startTimeActivity.ToString("HH:mm:ss");
+				lblStartTime_date.Content = startTimeActivity.ToString("dd.MM.yy");
+				lblShift_date.Content = _selectShift.StartDateStr;
+			}
+
+			return result;
 		}
 
 		private void btnActivate_Click(object sender, RoutedEventArgs e)
@@ -108,9 +113,9 @@ namespace TimerTracker
 			_selectShift = (ShiftCmb)cmbShift.SelectedItem;
 
 			var description = getTextFromRichTextBox(rtbDescription);
-			addActivite(activity, _selectProject, _selectShift, description);
-
-			_dispatcherTimer.Start();
+			var result = addActivite(activity, _selectProject, _selectShift, description);
+			if (result)
+				_dispatcherTimer.Start();
 		}
 		private void btnEndShift_Click(object sender, RoutedEventArgs e)
 		{
@@ -120,9 +125,9 @@ namespace TimerTracker
 				Name = eActivity.Stop.ToString()
 			};
 
-			addActivite(activity, _selectProject);
-
-			_dispatcherTimer.Stop();
+			var result = addActivite(activity, _selectProject);
+			if (result)
+				_dispatcherTimer.Stop();
 		}
 
 		private void btnPause_Click(object sender, RoutedEventArgs e)
@@ -133,9 +138,9 @@ namespace TimerTracker
 				Name = eActivity.Pause.ToString()
 			};
 
-			addActivite(activity, _selectProject);
-
-			_dispatcherTimer.Start();
+			var result = addActivite(activity, _selectProject);
+			if (result)
+				_dispatcherTimer.Start();
 		}
 
 		private string getTextFromRichTextBox(RichTextBox richTextBox)

@@ -30,7 +30,7 @@ namespace TimerTracker.Providers
 			}
 		}
 
-		public void SaveRecord(RecordActivity recordActivity)
+		public bool SaveRecord(RecordActivity recordActivity)
 		{
 			try
 			{
@@ -39,10 +39,12 @@ namespace TimerTracker.Providers
 					context.RecordActivities.Add(recordActivity);
 					context.SaveChanges();
 				}
+
+				return true;
 			}
 			catch (Exception ex)
 			{
-
+				return false;
 			}
 		}
 	}

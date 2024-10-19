@@ -61,7 +61,6 @@ namespace TimerTracker.Models.Database
 		[ForeignKey("ProjectId")]
 		public Project? Project { get; set; }
 
-		[Required]
 		[Column("Project_ID")]
 		public int? ProjectId { get; set; }
 
@@ -74,5 +73,11 @@ namespace TimerTracker.Models.Database
 		[Required]
 		[Column("Start_time")]
 		public DateTime StartTime { get; set; }
+
+		[ForeignKey("SubModuleID")]
+		public SubModule? SubModule { get; set; }
+
+		[Column("SubModule_ID")]
+		public int? SubModuleID { get; set; }
 	}
 }

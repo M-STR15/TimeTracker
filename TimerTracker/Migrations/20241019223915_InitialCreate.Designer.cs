@@ -11,7 +11,7 @@ using TimerTracker.DataAccess;
 namespace TimerTracker.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241019213643_InitialCreate")]
+    [Migration("20241019223915_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -101,7 +101,6 @@ namespace TimerTracker.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ProjectId")
-                        .IsRequired()
                         .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID");
 
@@ -113,6 +112,10 @@ namespace TimerTracker.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Start_time");
 
+                    b.Property<int?>("SubModuleID")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("SubModule_ID");
+
                     b.HasKey("GuidId");
 
                     b.HasIndex("ActivityId");
@@ -120,6 +123,8 @@ namespace TimerTracker.Migrations
                     b.HasIndex("ProjectId");
 
                     b.HasIndex("ShiftGuidId");
+
+                    b.HasIndex("SubModuleID");
 
                     b.ToTable("Record_activity", "dbo");
                 });
@@ -154,6 +159,31 @@ namespace TimerTracker.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TimerTracker.Models.Database.SubModule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("SubModule_ID");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("Project_ID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("SubModule", "dbo");
+                });
+
             modelBuilder.Entity("TimerTracker.Models.Database.RecordActivity", b =>
                 {
                     b.HasOne("TimerTracker.Models.Database.Activity", "Activity")
@@ -164,19 +194,23 @@ namespace TimerTracker.Migrations
 
                     b.HasOne("TimerTracker.Models.Database.Project", "Project")
                         .WithMany("Activities")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProjectId");
 
                     b.HasOne("TimerTracker.Models.Database.Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftGuidId");
+
+                    b.HasOne("TimerTracker.Models.Database.SubModule", "SubModule")
+                        .WithMany("Activities")
+                        .HasForeignKey("SubModuleID");
 
                     b.Navigation("Activity");
 
                     b.Navigation("Project");
 
                     b.Navigation("Shift");
+
+                    b.Navigation("SubModule");
                 });
 
             modelBuilder.Entity("TimerTracker.Models.Database.Shift", b =>
@@ -184,6 +218,17 @@ namespace TimerTracker.Migrations
                     b.HasOne("TimerTracker.Models.Database.Shift", null)
                         .WithMany("Shifts")
                         .HasForeignKey("ShiftGuidId");
+                });
+
+            modelBuilder.Entity("TimerTracker.Models.Database.SubModule", b =>
+                {
+                    b.HasOne("TimerTracker.Models.Database.Project", "Project")
+                        .WithMany("SubModules")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("TimerTracker.Models.Database.Activity", b =>
@@ -194,11 +239,18 @@ namespace TimerTracker.Migrations
             modelBuilder.Entity("TimerTracker.Models.Database.Project", b =>
                 {
                     b.Navigation("Activities");
+
+                    b.Navigation("SubModules");
                 });
 
             modelBuilder.Entity("TimerTracker.Models.Database.Shift", b =>
                 {
                     b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("TimerTracker.Models.Database.SubModule", b =>
+                {
+                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,7 @@ using TimerTracker.Models.Database.Enums;
 
 namespace TimerTracker.DataAccess
 {
-    public class MainDatacontext : DbContext
+	public class MainDatacontext : DbContext
 	{
 		private ModelBuilder _modelBuilder { get; set; }
 
@@ -12,6 +12,7 @@ namespace TimerTracker.DataAccess
 		public DbSet<Project> Projects { get; set; }
 		public DbSet<RecordActivity> RecordActivities { get; set; }
 		public DbSet<Shift> Shifts { get; set; }
+		public DbSet<SubModule> SubModules { get; set; }
 		public string DbPath { get; }
 
 		public MainDatacontext()
