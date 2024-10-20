@@ -9,17 +9,20 @@ namespace TimerTracker.Windows
 		{
 			InitializeComponent();
 			var origList = mainStore.ContainerStore.GetRecordProvider().GetRecords();
-			var list = origList.Select((record, index) => new reportObj()
+			if (origList != null && origList.Count > 0)
 			{
-				StartTimeDt = record.StartTime,
-				EndTimeDt = (origList.Count != (index + 1) ? origList[index + 1].StartTime : DateTime.Now),
-				Activity = record.Activity.Name,
-				Project = record.Project.Name,
-				Description = record.Description,
-			});
+				var list = origList.Select((record, index) => new reportObj()
+				{
+					StartTimeDt = record.StartTime,
+					EndTimeDt = (origList.Count != (index + 1) ? origList[index + 1].StartTime : DateTime.Now),
+					Activity = record.Activity.Name,
+					Project = record?.Project?.Name ?? "",
+					Description = record?.Description ?? "",
+				});
+				dtgRecordActivities.ItemsSource = list;
+			}
 
-			dtgRecordActivities.ItemsSource = list;
-			lblCount.Content = origList.Count.ToString();
+			lblCount.Content = (origList?.Count ?? 0).ToString();
 		}
 	}
 
