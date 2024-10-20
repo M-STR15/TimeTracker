@@ -174,10 +174,13 @@ namespace TimerTracker
 			var window = new ShiftsPlanWindow(_mainStory);
 			var result = window.ShowDialog();
 
-			var curretnSeletDate = _selectShift.StartDate;
 			loadShifts();
 
-			cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
+			if (_selectShift != null)
+			{
+				var curretnSeletDate = _selectShift.StartDate;
+				cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
+			}
 		}
 	}
 }
