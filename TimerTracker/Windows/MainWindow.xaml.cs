@@ -6,9 +6,8 @@ using TimerTracker.BE.D.Models;
 using TimerTracker.BE.D.Models.Enums;
 using TimerTracker.Models;
 using TimerTracker.Stories;
-using TimerTracker.Windows;
 
-namespace TimerTracker
+namespace TimerTracker.Windows
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
