@@ -1,5 +1,4 @@
-﻿using TimerTracker.Models.Database;
-
+﻿using TimerTracker.BE.DB.Models;
 namespace TimerTracker.Models
 {
 	public class ShiftCmb : Shift

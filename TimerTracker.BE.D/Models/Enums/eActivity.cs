@@ -1,4 +1,4 @@
-﻿namespace TimerTracker.Models.Database.Enums
+﻿namespace TimerTracker.BE.D.Models.Enums
 {
     public enum eActivity
     {

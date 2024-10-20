@@ -1,8 +1,5 @@
-﻿using Ninject;
-using System.Windows;
-using TimerTracker.DataAccess;
+﻿using System.Windows;
 using TimerTracker.Stories;
-using TimerTracker.Windows;
 
 namespace TimerTracker
 {

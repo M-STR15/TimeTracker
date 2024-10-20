@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using TimerTracker.Models.Database;
-using TimerTracker.Providers;
+using TimerTracker.BE.DB.Models;
+using TimerTracker.BE.DB.Providers;
 using TimerTracker.Stories;
 
 namespace TimerTracker.Windows

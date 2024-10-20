@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TimerTracker.DataAccess;
-using TimerTracker.Models.Database;
+using TimerTracker.BE.D.Models;
+using TimerTracker.BE.DB.DataAccess;
+using TimerTracker.BE.DB.Models;
 
-namespace TimerTracker.Providers
+namespace TimerTracker.BE.DB.Providers
 {
-    public class ShiftProvider
+	public class ShiftProvider
 	{
 		public ShiftProvider()
-		{}
+		{ }
 
 		public List<Shift> GetShifts()
 		{
@@ -49,7 +50,7 @@ namespace TimerTracker.Providers
 				using (var context = new MainDatacontext())
 				{
 					if (shifts == null || !shifts.Any())
-						return true; 
+						return true;
 
 					var firstDate = shifts.First().StartDate;
 					var year = firstDate.Year;

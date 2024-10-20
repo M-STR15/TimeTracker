@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TimerTracker.Models.Database
+namespace TimerTracker.BE.DB.Models
 {
     [Index(nameof(StartDate), IsUnique = true)]
     [Table("Shifts", Schema = "dbo")]

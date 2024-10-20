@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TimerTracker.Models.Database;
-using TimerTracker.Models.Database.Enums;
+using TimerTracker.BE.D.Models;
+using TimerTracker.BE.D.Models.Enums;
+using TimerTracker.BE.DB.Models;
 
-namespace TimerTracker.DataAccess
+namespace TimerTracker.BE.DB.DataAccess
 {
 	public class MainDatacontext : DbContext
 	{

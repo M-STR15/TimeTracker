@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using TimerTracker.Providers;
 using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
@@ -26,7 +25,7 @@ namespace TimerTracker.Windows
 
 	internal struct reportObj()
 	{
-		public string StartTime { get=> StartTimeDt.ToString("HH:mm:ss dd.MM.yyyy");}
+		public string StartTime { get => StartTimeDt.ToString("HH:mm:ss dd.MM.yyyy"); }
 		internal DateTime StartTimeDt { get; set; }
 		public string EndTime { get => EndTimeDt.ToString("HH:mm:ss dd.MM.yyyy"); }
 		internal DateTime EndTimeDt { get; set; }

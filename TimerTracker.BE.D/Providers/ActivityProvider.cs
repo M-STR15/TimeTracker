@@ -1,9 +1,9 @@
-﻿using TimerTracker.DataAccess;
-using TimerTracker.Models.Database;
+﻿using TimerTracker.BE.D.Models;
+using TimerTracker.BE.DB.DataAccess;
 
-namespace TimerTracker.Providers
+namespace TimerTracker.BE.DB.Providers
 {
-    public class ActivityProvider
+	public class ActivityProvider
 	{
 		public List<Activity> GetActivities()
 		{

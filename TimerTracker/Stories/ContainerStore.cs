@@ -1,11 +1,6 @@
 ﻿using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TimerTracker.DataAccess;
-using TimerTracker.Providers;
+using TimerTracker.BE.DB.DataAccess;
+using TimerTracker.BE.DB.Providers;
 using TimerTracker.Windows;
 
 namespace TimerTracker.Stories
