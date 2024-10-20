@@ -9,9 +9,6 @@ using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
 		private readonly MainStory _mainStory;
@@ -166,7 +163,7 @@ namespace TimerTracker.Windows
 		private void mbtnRecordList_Click(object sender, RoutedEventArgs e)
 		{
 			var report = new RecordListWindow(_mainStory);
-			report.ShowDialog();
+			report.Show();
 		}
 		private void mbtnShifts_Click(object sender, RoutedEventArgs e)
 		{
@@ -180,6 +177,12 @@ namespace TimerTracker.Windows
 				var curretnSeletDate = _selectShift.StartDate;
 				cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
 			}
+		}
+
+		private void mbtnSettings_Click(object sender, RoutedEventArgs e)
+		{
+			var window =new SettingWindow(_mainStory);
+			window.ShowDialog();
 		}
 	}
 }

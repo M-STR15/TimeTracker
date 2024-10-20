@@ -57,6 +57,11 @@
                     Click="mbtnRecordList_Click"
                     Header="Record list" />
             </MenuItem>
+
+            <MenuItem
+                x:Name="mbtnSettings"
+                Click="mbtnSettings_Click"
+                Header="Settings" />
         </Menu>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
