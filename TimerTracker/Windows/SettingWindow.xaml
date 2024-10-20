@@ -14,21 +14,35 @@
     <Window.Resources>
         <!--  Šablona pro Editable Project  -->
         <DataTemplate x:Key="EditableTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBox Width="150" Text="{Binding Name, Mode=TwoWay}" />
-                <Button Width="30">
-                    <Label Content="Save" />
+            <StackPanel
+                HorizontalAlignment="Stretch"
+                Orientation="Horizontal">
+
+                <Button Grid.Column="1" Width="30" x:Name="btnSave" Click="btnSave_Click" Tag="{Binding}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="25" Source="../Resources/save.png" />
+                        <Label Content="Save" />
+                    </StackPanel>
                 </Button>
+                <TextBox
+                    Grid.Column="0"
+                    Width="150"
+                    Text="{Binding Name, Mode=TwoWay}" />
             </StackPanel>
         </DataTemplate>
 
         <!--  Šablona pro ReadOnly Project  -->
         <DataTemplate x:Key="ReadOnlyTemplate">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="{Binding Name}" />
-                <Button Width="30">
-                    <Label Content="Edit" />
+            <StackPanel
+                HorizontalAlignment="Stretch"
+                Orientation="Horizontal">
+                <Button Width="30" HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="25" Source="../Resources/edit.png" />
+                        <Label Content="Edit" />
+                    </StackPanel>
                 </Button>
+                <Label Content="{Binding Name, Mode=TwoWay}" />
             </StackPanel>
         </DataTemplate>
 
@@ -54,19 +68,22 @@
                 x:Name="btnAddProject"
                 Grid.Row="0"
                 Grid.Column="0"
-                Width="50"
                 Height="30"
                 Margin="5"
                 HorizontalAlignment="Left">
-                <Label Content="Add" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="25" Source="../Resources/add.png" />
+                    <Label Content="Add" />
+                </StackPanel>
             </Button>
 
             <ListBox
                 x:Name="listProject"
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
                 ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
-                ItemsSource="{Binding ProjectListBox}"
+                ItemsSource="{Binding ItemsView, Mode=TwoWay}"
                 SelectionChanged="listProject_SelectionChanged" />
         </Grid>
         <GridSplitter
@@ -80,11 +97,13 @@
             </Grid.RowDefinitions>
             <Button
                 x:Name="btnSubModule"
-                Width="50"
                 Height="30"
                 Margin="5"
                 HorizontalAlignment="Left">
-                <Label Content="Add" />
+                <StackPanel Orientation="Horizontal">
+                    <Image Height="25" Source="../Resources/add.png" />
+                    <Label Content="Add" />
+                </StackPanel>
             </Button>
             <ListBox
                 x:Name="listSubModule"

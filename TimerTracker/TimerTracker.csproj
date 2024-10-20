@@ -16,7 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\add.png" />
+    <None Remove="Resources\coffee-cup.png" />
     <None Remove="Resources\cup.png" />
+    <None Remove="Resources\download.png" />
+    <None Remove="Resources\edit.png" />
+    <None Remove="Resources\save.png" />
     <None Remove="Resources\stop.png" />
     <None Remove="Resources\timer.png" />
   </ItemGroup>
@@ -30,7 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\add.png" />
+    <Resource Include="Resources\coffee-cup.png" />
     <Resource Include="Resources\cup.png" />
+    <Resource Include="Resources\download.png" />
+    <Resource Include="Resources\edit.png" />
+    <Resource Include="Resources\save.png" />
     <Resource Include="Resources\stop.png" />
     <Resource Include="Resources\timer.png" />
   </ItemGroup>

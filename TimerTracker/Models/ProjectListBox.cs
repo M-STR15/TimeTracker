@@ -50,8 +50,16 @@ namespace TimerTracker.Models
 		{
 			return Name.ToString();
 		}
-
-		public bool IsEditable { get; set; }
+		private bool _isEditable;
+		public bool IsEditable 
+		{ 
+			get=> _isEditable;
+			set
+			{
+				_isEditable = value;
+				OnPropertyChanged(nameof(IsEditable));
+			}
+		}
 		public ProjectListBox()
 		{ }
 		public ProjectListBox(Project project)

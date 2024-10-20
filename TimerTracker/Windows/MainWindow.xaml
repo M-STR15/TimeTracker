@@ -211,7 +211,7 @@
                 Click="btnPause_Click"
                 IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
-                    <Image Height="25" Source="../Resources/cup.png" />
+                    <Image Height="25" Source="../Resources/coffee-cup.png" />
                     <Label Margin="0" Content="Pause" />
                 </StackPanel>
             </Button>
