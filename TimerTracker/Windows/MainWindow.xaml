@@ -113,7 +113,7 @@
             Height="30"
             Click="btnActivate_Click">
             <StackPanel Orientation="Horizontal">
-                <Image Height="25" Source="Resources/timer.png" />
+                <Image Height="25" Source="../Resources/timer.png" />
                 <Label Margin="0" Content="Activate" />
             </StackPanel>
         </Button>
@@ -146,9 +146,9 @@
                         Content=" " />
                     <Label Content="Project" Style="{StaticResource lblTitle}" />
                     <Label
-                      x:Name="lblProject"
-                      Content=" "
-                      Style="{StaticResource lblGrid}" />
+                        x:Name="lblProject"
+                        Content=" "
+                        Style="{StaticResource lblGrid}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <Label Content="Activity" Style="{StaticResource lblTitle}" />
@@ -164,16 +164,16 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2">
                     <Label
-     Grid.Row="0"
-     Grid.Column="2"
-     Content="Time"
-     Style="{StaticResource lblTitle}" />
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Content="Time"
+                        Style="{StaticResource lblTitle}" />
                     <Label
-     x:Name="lblTime_time"
-     Margin="0"
-     HorizontalContentAlignment="Center"
-     VerticalContentAlignment="Center"
-     Content=" " />
+                        x:Name="lblTime_time"
+                        Margin="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content=" " />
 
                     <Label
                         Grid.Row="0"
@@ -206,7 +206,7 @@
                 Click="btnPause_Click"
                 IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
-                    <Image Height="25" Source="Resources/cup.png" />
+                    <Image Height="25" Source="../Resources/cup.png" />
                     <Label Margin="0" Content="Pause" />
                 </StackPanel>
             </Button>
@@ -219,7 +219,7 @@
                 Click="btnEndShift_Click"
                 IsEnabled="False">
                 <StackPanel Orientation="Horizontal">
-                    <Image Height="25" Source="Resources/stop.png" />
+                    <Image Height="25" Source="../Resources/stop.png" />
                     <Label Margin="0" Content="End of shift" />
                 </StackPanel>
             </Button>
