@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TimerTracker.BE.D.Models
 {
 	[Table("Project", Schema = "dbo")]
-	public class Project : IProject
+	public class Project : IProjectWithoutColl
 	{
 		[Key]
 		[Column("Project_ID")]
@@ -17,6 +17,13 @@ namespace TimerTracker.BE.D.Models
 		public Project()
 		{
 			Name = "";
+		}
+
+		public Project(IProjectWithoutColl project)
+		{
+			Id = project.Id;
+			Name = project.Name;
+			Description = project.Description;
 		}
 
 		public Project(int id, string name, string description = "") : this()

@@ -3,25 +3,33 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.BE.D.Models
 {
-    [Table("SubModule", Schema = "dbo")]
-    public class SubModule
-    {
-        [Key]
-        [Column("SubModule_ID")]
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string? Description { get; set; }
+	[Table("SubModule", Schema = "dbo")]
+	public class SubModule : ISubModuleWithoutColl
+	{
+		[Key]
+		[Column("SubModule_ID")]
+		public virtual int Id { get; set; }
+		public virtual string Name { get; set; }
+		public virtual string? Description { get; set; }
 
-        [Column("Project_ID")]
-        public int ProjectId { get; set; }
+		[Column("Project_ID")]
+		public virtual int ProjectId { get; set; }
 
-        [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
-        public ICollection<RecordActivity> Activities { get; set; }
+		[ForeignKey("ProjectId")]
+		public virtual Project Project { get; set; }
+		public virtual ICollection<RecordActivity> Activities { get; set; }
 
-        public SubModule()
-        {
-            Name = "";
-        }
-    }
+		public SubModule()
+		{
+			Name = "";
+		}
+
+		public SubModule(ISubModuleWithoutColl subModule)
+		{
+			Id = subModule.Id;
+			Name = subModule.Name;
+			Description = subModule.Description;
+			ProjectId = subModule.ProjectId;
+		}
+	}
 }

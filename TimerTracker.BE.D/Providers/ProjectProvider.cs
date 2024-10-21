@@ -41,12 +41,63 @@ public class ProjectProvider
 		{
 			using (var context = new MainDatacontext())
 			{
-				return context.SubModules.Where(x => x.ProjectId == ptojectId).ToList();
+				if (context.SubModules.Any(x => x.ProjectId == ptojectId))
+					return context.SubModules.Where(x => x.ProjectId == ptojectId).ToList();
+				else
+					return new List<SubModule>();
 			}
 		}
 		catch (Exception)
 		{
 			return new();
+		}
+	}
+
+	public bool SaveProject(IProjectWithoutColl project)
+	{
+		try
+		{
+			var item = new Project(project);
+
+			using (var context = new MainDatacontext())
+			{
+				if (item.Id == 0)
+					context.Projects.Add(item);
+				else
+					context.Projects.Update(item);
+
+				context.SaveChanges();
+			}
+
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
+
+	public bool SaveSubModule(ISubModuleWithoutColl subModule)
+	{
+		try
+		{
+			var item = new SubModule(subModule);
+
+			using (var context = new MainDatacontext())
+			{
+				if (item.Id == 0)
+					context.SubModules.Add(item);
+				else
+					context.SubModules.Update(item);
+
+				context.SaveChanges();
+			}
+
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
 		}
 	}
 }

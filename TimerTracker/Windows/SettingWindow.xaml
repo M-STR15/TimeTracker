@@ -13,12 +13,14 @@
 
     <Window.Resources>
         <!--  Šablona pro Editable Project  -->
-        <DataTemplate x:Key="EditableTemplate">
-            <StackPanel
-                HorizontalAlignment="Stretch"
-                Orientation="Horizontal">
-
-                <Button Grid.Column="1" Width="30" x:Name="btnSave" Click="btnSave_Click" Tag="{Binding}">
+        <DataTemplate x:Key="ProjectEditableTemplate">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button
+                    x:Name="btnProjectSave"
+                    Grid.Column="1"
+                    Width="30"
+                    Click="btnProjectSave_Click"
+                    Tag="{Binding}">
                     <StackPanel Orientation="Horizontal">
                         <Image Height="25" Source="../Resources/save.png" />
                         <Label Content="Save" />
@@ -32,30 +34,77 @@
         </DataTemplate>
 
         <!--  Šablona pro ReadOnly Project  -->
-        <DataTemplate x:Key="ReadOnlyTemplate">
-            <StackPanel
-                HorizontalAlignment="Stretch"
-                Orientation="Horizontal">
-                <Button Width="30" HorizontalAlignment="Right">
+        <DataTemplate x:Key="ProjectReadOnlyTemplate">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button
+                    x:Name="btnProjectEdit"
+                    Width="30"
+                    HorizontalAlignment="Right"
+                    Click="btnProjectEdit_Click"
+                    Tag="{Binding}">
                     <StackPanel Orientation="Horizontal">
                         <Image Height="25" Source="../Resources/edit.png" />
                         <Label Content="Edit" />
                     </StackPanel>
                 </Button>
-                <Label Content="{Binding Name, Mode=TwoWay}" />
+                <Label Content="{Binding Name}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <!--  Šablona pro Editable SubModule  -->
+        <DataTemplate x:Key="SubModuleEditableTemplate">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button
+                    x:Name="btnSubModuleSave"
+                    Grid.Column="1"
+                    Width="30"
+                    Click="btnSubModuleSave_Click"
+                    Tag="{Binding}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="25" Source="../Resources/save.png" />
+                        <Label Content="Save" />
+                    </StackPanel>
+                </Button>
+                <TextBox
+                    Grid.Column="0"
+                    Width="150"
+                    Text="{Binding Name, Mode=TwoWay}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <!--  Šablona pro ReadOnly SubModule  -->
+        <DataTemplate x:Key="SubModuleReadOnlyTemplate">
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                <Button
+                    x:Name="btnubModuleEdit"
+                    Width="30"
+                    HorizontalAlignment="Right"
+                    Click="btnubModuleEdit_Click"
+                    Tag="{Binding}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Height="25" Source="../Resources/edit.png" />
+                        <Label Content="Edit" />
+                    </StackPanel>
+                </Button>
+                <Label Content="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
 
         <!--  Template Selector  -->
         <temp:ProjectTemplateSelector
             x:Key="ProjectTemplateSelector"
-            EditableTemplate="{StaticResource EditableTemplate}"
-            ReadOnlyTemplate="{StaticResource ReadOnlyTemplate}" />
+            EditableTemplate="{StaticResource ProjectEditableTemplate}"
+            ReadOnlyTemplate="{StaticResource ProjectReadOnlyTemplate}" />
+
+        <temp:SubModuleTemplateSelector
+            x:Key="SubModuleTemplateSelector"
+            EditableTemplate="{StaticResource SubModuleEditableTemplate}"
+            ReadOnlyTemplate="{StaticResource SubModuleReadOnlyTemplate}" />
     </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="300" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -70,7 +119,8 @@
                 Grid.Column="0"
                 Height="30"
                 Margin="5"
-                HorizontalAlignment="Left">
+                HorizontalAlignment="Left"
+                Click="btnProjectAdd_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Height="25" Source="../Resources/add.png" />
                     <Label Content="Add" />
@@ -83,7 +133,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
-                ItemsSource="{Binding ItemsView, Mode=TwoWay}"
+                ItemsSource="{Binding ProjectItemsView, Mode=TwoWay}"
+                SelectedItem="{Binding SelectProjectListBox, Mode=TwoWay}"
                 SelectionChanged="listProject_SelectionChanged" />
         </Grid>
         <GridSplitter
@@ -96,10 +147,11 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Button
-                x:Name="btnSubModule"
+                x:Name="btnSubModuleAdd"
                 Height="30"
                 Margin="5"
-                HorizontalAlignment="Left">
+                HorizontalAlignment="Left"
+                Click="btnSubModuleAdd_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Height="25" Source="../Resources/add.png" />
                     <Label Content="Add" />
@@ -109,7 +161,9 @@
                 x:Name="listSubModule"
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
-                VerticalContentAlignment="Center" />
+                VerticalContentAlignment="Center"
+                ItemTemplateSelector="{StaticResource SubModuleTemplateSelector}"
+                ItemsSource="{Binding SubModuleItemsView, Mode=TwoWay}" />
         </Grid>
     </Grid>
 </Window>

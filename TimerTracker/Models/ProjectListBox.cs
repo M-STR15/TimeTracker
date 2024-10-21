@@ -3,7 +3,7 @@ using TimerTracker.BE.D.Models;
 
 namespace TimerTracker.Models
 {
-	public class ProjectListBox : IProject, INotifyPropertyChanged
+	public class ProjectListBox : IProjectWithoutColl, INotifyPropertyChanged, IListBox
 	{
 		private string? _description;
 		public string? Description
@@ -51,9 +51,9 @@ namespace TimerTracker.Models
 			return Name.ToString();
 		}
 		private bool _isEditable;
-		public bool IsEditable 
-		{ 
-			get=> _isEditable;
+		public bool IsEditable
+		{
+			get => _isEditable;
 			set
 			{
 				_isEditable = value;
@@ -62,13 +62,15 @@ namespace TimerTracker.Models
 		}
 		public ProjectListBox()
 		{ }
-		public ProjectListBox(Project project)
+		public ProjectListBox(string name = "", string description = "", bool isEditable = true) : this()
 		{
-			Id = project.Id;
-			Name = project.Name;
-			Description = project.Description;
-
-			IsEditable = Name == "Project 1";
+			Name = name;
+			Description = description;
+			IsEditable = isEditable;
+		}
+		public ProjectListBox(Project project) : this(project.Name, project?.Description ?? "", (project?.Name == "Project 1"))
+		{
+			Id = project?.Id ?? 0;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
