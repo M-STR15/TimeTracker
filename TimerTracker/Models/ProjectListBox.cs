@@ -60,6 +60,17 @@ namespace TimerTracker.Models
 				OnPropertyChanged(nameof(IsEditable));
 			}
 		}
+
+		private bool _isFlag;
+		public bool IsFlag
+		{
+			get => _isFlag;
+			set
+			{
+				_isFlag = value;
+				OnPropertyChanged(nameof(IsFlag));
+			}
+		}
 		public ProjectListBox()
 		{ }
 		public ProjectListBox(string name = "", string description = "", bool isEditable = true) : this()

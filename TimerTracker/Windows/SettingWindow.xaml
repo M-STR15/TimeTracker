@@ -132,10 +132,11 @@
                 Grid.Row="1"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
+                IsSynchronizedWithCurrentItem="True"
                 ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
-                ItemsSource="{Binding ProjectItemsView, Mode=TwoWay}"
-                SelectedItem="{Binding SelectProjectListBox, Mode=TwoWay}"
-                SelectionChanged="listProject_SelectionChanged" />
+                ItemsSource="{Binding ProjectItemsView}"
+                SelectionChanged="listProject_SelectionChanged"
+                SelectionMode="Extended" />
         </Grid>
         <GridSplitter
             Grid.Column="1"
