@@ -73,15 +73,16 @@ namespace TimerTracker.Models
 		}
 		public ProjectListBox()
 		{ }
-		public ProjectListBox(string name = "", string description = "", bool isEditable = true) : this()
+		public ProjectListBox(string name = "", string description = "", bool isEditable = false) : this()
 		{
 			Name = name;
 			Description = description;
 			IsEditable = isEditable;
 		}
-		public ProjectListBox(Project project) : this(project.Name, project?.Description ?? "", (project?.Name == "Project 1"))
+		public ProjectListBox(Project project) : this(project.Name, project?.Description ?? "")
 		{
 			Id = project?.Id ?? 0;
+			IsEditable = false;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

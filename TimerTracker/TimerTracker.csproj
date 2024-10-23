@@ -19,6 +19,7 @@
     <None Remove="Resources\add.png" />
     <None Remove="Resources\coffee-cup.png" />
     <None Remove="Resources\cup.png" />
+    <None Remove="Resources\delete.png" />
     <None Remove="Resources\download.png" />
     <None Remove="Resources\edit.png" />
     <None Remove="Resources\save.png" />
@@ -38,6 +39,7 @@
     <Resource Include="Resources\add.png" />
     <Resource Include="Resources\coffee-cup.png" />
     <Resource Include="Resources\cup.png" />
+    <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\download.png" />
     <Resource Include="Resources\edit.png" />
     <Resource Include="Resources\save.png" />

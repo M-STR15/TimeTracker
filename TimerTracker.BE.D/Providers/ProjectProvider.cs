@@ -77,6 +77,25 @@ public class ProjectProvider
 		}
 	}
 
+	public bool DeleteProject(IProjectWithoutColl project)
+	{
+		try
+		{
+			using (var context = new MainDatacontext())
+			{
+				var item = context.Projects.FirstOrDefault(x => x.Id == project.Id);
+				context.Projects.Remove(item);
+				context.SaveChanges();
+			}
+
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
+
 	public bool SaveSubModule(ISubModuleWithoutColl subModule)
 	{
 		try
@@ -90,6 +109,25 @@ public class ProjectProvider
 				else
 					context.SubModules.Update(item);
 
+				context.SaveChanges();
+			}
+
+			return true;
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
+
+	public bool DeleteSubModule(ISubModuleWithoutColl subModule)
+	{
+		try
+		{
+			using (var context = new MainDatacontext())
+			{
+				var item = context.SubModules.FirstOrDefault(x => x.Id == subModule.Id);
+				context.SubModules.Remove(item);
 				context.SaveChanges();
 			}
 
