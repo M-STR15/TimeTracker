@@ -18,137 +18,155 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackPanel x:Name="stpProjectButton" Orientation="Horizontal">
-                <Button
+    <TabControl Margin="5" >
+        <TabItem Header="Projects">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="stpProjectButton" Orientation="Horizontal">
+                        <Button
                     x:Name="btnAddProject"
                     Click="btnProjectAdd_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/add.png" />
-                        <Label Content="Add" />
-                    </StackPanel>
-                </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/add.png" />
+                                <Label Content="Add" />
+                            </StackPanel>
+                        </Button>
 
-                <Button
+                        <Button
                     x:Name="btnEditProject"
                     Click="btnProjectEdit_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/save.png" />
-                        <Label Content="Edit" />
-                    </StackPanel>
-                </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/save.png" />
+                                <Label Content="Edit" />
+                            </StackPanel>
+                        </Button>
 
-                <Button
+                        <Button
                     x:Name="btnProjectDelete"
                     Click="btnProjectDelete_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/delete.png" />
-                        <Label Content="Delete" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/delete.png" />
+                                <Label Content="Delete" />
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                </Button>
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
-                <ListBox
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
+                        <ListBox
                     x:Name="listProject"
                     Grid.Row="1"
                     ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
                     ItemsSource="{Binding ProjectItemsView}"
                     SelectionChanged="listProject_SelectionChanged"
                     Style="{StaticResource settingListboxStyle}" />
-                <Label
+                        <Label
                     x:Name="lblProjectInfo"
                     Grid.Row="2"
                     Content="Count 0" />
-            </Grid>
-        </Grid>
-        <GridSplitter
+                    </Grid>
+                </Grid>
+                <GridSplitter
             Grid.Column="1"
             Width="5"
             HorizontalAlignment="Stretch" />
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <StackPanel x:Name="stpSubModuleButton" Orientation="Horizontal">
-                <Button
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="stpSubModuleButton" Orientation="Horizontal">
+                        <Button
                     x:Name="btnSubModuleAdd"
                     Click="btnSubModuleAdd_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/add.png" />
-                        <Label Content="Add" />
-                    </StackPanel>
-                </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/add.png" />
+                                <Label Content="Add" />
+                            </StackPanel>
+                        </Button>
 
-                <Button
+                        <Button
                     x:Name="btnSubModuleEdit"
                     Click="btnSubModuleEdit_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/save.png" />
-                        <Label Content="Edit" />
-                    </StackPanel>
-                </Button>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/save.png" />
+                                <Label Content="Edit" />
+                            </StackPanel>
+                        </Button>
 
-                <Button
+                        <Button
                     x:Name="btnSubModuleDelete"
                     Click="btnSubModuleDelete_Click"
                     Style="{StaticResource settingButtonStyle}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Height="25" Source="../Resources/delete.png" />
-                        <Label Content="Delete" />
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Source="../Resources/delete.png" />
+                                <Label Content="Delete" />
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                </Button>
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="200" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
-                    <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
-                    <Label
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
+                            <Label
                         Grid.Column="1"
                         Content="Desription"
                         Style="{StaticResource settingTitleLabelStyle}" />
-                </Grid>
-                <ListBox
+                        </Grid>
+                        <ListBox
                     x:Name="listSubModule"
                     Grid.Row="1"
                     ItemTemplateSelector="{StaticResource SubModuleTemplateSelector}"
                     ItemsSource="{Binding SubModuleItemsView}"
                     Style="{StaticResource settingListboxStyle}" />
-                <Label
+                        <Label
                     x:Name="lblSubModuleInfo"
                     Grid.Row="2"
                     Content="Count 0" />
+                    </Grid>
+                </Grid>
             </Grid>
-        </Grid>
-    </Grid>
+        </TabItem>
+
+        <TabItem Header="Set main window">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Top window" ToolTip="Hlavní okno bude vždy zobrazeno nad ostatními okny."/>
+                <CheckBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
