@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace TimerTracker.BE.DB.Models
 {
@@ -19,7 +20,7 @@ namespace TimerTracker.BE.DB.Models
 			Name = "";
 		}
 
-		public Project(IProjectWithoutColl project)
+		public Project(IProjectWithoutColl project) : this()
 		{
 			Id = project.Id;
 			Name = project.Name;

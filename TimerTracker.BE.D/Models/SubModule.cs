@@ -24,7 +24,7 @@ namespace TimerTracker.BE.DB.Models
 			Name = "";
 		}
 
-		public SubModule(ISubModuleWithoutColl subModule)
+		public SubModule(ISubModuleWithoutColl subModule) : this()
 		{
 			Id = subModule.Id;
 			Name = subModule.Name;

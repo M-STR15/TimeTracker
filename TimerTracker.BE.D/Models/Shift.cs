@@ -25,7 +25,7 @@ namespace TimerTracker.BE.DB.Models
 
         }
 
-        public Shift(Guid guidId, DateTime startDate, string? description = null)
+        public Shift(Guid guidId, DateTime startDate, string? description = null):this()
         {
             GuidId = guidId;
             StartDate = startDate;
