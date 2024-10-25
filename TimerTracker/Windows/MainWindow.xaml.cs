@@ -6,6 +6,7 @@ using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Models.Enums;
 using TimerTracker.Models;
 using TimerTracker.Stories;
+using TimerTracker.ViewModels;
 
 namespace TimerTracker.Windows
 {
@@ -20,6 +21,7 @@ namespace TimerTracker.Windows
 		private List<ShiftCmb> _shiftCmbs;
 		public MainWindow(MainStory mainStory)
 		{
+			this.DataContext = new BaseViewModel("Timer tracker");
 			InitializeComponent();
 			_mainStory = mainStory;
 
@@ -181,7 +183,7 @@ namespace TimerTracker.Windows
 
 		private void mbtnSettings_Click(object sender, RoutedEventArgs e)
 		{
-			var window =new SettingWindow(_mainStory);
+			var window = new SettingWindow(_mainStory);
 			window.ShowDialog();
 		}
 	}

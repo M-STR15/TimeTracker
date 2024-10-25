@@ -22,6 +22,8 @@
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\download.png" />
     <None Remove="Resources\edit.png" />
+    <None Remove="Resources\Icons\Svg\close-square.svg" />
+    <None Remove="Resources\Icons\Svg\square-arrow.svg" />
     <None Remove="Resources\route_black.png" />
     <None Remove="Resources\route_white.png" />
     <None Remove="Resources\save.png" />
@@ -31,6 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ninject" Version="3.3.6" />
+    <PackageReference Include="SharpVectors" Version="1.8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +47,8 @@
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\download.png" />
     <Resource Include="Resources\edit.png" />
+    <Resource Include="Resources\Icons\Svg\close-square.svg" />
+    <Resource Include="Resources\Icons\Svg\square-arrow.svg" />
     <Resource Include="Resources\route_black.png" />
     <Resource Include="Resources\route_white.png" />
     <Resource Include="Resources\save.png" />

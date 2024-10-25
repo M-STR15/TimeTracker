@@ -6,8 +6,7 @@
     xmlns:local="clr-namespace:TimerTracker"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Timer tracker"
-    Width="270"
-    Height="590"
+    Style="{StaticResource MainWindow}"
     mc:Ignorable="d">
 
     <Window.Resources>
