@@ -2,8 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
-using TimerTracker.BE.D.Models;
-using TimerTracker.BE.D.Models.Enums;
+using TimerTracker.BE.DB.Models;
+using TimerTracker.BE.DB.Models.Enums;
 using TimerTracker.Models;
 using TimerTracker.Stories;
 

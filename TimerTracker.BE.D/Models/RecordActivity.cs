@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TimerTracker.BE.DB.Models;
 
-namespace TimerTracker.BE.D.Models
+namespace TimerTracker.BE.DB.Models
 {
     [Table("Record_activity", Schema = "dbo")]
     public class RecordActivity

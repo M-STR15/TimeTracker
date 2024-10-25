@@ -1,5 +1,5 @@
 ﻿namespace TimerTracker.BE.DB.Providers;
-using TimerTracker.BE.D.Models;
+using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.DataAccess;
 public class ProjectProvider
 {

@@ -1,4 +1,4 @@
-﻿using TimerTracker.BE.D.Models;
+﻿using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.DataAccess;
 
 namespace TimerTracker.BE.DB.Providers

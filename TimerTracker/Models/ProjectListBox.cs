@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using TimerTracker.BE.D.Models;
+using TimerTracker.BE.DB.Models;
 
 namespace TimerTracker.Models
 {

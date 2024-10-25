@@ -1,5 +1,5 @@
 ﻿
-namespace TimerTracker.BE.D.Models
+namespace TimerTracker.BE.DB.Models
 {
 	public interface IProjectWithoutColl
 	{

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TimerTracker.BE.D.Models
+namespace TimerTracker.BE.DB.Models
 {
 	[Table("Project", Schema = "dbo")]
 	public class Project : IProjectWithoutColl
