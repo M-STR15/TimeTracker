@@ -134,9 +134,14 @@ namespace TimerTracker.Windows
             if (item != null)
             {
                 var result = _projectProvider.SaveProject(item);
-                if (result)
+                if (result != null)
                 {
-                    item.IsEditable = false;
+                    var updateProject = ProjectListBox.FirstOrDefault(x => x.GuidIdForListbox == item.GuidIdForListbox);
+                    if (updateProject != null)
+                    {
+                        updateProject.Id = result.Id;
+                        updateProject.IsEditable = false;
+                    }
                     ProjectItemsView.Refresh();
                 }
             }
@@ -182,12 +187,20 @@ namespace TimerTracker.Windows
 
         private void subModuleSave_Click(object parameter)
         {
+            var currentItem = (SubModuleListBox)SubModuleItemsView.CurrentItem;
             var item = (SubModuleListBox)parameter;
+            item.ProjectId = _selectProjectLb?.Id ?? 0;
             item.IsEditable = false;
 
             var result = _projectProvider.SaveSubModule(item);
-            if (result)
+            if (result != null)
             {
+                var updateSubModule = SubModuleListBox.FirstOrDefault(x => x.GuidIdForListbox == item.GuidIdForListbox);
+                if (updateSubModule != null)
+                {
+                    updateSubModule.Id = result.Id;
+                    updateSubModule.IsEditable = false;
+                }
                 SubModuleItemsView.Refresh();
             }
         }

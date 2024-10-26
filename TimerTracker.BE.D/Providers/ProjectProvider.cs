@@ -53,7 +53,7 @@ public class ProjectProvider
         }
     }
 
-    public bool SaveProject(IProjectWithoutColl project)
+    public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
     {
         try
         {
@@ -72,15 +72,15 @@ public class ProjectProvider
                 }
                 else
                 {
-                    return false;
+                    return null;
                 }
             }
 
-            return true;
+            return item;
         }
         catch (Exception)
         {
-            return false;
+            return null;
         }
     }
 
@@ -103,7 +103,7 @@ public class ProjectProvider
         }
     }
 
-    public bool SaveSubModule(ISubModuleWithoutColl subModule)
+    public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
     {
         try
         {
@@ -112,18 +112,22 @@ public class ProjectProvider
             using (var context = new MainDatacontext())
             {
                 if (item.Id == 0)
+                {
                     context.SubModules.Add(item);
+                }
                 else
+                { 
                     context.SubModules.Update(item);
+                }
 
                 context.SaveChanges();
             }
 
-            return true;
+            return item;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            return false;
+            return null;
         }
     }
 

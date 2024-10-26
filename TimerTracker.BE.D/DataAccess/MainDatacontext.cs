@@ -33,6 +33,17 @@ namespace TimerTracker.BE.DB.DataAccess
             _modelBuilder = modelBuilder;
             insertDefaultValues_Activities();
             insertDefaultValues_Projects();
+
+            setSubModuleTable();
+        }
+
+        private void setSubModuleTable()
+        {
+            _modelBuilder.Entity<SubModule>()
+                .HasOne(p => p.Project)
+                .WithMany(b => b.SubModules)
+                .HasForeignKey(p => p.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private void insertDefaultValues_Activities()

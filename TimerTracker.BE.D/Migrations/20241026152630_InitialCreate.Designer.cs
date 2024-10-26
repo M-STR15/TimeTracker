@@ -11,7 +11,7 @@ using TimerTracker.BE.DB.DataAccess;
 namespace TimerTracker.BE.DB.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241026141928_InitialCreate")]
+    [Migration("20241026152630_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
