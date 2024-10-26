@@ -1,0 +1,3 @@
+﻿Add-Migration InitialCreate -Project TimerTracker.BE.DB -StartupProject TimerTracker.BE.DB
+
+ update-database -Project TimerTracker.BE.DB -StartupProject TimerTracker.BE.DB
