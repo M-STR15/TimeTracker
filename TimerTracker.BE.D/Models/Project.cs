@@ -1,15 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace TimerTracker.BE.DB.Models
 {
 	[Table("Project", Schema = "dbo")]
-	public class Project : IProjectWithoutColl
+    [Index(nameof(Name))]
+    public class Project : IProjectWithoutColl
 	{
 		[Key]
 		[Column("Project_ID")]
 		public virtual int Id { get; set; }
+		[Required]
 		public virtual string Name { get; set; }
 		public virtual string? Description { get; set; }
 

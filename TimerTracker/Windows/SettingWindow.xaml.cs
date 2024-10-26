@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Providers;
 using TimerTracker.Helpers;
 using TimerTracker.Models;
@@ -87,7 +86,7 @@ namespace TimerTracker.Windows
                     _subModule = value;
                     var isSelect = (_selectSubModuleLb == null);
                     btnSubModuleEdit.IsEnabled = !isSelect;
-                    btnProjectDelete.IsEnabled = !isSelect;
+                    btnSubModuleDelete.IsEnabled = !isSelect;
                 }
             }
         }

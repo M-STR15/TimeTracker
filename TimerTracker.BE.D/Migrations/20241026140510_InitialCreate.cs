@@ -155,6 +155,18 @@ namespace TimerTracker.BE.DB.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Activities_Name",
+                schema: "dbo",
+                table: "Activities",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Project_Name",
+                schema: "dbo",
+                table: "Project",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Record_activity_Activity_ID",
                 schema: "dbo",
                 table: "Record_activity",
@@ -190,6 +202,12 @@ namespace TimerTracker.BE.DB.Migrations
                 table: "Shifts",
                 column: "Start_date",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubModule_Name",
+                schema: "dbo",
+                table: "SubModule",
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubModule_Project_ID",

@@ -30,6 +30,8 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name");
+
                     b.ToTable("Activities", "dbo");
 
                     b.HasData(
@@ -65,6 +67,8 @@ namespace TimerTracker.BE.DB.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Project", "dbo");
 
@@ -175,6 +179,8 @@ namespace TimerTracker.BE.DB.Migrations
                         .HasColumnName("Project_ID");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.HasIndex("ProjectId");
 
