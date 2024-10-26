@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Providers;
 using TimerTracker.Helpers;
 using TimerTracker.Models;
@@ -57,6 +58,39 @@ namespace TimerTracker.Windows
 
         public ICommand CmdProjectSave { get; }
         public ICommand CmdSubModuleSave { get; }
+
+        private ProjectListBox? _project;
+        private ProjectListBox? _selectProjectLb
+        {
+            get => _project;
+            set
+            {
+                if (_project != value)
+                {
+                    _project = value;
+                    var isSelect = (_selectProjectLb == null);
+                    btnEditProject.IsEnabled = !isSelect;
+                    btnProjectDelete.IsEnabled = !isSelect;
+                    btnSubModuleAdd.IsEnabled = !isSelect;
+                }
+            }
+        }
+
+        private SubModuleListBox? _subModule;
+        private SubModuleListBox? _selectSubModuleLb
+        {
+            get => _subModule;
+            set
+            {
+                if (_subModule != value)
+                {
+                    _subModule = value;
+                    var isSelect = (_selectSubModuleLb == null);
+                    btnSubModuleEdit.IsEnabled = !isSelect;
+                    btnProjectDelete.IsEnabled = !isSelect;
+                }
+            }
+        }
 
         private void btnProjectAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -149,8 +183,8 @@ namespace TimerTracker.Windows
 
         private void listProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-
+            var selected = (ProjectListBox)ProjectItemsView?.CurrentItem ?? null;
+            _selectProjectLb = selected;
             if (selected != null)
             {
                 var list = _projectProvider.GetSubModules(selected.Id);
@@ -220,6 +254,12 @@ namespace TimerTracker.Windows
             SubModuleItemsView.CollectionChanged += onSubModuleItemsViewChangeHandler;
 
             setLblSubModuleInfo();
+        }
+
+        private void listSubModule_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem ?? null;
+            _selectSubModuleLb = selected;
         }
     }
 }

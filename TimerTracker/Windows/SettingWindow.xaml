@@ -18,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <TabControl Margin="5" >
+    <TabControl Margin="5">
         <TabItem Header="Projects">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -33,9 +33,9 @@
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="stpProjectButton" Orientation="Horizontal">
                         <Button
-                    x:Name="btnAddProject"
-                    Click="btnProjectAdd_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnAddProject"
+                            Click="btnProjectAdd_Click"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/add.png" />
                                 <Label Content="Add" />
@@ -43,9 +43,10 @@
                         </Button>
 
                         <Button
-                    x:Name="btnEditProject"
-                    Click="btnProjectEdit_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnEditProject"
+                            Click="btnProjectEdit_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/save.png" />
                                 <Label Content="Edit" />
@@ -53,9 +54,10 @@
                         </Button>
 
                         <Button
-                    x:Name="btnProjectDelete"
-                    Click="btnProjectDelete_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnProjectDelete"
+                            Click="btnProjectDelete_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/delete.png" />
                                 <Label Content="Delete" />
@@ -70,22 +72,22 @@
                         </Grid.RowDefinitions>
                         <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
                         <ListBox
-                    x:Name="listProject"
-                    Grid.Row="1"
-                    ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
-                    ItemsSource="{Binding ProjectItemsView}"
-                    SelectionChanged="listProject_SelectionChanged"
-                    Style="{StaticResource settingListboxStyle}" />
+                            x:Name="listProject"
+                            Grid.Row="1"
+                            ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
+                            ItemsSource="{Binding ProjectItemsView}"
+                            SelectionChanged="listProject_SelectionChanged"
+                            Style="{StaticResource settingListboxStyle}" />
                         <Label
-                    x:Name="lblProjectInfo"
-                    Grid.Row="2"
-                    Content="Count 0" />
+                            x:Name="lblProjectInfo"
+                            Grid.Row="2"
+                            Content="Count 0" />
                     </Grid>
                 </Grid>
                 <GridSplitter
-            Grid.Column="1"
-            Width="5"
-            HorizontalAlignment="Stretch" />
+                    Grid.Column="1"
+                    Width="5"
+                    HorizontalAlignment="Stretch" />
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -93,9 +95,10 @@
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="stpSubModuleButton" Orientation="Horizontal">
                         <Button
-                    x:Name="btnSubModuleAdd"
-                    Click="btnSubModuleAdd_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnSubModuleAdd"
+                            Click="btnSubModuleAdd_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/add.png" />
                                 <Label Content="Add" />
@@ -103,9 +106,10 @@
                         </Button>
 
                         <Button
-                    x:Name="btnSubModuleEdit"
-                    Click="btnSubModuleEdit_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnSubModuleEdit"
+                            Click="btnSubModuleEdit_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/save.png" />
                                 <Label Content="Edit" />
@@ -113,9 +117,10 @@
                         </Button>
 
                         <Button
-                    x:Name="btnSubModuleDelete"
-                    Click="btnSubModuleDelete_Click"
-                    Style="{StaticResource settingButtonStyle}">
+                            x:Name="btnSubModuleDelete"
+                            Click="btnSubModuleDelete_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/delete.png" />
                                 <Label Content="Delete" />
@@ -135,20 +140,21 @@
                             </Grid.ColumnDefinitions>
                             <Label Content="Name" Style="{StaticResource settingTitleLabelStyle}" />
                             <Label
-                        Grid.Column="1"
-                        Content="Desription"
-                        Style="{StaticResource settingTitleLabelStyle}" />
+                                Grid.Column="1"
+                                Content="Desription"
+                                Style="{StaticResource settingTitleLabelStyle}" />
                         </Grid>
                         <ListBox
-                    x:Name="listSubModule"
-                    Grid.Row="1"
-                    ItemTemplateSelector="{StaticResource SubModuleTemplateSelector}"
-                    ItemsSource="{Binding SubModuleItemsView}"
-                    Style="{StaticResource settingListboxStyle}" />
+                            x:Name="listSubModule"
+                            Grid.Row="1"
+                            ItemTemplateSelector="{StaticResource SubModuleTemplateSelector}"
+                            ItemsSource="{Binding SubModuleItemsView}"
+                            SelectionChanged="listSubModule_SelectionChanged"
+                            Style="{StaticResource settingListboxStyle}" />
                         <Label
-                    x:Name="lblSubModuleInfo"
-                    Grid.Row="2"
-                    Content="Count 0" />
+                            x:Name="lblSubModuleInfo"
+                            Grid.Row="2"
+                            Content="Count 0" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -157,15 +163,18 @@
         <TabItem Header="Set main window">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Content="Top window" ToolTip="Hlavní okno bude vždy zobrazeno nad ostatními okny."/>
-                <CheckBox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Label Content="Top window" ToolTip="Hlavní okno bude vždy zobrazeno nad ostatními okny." />
+                <CheckBox
+                    Grid.Column="1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
             </Grid>
         </TabItem>
     </TabControl>
