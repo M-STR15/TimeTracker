@@ -84,22 +84,29 @@ public class ProjectProvider
         }
     }
 
-    public bool DeleteProject(IProjectWithoutColl project)
+    public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
     {
         try
         {
             using (var context = new MainDatacontext())
             {
                 var item = context.Projects.FirstOrDefault(x => x.Id == project.Id);
-                context.Projects.Remove(item);
-                context.SaveChanges();
+                if (item != null)
+                {
+                    context.Projects.Remove(item);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    return null;
+                }
+                return item;
             }
 
-            return true;
         }
         catch (Exception)
         {
-            return false;
+            return null;
         }
     }
 
@@ -116,7 +123,7 @@ public class ProjectProvider
                     context.SubModules.Add(item);
                 }
                 else
-                { 
+                {
                     context.SubModules.Update(item);
                 }
 
@@ -131,22 +138,28 @@ public class ProjectProvider
         }
     }
 
-    public bool DeleteSubModule(ISubModuleWithoutColl subModule)
+    public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
     {
         try
         {
             using (var context = new MainDatacontext())
             {
                 var item = context.SubModules.FirstOrDefault(x => x.Id == subModule.Id);
-                context.SubModules.Remove(item);
-                context.SaveChanges();
+                if (item != null)
+                {
+                    context.SubModules.Remove(item);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    return null;
+                }
+                return item;
             }
-
-            return true;
         }
         catch (Exception)
         {
-            return false;
+            return null;
         }
     }
 }

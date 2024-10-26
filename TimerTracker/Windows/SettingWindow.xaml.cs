@@ -108,7 +108,7 @@ namespace TimerTracker.Windows
             {
                 var result = _projectProvider.DeleteProject(selected);
 
-                if (result)
+                if (result != null)
                 {
                     ProjectListBox.Remove(selected);
                     ProjectItemsView.Refresh();
@@ -167,7 +167,7 @@ namespace TimerTracker.Windows
             if (selected != null)
             {
                 var result = _projectProvider.DeleteSubModule(selected);
-                if (result)
+                if (result != null)
                 {
                     SubModuleListBox.Remove(selected);
                     SubModuleItemsView.Refresh();
