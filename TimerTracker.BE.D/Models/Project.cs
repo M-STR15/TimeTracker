@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace TimerTracker.BE.DB.Models
 {
-	[Table("Project", Schema = "dbo")]
+	[Table("Projects", Schema = "dbo")]
     [Index(nameof(Name))]
     public class Project : IProjectWithoutColl
 	{

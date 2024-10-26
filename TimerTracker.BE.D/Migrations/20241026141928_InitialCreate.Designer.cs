@@ -11,7 +11,7 @@ using TimerTracker.BE.DB.DataAccess;
 namespace TimerTracker.BE.DB.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241026140510_InitialCreate")]
+    [Migration("20241026141928_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -73,7 +73,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("Project", "dbo");
+                    b.ToTable("Projects", "dbo");
 
                     b.HasData(
                         new
@@ -130,7 +130,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("SubModuleId");
 
-                    b.ToTable("Record_activity", "dbo");
+                    b.ToTable("Record_activities", "dbo");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Shift", b =>
@@ -187,7 +187,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("SubModule", "dbo");
+                    b.ToTable("SubModules", "dbo");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.RecordActivity", b =>

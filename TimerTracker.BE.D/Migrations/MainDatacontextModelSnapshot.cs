@@ -70,7 +70,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("Name");
 
-                    b.ToTable("Project", "dbo");
+                    b.ToTable("Projects", "dbo");
 
                     b.HasData(
                         new
@@ -127,7 +127,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("SubModuleId");
 
-                    b.ToTable("Record_activity", "dbo");
+                    b.ToTable("Record_activities", "dbo");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Shift", b =>
@@ -184,7 +184,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("SubModule", "dbo");
+                    b.ToTable("SubModules", "dbo");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.RecordActivity", b =>

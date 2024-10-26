@@ -31,7 +31,7 @@ namespace TimerTracker.BE.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 schema: "dbo",
                 columns: table => new
                 {
@@ -42,7 +42,7 @@ namespace TimerTracker.BE.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Project_ID);
+                    table.PrimaryKey("PK_Projects", x => x.Project_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,7 +68,7 @@ namespace TimerTracker.BE.DB.Migrations
                 comment: "Tabulka slouží k naplánování směny.");
 
             migrationBuilder.CreateTable(
-                name: "SubModule",
+                name: "SubModules",
                 schema: "dbo",
                 columns: table => new
                 {
@@ -80,18 +80,18 @@ namespace TimerTracker.BE.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubModule", x => x.SubModule_ID);
+                    table.PrimaryKey("PK_SubModules", x => x.SubModule_ID);
                     table.ForeignKey(
-                        name: "FK_SubModule_Project_Project_ID",
+                        name: "FK_SubModules_Projects_Project_ID",
                         column: x => x.Project_ID,
                         principalSchema: "dbo",
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "Project_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Record_activity",
+                name: "Record_activities",
                 schema: "dbo",
                 columns: table => new
                 {
@@ -105,31 +105,31 @@ namespace TimerTracker.BE.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Record_activity", x => x.Guid_ID);
+                    table.PrimaryKey("PK_Record_activities", x => x.Guid_ID);
                     table.ForeignKey(
-                        name: "FK_Record_activity_Activities_Activity_ID",
+                        name: "FK_Record_activities_Activities_Activity_ID",
                         column: x => x.Activity_ID,
                         principalSchema: "dbo",
                         principalTable: "Activities",
                         principalColumn: "Activity_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Record_activity_Project_Project_ID",
+                        name: "FK_Record_activities_Projects_Project_ID",
                         column: x => x.Project_ID,
                         principalSchema: "dbo",
-                        principalTable: "Project",
+                        principalTable: "Projects",
                         principalColumn: "Project_ID");
                     table.ForeignKey(
-                        name: "FK_Record_activity_Shifts_Shift_GuidID",
+                        name: "FK_Record_activities_Shifts_Shift_GuidID",
                         column: x => x.Shift_GuidID,
                         principalSchema: "dbo",
                         principalTable: "Shifts",
                         principalColumn: "Guid_ID");
                     table.ForeignKey(
-                        name: "FK_Record_activity_SubModule_SubModule_ID",
+                        name: "FK_Record_activities_SubModules_SubModule_ID",
                         column: x => x.SubModule_ID,
                         principalSchema: "dbo",
-                        principalTable: "SubModule",
+                        principalTable: "SubModules",
                         principalColumn: "SubModule_ID");
                 });
 
@@ -146,7 +146,7 @@ namespace TimerTracker.BE.DB.Migrations
 
             migrationBuilder.InsertData(
                 schema: "dbo",
-                table: "Project",
+                table: "Projects",
                 columns: new[] { "Project_ID", "Description", "Name" },
                 values: new object[,]
                 {
@@ -161,33 +161,33 @@ namespace TimerTracker.BE.DB.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_Name",
+                name: "IX_Projects_Name",
                 schema: "dbo",
-                table: "Project",
+                table: "Projects",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Record_activity_Activity_ID",
+                name: "IX_Record_activities_Activity_ID",
                 schema: "dbo",
-                table: "Record_activity",
+                table: "Record_activities",
                 column: "Activity_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Record_activity_Project_ID",
+                name: "IX_Record_activities_Project_ID",
                 schema: "dbo",
-                table: "Record_activity",
+                table: "Record_activities",
                 column: "Project_ID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Record_activity_Shift_GuidID",
+                name: "IX_Record_activities_Shift_GuidID",
                 schema: "dbo",
-                table: "Record_activity",
+                table: "Record_activities",
                 column: "Shift_GuidID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Record_activity_SubModule_ID",
+                name: "IX_Record_activities_SubModule_ID",
                 schema: "dbo",
-                table: "Record_activity",
+                table: "Record_activities",
                 column: "SubModule_ID");
 
             migrationBuilder.CreateIndex(
@@ -204,15 +204,15 @@ namespace TimerTracker.BE.DB.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubModule_Name",
+                name: "IX_SubModules_Name",
                 schema: "dbo",
-                table: "SubModule",
+                table: "SubModules",
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubModule_Project_ID",
+                name: "IX_SubModules_Project_ID",
                 schema: "dbo",
-                table: "SubModule",
+                table: "SubModules",
                 column: "Project_ID");
         }
 
@@ -220,7 +220,7 @@ namespace TimerTracker.BE.DB.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Record_activity",
+                name: "Record_activities",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -232,11 +232,11 @@ namespace TimerTracker.BE.DB.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "SubModule",
+                name: "SubModules",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Project",
+                name: "Projects",
                 schema: "dbo");
         }
     }

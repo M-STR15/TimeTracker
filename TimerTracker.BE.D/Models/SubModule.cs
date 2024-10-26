@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.BE.DB.Models
 {
-	[Table("SubModule", Schema = "dbo")]
+	[Table("SubModules", Schema = "dbo")]
     [Index(nameof(Name))]
     public class SubModule : ISubModuleWithoutColl
 	{

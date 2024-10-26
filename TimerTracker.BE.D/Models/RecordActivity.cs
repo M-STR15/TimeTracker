@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.BE.DB.Models
 {
-	[Table("Record_activity", Schema = "dbo")]
+	[Table("Record_activities", Schema = "dbo")]
 	public class RecordActivity
 	{
 		public RecordActivity()
