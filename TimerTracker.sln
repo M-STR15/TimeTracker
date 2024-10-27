@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerTracker", "TimerTracker\TimerTracker.csproj", "{8107465D-71B2-45DA-93E3-0F0B2A4A4E03}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerTracker.BE.DB", "TimerTracker.BE.D\TimerTracker.BE.DB.csproj", "{27EC6AC3-EBAD-4630-9207-D65D96D94138}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerTracker.BE.DB", "TimerTracker.BE.DB\TimerTracker.BE.DB.csproj", "{27EC6AC3-EBAD-4630-9207-D65D96D94138}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
