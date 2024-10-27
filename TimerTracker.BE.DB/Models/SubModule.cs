@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.BE.DB.Models
 {
-	[Table("SubModule", Schema = "dbo")]
+    [Index(nameof(ProjectId),nameof(Name), IsUnique = true)]
+    [Table("SubModule", Schema = "dbo")]
 	public class SubModule : ISubModuleWithoutColl
 	{
 		[Key]

@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimerTracker.BE.DB.Models
 {
+    [Index(nameof(Name), IsUnique = true)]
     [Table("Activities", Schema = "dbo")]
     public class Activity
     {
