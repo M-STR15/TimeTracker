@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TimerTracker.BE.D\TimerTracker.BE.DB.csproj" />
+    <ProjectReference Include="..\TimerTracker.BE.DB\TimerTracker.BE.DB.csproj" />
   </ItemGroup>
 
   <ItemGroup>
