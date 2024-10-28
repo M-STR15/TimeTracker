@@ -4,61 +4,23 @@ using TimerTracker.BE.DB.Models;
 
 namespace TimerTracker.Models
 {
+    /// <summary>
+    /// Třída slouží pro manipulaci v Listboxu, je to mezi vrstva mezi DB a editování dat. 
+    /// </summary>
     [ObservableObject]
     public partial class SubModuleListBox : ISubModuleWithoutColl, IListBox
     {
         public Guid GuidId { get; private set; }
+        [ObservableProperty]
         private bool _isEditable;
-        public bool IsEditable
-        {
-            get => _isEditable;
-            set
-            {
-                _isEditable = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private string? _description;
-        public string? Description
-        {
-            get => _description;
-            set
-            {
-                _description = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private int _id;
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private string _name;
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
+        [ObservableProperty]
         private int _projectId;
-        public int ProjectId
-        {
-            get => _projectId;
-            set
-            {
-                _projectId = value;
-                OnPropertyChanged();
-            }
-        }
-
         public SubModuleListBox()
         {
             GuidId = Guid.NewGuid();

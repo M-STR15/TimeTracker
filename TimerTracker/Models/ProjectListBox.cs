@@ -7,72 +7,19 @@ namespace TimerTracker.Models
     public partial class ProjectListBox : IProjectWithoutColl, IListBox
     {
         public Guid GuidId { get; private set; }
+        [ObservableProperty]
         private string? _description;
-        public string? Description
-        {
-            get => _description;
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
         private int _id;
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                if (_id != value)
-                {
-                    _id = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
         private string _name;
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
 
         public override string ToString()
         {
             return Name.ToString();
         }
+        [ObservableProperty]
         private bool _isEditable;
-        public bool IsEditable
-        {
-            get => _isEditable;
-            set
-            {
-                _isEditable = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isFlag;
-        public bool IsFlag
-        {
-            get => _isFlag;
-            set
-            {
-                _isFlag = value;
-                OnPropertyChanged();
-            }
-        }
         public ProjectListBox()
         {
             GuidId = Guid.NewGuid();
