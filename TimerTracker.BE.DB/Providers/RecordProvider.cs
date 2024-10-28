@@ -41,7 +41,7 @@ namespace TimerTracker.BE.DB.Providers
                 }
                 return recordActivity;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return null;
             }

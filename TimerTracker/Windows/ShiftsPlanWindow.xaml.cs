@@ -1,15 +1,19 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using TimerTracker.BE.DB.Models;
+using TimerTracker.BE.DB.Models.Enums;
 using TimerTracker.BE.DB.Providers;
 using TimerTracker.Stories;
+using TimerTracker.Windows.Models;
 
 namespace TimerTracker.Windows
 {
     public partial class ShiftsPlanWindow : Window
     {
-        private List<InfoOfDate> _daiesList = new();
+        private List<InfoOfDate> _dailyList = new();
+        private List<TypeShiftRadioButton> _typeShifts = new();
         private MainStory _mainStory;
         private ShiftProvider _shiftProvider;
 
@@ -19,6 +23,12 @@ namespace TimerTracker.Windows
 
             _mainStory = mainStory;
             _shiftProvider = mainStory.ContainerStore.GetShiftProvider();
+
+            _typeShifts = _shiftProvider.GetTypeShifts().Select(x => new TypeShiftRadioButton(x)).ToList();
+            if (_typeShifts.Count > 0)
+                _typeShifts.First().IsSelected = true;
+
+            lvTypeShifts.ItemsSource = _typeShifts;
 
             var monthAndShift = new List<string>();
             var countMountBack = 6;
@@ -38,7 +48,7 @@ namespace TimerTracker.Windows
 
         private void generateButtonList()
         {
-            foreach (var item in _daiesList)
+            foreach (var item in _dailyList)
             {
                 var button = new Button()
                 {
@@ -48,7 +58,7 @@ namespace TimerTracker.Windows
                     Width = 40,
                     Margin = new Thickness(5),
                     Tag = item,
-                    Background = getColorButtom(item.IsPlanShiftInDay)
+                    Background = getColorButtom(item)
                 };
 
                 button.Click += onClickOnBtnDay_Click;
@@ -77,26 +87,47 @@ namespace TimerTracker.Windows
                 var guidId = anyShiftInDb ? shift.GuidId : Guid.Empty;
                 var infoOfDate = new InfoOfDate(date, guidId, anyShiftInDb);
 
-                _daiesList.Add(infoOfDate);
+                _dailyList.Add(infoOfDate);
             }
         }
 
-        private SolidColorBrush getColorButtom(bool isPlanShiftInDay) => new SolidColorBrush(isPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
+        private SolidColorBrush getColorButtom(InfoOfDate infoOfDate)
+        {
+            if (infoOfDate.IsPlanShiftInDay)
+            {
+                var typeSchift = _typeShifts.FirstOrDefault(x => x.Id == (int)infoOfDate.eTypeShift);
+                if (typeSchift != null)
+                {
+                    var colorString = typeSchift.Color;
+                    var color = (Color)ColorConverter.ConvertFromString(colorString);
+                    return new SolidColorBrush(color);
+                }
+                else
+                {
+                    return new SolidColorBrush(Colors.Gray);
+                }
+            }
+            else
+            {
+                return new SolidColorBrush(Colors.Gray);
+            }
+        }
 
         private void onClickOnBtnDay_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
             var infoOfDate = (InfoOfDate)btn.Tag;
-            var setIsPlanShiftInDay = !infoOfDate.IsPlanShiftInDay;
-            infoOfDate.IsPlanShiftInDay = setIsPlanShiftInDay;
+            infoOfDate.IsPlanShiftInDay = (!infoOfDate.IsPlanShiftInDay);
+            var selTypeShift = _typeShifts.FirstOrDefault(x => x.IsSelected);
+            infoOfDate.eTypeShift = (eTypeShift)Enum.ToObject(typeof(eTypeShift), selTypeShift?.Id ?? 0);
 
-            btn.Background = new SolidColorBrush(setIsPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
+            btn.Background = getColorButtom(infoOfDate);
         }
 
         private void onChangeItemMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             itmcDays.Items.Clear();
-            _daiesList.Clear();
+            _dailyList.Clear();
 
             setHeaderGrid();
             generateDateList();
@@ -107,12 +138,12 @@ namespace TimerTracker.Windows
         {
             var shifts = new List<Shift>();
 
-            foreach (var item in _daiesList.Where(x => x.IsPlanShiftInDay).ToList())
+            foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
             {
-                var shift = new Shift(item.GuidId, item.Date);
+                var shift = new Shift(item.GuidId, item.Date, (int)item.eTypeShift);
                 shifts.Add(shift);
             }
-            _shiftProvider.SaveShifts(shifts);
+            var result = _shiftProvider.SaveShifts(shifts);
 
             this.Close();
         }
@@ -130,68 +161,6 @@ namespace TimerTracker.Windows
                 itmcDays.Items.Add(label);
                 Grid.SetColumn(label, InfoOfDate.GetColumn(item));
             }
-        }
-    }
-
-    internal class InfoOfDate
-    {
-        private string? _description;
-
-        private bool _isPlanShiftInDay;
-
-        public InfoOfDate(DateTime date, Guid guidID, bool isPlanShiftInDay, string? description = null)
-        {
-            GuidId = guidID;
-            Date = date;
-            Day = date.Day;
-            DayOfWeek = date.DayOfWeek;
-            WeekInMont = getWeekInMonth(date);
-            Description = description;
-            IsPlanShiftInDay = isPlanShiftInDay;
-
-            IsEdited = false;
-        }
-
-        public DateTime Date { get; private set; }
-        public int Day { get; private set; }
-        public DayOfWeek DayOfWeek { get; private set; }
-
-        public string? Description
-        {
-            get => _description;
-            set
-            {
-                _description = value;
-                IsEdited = true;
-            }
-        }
-
-        public Guid GuidId { get; private set; }
-        public bool IsEdited { get; private set; }
-
-        public bool IsPlanShiftInDay
-        {
-            get => _isPlanShiftInDay;
-            set
-            {
-                _isPlanShiftInDay = value;
-                IsEdited = true;
-            }
-        }
-
-        public int WeekInMont { get; private set; }
-
-        public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
-
-        private static int getWeekInMonth(DateTime date)
-        {
-            DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
-            int firstDayOfWeek = GetColumn(firstDayOfMonth.DayOfWeek); // 0 = neděle, 1 = pondělí, ...
-            int daysSinceStartOfMonth = date.Day;
-            int totalDaysBeforeCurrentWeek = daysSinceStartOfMonth + firstDayOfWeek - 1;
-            int weekNumber = totalDaysBeforeCurrentWeek / 7 + 1;
-
-            return weekNumber;
         }
     }
 }

@@ -6,9 +6,17 @@
     xmlns:local="clr-namespace:TimerTracker.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="ShiftsPlanWindow"
-    Width="450"
+    Width="680"
     Height="430"
     mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/TimerTracker;Component/Dictionaries/ShiftsPlanWindowDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -21,15 +29,34 @@
                 x:Name="cmbMontAndYear"
                 Width="150"
                 SelectionChanged="onChangeItemMontAndYear_SelectionChanged" />
+            <Label Content="Set type:" />
+            <Border BorderBrush="Gray" BorderThickness="2">
+                <ListView x:Name="lvTypeShifts">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton
+                                Width="85"
+                                Content="{Binding Name, FallbackValue=Test}"
+                                GroupName="TypeShiftsGroup"
+                                IsChecked="{Binding IsSelected}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
         </StackPanel>
         <Grid Grid.Row="1">
             <ItemsControl
                 x:Name="itmcDays"
                 Margin="5"
-                HorizontalContentAlignment="Left">
+                HorizontalContentAlignment="Center">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Grid>
+                        <Grid HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />

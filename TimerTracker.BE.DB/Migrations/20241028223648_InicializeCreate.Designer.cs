@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimerTracker.BE.DB.DataAccess;
 
@@ -10,9 +11,11 @@ using TimerTracker.BE.DB.DataAccess;
 namespace TimerTracker.BE.DB.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    partial class MainDatacontextModelSnapshot : ModelSnapshot
+    [Migration("20241028223648_InicializeCreate")]
+    partial class InicializeCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -213,9 +216,6 @@ namespace TimerTracker.BE.DB.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("IsVisibleInMainWindow")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -238,29 +238,19 @@ namespace TimerTracker.BE.DB.Migrations
                         {
                             Id = 2,
                             Color = "SkyBlue",
-                            IsVisibleInMainWindow = true,
                             Name = "HomeOffice"
                         },
                         new
                         {
                             Id = 1,
                             Color = "Orange",
-                            IsVisibleInMainWindow = true,
                             Name = "Office"
                         },
                         new
                         {
                             Id = 3,
                             Color = "MediumPurple",
-                            IsVisibleInMainWindow = true,
                             Name = "Others"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Color = "LawnGreen",
-                            IsVisibleInMainWindow = false,
-                            Name = "Holiday"
                         });
                 });
 

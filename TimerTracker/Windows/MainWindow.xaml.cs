@@ -18,7 +18,8 @@ namespace TimerTracker.Windows
         private RecordActivity _lastRecordActivity;
         private ProjectProvider _projectProvider;
         private RecordProvider _recordProvider;
-        private List<ShiftCmb> _shiftCmbs;
+        private List<ShiftCmb> _shiftCmbs = new();
+        private List<TypeShift> _typeShifts = new();
 
         private ShiftProvider _shiftProvider;
         public MainWindow(MainStory mainStory)
@@ -33,6 +34,7 @@ namespace TimerTracker.Windows
 
             loadProjects();
             loadShifts();
+            loadTypeShifts();
 
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
@@ -41,6 +43,7 @@ namespace TimerTracker.Windows
             cmbProjects.DisplayMemberPath = "Name";
             cmbShift.DisplayMemberPath = "StartDateStr";
             cmbSubModule.DisplayMemberPath = "Name";
+            cmbTypeShift.DisplayMemberPath = "Name";
         }
 
         private void _dispatcherTimer_Tick(object? sender, EventArgs e)
@@ -50,10 +53,10 @@ namespace TimerTracker.Windows
 
         private bool addActivite(RecordActivity recordActivity)
         {
-            return addActivite(recordActivity.Activity, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+            return addActivite(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
         }
 
-        private bool addActivite(Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+        private bool addActivite(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
         {
             try
             {
@@ -61,14 +64,14 @@ namespace TimerTracker.Windows
 
                 var record = new RecordActivity();
                 if (shift != null && shift.GuidId != Guid.Empty)
-                    record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, subModule?.Id ?? null, description);
+                    record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
                 else
-                    record = new RecordActivity(startTimeActivity, activity.Id, project?.Id ?? null, subModule?.Id ?? null, description);
+                    record = new RecordActivity(startTimeActivity, activity.Id, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
 
                 var result = _recordProvider.SaveRecord(record);
                 if (result != null)
                 {
-                    _lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, activity, project, subModule, shift, description);
+                    _lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, activity, typeShift, project, subModule, shift, description);
                 }
 
                 return result != null;
@@ -114,6 +117,13 @@ namespace TimerTracker.Windows
             cmbProjects.SelectedIndex = 0;
         }
 
+        private void loadTypeShifts()
+        {
+            _typeShifts = _shiftProvider.GetTypeShiftsForMainWindow();
+            cmbTypeShift.ItemsSource = _typeShifts;
+            cmbTypeShift.SelectedIndex = 0;
+        }
+
         private void loadShifts()
         {
             var currentDate = DateTime.Now;
@@ -136,9 +146,10 @@ namespace TimerTracker.Windows
             var selProject = (Project)cmbProjects.SelectedItem;
             var selShift = (ShiftCmb)cmbShift.SelectedItem;
             var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
+            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
             var description = getTextFromRichTextBox(rtbDescription);
-            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selProject, selSubmodule, selShift, description);
+            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selProject, selSubmodule, selShift, description);
 
             var result = addActivite(selRecordActivity);
             if (result)
@@ -156,7 +167,9 @@ namespace TimerTracker.Windows
                 Name = eActivity.Stop.ToString()
             };
 
-            var result = addActivite(activity);
+            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+
+            var result = addActivite(activity, selTypeShift);
             if (result)
             {
                 changeLabels();
@@ -172,7 +185,9 @@ namespace TimerTracker.Windows
                 Name = eActivity.Pause.ToString()
             };
 
-            var result = addActivite(activity);
+            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+
+            var result = addActivite(activity, selTypeShift);
             if (result)
             {
                 changeLabels();
@@ -182,11 +197,14 @@ namespace TimerTracker.Windows
 
         private void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var projectId = ((Project)cmbProjects.SelectedItem).Id;
-            var subModules = _projectProvider.GetSubModules(projectId);
-            cmbSubModule.ItemsSource = subModules;
-            if (subModules.Count > 0)
-                cmbSubModule.SelectedIndex = 0;
+            if (cmbProjects.SelectedItem != null)
+            {
+                var projectId = ((Project)cmbProjects.SelectedItem).Id;
+                var subModules = _projectProvider.GetSubModules(projectId);
+                cmbSubModule.ItemsSource = subModules;
+                if (subModules.Count > 0)
+                    cmbSubModule.SelectedIndex = 0;
+            }
         }
         private void onOpenWindowReportRecords_Click(object sender, RoutedEventArgs e)
         {

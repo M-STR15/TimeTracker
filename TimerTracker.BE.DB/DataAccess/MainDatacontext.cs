@@ -13,6 +13,7 @@ namespace TimerTracker.BE.DB.DataAccess
         public DbSet<RecordActivity> RecordActivities { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<SubModule> SubModules { get; set; }
+        public DbSet<TypeShift> TypeShifts { get; set; }
         public string DbPath { get; }
 
         public MainDatacontext()
@@ -31,6 +32,7 @@ namespace TimerTracker.BE.DB.DataAccess
         {
             _modelBuilder = modelBuilder;
             insertDefaultValues_Activities();
+            insertDefaultValues_TypeShifts();
             insertDefaultValues_Projects();
 
             setSubModuleTable();
@@ -52,6 +54,17 @@ namespace TimerTracker.BE.DB.DataAccess
                 new Activity((int)eActivity.Start, eActivity.Start.ToString()),
                 new Activity((int)eActivity.Pause, eActivity.Pause.ToString()),
                 new Activity((int)eActivity.Stop, eActivity.Stop.ToString())
+                );
+        }
+
+        private void insertDefaultValues_TypeShifts()
+        {
+            _modelBuilder.Entity<TypeShift>()
+                .HasData(
+                new TypeShift((int)eTypeShift.HomeOffice, eTypeShift.HomeOffice.ToString(), "SkyBlue"),
+                new TypeShift((int)eTypeShift.Office, eTypeShift.Office.ToString(), "Orange"),
+                new TypeShift((int)eTypeShift.Others, eTypeShift.Others.ToString(), "MediumPurple"),
+                new TypeShift((int)eTypeShift.Holiday, eTypeShift.Holiday.ToString(), "LawnGreen", false)
                 );
         }
 

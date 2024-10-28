@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimerTracker.BE.DB.DataAccess;
 using TimerTracker.BE.DB.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TimerTracker.BE.DB.Providers
 {
@@ -33,6 +34,38 @@ namespace TimerTracker.BE.DB.Providers
                 {
                     var shifts = context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToList();
                     return shifts;
+                }
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
+        public List<TypeShift> GetTypeShifts()
+        {
+            try
+            {
+                using (var context = new MainDatacontext())
+                {
+                    var typeShifts = context.TypeShifts.AsNoTracking().ToList();
+                    return typeShifts;
+                }
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
+        public List<TypeShift> GetTypeShiftsForMainWindow()
+        {
+            try
+            {
+                using (var context = new MainDatacontext())
+                {
+                    var typeShifts = context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToList();
+                    return typeShifts;
                 }
             }
             catch (Exception)

@@ -21,15 +21,23 @@ namespace TimerTracker.BE.DB.Models
 
         public ICollection<Shift> Shifts { get; set; }
 
+        [Required]
+        [Column("TypeShift_ID")]
+        public int TypeShiftId { get; set; }
+
+        [ForeignKey("TypeShiftId")]
+        public TypeShift TypeShift { get; set; }
+
         public Shift()
         {
         }
 
-        public Shift(Guid guidId, DateTime startDate, string? description = null) : this()
+        public Shift(Guid guidId, DateTime startDate, int typeShiftId, string? description = null) : this()
         {
             GuidId = guidId;
             StartDate = startDate;
             Description = description;
+            TypeShiftId = typeShiftId;
         }
     }
 }

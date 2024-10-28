@@ -9,44 +9,11 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <Style TargetType="Label">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style x:Key="lblMainTitle" TargetType="Label">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="Margin" Value="5,5,5,0" />
-        </Style>
-        <Style x:Key="lblTitle" TargetType="Label">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-
-        <Style x:Key="lblStyle1" TargetType="Label" />
-
-        <Style x:Key="lblStyle2" TargetType="Label">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="FontWeight" Value="Bold" />
-        </Style>
-
-        <Style x:Key="txbGrid" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
-        </Style>
-        <Style TargetType="Border">
-            <Setter Property="Margin" Value="5,0,5,5" />
-            <Setter Property="BorderBrush" Value="Gray" />
-            <Setter Property="BorderThickness" Value="2" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/TimerTracker;Component/Dictionaries/MainWindowDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -96,6 +63,8 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -104,30 +73,42 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="0"
+                            Content="Type shift"
+                            Style="{StaticResource lblStyle1}" />
+                        <ComboBox
+                            x:Name="cmbTypeShift"
+                            Grid.Row="1"
+                            Grid.Column="0"/>
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
                             Content="Shift"
                             Style="{StaticResource lblStyle1}" />
                         <ComboBox
                             x:Name="cmbShift"
                             Grid.Row="1"
-                            Grid.Column="0" />
+                            Grid.Column="1" />
                         <Label
-                            Grid.Column="1"
+                            Grid.Row="2"
+                            Grid.Column="0"
                             Content="Project"
+                            Grid.ColumnSpan="2"
                             Style="{StaticResource lblStyle1}" />
                         <ComboBox
                             x:Name="cmbProjects"
-                            Grid.Row="1"
-                            Grid.Column="1"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
                             SelectionChanged="onLoadDataAfterChangeProject_SelectionChanged" />
                         <Label
-                            Grid.Row="2"
+                            Grid.Row="4"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             Content="Sub module"
                             Style="{StaticResource lblStyle1}" />
                         <ComboBox
                             x:Name="cmbSubModule"
-                            Grid.Row="3"
+                            Grid.Row="5"
                             Grid.Column="0"
                             Grid.ColumnSpan="2" />
                     </Grid>
@@ -161,7 +142,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Quick buttons" Style="{StaticResource lblMainTitle}" />
                 <Border Grid.Row="1">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                         <Button
                             x:Name="btnPause"
                             Grid.Row="7"

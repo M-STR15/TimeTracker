@@ -11,8 +11,8 @@ using TimerTracker.BE.DB.DataAccess;
 namespace TimerTracker.BE.DB.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241028013402_InicializeCreate")]
-    partial class InicializeCreate
+    [Migration("20241028224012_AddItemTypeShift")]
+    partial class AddItemTypeShift
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,10 @@ namespace TimerTracker.BE.DB.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("SubModule_ID");
 
+                    b.Property<int>("TypeShiftId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("TypeShift_ID");
+
                     b.HasKey("GuidId");
 
                     b.HasIndex("ActivityId");
@@ -132,6 +136,8 @@ namespace TimerTracker.BE.DB.Migrations
                     b.HasIndex("ShiftGuidId");
 
                     b.HasIndex("SubModuleId");
+
+                    b.HasIndex("TypeShiftId");
 
                     b.ToTable("Record_activities", "dbo");
                 });
@@ -153,12 +159,18 @@ namespace TimerTracker.BE.DB.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Start_date");
 
+                    b.Property<int>("TypeShiftId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("TypeShift_ID");
+
                     b.HasKey("GuidId");
 
                     b.HasIndex("ShiftGuidId");
 
                     b.HasIndex("StartDate")
                         .IsUnique();
+
+                    b.HasIndex("TypeShiftId");
 
                     b.ToTable("Shifts", "dbo", t =>
                         {
@@ -193,6 +205,61 @@ namespace TimerTracker.BE.DB.Migrations
                     b.ToTable("SubModule", "dbo");
                 });
 
+            modelBuilder.Entity("TimerTracker.BE.DB.Models.TypeShift", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("TypeShift_ID");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Name");
+
+                    b.Property<int?>("TypeShiftId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeShiftId");
+
+                    b.ToTable("TypeShifts", "dbo", t =>
+                        {
+                            t.HasComment("Tabulka všech možných směn.");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Color = "SkyBlue",
+                            Name = "HomeOffice"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Color = "Orange",
+                            Name = "Office"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Color = "MediumPurple",
+                            Name = "Others"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Color = "LawnGreen",
+                            Name = "Holiday"
+                        });
+                });
+
             modelBuilder.Entity("TimerTracker.BE.DB.Models.RecordActivity", b =>
                 {
                     b.HasOne("TimerTracker.BE.DB.Models.Activity", "Activity")
@@ -213,6 +280,12 @@ namespace TimerTracker.BE.DB.Migrations
                         .WithMany("Activities")
                         .HasForeignKey("SubModuleId");
 
+                    b.HasOne("TimerTracker.BE.DB.Models.TypeShift", "TypeShift")
+                        .WithMany("RecordActivity")
+                        .HasForeignKey("TypeShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Activity");
 
                     b.Navigation("Project");
@@ -220,6 +293,8 @@ namespace TimerTracker.BE.DB.Migrations
                     b.Navigation("Shift");
 
                     b.Navigation("SubModule");
+
+                    b.Navigation("TypeShift");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Shift", b =>
@@ -227,6 +302,14 @@ namespace TimerTracker.BE.DB.Migrations
                     b.HasOne("TimerTracker.BE.DB.Models.Shift", null)
                         .WithMany("Shifts")
                         .HasForeignKey("ShiftGuidId");
+
+                    b.HasOne("TimerTracker.BE.DB.Models.TypeShift", "TypeShift")
+                        .WithMany()
+                        .HasForeignKey("TypeShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TypeShift");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.SubModule", b =>
@@ -238,6 +321,13 @@ namespace TimerTracker.BE.DB.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TimerTracker.BE.DB.Models.TypeShift", b =>
+                {
+                    b.HasOne("TimerTracker.BE.DB.Models.TypeShift", null)
+                        .WithMany("TypeShifts")
+                        .HasForeignKey("TypeShiftId");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Activity", b =>
@@ -260,6 +350,13 @@ namespace TimerTracker.BE.DB.Migrations
             modelBuilder.Entity("TimerTracker.BE.DB.Models.SubModule", b =>
                 {
                     b.Navigation("Activities");
+                });
+
+            modelBuilder.Entity("TimerTracker.BE.DB.Models.TypeShift", b =>
+                {
+                    b.Navigation("RecordActivity");
+
+                    b.Navigation("TypeShifts");
                 });
 #pragma warning restore 612, 618
         }

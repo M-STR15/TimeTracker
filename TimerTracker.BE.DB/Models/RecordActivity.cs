@@ -18,39 +18,41 @@ namespace TimerTracker.BE.DB.Models
             Description = description;
         }
 
-        public RecordActivity(DateTime startTime, int activityId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, description)
+        public RecordActivity(DateTime startTime, int activityId, int typeShiftId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, description)
         {
             ProjectId = projectId;
             SubModuleId = subModuleId;
+            TypeShiftId = typeShiftId;
         }
 
-        public RecordActivity(DateTime startTime, int activityId, Guid shiftGuidId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, projectId, subModuleId, description)
+        public RecordActivity(DateTime startTime, int activityId, Guid shiftGuidId, int typeShiftId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
         {
             ShiftGuidId = shiftGuidId;
         }
 
-        public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? projectId, int? subModuleId, string description = "") : this(startTime, activityId, projectId, subModuleId, description)
+        public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? projectId, int? subModuleId, int typeShiftId, string description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
         {
             GuidId = guidId;
         }
 
-        public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? projectId, int? subModuleId, Guid shiftGuidId, string description = "") : this(startTime, activityId, projectId, subModuleId, description)
+        public RecordActivity(Guid guidId, DateTime startTime, int activityId, int typeShiftId, int? projectId, int? subModuleId, Guid shiftGuidId, string description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
         {
             GuidId = guidId;
             ShiftGuidId = shiftGuidId;
         }
 
-        public RecordActivity(Guid guidId, DateTime startTime, Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this(startTime, activity, project, subModule, shift, description)
+        public RecordActivity(Guid guidId, DateTime startTime, Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this(startTime, activity, typeShift, project, subModule, shift, description)
         {
             GuidId = guidId;
         }
 
-        public RecordActivity(DateTime startTime, Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this()
+        public RecordActivity(DateTime startTime, Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this()
         {
             Activity = activity;
             Project = project;
             SubModule = subModule;
             Shift = shift;
+            TypeShift = typeShift;
 
             ActivityId = activity.Id;
             ProjectId = project?.Id ?? null;
@@ -58,6 +60,7 @@ namespace TimerTracker.BE.DB.Models
             ShiftGuidId = shift?.GuidId ?? null;
             Description = description;
             StartTime = startTime;
+            TypeShiftId = typeShift.Id;
         }
 
         [ForeignKey("ActivityId")]
@@ -94,5 +97,10 @@ namespace TimerTracker.BE.DB.Models
 
         [Column("SubModule_ID")]
         public int? SubModuleId { get; set; }
+        [Column("TypeShift_ID")]
+
+        public int TypeShiftId { get; set; }
+        [ForeignKey("TypeShiftId")]
+        public TypeShift TypeShift { get; set; }
     }
 }
