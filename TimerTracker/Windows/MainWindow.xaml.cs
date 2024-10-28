@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Models.Enums;
+using TimerTracker.BE.DB.Providers;
 using TimerTracker.Models;
 using TimerTracker.Stories;
 using TimerTracker.ViewModels;

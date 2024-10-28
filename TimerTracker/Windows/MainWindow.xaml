@@ -33,6 +33,7 @@
 
         <Style x:Key="lblStyle2" TargetType="Label">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="FontWeight" Value="Bold" />
         </Style>
@@ -117,7 +118,8 @@
                         <ComboBox
                             x:Name="cmbProjects"
                             Grid.Row="1"
-                            Grid.Column="1" />
+                            Grid.Column="1"
+                            SelectionChanged="cmbProjects_SelectionChanged" />
                         <Label
                             Grid.Row="2"
                             Grid.Column="0"

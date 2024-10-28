@@ -12,6 +12,7 @@ namespace TimerTracker.BE.DB.Models
 		[Key]
 		[Column("Project_ID")]
 		public virtual int Id { get; set; }
+		[Required]
 		public virtual string Name { get; set; }
 		public virtual string? Description { get; set; }
 

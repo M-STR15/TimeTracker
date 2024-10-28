@@ -6,6 +6,7 @@ namespace TimerTracker.BE.DB.Models
 {
     [Index(nameof(Name), IsUnique = true)]
     [Table("Activities", Schema = "dbo")]
+    [Index(nameof(Name))]
     public class Activity
     {
         [Key]

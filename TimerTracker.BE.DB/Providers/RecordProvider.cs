@@ -42,7 +42,7 @@ namespace TimerTracker.BE.DB.Providers
 
 				return true;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return false;
 			}

@@ -7,7 +7,7 @@
     <Application.Resources>
         <SolidColorBrush x:Key="Background" Color="#fff" />
         <SolidColorBrush x:Key="BorderWindow" Color="LightGray" />
-        
+
         <Style x:Key="MainWindow" TargetType="Window">
             <Setter Property="Focusable" Value="True" />
             <Setter Property="SizeToContent" Value="Manual" />
