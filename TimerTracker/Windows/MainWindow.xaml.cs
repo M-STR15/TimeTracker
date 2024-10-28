@@ -4,7 +4,6 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Models.Enums;
-using TimerTracker.BE.DB.Providers;
 using TimerTracker.Models;
 using TimerTracker.Stories;
 using TimerTracker.ViewModels;
@@ -51,7 +50,7 @@ namespace TimerTracker.Windows
         private void loadShifts()
         {
             var currentDate = DateTime.Now;
-            var getList = _mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate);
+            var getList = _mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
             _shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
             _shiftCmbs.Add(new ShiftCmb());
             cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
