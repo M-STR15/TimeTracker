@@ -169,6 +169,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Content="Top window" ToolTip="Hlavní okno bude vždy zobrazeno nad ostatními okny." />
@@ -176,6 +177,24 @@
                     Grid.Column="1"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center" />
+                <Label
+                    Grid.Row="1"
+                    Content="Start position main window"
+                    ToolTip="Nastavení kde se má zobrazit hlavní okno při startu aplikace." />
+                <ComboBox Grid.Row="1" Grid.Column="1">
+                    <ComboBoxItem Content="H:Left-V:Top" />
+                    <ComboBoxItem Content="H:Left-V:Center" />
+                    <ComboBoxItem Content="H:Left-V:Bottom" />
+
+                    <ComboBoxItem Content="H:Center-V:Top" />
+                    <ComboBoxItem Content="H:Center-V:Center" />
+                    <ComboBoxItem Content="H:Center-V:Bottom" />
+
+                    <ComboBoxItem Content="H:Rght-V:Top" />
+                    <ComboBoxItem Content="H:Right-V:Center" />
+                    <ComboBoxItem Content="H:Right-V:Bottom" />
+                </ComboBox>
+
             </Grid>
         </TabItem>
     </TabControl>
