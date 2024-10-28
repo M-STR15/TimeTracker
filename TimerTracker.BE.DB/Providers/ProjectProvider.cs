@@ -1,9 +1,10 @@
 ﻿namespace TimerTracker.BE.DB.Providers;
-using TimerTracker.BE.DB.Models;
+
 using TimerTracker.BE.DB.DataAccess;
+using TimerTracker.BE.DB.Models;
+
 public class ProjectProvider
 {
-
     public List<Project> GetProjects()
     {
         try
@@ -18,7 +19,6 @@ public class ProjectProvider
             return new();
         }
     }
-
 
     public List<SubModule> GetSubModules()
     {
@@ -53,11 +53,11 @@ public class ProjectProvider
         }
     }
 
-	public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
-	{
-		try
-		{
-			var item = new Project(project);
+    public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
+    {
+        try
+        {
+            var item = new Project(project);
 
             using (var context = new MainDatacontext())
             {
@@ -76,13 +76,13 @@ public class ProjectProvider
                 }
             }
 
-			return item;
-		}
-		catch (Exception)
-		{
-			return null;
-		}
-	}
+            return item;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 
     public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
     {
@@ -102,7 +102,6 @@ public class ProjectProvider
                 }
                 return item;
             }
-
         }
         catch (Exception)
         {
@@ -110,11 +109,11 @@ public class ProjectProvider
         }
     }
 
-	public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
-	{
-		try
-		{
-			var item = new SubModule(subModule);
+    public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
+    {
+        try
+        {
+            var item = new SubModule(subModule);
 
             using (var context = new MainDatacontext())
             {
@@ -130,13 +129,13 @@ public class ProjectProvider
                 context.SaveChanges();
             }
 
-			return item;
-		}
-		catch (Exception)
-		{
-			return null;
-		}
-	}
+            return item;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 
     public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
     {

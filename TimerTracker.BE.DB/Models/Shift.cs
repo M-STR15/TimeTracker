@@ -12,6 +12,7 @@ namespace TimerTracker.BE.DB.Models
         [Key]
         [Column("Guid_ID")]
         public Guid GuidId { get; set; }
+
         [Required]
         [Column("Start_date")]
         public DateTime StartDate { get; set; }
@@ -22,10 +23,9 @@ namespace TimerTracker.BE.DB.Models
 
         public Shift()
         {
-
         }
 
-        public Shift(Guid guidId, DateTime startDate, string? description = null):this()
+        public Shift(Guid guidId, DateTime startDate, string? description = null) : this()
         {
             GuidId = guidId;
             StartDate = startDate;

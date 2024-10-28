@@ -19,6 +19,7 @@ namespace TimerTracker.Windows
         private readonly ProjectProvider _projectProvider;
 
         private ProjectListBox _selectProjectListBox;
+
         public SettingWindow(MainStory mainStory)
         {
             _mainStory = mainStory;
@@ -40,6 +41,7 @@ namespace TimerTracker.Windows
         }
 
         public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
+
         private void listProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
@@ -144,7 +146,7 @@ namespace TimerTracker.Windows
                 var result = _projectProvider.DeleteSubModule(selected);
                 if (result != null)
                 {
-                    var item= ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
+                    var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
                     SubModuleListBox.Remove(selected);
                     SubModuleItemsView.Refresh();
                 }
@@ -160,10 +162,12 @@ namespace TimerTracker.Windows
                 SubModuleItemsView.Refresh();
             }
         }
+
         private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
         {
             setLblSubModuleInfo();
         }
+
         private void onSubModuleSave_Click(object parameter)
         {
             var item = (SubModuleListBox)parameter;
@@ -214,7 +218,9 @@ namespace TimerTracker.Windows
 
             setLblSubModuleInfo();
         }
+
         #region MVVM
+
         public SubModuleListBox _selectSubModuleListBox;
         public ICommand CmdProjectSave { get; }
         public ICommand CmdSubModuleSave { get; }
@@ -258,6 +264,7 @@ namespace TimerTracker.Windows
         }
 
         public ICollectionView SubModuleItemsView { get; set; }
+
         #endregion MVVM
     }
 }

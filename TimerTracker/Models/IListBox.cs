@@ -3,6 +3,5 @@
     public interface IListBox
     {
         bool IsEditable { get; set; }
-
     }
 }

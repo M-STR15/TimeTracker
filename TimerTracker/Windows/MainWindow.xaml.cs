@@ -19,6 +19,7 @@ namespace TimerTracker.Windows
         private Activity? _selectActivity;
         private DateTime _startTimeActivity;
         private List<ShiftCmb> _shiftCmbs;
+
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -47,6 +48,7 @@ namespace TimerTracker.Windows
             cmbProjects.DisplayMemberPath = "Name";
             cmbProjects.SelectedIndex = 0;
         }
+
         private void loadShifts()
         {
             var currentDate = DateTime.Now;
@@ -67,7 +69,9 @@ namespace TimerTracker.Windows
                     _prj = value;
             }
         }
+
         private SubModule _subM;
+
         private SubModule? _selectSubModule
         {
             get => _subM;
@@ -77,6 +81,7 @@ namespace TimerTracker.Windows
                     _subM = value;
             }
         }
+
         private void _dispatcherTimer_Tick(object? sender, EventArgs e)
         {
             setlblTime();
@@ -145,6 +150,7 @@ namespace TimerTracker.Windows
             if (!_dispatcherTimer.IsEnabled)
                 _dispatcherTimer.Start();
         }
+
         private void btnEndShift_Click(object sender, RoutedEventArgs e)
         {
             var activity = new Activity()
@@ -188,6 +194,7 @@ namespace TimerTracker.Windows
             var report = new RecordListWindow(_mainStory);
             report.Show();
         }
+
         private void mbtnShifts_Click(object sender, RoutedEventArgs e)
         {
             var window = new ShiftsPlanWindow(_mainStory);
@@ -210,7 +217,6 @@ namespace TimerTracker.Windows
 
         private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
     }
 }

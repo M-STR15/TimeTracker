@@ -194,7 +194,6 @@
                     <ComboBoxItem Content="H:Right-V:Center" />
                     <ComboBoxItem Content="H:Right-V:Bottom" />
                 </ComboBox>
-
             </Grid>
         </TabItem>
     </TabControl>

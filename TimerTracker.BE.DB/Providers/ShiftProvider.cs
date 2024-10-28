@@ -31,7 +31,6 @@ namespace TimerTracker.BE.DB.Providers
             {
                 using (var context = new MainDatacontext())
                 {
-
                     var shifts = context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToList();
                     return shifts;
                 }
