@@ -20,6 +20,8 @@ namespace TimerTracker.Windows
 
         private ProjectListBox _selectProjectListBox;
 
+        private List<string> PositionList = new();
+
         public SettingWindow(MainStory mainStory)
         {
             _mainStory = mainStory;
@@ -38,6 +40,20 @@ namespace TimerTracker.Windows
             CmdSubModuleSave = new RelayCommand(onSubModuleSave_Click);
 
             DataContext = this;
+
+            PositionList.Add("H:Left-V:Top");
+            PositionList.Add("H:Left-V:Center");
+            PositionList.Add("H:Left-V:Bottom");
+
+            PositionList.Add("H:Center-V:Top");
+            PositionList.Add("H:Center-V:Center");
+            PositionList.Add("H:Center-V:Bottom");
+
+            PositionList.Add("H:Rght-V:Top");
+            PositionList.Add("H:Right-V:Center");
+            PositionList.Add("H:Right-V:Bottom");
+
+            cmbPositionList.ItemsSource = PositionList;
         }
 
         public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
