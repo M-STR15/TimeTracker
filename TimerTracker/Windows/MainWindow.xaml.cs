@@ -4,6 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimerTracker.BE.DB.Models;
 using TimerTracker.BE.DB.Models.Enums;
+using TimerTracker.BE.DB.Providers;
 using TimerTracker.Models;
 using TimerTracker.Stories;
 using TimerTracker.ViewModels;
@@ -20,11 +21,17 @@ namespace TimerTracker.Windows
         private DateTime _startTimeActivity;
         private List<ShiftCmb> _shiftCmbs;
 
+        private ShiftProvider _shiftProvider;
+        private ProjectProvider _projectProvider;
+
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
             InitializeComponent();
             _mainStory = mainStory;
+
+            _shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
+            _projectProvider = _mainStory.ContainerStore.GetProjectProvider();
 
             //loadActivities();
             loadProjects();
@@ -33,30 +40,26 @@ namespace TimerTracker.Windows
             _dispatcherTimer = new DispatcherTimer();
             _dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             _dispatcherTimer.Tick += _dispatcherTimer_Tick;
+
+            cmbProjects.DisplayMemberPath = "Name";
+            cmbShift.DisplayMemberPath = "StartDateStr";
+            cmbSubModule.DisplayMemberPath = "Name";
         }
 
-        //private void loadActivities()
-        //{
-        //	cmbActivities.ItemsSource = _mainStory.ContainerStore.GetActivityProvider().GetActivities();
-        //	cmbActivities.DisplayMemberPath = "Name";
-        //	cmbActivities.SelectedIndex = 0;
-        //}
         private void loadProjects()
         {
             cmbProjects.ItemsSource = null;
-            cmbProjects.ItemsSource = _mainStory.ContainerStore.GetProjectProvider().GetProjects();
-            cmbProjects.DisplayMemberPath = "Name";
+            cmbProjects.ItemsSource = _projectProvider.GetProjects();
             cmbProjects.SelectedIndex = 0;
         }
 
         private void loadShifts()
         {
             var currentDate = DateTime.Now;
-            var getList = _mainStory.ContainerStore.GetShiftProvider().GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
+            var getList = _shiftProvider.GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
             _shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
             _shiftCmbs.Add(new ShiftCmb());
             cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
-            cmbShift.DisplayMemberPath = "StartDateStr";
             cmbShift.SelectedIndex = 0;
         }
 
@@ -119,6 +122,7 @@ namespace TimerTracker.Windows
             setlblTime();
             lblActivity.Text = _selectActivity?.Name ?? "";
             lblProject.Text = _selectProject?.Name ?? "";
+            lblSubModule.Text = _selectSubModule?.Name ?? "";
             lblStartTime_time.Text = _startTimeActivity.ToString("HH:mm:ss");
             lblStartTime_date.Text = _startTimeActivity.ToString("dd.MM.yy");
             lblShift_date.Text = _selectShift?.StartDateStr ?? "";
@@ -217,6 +221,11 @@ namespace TimerTracker.Windows
 
         private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var projectId = ((Project)cmbProjects.SelectedItem).Id;
+            var subModules = _projectProvider.GetSubModules(projectId);
+            cmbSubModule.ItemsSource = subModules;
+            if (subModules.Count > 0)
+                cmbSubModule.SelectedIndex = 0;
         }
     }
 }
