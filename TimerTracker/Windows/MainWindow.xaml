@@ -1,8 +1,8 @@
 ﻿<Window
     x:Class="TimerTracker.Windows.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Timer tracker"
     Style="{StaticResource MainWindow}"
@@ -211,7 +211,7 @@
                             Style="{StaticResource lblStyle2}" />
                         <TextBlock
                             x:Name="lblShift_date"
-                            Margin="0"
+                            Style="{StaticResource txbGrid}"
                             Text=" " />
                         <Label Content="Project" Style="{StaticResource lblStyle2}" />
                         <TextBlock

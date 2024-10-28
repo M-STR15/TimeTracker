@@ -199,6 +199,8 @@ namespace TimerTracker.Windows
         {
             var window = new SettingWindow(_mainStory);
             window.ShowDialog();
+
+            loadProjects();
         }
 
         private void mbtnShifts_Click(object sender, RoutedEventArgs e)
@@ -208,7 +210,7 @@ namespace TimerTracker.Windows
 
             loadShifts();
 
-            if (_lastRecordActivity.Shift != null)
+            if (_lastRecordActivity != null && _lastRecordActivity.Shift != null)
             {
                 var curretnSeletDate = _lastRecordActivity.Shift.StartDate;
                 cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
