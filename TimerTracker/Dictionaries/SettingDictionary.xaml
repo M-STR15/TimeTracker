@@ -14,8 +14,8 @@
                 x:Name="btnProjectSave"
                 Grid.Column="1"
                 Width="30"
-                Command="{Binding CmdProjectSave}"
-                CommandParameter="{Binding }">
+                Command="{Binding CmdProjectSave, RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}">
                 <StackPanel Orientation="Horizontal">
                     <Image Height="25" Source="../Resources/save.png" />
                     <Label Content="Save" />
@@ -48,8 +48,8 @@
                 x:Name="btnSubModuleSave"
                 Grid.Column="2"
                 Width="30"
-                Command="{Binding CmdSubModuleSave}"
-                CommandParameter="{Binding }">
+                Command="{Binding CmdSubModuleSave, RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}">
                 <StackPanel Orientation="Horizontal">
                     <Image Height="25" Source="../Resources/save.png" />
                     <Label Content="Save" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +12,8 @@ using TimerTracker.Stories;
 
 namespace TimerTracker.Windows
 {
-    public partial class SettingWindow : Window, INotifyPropertyChanged
+    [ObservableObject]
+    public partial class SettingWindow : Window
     {
         private readonly MainStory _mainStory;
         private readonly ProjectProvider _projectProvider;
@@ -31,86 +33,13 @@ namespace TimerTracker.Windows
             setProjectItemsView();
             setSubModulesItemsView();
 
-            CmdProjectSave = new RelayCommand(projectSave_Click);
-            CmdSubModuleSave = new RelayCommand(subModuleSave_Click);
+            CmdProjectSave = new RelayCommand(onProjectSave_Click);
+            CmdSubModuleSave = new RelayCommand(onSubModuleSave_Click);
 
             DataContext = this;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
-        private void btnProjectAdd_Click(object sender, RoutedEventArgs e)
-        {
-            var name = $"New Project({ProjectListBox.Count + 1})";
-            var item = new ProjectListBox(name, "");
-            item.IsEditable = true;
-
-            ProjectListBox.Add(item);
-            ProjectItemsView.Refresh();
-        }
-
-        private void btnProjectDelete_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-            if (selected != null)
-            {
-                var result = _projectProvider.DeleteProject(selected);
-
-                if (result)
-                {
-                    ProjectListBox.Remove(selected);
-                    ProjectItemsView.Refresh();
-                }
-            }
-        }
-
-        private void btnProjectEdit_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-
-            if (selected != null)
-            {
-                selected.IsEditable = true;
-                ProjectItemsView.Refresh();
-            }
-        }
-
-        private void btnSubModuleAdd_Click(object sender, RoutedEventArgs e)
-        {
-            var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
-            var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
-            var item = new SubModuleListBox(0, name, "", selectProjectId);
-            item.IsEditable = true;
-
-            SubModuleListBox.Add(item);
-            SubModuleItemsView.Refresh();
-        }
-
-        private void btnSubModuleDelete_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
-            {
-                var result = _projectProvider.DeleteSubModule(selected);
-                if (result)
-                {
-                    SubModuleListBox.Remove(selected);
-                    SubModuleItemsView.Refresh();
-                }
-            }
-        }
-
-        private void btnSubModuleEdit_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
-            {
-                selected.IsEditable = true;
-                SubModuleItemsView.Refresh();
-            }
-        }
-
         private void listProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
@@ -137,31 +66,121 @@ namespace TimerTracker.Windows
             //			.ToList();
         }
 
+        private void onProjectAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var name = $"New Project({ProjectListBox.Count + 1})";
+            var item = new ProjectListBox(name, "");
+            item.IsEditable = true;
+
+            ProjectListBox.Add(item);
+            ProjectItemsView.Refresh();
+        }
+
+        private void onProjectDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
+            if (selected != null)
+            {
+                var result = _projectProvider.DeleteProject(selected);
+
+                if (result)
+                {
+                    ProjectListBox.Remove(selected);
+                    ProjectItemsView.Refresh();
+                }
+            }
+        }
+
+        private void onProjectEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
+
+            if (selected != null)
+            {
+                selected.IsEditable = true;
+                ProjectItemsView.Refresh();
+            }
+        }
+
         private void onProjectItemsViewChangeHandler(object sender, EventArgs args)
         {
             setLblProjectInfo();
         }
 
-        private void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(info));
-        }
-
-        private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
-        {
-            setLblSubModuleInfo();
-        }
-
-        private void projectSave_Click(object parameter)
+        private void onProjectSave_Click(object parameter)
         {
             var item = (ProjectListBox)parameter;
             item.IsEditable = false;
 
-            _projectProvider.SaveProject(item);
-            ProjectItemsView.Refresh();
+            var result = _projectProvider.SaveProject(item);
+            if (result != null)
+            {
+                var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
+                if (updateItem != null)
+                {
+                    updateItem.Id = result.Id;
+                    ProjectItemsView.Refresh();
+                }
+            }
         }
+
+        private void onSubModuleAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
+            var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
+            var item = new SubModuleListBox(0, name, "", selectProjectId);
+            item.IsEditable = true;
+
+            SubModuleListBox.Add(item);
+            SubModuleItemsView.Refresh();
+        }
+
+        private void onSubModuleDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+            if (selected != null)
+            {
+                var result = _projectProvider.DeleteSubModule(selected);
+                if (result)
+                {
+                    SubModuleListBox.Remove(selected);
+                    SubModuleItemsView.Refresh();
+                }
+            }
+        }
+
+        private void onSubModuleEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+            if (selected != null)
+            {
+                selected.IsEditable = true;
+                SubModuleItemsView.Refresh();
+            }
+        }
+        private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
+        {
+            setLblSubModuleInfo();
+        }
+        private void onSubModuleSave_Click(object parameter)
+        {
+            var item = (SubModuleListBox)parameter;
+            item.IsEditable = false;
+
+            var result = _projectProvider.SaveSubModule(item);
+            if (result != null)
+            {
+                var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
+                if (updateItem != null)
+                {
+                    updateItem.Id = result.Id;
+                    ProjectItemsView.Refresh();
+                }
+            }
+
+            SubModuleItemsView.Refresh();
+        }
+
         private void setLblProjectInfo()
         {
             lblProjectInfo.Content = ProjectListBox.Count();
@@ -193,16 +212,6 @@ namespace TimerTracker.Windows
 
             setLblSubModuleInfo();
         }
-
-        private void subModuleSave_Click(object parameter)
-        {
-            var item = (SubModuleListBox)parameter;
-            item.IsEditable = false;
-
-            _projectProvider.SaveSubModule(item);
-            SubModuleItemsView.Refresh();
-        }
-
         #region MVVM
         public SubModuleListBox _selectSubModuleListBox;
         public ICommand CmdProjectSave { get; }
@@ -210,8 +219,6 @@ namespace TimerTracker.Windows
         public ICollectionView ProjectItemsView { get; set; }
 
         public ICollection<ProjectListBox> ProjectListBox { get; set; }
-
-
 
         public ProjectListBox SelectProjectListBox
         {
@@ -221,12 +228,12 @@ namespace TimerTracker.Windows
                 if (_selectProjectListBox != value)
                 {
                     _selectProjectListBox = value;
-                    OnPropertyChanged(nameof(SelectProjectListBox));
+                    OnPropertyChanged();
 
                     var isSelected = (value != null);
                     btnProjectEdit.IsEnabled = isSelected;
                     btnProjectDelete.IsEnabled = isSelected;
-                    btnSubModuleAdd.IsEnabled = isSelected;
+                    btnSubModuleAdd.IsEnabled = isSelected && !SelectProjectListBox.IsEditable;
                 }
             }
         }
@@ -239,7 +246,7 @@ namespace TimerTracker.Windows
                 if (_selectSubModuleListBox != value)
                 {
                     _selectSubModuleListBox = value;
-                    OnPropertyChanged(nameof(SelectSubModuleListBox));
+                    OnPropertyChanged();
 
                     var isSelected = (value != null);
                     btnSubModuleDelete.IsEnabled = isSelected;

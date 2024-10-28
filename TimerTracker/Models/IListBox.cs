@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace TimerTracker.Models
+﻿namespace TimerTracker.Models
 {
-	public interface IListBox
-	{
-		bool IsEditable { get; set; }
+    public interface IListBox
+    {
+        bool IsEditable { get; set; }
 
-		event PropertyChangedEventHandler PropertyChanged;
-	}
+    }
 }

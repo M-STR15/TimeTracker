@@ -34,7 +34,7 @@
                     <StackPanel x:Name="stpProjectButton" Orientation="Horizontal">
                         <Button
                             x:Name="btnProjectAdd"
-                            Click="btnProjectAdd_Click"
+                            Click="onProjectAdd_Click"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/add.png" />
@@ -44,7 +44,7 @@
 
                         <Button
                             x:Name="btnProjectEdit"
-                            Click="btnProjectEdit_Click"
+                            Click="onProjectEdit_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -55,7 +55,7 @@
 
                         <Button
                             x:Name="btnProjectDelete"
-                            Click="btnProjectDelete_Click"
+                            Click="onProjectDelete_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -97,7 +97,7 @@
                     <StackPanel x:Name="stpSubModuleButton" Orientation="Horizontal">
                         <Button
                             x:Name="btnSubModuleAdd"
-                            Click="btnSubModuleAdd_Click"
+                            Click="onSubModuleAdd_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -108,7 +108,7 @@
 
                         <Button
                             x:Name="btnSubModuleEdit"
-                            Click="btnSubModuleEdit_Click"
+                            Click="onSubModuleEdit_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -119,7 +119,7 @@
 
                         <Button
                             x:Name="btnSubModuleDelete"
-                            Click="btnSubModuleDelete_Click"
+                            Click="onSubModuleDelete_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">

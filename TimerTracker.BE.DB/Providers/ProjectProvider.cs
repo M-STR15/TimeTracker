@@ -53,7 +53,7 @@ public class ProjectProvider
 		}
 	}
 
-	public bool SaveProject(IProjectWithoutColl project)
+	public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
 	{
 		try
 		{
@@ -69,11 +69,11 @@ public class ProjectProvider
 				context.SaveChanges();
 			}
 
-			return true;
+			return item;
 		}
 		catch (Exception)
 		{
-			return false;
+			return null;
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ProjectProvider
 		}
 	}
 
-	public bool SaveSubModule(ISubModuleWithoutColl subModule)
+	public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
 	{
 		try
 		{
@@ -112,11 +112,11 @@ public class ProjectProvider
 				context.SaveChanges();
 			}
 
-			return true;
+			return item;
 		}
 		catch (Exception)
 		{
-			return false;
+			return null;
 		}
 	}
 
