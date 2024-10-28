@@ -63,10 +63,8 @@ namespace TimerTracker.Windows
             get => _prj;
             set
             {
-                _prj = value;
-                var isEditBtn = (value != null);
-                btnPause.IsEnabled = isEditBtn;
-                btnEndShift.IsEnabled = isEditBtn;
+                if (_prj != value)
+                    _prj = value;
             }
         }
         private SubModule _subM;
@@ -75,13 +73,19 @@ namespace TimerTracker.Windows
             get => _subM;
             set
             {
-                _subM = value;
+                if (_subM != value)
+                    _subM = value;
             }
         }
         private void _dispatcherTimer_Tick(object? sender, EventArgs e)
         {
+            setlblTime();
+        }
+
+        private void setlblTime()
+        {
             var time = (DateTime.Now - _startTimeActivity);
-            lblTime_time.Content = time.ToString(@"hh\:mm\:ss");
+            lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
         }
 
         private bool addActivite(Activity activity, Project? project = null, SubModule? subModule = null, ShiftCmb? shift = null, string description = "")
@@ -107,11 +111,12 @@ namespace TimerTracker.Windows
 
         private void changeLabels()
         {
-            lblActivity.Content = _selectActivity?.Name ?? "";
-            lblProject.Content = _selectProject?.Name ?? "";
-            lblStartTime_time.Content = _startTimeActivity.ToString("HH:mm:ss");
-            lblStartTime_date.Content = _startTimeActivity.ToString("dd.MM.yy");
-            lblShift_date.Content = _selectShift.StartDateStr;
+            setlblTime();
+            lblActivity.Text = _selectActivity?.Name ?? "";
+            lblProject.Text = _selectProject?.Name ?? "";
+            lblStartTime_time.Text = _startTimeActivity.ToString("HH:mm:ss");
+            lblStartTime_date.Text = _startTimeActivity.ToString("dd.MM.yy");
+            lblShift_date.Text = _selectShift?.StartDateStr ?? "";
         }
 
         private void btnActivate_Click(object sender, RoutedEventArgs e)
@@ -131,8 +136,14 @@ namespace TimerTracker.Windows
             if (result)
             {
                 changeLabels();
-                _dispatcherTimer.Start();
+                startTimer();
             }
+        }
+
+        private void startTimer()
+        {
+            if (!_dispatcherTimer.IsEnabled)
+                _dispatcherTimer.Start();
         }
         private void btnEndShift_Click(object sender, RoutedEventArgs e)
         {
@@ -162,7 +173,7 @@ namespace TimerTracker.Windows
             if (result)
             {
                 changeLabels();
-                _dispatcherTimer.Start();
+                startTimer();
             }
         }
 

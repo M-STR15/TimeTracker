@@ -36,11 +36,11 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
-        <Style x:Key="lblGrid" TargetType="Label">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style x:Key="txbGrid" TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
         </Style>
-
         <Style TargetType="Border">
             <Setter Property="Margin" Value="5,0,5,5" />
             <Setter Property="BorderBrush" Value="Gray" />
@@ -166,8 +166,7 @@
                             Width="100"
                             Height="30"
                             HorizontalAlignment="Left"
-                            Click="btnPause_Click"
-                            IsEnabled="False">
+                            Click="btnPause_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/coffee-cup.png" />
                                 <Label Margin="0" Content="Pause" />
@@ -179,8 +178,7 @@
                             Width="100"
                             Height="30"
                             HorizontalAlignment="Right"
-                            Click="btnEndShift_Click"
-                            IsEnabled="False">
+                            Click="btnEndShift_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/stop.png" />
                                 <Label Margin="0" Content="End of shift" />
@@ -209,29 +207,27 @@
                             Grid.Column="2"
                             Content="Date shift"
                             Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblShift_date"
                             Margin="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Content=" " />
+                            Text=" " />
                         <Label Content="Project" Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblProject"
-                            Content=" "
-                            Style="{StaticResource lblStyle2}" />
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <Label Content="Activity" Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblActivity"
-                            Content=" "
-                            Style="{StaticResource lblGrid}" />
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
                         <Label Content="Sub mod." Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblSubModule"
-                            Content=" "
-                            Style="{StaticResource lblGrid}" />
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
                     </StackPanel>
                     <StackPanel Grid.Column="2">
                         <Label
@@ -239,30 +235,24 @@
                             Grid.Column="2"
                             Content="Time"
                             Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblTime_time"
                             Margin="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Content=" " />
-
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             Content="Start time"
                             Style="{StaticResource lblStyle2}" />
-                        <Label
+                        <TextBlock
                             x:Name="lblStartTime_time"
-                            Margin="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Content=" " />
-                        <Label
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
+                        <TextBlock
                             x:Name="lblStartTime_date"
-                            Margin="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Content=" " />
+                            Style="{StaticResource txbGrid}"
+                            Text=" " />
                     </StackPanel>
                 </Grid>
             </Border>
