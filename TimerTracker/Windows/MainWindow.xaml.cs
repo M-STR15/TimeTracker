@@ -15,15 +15,12 @@ namespace TimerTracker.Windows
     {
         private readonly MainStory _mainStory;
         private DispatcherTimer _dispatcherTimer;
-        private Project? _prj;
-        private ShiftCmb? _selectShift;
-        private Activity? _selectActivity;
-        private DateTime _startTimeActivity;
+        private RecordActivity _lastRecordActivity;
+        private ProjectProvider _projectProvider;
+        private RecordProvider _recordProvider;
         private List<ShiftCmb> _shiftCmbs;
 
         private ShiftProvider _shiftProvider;
-        private ProjectProvider _projectProvider;
-
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -32,8 +29,8 @@ namespace TimerTracker.Windows
 
             _shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
             _projectProvider = _mainStory.ContainerStore.GetProjectProvider();
+            _recordProvider = _mainStory.ContainerStore.GetRecordProvider();
 
-            //loadActivities();
             loadProjects();
             loadShifts();
 
@@ -46,113 +43,65 @@ namespace TimerTracker.Windows
             cmbSubModule.DisplayMemberPath = "Name";
         }
 
-        private void loadProjects()
-        {
-            cmbProjects.ItemsSource = null;
-            cmbProjects.ItemsSource = _projectProvider.GetProjects();
-            cmbProjects.SelectedIndex = 0;
-        }
-
-        private void loadShifts()
-        {
-            var currentDate = DateTime.Now;
-            var getList = _shiftProvider.GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
-            _shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
-            _shiftCmbs.Add(new ShiftCmb());
-            cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
-            cmbShift.SelectedIndex = 0;
-        }
-
-        private Project? _selectProject
-        {
-            get => _prj;
-            set
-            {
-                if (_prj != value)
-                    _prj = value;
-            }
-        }
-
-        private SubModule _subM;
-
-        private SubModule? _selectSubModule
-        {
-            get => _subM;
-            set
-            {
-                if (_subM != value)
-                    _subM = value;
-            }
-        }
-
         private void _dispatcherTimer_Tick(object? sender, EventArgs e)
         {
             setlblTime();
         }
 
-        private void setlblTime()
+        private bool addActivite(RecordActivity recordActivity)
         {
-            var time = (DateTime.Now - _startTimeActivity);
-            lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
+            return addActivite(recordActivity.Activity, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
         }
 
-        private bool addActivite(Activity activity, Project? project = null, SubModule? subModule = null, ShiftCmb? shift = null, string description = "")
+        private bool addActivite(Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
         {
-            var startTimeActivity = DateTime.Now;
-
-            var record = new RecordActivity();
-            if (shift != null && shift.GuidId != Guid.Empty)
-                record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, subModule?.Id ?? null, description);
-            else
-                record = new RecordActivity(startTimeActivity, activity.Id, project?.Id ?? null, subModule?.Id ?? null, description);
-
-            var result = _mainStory.ContainerStore.GetRecordProvider().SaveRecord(record);
-            if (true)
+            try
             {
-                _selectActivity = activity;
-                _selectProject = project;
-                _startTimeActivity = startTimeActivity;
+                var startTimeActivity = DateTime.Now;
+
+                var record = new RecordActivity();
+                if (shift != null && shift.GuidId != Guid.Empty)
+                    record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, project?.Id ?? null, subModule?.Id ?? null, description);
+                else
+                    record = new RecordActivity(startTimeActivity, activity.Id, project?.Id ?? null, subModule?.Id ?? null, description);
+
+                var result = _recordProvider.SaveRecord(record);
+                if (result != null)
+                {
+                    _lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, activity, project, subModule, shift, description);
+                }
+
+                return result != null;
             }
-
-            return result;
-        }
-
-        private void changeLabels()
-        {
-            setlblTime();
-            lblActivity.Text = _selectActivity?.Name ?? "";
-            lblProject.Text = _selectProject?.Name ?? "";
-            lblSubModule.Text = _selectSubModule?.Name ?? "";
-            lblStartTime_time.Text = _startTimeActivity.ToString("HH:mm:ss");
-            lblStartTime_date.Text = _startTimeActivity.ToString("dd.MM.yy");
-            lblShift_date.Text = _selectShift?.StartDateStr ?? "";
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private void btnActivate_Click(object sender, RoutedEventArgs e)
         {
+            var startTimeActivity = DateTime.Now;
             var activity = new Activity()
             {
                 Id = (int)eActivity.Start,
                 Name = eActivity.Start.ToString()
             };
 
-            _selectProject = (Project)cmbProjects.SelectedItem;
-            _selectShift = (ShiftCmb)cmbShift.SelectedItem;
-            _selectSubModule = (SubModule)cmbSubModule.SelectedItem;
+            var selProject = (Project)cmbProjects.SelectedItem;
+            var selShift = (ShiftCmb)cmbShift.SelectedItem;
+            var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
 
             var description = getTextFromRichTextBox(rtbDescription);
-            var result = addActivite(activity, _selectProject, _selectSubModule, _selectShift, description);
+            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selProject, selSubmodule, selShift, description);
+
+            var result = addActivite(selRecordActivity);
             if (result)
             {
+                rtbDescription.Document.Blocks.Clear();
                 changeLabels();
                 startTimer();
             }
-        }
-
-        private void startTimer()
-        {
-            if (!_dispatcherTimer.IsEnabled)
-                _dispatcherTimer.Start();
         }
 
         private void btnEndShift_Click(object sender, RoutedEventArgs e)
@@ -187,16 +136,69 @@ namespace TimerTracker.Windows
             }
         }
 
+        private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var projectId = ((Project)cmbProjects.SelectedItem).Id;
+            var subModules = _projectProvider.GetSubModules(projectId);
+            cmbSubModule.ItemsSource = subModules;
+            if (subModules.Count > 0)
+                cmbSubModule.SelectedIndex = 0;
+        }
+
         private string getTextFromRichTextBox(RichTextBox richTextBox)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
             return textRange.Text;
         }
 
+        private void changeLabels()
+        {
+            setlblTime();
+            lblActivity.Text = _lastRecordActivity.Activity?.Name ?? "";
+            lblProject.Text = _lastRecordActivity.Project?.Name ?? "";
+            lblSubModule.Text = _lastRecordActivity.SubModule?.Name ?? "";
+            lblStartTime_time.Text = _lastRecordActivity?.StartTime.ToString("HH:mm:ss");
+            lblStartTime_date.Text = _lastRecordActivity?.StartTime.ToString("dd.MM.yy");
+
+            var shift = _lastRecordActivity?.Shift;
+
+            if (shift != null)
+            {
+                var cmdShift = new ShiftCmb(shift);
+                lblShift_date.Text = cmdShift?.StartDateStr ?? "";
+            }
+            else
+            {
+                lblShift_date.Text = "";
+            }
+        }
+
+        private void loadProjects()
+        {
+            cmbProjects.ItemsSource = null;
+            cmbProjects.ItemsSource = _projectProvider.GetProjects();
+            cmbProjects.SelectedIndex = 0;
+        }
+
+        private void loadShifts()
+        {
+            var currentDate = DateTime.Now;
+            var getList = _shiftProvider.GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
+            _shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
+            _shiftCmbs.Add(new ShiftCmb());
+            cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
+            cmbShift.SelectedIndex = 0;
+        }
         private void mbtnRecordList_Click(object sender, RoutedEventArgs e)
         {
             var report = new RecordListWindow(_mainStory);
             report.Show();
+        }
+
+        private void mbtnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SettingWindow(_mainStory);
+            window.ShowDialog();
         }
 
         private void mbtnShifts_Click(object sender, RoutedEventArgs e)
@@ -206,26 +208,22 @@ namespace TimerTracker.Windows
 
             loadShifts();
 
-            if (_selectShift != null)
+            if (_lastRecordActivity.Shift != null)
             {
-                var curretnSeletDate = _selectShift.StartDate;
+                var curretnSeletDate = _lastRecordActivity.Shift.StartDate;
                 cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
             }
         }
 
-        private void mbtnSettings_Click(object sender, RoutedEventArgs e)
+        private void setlblTime()
         {
-            var window = new SettingWindow(_mainStory);
-            window.ShowDialog();
+            var time = (DateTime.Now - _lastRecordActivity.StartTime);
+            lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
         }
-
-        private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void startTimer()
         {
-            var projectId = ((Project)cmbProjects.SelectedItem).Id;
-            var subModules = _projectProvider.GetSubModules(projectId);
-            cmbSubModule.ItemsSource = subModules;
-            if (subModules.Count > 0)
-                cmbSubModule.SelectedIndex = 0;
+            if (!_dispatcherTimer.IsEnabled)
+                _dispatcherTimer.Start();
         }
     }
 }

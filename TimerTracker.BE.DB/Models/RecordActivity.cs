@@ -40,6 +40,26 @@ namespace TimerTracker.BE.DB.Models
             ShiftGuidId = shiftGuidId;
         }
 
+        public RecordActivity(Guid guidId, DateTime startTime, Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this(startTime, activity, project, subModule, shift, description)
+        {
+            GuidId = guidId;
+        }
+
+        public RecordActivity(DateTime startTime, Activity activity, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "") : this()
+        {
+            Activity = activity;
+            Project = project;
+            SubModule = subModule;
+            Shift = shift;
+
+            ActivityId = activity.Id;
+            ProjectId = project?.Id ?? null;
+            SubModuleId = subModule?.Id ?? null;
+            ShiftGuidId = shift?.GuidId ?? null;
+            Description = description;
+            StartTime = startTime;
+        }
+
         [ForeignKey("ActivityId")]
         public Activity Activity { get; set; }
 
