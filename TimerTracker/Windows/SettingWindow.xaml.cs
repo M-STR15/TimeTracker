@@ -36,8 +36,8 @@ namespace TimerTracker.Windows
             setProjectItemsView();
             setSubModulesItemsView();
 
-            CmdProjectSave = new RelayCommand(onProjectSave_Click);
-            CmdSubModuleSave = new RelayCommand(onSubModuleSave_Click);
+            CmdProjectSave = new RelayCommand(onSaveProject_Click);
+            CmdSubModuleSave = new RelayCommand(onSaveSubModule_Click);
 
             DataContext = this;
 
@@ -58,7 +58,17 @@ namespace TimerTracker.Windows
 
         public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
 
-        private void listProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void loadProjects()
+        {
+            var list = _projectProvider.GetProjects();
+            ProjectListBox = new ObservableCollection<ProjectListBox>(list.Select(x => new ProjectListBox(x)).ToList());
+
+            //ProjectListBox = ProjectListBox.OrderBy(item => string.IsNullOrEmpty(item.Name)) // Prázdné položky na konec
+            //			.ThenBy(item => item.Name) // Abecední řazení
+            //			.ToList();
+        }
+
+        private void onActionAfterChangeItemInListProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 
@@ -73,18 +83,7 @@ namespace TimerTracker.Windows
                 }
             }
         }
-
-        private void loadProjects()
-        {
-            var list = _projectProvider.GetProjects();
-            ProjectListBox = new ObservableCollection<ProjectListBox>(list.Select(x => new ProjectListBox(x)).ToList());
-
-            //ProjectListBox = ProjectListBox.OrderBy(item => string.IsNullOrEmpty(item.Name)) // Prázdné položky na konec
-            //			.ThenBy(item => item.Name) // Abecední řazení
-            //			.ToList();
-        }
-
-        private void onProjectAdd_Click(object sender, RoutedEventArgs e)
+        private void onAddProject_Click(object sender, RoutedEventArgs e)
         {
             var name = $"New Project({ProjectListBox.Count + 1})";
             var item = new ProjectListBox(name, "");
@@ -94,7 +93,18 @@ namespace TimerTracker.Windows
             ProjectItemsView.Refresh();
         }
 
-        private void onProjectDelete_Click(object sender, RoutedEventArgs e)
+        private void onAddSubModule_Click(object sender, RoutedEventArgs e)
+        {
+            var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
+            var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
+            var item = new SubModuleListBox(0, name, "", selectProjectId);
+            item.IsEditable = true;
+
+            SubModuleListBox.Add(item);
+            SubModuleItemsView.Refresh();
+        }
+
+        private void onDeleteProject_Click(object sender, RoutedEventArgs e)
         {
             var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
             if (selected != null)
@@ -110,7 +120,22 @@ namespace TimerTracker.Windows
             }
         }
 
-        private void onProjectEdit_Click(object sender, RoutedEventArgs e)
+        private void onDeleteSubModule_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+            if (selected != null)
+            {
+                var result = _projectProvider.DeleteSubModule(selected);
+                if (result != null)
+                {
+                    var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
+                    SubModuleListBox.Remove(selected);
+                    SubModuleItemsView.Refresh();
+                }
+            }
+        }
+
+        private void onEditProject_Click(object sender, RoutedEventArgs e)
         {
             var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 
@@ -121,12 +146,22 @@ namespace TimerTracker.Windows
             }
         }
 
+        private void onEditSubModule_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+            if (selected != null)
+            {
+                selected.IsEditable = true;
+                SubModuleItemsView.Refresh();
+            }
+        }
+
         private void onProjectItemsViewChangeHandler(object sender, EventArgs args)
         {
             setLblProjectInfo();
         }
 
-        private void onProjectSave_Click(object parameter)
+        private void onSaveProject_Click(object parameter)
         {
             var item = (ProjectListBox)parameter;
             item.IsEditable = false;
@@ -142,49 +177,7 @@ namespace TimerTracker.Windows
                 }
             }
         }
-
-        private void onSubModuleAdd_Click(object sender, RoutedEventArgs e)
-        {
-            var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
-            var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
-            var item = new SubModuleListBox(0, name, "", selectProjectId);
-            item.IsEditable = true;
-
-            SubModuleListBox.Add(item);
-            SubModuleItemsView.Refresh();
-        }
-
-        private void onSubModuleDelete_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
-            {
-                var result = _projectProvider.DeleteSubModule(selected);
-                if (result != null)
-                {
-                    var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
-                    SubModuleListBox.Remove(selected);
-                    SubModuleItemsView.Refresh();
-                }
-            }
-        }
-
-        private void onSubModuleEdit_Click(object sender, RoutedEventArgs e)
-        {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
-            {
-                selected.IsEditable = true;
-                SubModuleItemsView.Refresh();
-            }
-        }
-
-        private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
-        {
-            setLblSubModuleInfo();
-        }
-
-        private void onSubModuleSave_Click(object parameter)
+        private void onSaveSubModule_Click(object parameter)
         {
             var item = (SubModuleListBox)parameter;
             item.IsEditable = false;
@@ -203,6 +196,10 @@ namespace TimerTracker.Windows
             SubModuleItemsView.Refresh();
         }
 
+        private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
+        {
+            setLblSubModuleInfo();
+        }
         private void setLblProjectInfo()
         {
             lblProjectInfo.Content = ProjectListBox.Count();

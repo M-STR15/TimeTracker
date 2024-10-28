@@ -35,7 +35,7 @@
                     <StackPanel x:Name="stpProjectButton" Orientation="Horizontal">
                         <Button
                             x:Name="btnProjectAdd"
-                            Click="onProjectAdd_Click"
+                            Click="onAddProject_Click"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Style="{StaticResource btnImage}" Source="../Resources/add.png" />
@@ -45,7 +45,7 @@
 
                         <Button
                             x:Name="btnProjectEdit"
-                            Click="onProjectEdit_Click"
+                            Click="onEditProject_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -56,7 +56,7 @@
 
                         <Button
                             x:Name="btnProjectDelete"
-                            Click="onProjectDelete_Click"
+                            Click="onDeleteProject_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -78,7 +78,7 @@
                             ItemTemplateSelector="{StaticResource ProjectTemplateSelector}"
                             ItemsSource="{Binding ProjectItemsView}"
                             SelectedItem="{Binding SelectProjectListBox}"
-                            SelectionChanged="listProject_SelectionChanged"
+                            SelectionChanged="onActionAfterChangeItemInListProject_SelectionChanged"
                             Style="{StaticResource settingListboxStyle}" />
                         <Label
                             x:Name="lblProjectInfo"
@@ -98,7 +98,7 @@
                     <StackPanel x:Name="stpSubModuleButton" Orientation="Horizontal">
                         <Button
                             x:Name="btnSubModuleAdd"
-                            Click="onSubModuleAdd_Click"
+                            Click="onAddSubModule_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -109,7 +109,7 @@
 
                         <Button
                             x:Name="btnSubModuleEdit"
-                            Click="onSubModuleEdit_Click"
+                            Click="onEditSubModule_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
@@ -120,7 +120,7 @@
 
                         <Button
                             x:Name="btnSubModuleDelete"
-                            Click="onSubModuleDelete_Click"
+                            Click="onDeleteSubModule_Click"
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">

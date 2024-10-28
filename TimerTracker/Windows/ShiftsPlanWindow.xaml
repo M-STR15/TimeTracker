@@ -20,7 +20,7 @@
             <ComboBox
                 x:Name="cmbMontAndYear"
                 Width="150"
-                SelectionChanged="cmbMontAndYear_SelectionChanged" />
+                SelectionChanged="onChangeItemMontAndYear_SelectionChanged" />
         </StackPanel>
         <Grid Grid.Row="1">
             <ItemsControl
@@ -60,7 +60,7 @@
             x:Name="btnSave"
             Grid.Row="2"
             Margin="5"
-            Click="btnSave_Click"
+            Click="onSave_Click"
             Content="Save" />
     </Grid>
 </Window>

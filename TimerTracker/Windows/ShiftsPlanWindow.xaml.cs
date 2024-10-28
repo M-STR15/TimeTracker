@@ -36,40 +36,6 @@ namespace TimerTracker.Windows
             cmbMontAndYear.SelectedIndex = 0;
         }
 
-        private void btnDay_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = sender as Button;
-            var infoOfDate = (InfoOfDate)btn.Tag;
-            var setIsPlanShiftInDay = !infoOfDate.IsPlanShiftInDay;
-            infoOfDate.IsPlanShiftInDay = setIsPlanShiftInDay;
-
-            btn.Background = new SolidColorBrush(setIsPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
-        }
-
-        private void btnSave_Click(object sender, RoutedEventArgs e)
-        {
-            var shifts = new List<Shift>();
-
-            foreach (var item in _daiesList.Where(x => x.IsPlanShiftInDay).ToList())
-            {
-                var shift = new Shift(item.GuidId, item.Date);
-                shifts.Add(shift);
-            }
-            _shiftProvider.SaveShifts(shifts);
-
-            this.Close();
-        }
-
-        private void cmbMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            itmcDays.Items.Clear();
-            _daiesList.Clear();
-
-            setHeaderGrid();
-            generateDateList();
-            generateButtonList();
-        }
-
         private void generateButtonList()
         {
             foreach (var item in _daiesList)
@@ -85,7 +51,7 @@ namespace TimerTracker.Windows
                     Background = getColorButtom(item.IsPlanShiftInDay)
                 };
 
-                button.Click += btnDay_Click;
+                button.Click += onClickOnBtnDay_Click;
 
                 itmcDays.Items.Add(button);
                 Grid.SetRow(button, (int)item.WeekInMont + 1);
@@ -117,6 +83,39 @@ namespace TimerTracker.Windows
 
         private SolidColorBrush getColorButtom(bool isPlanShiftInDay) => new SolidColorBrush(isPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
 
+        private void onClickOnBtnDay_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as Button;
+            var infoOfDate = (InfoOfDate)btn.Tag;
+            var setIsPlanShiftInDay = !infoOfDate.IsPlanShiftInDay;
+            infoOfDate.IsPlanShiftInDay = setIsPlanShiftInDay;
+
+            btn.Background = new SolidColorBrush(setIsPlanShiftInDay ? Colors.LightBlue : Colors.Gray);
+        }
+
+        private void onChangeItemMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            itmcDays.Items.Clear();
+            _daiesList.Clear();
+
+            setHeaderGrid();
+            generateDateList();
+            generateButtonList();
+        }
+
+        private void onSave_Click(object sender, RoutedEventArgs e)
+        {
+            var shifts = new List<Shift>();
+
+            foreach (var item in _daiesList.Where(x => x.IsPlanShiftInDay).ToList())
+            {
+                var shift = new Shift(item.GuidId, item.Date);
+                shifts.Add(shift);
+            }
+            _shiftProvider.SaveShifts(shifts);
+
+            this.Close();
+        }
         private void setHeaderGrid()
         {
             var daysList = Enum.GetValues(typeof(DayOfWeek))
