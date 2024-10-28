@@ -12,6 +12,7 @@ namespace TimerTracker.BE.DB.Models
 		[Column("SubModule_ID")]
 		public virtual int Id { get; set; }
         [Required]
+		[MaxLength(30,ErrorMessage ="Název je příliš dlouhý.")]
         public virtual string Name { get; set; }
 		public virtual string? Description { get; set; }
 

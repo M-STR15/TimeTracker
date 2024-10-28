@@ -11,6 +11,8 @@ namespace TimerTracker.BE.DB.Models
         [Key]
         [Column("Activity_ID")]
         public int Id { get; set; }
+        [Required]
+        [MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
         public string Name { get; set; }
 
         public ICollection<RecordActivity> Activities { get; set; }

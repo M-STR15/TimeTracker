@@ -56,6 +56,11 @@
             </ItemsControl>
         </Grid>
 
-        <Button Grid.Row="2" Content="Save" x:Name="btnSave" Click="btnSave_Click" Margin="5"/>
+        <Button
+            x:Name="btnSave"
+            Grid.Row="2"
+            Margin="5"
+            Click="btnSave_Click"
+            Content="Save" />
     </Grid>
 </Window>

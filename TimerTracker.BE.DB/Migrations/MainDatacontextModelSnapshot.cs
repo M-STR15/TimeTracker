@@ -26,6 +26,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -129,7 +130,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.HasIndex("SubModuleId");
 
-                    b.ToTable("Record_activity", "dbo");
+                    b.ToTable("Record_activities", "dbo");
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Shift", b =>
@@ -174,6 +175,7 @@ namespace TimerTracker.BE.DB.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProjectId")
