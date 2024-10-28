@@ -59,18 +59,18 @@
         <Menu>
             <MenuItem
                 x:Name="mbtnShifts"
-                Click="mbtnShifts_Click"
+                Click="onOpenWindowShifts_Click"
                 Header="Shifts" />
             <MenuItem Header="Reports">
                 <MenuItem
                     x:Name="mbtnRecordList"
-                    Click="mbtnRecordList_Click"
+                    Click="onOpenWindowReportRecords_Click"
                     Header="Record list" />
             </MenuItem>
 
             <MenuItem
                 x:Name="mbtnSettings"
-                Click="mbtnSettings_Click"
+                Click="onOpenWindowSetting_Click"
                 Header="Settings" />
         </Menu>
         <Grid Grid.Row="1">
@@ -118,7 +118,7 @@
                             x:Name="cmbProjects"
                             Grid.Row="1"
                             Grid.Column="1"
-                            SelectionChanged="cmbProjects_SelectionChanged" />
+                            SelectionChanged="onLoadDataAfterChangeProject_SelectionChanged" />
                         <Label
                             Grid.Row="2"
                             Grid.Column="0"
@@ -144,7 +144,7 @@
                         x:Name="btnActivate"
                         Grid.Row="3"
                         Height="30"
-                        Click="btnActivate_Click">
+                        Click="onActionAfterClickActivate_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="25" Source="../Resources/timer.png" />
                             <Label Margin="0" Content="Set" />
@@ -161,14 +161,14 @@
                 </Grid.RowDefinitions>
                 <Label Content="Quick buttons" Style="{StaticResource lblMainTitle}" />
                 <Border Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button
                             x:Name="btnPause"
                             Grid.Row="7"
                             Width="100"
                             Height="30"
                             HorizontalAlignment="Left"
-                            Click="btnPause_Click">
+                            Click="onActionAfterClickPause_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/coffee-cup.png" />
                                 <Label Margin="0" Content="Pause" />
@@ -180,7 +180,7 @@
                             Width="100"
                             Height="30"
                             HorizontalAlignment="Right"
-                            Click="btnEndShift_Click">
+                            Click="onActionAfterClickEndShift_Click">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Source="../Resources/stop.png" />
                                 <Label Margin="0" Content="End of shift" />

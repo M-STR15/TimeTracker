@@ -79,72 +79,6 @@ namespace TimerTracker.Windows
             }
         }
 
-        private void btnActivate_Click(object sender, RoutedEventArgs e)
-        {
-            var startTimeActivity = DateTime.Now;
-            var activity = new Activity()
-            {
-                Id = (int)eActivity.Start,
-                Name = eActivity.Start.ToString()
-            };
-
-            var selProject = (Project)cmbProjects.SelectedItem;
-            var selShift = (ShiftCmb)cmbShift.SelectedItem;
-            var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
-
-            var description = getTextFromRichTextBox(rtbDescription);
-            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selProject, selSubmodule, selShift, description);
-
-            var result = addActivite(selRecordActivity);
-            if (result)
-            {
-                rtbDescription.Document.Blocks.Clear();
-                changeLabels();
-                startTimer();
-            }
-        }
-
-        private void btnEndShift_Click(object sender, RoutedEventArgs e)
-        {
-            var activity = new Activity()
-            {
-                Id = (int)eActivity.Stop,
-                Name = eActivity.Stop.ToString()
-            };
-
-            var result = addActivite(activity);
-            if (result)
-            {
-                changeLabels();
-                _dispatcherTimer.Stop();
-            }
-        }
-
-        private void btnPause_Click(object sender, RoutedEventArgs e)
-        {
-            var activity = new Activity()
-            {
-                Id = (int)eActivity.Pause,
-                Name = eActivity.Pause.ToString()
-            };
-
-            var result = addActivite(activity);
-            if (result)
-            {
-                changeLabels();
-                startTimer();
-            }
-        }
-
-        private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var projectId = ((Project)cmbProjects.SelectedItem).Id;
-            var subModules = _projectProvider.GetSubModules(projectId);
-            cmbSubModule.ItemsSource = subModules;
-            if (subModules.Count > 0)
-                cmbSubModule.SelectedIndex = 0;
-        }
-
         private string getTextFromRichTextBox(RichTextBox richTextBox)
         {
             var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
@@ -189,13 +123,78 @@ namespace TimerTracker.Windows
             cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
             cmbShift.SelectedIndex = 0;
         }
-        private void mbtnRecordList_Click(object sender, RoutedEventArgs e)
+
+        private void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
+        {
+            var startTimeActivity = DateTime.Now;
+            var activity = new Activity()
+            {
+                Id = (int)eActivity.Start,
+                Name = eActivity.Start.ToString()
+            };
+
+            var selProject = (Project)cmbProjects.SelectedItem;
+            var selShift = (ShiftCmb)cmbShift.SelectedItem;
+            var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
+
+            var description = getTextFromRichTextBox(rtbDescription);
+            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selProject, selSubmodule, selShift, description);
+
+            var result = addActivite(selRecordActivity);
+            if (result)
+            {
+                rtbDescription.Document.Blocks.Clear();
+                changeLabels();
+                startTimer();
+            }
+        }
+        private void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
+        {
+            var activity = new Activity()
+            {
+                Id = (int)eActivity.Stop,
+                Name = eActivity.Stop.ToString()
+            };
+
+            var result = addActivite(activity);
+            if (result)
+            {
+                changeLabels();
+                _dispatcherTimer.Stop();
+            }
+        }
+
+        private void onActionAfterClickPause_Click(object sender, RoutedEventArgs e)
+        {
+            var activity = new Activity()
+            {
+                Id = (int)eActivity.Pause,
+                Name = eActivity.Pause.ToString()
+            };
+
+            var result = addActivite(activity);
+            if (result)
+            {
+                changeLabels();
+                startTimer();
+            }
+        }
+
+        private void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var projectId = ((Project)cmbProjects.SelectedItem).Id;
+            var subModules = _projectProvider.GetSubModules(projectId);
+            cmbSubModule.ItemsSource = subModules;
+            if (subModules.Count > 0)
+                cmbSubModule.SelectedIndex = 0;
+        }
+        private void onOpenWindowReportRecords_Click(object sender, RoutedEventArgs e)
         {
             var report = new RecordListWindow(_mainStory);
             report.Show();
         }
 
-        private void mbtnSettings_Click(object sender, RoutedEventArgs e)
+        private void onOpenWindowSetting_Click(object sender, RoutedEventArgs e)
         {
             var window = new SettingWindow(_mainStory);
             window.ShowDialog();
@@ -203,7 +202,7 @@ namespace TimerTracker.Windows
             loadProjects();
         }
 
-        private void mbtnShifts_Click(object sender, RoutedEventArgs e)
+        private void onOpenWindowShifts_Click(object sender, RoutedEventArgs e)
         {
             var window = new ShiftsPlanWindow(_mainStory);
             var result = window.ShowDialog();
