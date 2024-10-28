@@ -83,8 +83,9 @@ namespace TimerTracker.Windows
             {
                 var result = _projectProvider.DeleteProject(selected);
 
-                if (result)
+                if (result != null)
                 {
+                    var item = ProjectListBox.First(x => x.GuidId == selected.GuidId);
                     ProjectListBox.Remove(selected);
                     ProjectItemsView.Refresh();
                 }
@@ -141,8 +142,9 @@ namespace TimerTracker.Windows
             if (selected != null)
             {
                 var result = _projectProvider.DeleteSubModule(selected);
-                if (result)
+                if (result != null)
                 {
+                    var item= ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
                     SubModuleListBox.Remove(selected);
                     SubModuleItemsView.Refresh();
                 }

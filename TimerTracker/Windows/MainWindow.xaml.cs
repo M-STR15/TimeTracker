@@ -208,5 +208,10 @@ namespace TimerTracker.Windows
             var window = new SettingWindow(_mainStory);
             window.ShowDialog();
         }
+
+        private void cmbProjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
