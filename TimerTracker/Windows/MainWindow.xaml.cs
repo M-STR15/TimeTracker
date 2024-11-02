@@ -8,6 +8,7 @@ using TimerTracker.BE.DB.Providers;
 using TimerTracker.Models;
 using TimerTracker.Stories;
 using TimerTracker.ViewModels;
+using TimerTracker.Windows.Reports;
 
 namespace TimerTracker.Windows
 {
@@ -243,6 +244,12 @@ namespace TimerTracker.Windows
         {
             if (!_dispatcherTimer.IsEnabled)
                 _dispatcherTimer.Start();
+        }
+
+        private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new ActivitiesOverDaysWindow();
+            window.Show();
         }
     }
 }

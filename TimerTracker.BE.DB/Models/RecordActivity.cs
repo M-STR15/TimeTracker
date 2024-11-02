@@ -97,10 +97,11 @@ namespace TimerTracker.BE.DB.Models
 
         [Column("SubModule_ID")]
         public int? SubModuleId { get; set; }
+        [ForeignKey("TypeShiftId")]
+        public TypeShift TypeShift { get; set; }
+
         [Column("TypeShift_ID")]
 
         public int TypeShiftId { get; set; }
-        [ForeignKey("TypeShiftId")]
-        public TypeShift TypeShift { get; set; }
     }
 }

@@ -33,6 +33,10 @@
                     x:Name="mbtnRecordList"
                     Click="onOpenWindowReportRecords_Click"
                     Header="Record list" />
+                <MenuItem
+                    x:Name="mbtnActivitiesOverDays"
+                    Click="mbtnActivitiesOverDays_Click"
+                    Header="Activities over days" />
             </MenuItem>
 
             <MenuItem
@@ -78,7 +82,7 @@
                         <ComboBox
                             x:Name="cmbTypeShift"
                             Grid.Row="1"
-                            Grid.Column="0"/>
+                            Grid.Column="0" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
@@ -91,8 +95,8 @@
                         <Label
                             Grid.Row="2"
                             Grid.Column="0"
-                            Content="Project"
                             Grid.ColumnSpan="2"
+                            Content="Project"
                             Style="{StaticResource lblStyle1}" />
                         <ComboBox
                             x:Name="cmbProjects"

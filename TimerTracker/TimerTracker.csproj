@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+    <PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.8" />
     <PackageReference Include="Ninject" Version="3.3.6" />
     <PackageReference Include="NotificationWpf" Version="1.0.0" />
     <PackageReference Include="SharpVectors" Version="1.8.4.2" />

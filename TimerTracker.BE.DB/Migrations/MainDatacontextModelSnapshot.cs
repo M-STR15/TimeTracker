@@ -137,6 +137,168 @@ namespace TimerTracker.BE.DB.Migrations
                     b.HasIndex("TypeShiftId");
 
                     b.ToTable("Record_activities", "dbo");
+
+                    b.HasData(
+                        new
+                        {
+                            GuidId = new Guid("a03ccd74-125d-4282-9b9e-3b2f425d75c6"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 1, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("a302ef5d-8f28-4407-afe6-7fefcc194463"),
+                            ActivityId = 2,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 1, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("c007224f-0b77-455d-8392-8c823e1ed707"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 1, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("82cc4892-3682-48a3-9773-cbfa11d38310"),
+                            ActivityId = 3,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("936c2b4d-3382-45f0-9c79-487080e28a08"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 2, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("6c612a12-b523-4a7a-b59c-c59ea9f306c0"),
+                            ActivityId = 2,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 2, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("65ee1ccb-a136-484d-8aef-d3a7f983c21a"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("c0fb140b-e16b-47bf-a849-12b4c6a37487"),
+                            ActivityId = 3,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("7ef303ad-b6b5-442c-9742-d4903da5db2f"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 3, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("ad53fd53-79b0-41a2-b196-1bb3364c82f0"),
+                            ActivityId = 2,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 3, 11, 30, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("4af68c55-abf0-4b6e-a4ab-65b10281d36f"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 3, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("afc35f51-5e63-402d-ac7a-fcc86ffb2199"),
+                            ActivityId = 3,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 1
+                        },
+                        new
+                        {
+                            GuidId = new Guid("04bd8683-4063-4b1b-9396-9441aee0d0f6"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 4, 7, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 2
+                        },
+                        new
+                        {
+                            GuidId = new Guid("c374fe89-5171-401e-88e1-93a151d4fcfd"),
+                            ActivityId = 2,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 4, 11, 40, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 2
+                        },
+                        new
+                        {
+                            GuidId = new Guid("ad9df005-80bb-4cb3-8bb8-fe0b54c7e096"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 4, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 2
+                        },
+                        new
+                        {
+                            GuidId = new Guid("e995c47c-4ce1-4759-91b3-bd86a3167337"),
+                            ActivityId = 3,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 4, 15, 10, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 2
+                        },
+                        new
+                        {
+                            GuidId = new Guid("2e8aed50-a704-4b13-bd2d-2c8eb526ec61"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 5, 8, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 3
+                        },
+                        new
+                        {
+                            GuidId = new Guid("7b6c8911-843b-4b06-bc01-21ef80b6aa2f"),
+                            ActivityId = 2,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 5, 11, 40, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 3
+                        },
+                        new
+                        {
+                            GuidId = new Guid("433b4608-b315-473b-a6a6-ecd63c216361"),
+                            ActivityId = 1,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 5, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 3
+                        },
+                        new
+                        {
+                            GuidId = new Guid("9143c640-ff6a-4acb-a908-ca7d8d209a57"),
+                            ActivityId = 3,
+                            Description = "",
+                            StartTime = new DateTime(2024, 10, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            TypeShiftId = 3
+                        });
                 });
 
             modelBuilder.Entity("TimerTracker.BE.DB.Models.Shift", b =>
