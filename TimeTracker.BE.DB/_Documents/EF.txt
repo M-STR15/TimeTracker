@@ -1,0 +1,3 @@
+﻿Add-Migration InicializeCreate -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
+
+Update-Database -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
