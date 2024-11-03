@@ -31,11 +31,14 @@ namespace TimeTracker.Windows.Reports
         {
             var start = new DateTime(2024, 10, 1);
             var end = new DateTime(2024, 11, 1);
-            var typeShifts = new eTypeShift[] { eTypeShift.Office };
-            var officeWorkHourslist = _reportProvider.GetPlanVsRealitaWorkHours(start, end, typeShifts);
+            var typeShifts_Office = new eTypeShift[] { eTypeShift.Office };
+            var officeWorkHourslist = _reportProvider.GetWorkHours(start, end, typeShifts_Office);
 
-            var typeShifts2 = new eTypeShift[] { eTypeShift.HomeOffice , eTypeShift.Others };
-            var homeOfficeWorkHourslist = _reportProvider.GetPlanVsRealitaWorkHours(start, end, typeShifts2);
+            var typeShifts_WithOutOffice = new eTypeShift[] { eTypeShift.HomeOffice, eTypeShift.Others };
+            var homeOfficeWorkHourslist = _reportProvider.GetWorkHours(start, end, typeShifts_WithOutOffice);
+
+            var planWorkHoursList = _reportProvider.GetPlanWorkHours(start, end, typeShifts_Office);
+            var planHomeOfficeWorkHoursList = _reportProvider.GetPlanWorkHours(start, end, typeShifts_WithOutOffice);
 
             SeriesCollection = new SeriesCollection
             {
@@ -79,7 +82,7 @@ namespace TimeTracker.Windows.Reports
                 new LineSeries
                 {
                     Title = "Cum.-Work hours-Plan",
-                    Values = new ChartValues<double>(officeWorkHourslist.Select(x => x.CumHours).ToArray()),
+                    Values = new ChartValues<double>(planWorkHoursList.Select(x => x.CumHours).ToArray()),
                     PointGeometry = DefaultGeometries.Diamond,
                     LineSmoothness = 0,
                     ScalesYAt = 0
@@ -88,7 +91,7 @@ namespace TimeTracker.Windows.Reports
                 new LineSeries
                 {
                     Title = "Cum.-Home office-Plan",
-                    Values = new ChartValues<double>(homeOfficeWorkHourslist.Select(x => x.CumHours).ToArray()),
+                    Values = new ChartValues<double>(planHomeOfficeWorkHoursList.Select(x => x.CumHours).ToArray()),
                     PointGeometry = DefaultGeometries.Diamond,
                     LineSmoothness = 0,
                     ScalesYAt = 0

@@ -35,22 +35,19 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
-        private List<RecordSum> getRecordSumList(DateTime start, DateTime end)
+        public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
         {
-            using (var context = new MainDatacontext())
-            {
-                var basicData = context.RecordActivities
-                        .Where(x => x.StartTime >= start && x.StartTime <= end).OrderBy(x => x.StartTime).ToList();
-
-                return basicData
-                        .Zip(basicData.Skip(1), (current, next) => new RecordSum(
-                            activityId: current.ActivityId,
-                            day: current.StartTime.Date,
-                            dateTimeFrom: current.StartTime,
-                            dateTimeTo: next.StartTime,
-                            typeShiftId: current.TypeShiftId)).ToList();
-            }
+            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+            var realData = GetActivityOverDays(start, end);
+            return getRealList_DayHours(dateList, realData, typeShifts);
         }
+
+        public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+        {
+            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+            return getPlanList_DayHours(start, end, dateList, typeShifts);
+        }
+
 
         private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
         {
@@ -59,28 +56,22 @@ namespace TimeTracker.BE.DB.Providers
                              .ToList();
         }
 
-        private double getSumHours(List<RecordSum> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
+        private List<DayHours> getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
         {
-            return Math.Round(list.Where(x => x.Day == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
-        }
+            var shiftList = new List<Shift>();
 
-        public List<DayHours> GetPlanVsRealitaWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
-        {
-            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
-            var planList = getPlanList_DayHours(dateList);
+            using (var context = new MainDatacontext())
+            {
+                shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => (int)y == x.TypeShiftId)).ToList();
+            }
 
-            var realData = GetActivityOverDays(start, end);
-            return getRealList_DayHours(dateList, realData, typeShifts);
-        }
-
-        private List<DayHours> getPlanList_DayHours(List<DayHours> basicList)
-        {
             var cumHours = 0.00;
             var planList = new List<DayHours>();
             for (int i = 0; i < basicList.Count; i++)
             {
                 var current = basicList[i];
-                var newRecord = new DayHours(current, current.IsWorkDay ? 7.5 : 0, cumHours);
+                var houtInDay = shiftList.Any(x => x.StartDate == current.Date) ? 7.5 : 0;
+                var newRecord = new DayHours(current, houtInDay, cumHours);
                 planList.Add(newRecord);
                 cumHours = newRecord.CumHours;
             }
@@ -104,38 +95,26 @@ namespace TimeTracker.BE.DB.Providers
 
             return planList;
         }
-    }
 
-
-    public class DayHours
-    {
-        public DateTime Date { get; set; }
-        public double DateHours { get; set; }
-        public double CumHours { get; set; }
-        public bool IsWorkDay { get; private set; }
-        public DayHours()
-        { }
-        public DayHours(DateTime date, double dateHours = 0, double cumHours = 0)
+        private List<RecordSum> getRecordSumList(DateTime start, DateTime end)
         {
-            Date = date;
-            setIsWorkDay();
-            DateHours = dateHours;
-            CumHours = cumHours;
+            using (var context = new MainDatacontext())
+            {
+                var basicData = context.RecordActivities
+                        .Where(x => x.StartTime >= start && x.StartTime <= end).OrderBy(x => x.StartTime).ToList();
+
+                return basicData
+                        .Zip(basicData.Skip(1), (current, next) => new RecordSum(
+                            activityId: current.ActivityId,
+                            day: current.StartTime.Date,
+                            dateTimeFrom: current.StartTime,
+                            dateTimeTo: next.StartTime,
+                            typeShiftId: current.TypeShiftId)).ToList();
+            }
         }
-        private void setIsWorkDay()
+        private double getSumHours(List<RecordSum> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
         {
-            IsWorkDay = ((int)Date.DayOfWeek >= 1 && (int)Date.DayOfWeek <= 5);
-        }
-
-        public DayHours(DayHours dayHours) : this(dayHours.Date, dayHours.DateHours, dayHours.CumHours)
-        { }
-
-        public DayHours(DayHours currentDayHours, double dateHours = 0, double cumHours = 0)
-        {
-            Date = currentDayHours.Date;
-            setIsWorkDay();
-            DateHours = dateHours;
-            CumHours = cumHours + dateHours;
+            return Math.Round(list.Where(x => x.Day == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
         }
     }
 }
