@@ -11,9 +11,11 @@ namespace TimeTracker.BE.DB.Models
         [Key]
         [Column("TypeShift_ID")]
         public int Id { get; set; }
+
         [Required]
         [Column("Name")]
         public string Name { get; set; } = "";
+
         public string Color { get; set; } = "";
         public bool IsVisibleInMainWindow { get; set; }
 

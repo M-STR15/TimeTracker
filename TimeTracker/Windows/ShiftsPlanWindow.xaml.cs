@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models;
@@ -147,6 +146,7 @@ namespace TimeTracker.Windows
 
             this.Close();
         }
+
         private void setHeaderGrid()
         {
             var daysList = Enum.GetValues(typeof(DayOfWeek))

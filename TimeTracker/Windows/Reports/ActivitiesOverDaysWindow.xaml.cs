@@ -27,7 +27,6 @@ namespace TimeTracker.Windows.Reports
             createChartData();
 
             DataContext = this;
-
         }
 
         private List<string> getLastSixMonth()
@@ -51,12 +50,9 @@ namespace TimeTracker.Windows.Reports
 
             var selectItemCmb = cmbMonth.SelectedItem as string;
 
-
             var dateFrom = Convert.ToDateTime("1." + selectItemCmb);
             var dateTo = dateFrom.AddMonths(1);
             var list = getProvider.GetActivityOverDays(dateFrom, dateTo);
-
-
 
             SeriesCollection = new SeriesCollection
             {
@@ -113,6 +109,7 @@ namespace TimeTracker.Windows.Reports
             Labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
             Formatter = value => value + " H";
         }
+
         [ObservableProperty]
         private SeriesCollection _seriesCollection;
 

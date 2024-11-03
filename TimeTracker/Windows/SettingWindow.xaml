@@ -18,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <TabControl Margin="5">
         <TabItem Header="Projects">
             <Grid>
@@ -182,7 +182,7 @@
                     Grid.Row="1"
                     Content="Start position main window"
                     ToolTip="Nastavení kde se má zobrazit hlavní okno při startu aplikace." />
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cmbPositionList"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cmbPositionList" />
             </Grid>
         </TabItem>
     </TabControl>

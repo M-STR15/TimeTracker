@@ -10,25 +10,25 @@
         Title="ActivitiesOverDaysWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto" MinWidth="150"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" MinWidth="150" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Content="Month"/>
-            <ComboBox x:Name="cmbMonth" Grid.Column="1" SelectionChanged="cmbMonth_SelectionChanged"/>
+            <Label Content="Month" />
+            <ComboBox x:Name="cmbMonth" Grid.Column="1" SelectionChanged="cmbMonth_SelectionChanged" />
         </Grid>
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" Grid.Row="1">
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Days" 
-                          Labels="{Binding Labels}" LabelsRotation="0" >
+                <lvc:Axis Title="Days"
+                          Labels="{Binding Labels}" LabelsRotation="0">
                     <lvc:Axis.Separator>
-                        <lvc:Separator Step="1"/>
+                        <lvc:Separator Step="1" />
                     </lvc:Axis.Separator>
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>

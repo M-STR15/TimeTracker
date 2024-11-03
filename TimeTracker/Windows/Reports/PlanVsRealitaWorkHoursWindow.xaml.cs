@@ -1,5 +1,4 @@
 ﻿using LiveCharts;
-using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
@@ -14,6 +13,7 @@ namespace TimeTracker.Windows.Reports
     public partial class PlanVsRealitaWorkHoursWindow : Window
     {
         private ReportProvider _reportProvider = new ReportProvider();
+
         public PlanVsRealitaWorkHoursWindow()
         {
             InitializeComponent();
@@ -42,7 +42,6 @@ namespace TimeTracker.Windows.Reports
 
             SeriesCollection = new SeriesCollection
             {
-
                 new StackedColumnSeries
                 {
                     Title = "Work hours-Real",

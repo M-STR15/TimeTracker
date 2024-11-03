@@ -23,6 +23,7 @@ namespace TimeTracker.Windows
         private List<TypeShift> _typeShifts = new();
 
         private ShiftProvider _shiftProvider;
+
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -160,6 +161,7 @@ namespace TimeTracker.Windows
                 startTimer();
             }
         }
+
         private void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
         {
             var activity = new Activity()
@@ -207,6 +209,7 @@ namespace TimeTracker.Windows
                     cmbSubModule.SelectedIndex = 0;
             }
         }
+
         private void onOpenWindowReportRecords_Click(object sender, RoutedEventArgs e)
         {
             var report = new RecordListWindow(_mainStory);
@@ -240,6 +243,7 @@ namespace TimeTracker.Windows
             var time = (DateTime.Now - _lastRecordActivity.StartTime);
             lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
         }
+
         private void startTimer()
         {
             if (!_dispatcherTimer.IsEnabled)

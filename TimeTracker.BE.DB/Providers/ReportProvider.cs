@@ -7,7 +7,6 @@ namespace TimeTracker.BE.DB.Providers
 {
     public class ReportProvider
     {
-
         public List<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
         {
             var activities = new List<RecordActivity>();
@@ -47,7 +46,6 @@ namespace TimeTracker.BE.DB.Providers
             var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
             return getPlanList_DayHours(start, end, dateList, typeShifts);
         }
-
 
         private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
         {
@@ -112,6 +110,7 @@ namespace TimeTracker.BE.DB.Providers
                             typeShiftId: current.TypeShiftId)).ToList();
             }
         }
+
         private double getSumHours(List<RecordSum> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
         {
             return Math.Round(list.Where(x => x.Day == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);

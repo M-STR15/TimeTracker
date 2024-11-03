@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TimeTracker.BE.DB.Providers
 {

@@ -7,6 +7,7 @@ namespace TimeTracker.Stories
     {
         public List<string> EventLogs { get; set; }
         private NotificationManagement _notificationService;
+
         public EventLogStory()
         {
             _notificationService = new NotificationManagement();
@@ -15,13 +16,13 @@ namespace TimeTracker.Stories
         public void WriteInfo()
         {
             _notificationService.Create(eTypeNotification.Suscaise);
-
         }
 
         public void WriteWarning()
         {
             _notificationService.Create(eTypeNotification.Warning);
         }
+
         public void WriteError()
         {
             _notificationService.Create(eTypeNotification.Error);

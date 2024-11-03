@@ -83,6 +83,7 @@ namespace TimeTracker.Windows
                 }
             }
         }
+
         private void onAddProject_Click(object sender, RoutedEventArgs e)
         {
             var name = $"New Project({ProjectListBox.Count + 1})";
@@ -177,6 +178,7 @@ namespace TimeTracker.Windows
                 }
             }
         }
+
         private void onSaveSubModule_Click(object parameter)
         {
             var item = (SubModuleListBox)parameter;
@@ -200,6 +202,7 @@ namespace TimeTracker.Windows
         {
             setLblSubModuleInfo();
         }
+
         private void setLblProjectInfo()
         {
             lblProjectInfo.Content = ProjectListBox.Count();

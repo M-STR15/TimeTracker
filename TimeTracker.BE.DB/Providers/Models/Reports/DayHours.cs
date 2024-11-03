@@ -6,8 +6,10 @@
         public double DateHours { get; set; }
         public double CumHours { get; set; }
         public bool IsWorkDay { get; private set; }
+
         public DayHours()
         { }
+
         public DayHours(DateTime date, double dateHours = 0, double cumHours = 0)
         {
             Date = date;
@@ -15,6 +17,7 @@
             DateHours = dateHours;
             CumHours = cumHours;
         }
+
         private void setIsWorkDay()
         {
             IsWorkDay = ((int)Date.DayOfWeek >= 1 && (int)Date.DayOfWeek <= 5);
