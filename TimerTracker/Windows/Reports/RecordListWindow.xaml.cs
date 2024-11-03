@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using TimerTracker.Stories;
 
-namespace TimerTracker.Windows
+namespace TimerTracker.Windows.Reports
 {
     public partial class RecordListWindow : Window
     {

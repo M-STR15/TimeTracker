@@ -251,5 +251,11 @@ namespace TimerTracker.Windows
             var window = new ActivitiesOverDaysWindow();
             window.Show();
         }
+
+        private void mbtnPlanVsRealitaWorkHours_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new PlanVsRealitaWorkHoursWindow();
+            window.Show();
+        }
     }
 }

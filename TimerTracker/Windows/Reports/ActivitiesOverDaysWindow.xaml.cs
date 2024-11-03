@@ -3,6 +3,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
+using TimerTracker.BE.DB.Models.Enums;
 using TimerTracker.BE.DB.Providers;
 
 namespace TimerTracker.Windows.Reports
@@ -62,7 +63,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Work hours Office",
-                    Values = new ChartValues<double> (list.Select(x=>x.WorkHours_Office)),
+                    Values = new ChartValues<double> (list.Where(x=>x.TypeShift==eTypeShift.Office).Select(x=>x.WorkHours)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill= Brushes.CornflowerBlue
@@ -70,7 +71,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Pauses-Office",
-                    Values = new ChartValues<double> (list.Select(x=>x.Pause_Office)),
+                    Values = new ChartValues<double> (list.Where(x=>x.TypeShift==eTypeShift.Office).Select(x=>x.Pause)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill= Brushes.DarkSeaGreen
@@ -78,7 +79,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Work hours-HomeOffice",
-                    Values = new ChartValues<double> (list.Select(x=>x.WorkHours_HomeOffice)),
+                    Values = new ChartValues<double> (list.Where(x=>x.TypeShift==eTypeShift.HomeOffice).Select(x=>x.WorkHours)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill=Brushes.MediumOrchid
@@ -86,7 +87,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Pauses-HomeOffice",
-                    Values = new ChartValues<double> (list.Select(x=>x.Pause_HomeOffice)),
+                    Values = new ChartValues<double> (list.Where(x=>x.TypeShift==eTypeShift.HomeOffice).Select(x=>x.Pause)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill= Brushes.MediumSpringGreen
@@ -94,7 +95,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Work hours-Others",
-                    Values = new ChartValues<double> (list.Select(x=>x.WorkHours_Others)),
+                    Values = new ChartValues<double> (list.Where(x => x.TypeShift == eTypeShift.Others).Select(x=>x.WorkHours)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill= Brushes.SlateBlue
@@ -102,7 +103,7 @@ namespace TimerTracker.Windows.Reports
                 new StackedColumnSeries
                 {
                     Title ="Pauses-Others",
-                    Values = new ChartValues<double> (list.Select(x=>x.Pause_Others)),
+                    Values = new ChartValues<double> (list.Where(x=>x.TypeShift==eTypeShift.Others).Select(x=>x.Pause)),
                     StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
                     DataLabels = true,
                     Fill= Brushes.YellowGreen
@@ -114,13 +115,13 @@ namespace TimerTracker.Windows.Reports
         }
         [ObservableProperty]
         private SeriesCollection _seriesCollection;
-       
+
         [ObservableProperty]
         private string[] _labels;
-       
+
         [ObservableProperty]
         public Func<double, string> _formatter;
-       
+
         private void cmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             createChartData();

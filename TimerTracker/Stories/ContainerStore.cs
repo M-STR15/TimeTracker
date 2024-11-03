@@ -2,6 +2,7 @@
 using TimerTracker.BE.DB.DataAccess;
 using TimerTracker.BE.DB.Providers;
 using TimerTracker.Windows;
+using TimerTracker.Windows.Reports;
 
 namespace TimerTracker.Stories
 {

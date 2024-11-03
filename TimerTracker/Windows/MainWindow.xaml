@@ -37,6 +37,10 @@
                     x:Name="mbtnActivitiesOverDays"
                     Click="mbtnActivitiesOverDays_Click"
                     Header="Activities over days" />
+                <MenuItem
+                    x:Name="mbtnPlanVsRealitaWorkHours"
+                    Click="mbtnPlanVsRealitaWorkHours_Click"
+                    Header="Plan vs realita work hours" />
             </MenuItem>
 
             <MenuItem
