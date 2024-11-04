@@ -9,13 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <None Remove="Services\**" />
-    <Page Remove="Services\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\add.png" />
     <None Remove="Resources\coffee-cup.png" />
     <None Remove="Resources\cup.png" />

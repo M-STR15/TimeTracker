@@ -4,6 +4,7 @@ using System.Windows.Media;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
+using TimeTracker.Services;
 using TimeTracker.Stories;
 using TimeTracker.Windows.Models;
 
@@ -15,11 +16,13 @@ namespace TimeTracker.Windows
         private List<TypeShiftRadioButton> _typeShifts = new();
         private MainStory _mainStory;
         private ShiftProvider _shiftProvider;
+        private EventLogService _eventLogService;
 
         public ShiftsPlanWindow(MainStory mainStory)
         {
             InitializeComponent();
 
+            _eventLogService = new EventLogService();
             _mainStory = mainStory;
             _shiftProvider = mainStory.ContainerStore.GetShiftProvider();
 
@@ -125,26 +128,40 @@ namespace TimeTracker.Windows
 
         private void onChangeItemMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            itmcDays.Items.Clear();
-            _dailyList.Clear();
+            try
+            {
+                itmcDays.Items.Clear();
+                _dailyList.Clear();
 
-            setHeaderGrid();
-            generateDateList();
-            generateButtonList();
+                setHeaderGrid();
+                generateDateList();
+                generateButtonList();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("ee6b3d6c-5dd4-4db9-a083-d7144229bf80"), ex.Message, "Problém s přepnutí měsíců.");
+            }
         }
 
         private void onSave_Click(object sender, RoutedEventArgs e)
         {
-            var shifts = new List<Shift>();
-
-            foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
+            try
             {
-                var shift = new Shift(item.GuidId, item.Date, (int)item.eTypeShift);
-                shifts.Add(shift);
-            }
-            var result = _shiftProvider.SaveShifts(shifts);
+                var shifts = new List<Shift>();
 
-            this.Close();
+                foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
+                {
+                    var shift = new Shift(item.GuidId, item.Date, (int)item.eTypeShift);
+                    shifts.Add(shift);
+                }
+                var result = _shiftProvider.SaveShifts(shifts);
+
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("f40f8f19-9bb9-40e5-a293-1e95acc63384"), ex.Message, "Problém s uložením směn.");
+            }
         }
 
         private void setHeaderGrid()

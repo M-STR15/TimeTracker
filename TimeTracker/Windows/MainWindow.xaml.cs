@@ -6,6 +6,7 @@ using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
 using TimeTracker.Models;
+using TimeTracker.Services;
 using TimeTracker.Stories;
 using TimeTracker.ViewModels;
 using TimeTracker.Windows.Reports;
@@ -21,13 +22,14 @@ namespace TimeTracker.Windows
         private RecordProvider _recordProvider;
         private List<ShiftCmb> _shiftCmbs = new();
         private List<TypeShift> _typeShifts = new();
-
+        private EventLogService _eventLogService;
         private ShiftProvider _shiftProvider;
 
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
             InitializeComponent();
+            _eventLogService = new EventLogService();
             _mainStory = mainStory;
 
             _shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
@@ -138,103 +140,152 @@ namespace TimeTracker.Windows
 
         private void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
         {
-            var startTimeActivity = DateTime.Now;
-            var activity = new Activity()
+            try
             {
-                Id = (int)eActivity.Start,
-                Name = eActivity.Start.ToString()
-            };
+                var startTimeActivity = DateTime.Now;
+                var activity = new Activity()
+                {
+                    Id = (int)eActivity.Start,
+                    Name = eActivity.Start.ToString()
+                };
 
-            var selProject = (Project)cmbProjects.SelectedItem;
-            var selShift = (ShiftCmb)cmbShift.SelectedItem;
-            var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
-            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+                var selProject = (Project)cmbProjects.SelectedItem;
+                var selShift = (ShiftCmb)cmbShift.SelectedItem;
+                var selSubmodule = (SubModule)cmbSubModule.SelectedItem;
+                var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
-            var description = getTextFromRichTextBox(rtbDescription);
-            var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selProject, selSubmodule, selShift, description);
+                var description = getTextFromRichTextBox(rtbDescription);
+                var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selProject, selSubmodule, selShift, description);
 
-            var result = addActivite(selRecordActivity);
-            if (result)
+                var result = addActivite(selRecordActivity);
+                if (result)
+                {
+                    rtbDescription.Document.Blocks.Clear();
+                    changeLabels();
+                    startTimer();
+                }
+            }
+            catch (Exception ex)
             {
-                rtbDescription.Document.Blocks.Clear();
-                changeLabels();
-                startTimer();
+                _eventLogService.WriteError(new Guid("51905c9e-51c5-4fa4-bac2-fe60543bc170"), ex.Message, "Problém při vkláání akivity.");
             }
         }
 
         private void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
         {
-            var activity = new Activity()
+            try
             {
-                Id = (int)eActivity.Stop,
-                Name = eActivity.Stop.ToString()
-            };
+                var activity = new Activity()
+                {
+                    Id = (int)eActivity.Stop,
+                    Name = eActivity.Stop.ToString()
+                };
 
-            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+                var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
-            var result = addActivite(activity, selTypeShift);
-            if (result)
+                var result = addActivite(activity, selTypeShift);
+                if (result)
+                {
+                    changeLabels();
+                    _dispatcherTimer.Stop();
+                }
+            }
+            catch (Exception ex)
             {
-                changeLabels();
-                _dispatcherTimer.Stop();
+                _eventLogService.WriteError(new Guid("d769b7d8-adea-4011-babe-4415f3258467"), ex.Message, "Problém při ukládání konce směny.");
             }
         }
 
         private void onActionAfterClickPause_Click(object sender, RoutedEventArgs e)
         {
-            var activity = new Activity()
+            try
             {
-                Id = (int)eActivity.Pause,
-                Name = eActivity.Pause.ToString()
-            };
+                var activity = new Activity()
+                {
+                    Id = (int)eActivity.Pause,
+                    Name = eActivity.Pause.ToString()
+                };
 
-            var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+                var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
-            var result = addActivite(activity, selTypeShift);
-            if (result)
+                var result = addActivite(activity, selTypeShift);
+                if (result)
+                {
+                    changeLabels();
+                    startTimer();
+                }
+            }
+            catch (Exception ex)
             {
-                changeLabels();
-                startTimer();
+                _eventLogService.WriteError(new Guid("aa2467f9-bddd-4c6b-a3bd-b4554936314f"), ex.Message, "Problém při ukládání pauzy.");
             }
         }
 
         private void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cmbProjects.SelectedItem != null)
+            try
             {
-                var projectId = ((Project)cmbProjects.SelectedItem).Id;
-                var subModules = _projectProvider.GetSubModules(projectId);
-                cmbSubModule.ItemsSource = subModules;
-                if (subModules.Count > 0)
-                    cmbSubModule.SelectedIndex = 0;
+                if (cmbProjects.SelectedItem != null)
+                {
+                    var projectId = ((Project)cmbProjects.SelectedItem).Id;
+                    var subModules = _projectProvider.GetSubModules(projectId);
+                    cmbSubModule.ItemsSource = subModules;
+                    if (subModules.Count > 0)
+                        cmbSubModule.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("01c4c769-2c67-48ab-9c15-156609f49e0d"), ex.Message, "Problém při přepnutí projectu.");
             }
         }
 
         private void onOpenWindowReportRecords_Click(object sender, RoutedEventArgs e)
         {
-            var report = new RecordListWindow(_mainStory);
-            report.Show();
+            try
+            {
+                var report = new RecordListWindow(_mainStory);
+                report.Show();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("9d0de4e8-d44e-4404-bf96-ca312a7556fa"), ex.Message, "Problém při otvírání okna s reportem.");
+            }
         }
 
         private void onOpenWindowSetting_Click(object sender, RoutedEventArgs e)
         {
-            var window = new SettingWindow(_mainStory);
-            window.ShowDialog();
+            try
+            {
+                var window = new SettingWindow(_mainStory);
+                window.ShowDialog();
 
-            loadProjects();
+                loadProjects();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("d070dfde-f70c-4aa3-a486-3d97d4f1688a"), ex.Message, "Problém při otvírání okna s nastavením.");
+            }
         }
 
         private void onOpenWindowShifts_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ShiftsPlanWindow(_mainStory);
-            var result = window.ShowDialog();
-
-            loadShifts();
-
-            if (_lastRecordActivity != null && _lastRecordActivity.Shift != null)
+            try
             {
-                var curretnSeletDate = _lastRecordActivity.Shift.StartDate;
-                cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
+                var window = new ShiftsPlanWindow(_mainStory);
+                var result = window.ShowDialog();
+
+                loadShifts();
+
+                if (_lastRecordActivity != null && _lastRecordActivity.Shift != null)
+                {
+                    var curretnSeletDate = _lastRecordActivity.Shift.StartDate;
+                    cmbShift.SelectedItem = _shiftCmbs.FirstOrDefault(x => x.StartDate == curretnSeletDate);
+                }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("1234980a-9768-40b0-bbb6-9ab6927adb1a"), ex.Message, "Problém při otvírání okna se směnami.");
             }
         }
 
@@ -252,14 +303,28 @@ namespace TimeTracker.Windows
 
         private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ActivitiesOverDaysWindow();
-            window.Show();
+            try
+            {
+                var window = new ActivitiesOverDaysWindow();
+                window.Show();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("1a0e5889-4d8f-4560-8d18-51040ff5e4a4"), ex.Message, "Problém při otvírání reportu.");
+            }
         }
 
         private void mbtnPlanVsRealitaWorkHours_Click(object sender, RoutedEventArgs e)
         {
-            var window = new PlanVsRealitaWorkHoursWindow();
-            window.Show();
+            try
+            {
+                var window = new PlanVsRealitaWorkHoursWindow();
+                window.Show();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("ebb2c705-f5dd-4cc9-81b6-99caf462292a"), ex.Message, "Problém při otvírání reportu.");
+            }
         }
     }
 }

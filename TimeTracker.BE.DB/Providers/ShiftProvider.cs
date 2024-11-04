@@ -118,8 +118,9 @@ namespace TimeTracker.BE.DB.Providers
             {
                 // Zde můžeš přidat logování chyby pro další diagnostiku
                 Console.WriteLine(ex.Message); // Například log do konzole
-                return false;
+                throw new ArgumentException("Chyba při ukládání směny do DB.", ex);
             }
+
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TimeTracker.BE.DB.Providers;
 using TimeTracker.Helpers;
 using TimeTracker.Models;
+using TimeTracker.Services;
 using TimeTracker.Stories;
 
 namespace TimeTracker.Windows
@@ -18,12 +19,13 @@ namespace TimeTracker.Windows
         private readonly MainStory _mainStory;
         private readonly ProjectProvider _projectProvider;
 
+        private EventLogService _eventLogService;
         private ProjectListBox _selectProjectListBox;
-
         private List<string> PositionList = new();
 
         public SettingWindow(MainStory mainStory)
         {
+            _eventLogService = new EventLogService();
             _mainStory = mainStory;
             _projectProvider = _mainStory.ContainerStore.GetProjectProvider();
 
@@ -70,132 +72,192 @@ namespace TimeTracker.Windows
 
         private void onActionAfterChangeItemInListProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-
-            if (selected != null)
+            try
             {
-                var list = _projectProvider.GetSubModules(selected.Id);
+                var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 
-                SubModuleListBox.Clear();
-                foreach (var item in list.Select(x => new SubModuleListBox(x)).ToList())
+                if (selected != null)
                 {
-                    SubModuleListBox.Add(item);
+                    var list = _projectProvider.GetSubModules(selected.Id);
+
+                    SubModuleListBox.Clear();
+                    foreach (var item in list.Select(x => new SubModuleListBox(x)).ToList())
+                    {
+                        SubModuleListBox.Add(item);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("0cdee520-445c-42a9-8039-d1fe128bae1d"), ex.Message, "Problém při přepnutí projectu.");
             }
         }
 
         private void onAddProject_Click(object sender, RoutedEventArgs e)
         {
-            var name = $"New Project({ProjectListBox.Count + 1})";
-            var item = new ProjectListBox(name, "");
-            item.IsEditable = true;
+            try
+            {
+                var name = $"New Project({ProjectListBox.Count + 1})";
+                var item = new ProjectListBox(name, "");
+                item.IsEditable = true;
 
-            ProjectListBox.Add(item);
-            ProjectItemsView.Refresh();
+                ProjectListBox.Add(item);
+                ProjectItemsView.Refresh();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("83bfd991-0549-4094-ab5d-625688ded5d9"), ex.Message, "Problém s přidáním projektu.");
+            }
         }
 
         private void onAddSubModule_Click(object sender, RoutedEventArgs e)
         {
-            var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
-            var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
-            var item = new SubModuleListBox(0, name, "", selectProjectId);
-            item.IsEditable = true;
+            try
+            {
+                var name = $"New SubModule{(SubModuleListBox.Count + 1)}";
+                var selectProjectId = ((ProjectListBox)ProjectItemsView.CurrentItem).Id;
+                var item = new SubModuleListBox(0, name, "", selectProjectId);
+                item.IsEditable = true;
 
-            SubModuleListBox.Add(item);
-            SubModuleItemsView.Refresh();
+                SubModuleListBox.Add(item);
+                SubModuleItemsView.Refresh();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("6828bf3f-dd9b-453c-a9e9-9709ce87f523"), ex.Message, "Problém s vytvořením sub modulu.");
+            }
         }
 
         private void onDeleteProject_Click(object sender, RoutedEventArgs e)
         {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-            if (selected != null)
+            try
             {
-                var result = _projectProvider.DeleteProject(selected);
-
-                if (result != null)
+                var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
+                if (selected != null)
                 {
-                    var item = ProjectListBox.First(x => x.GuidId == selected.GuidId);
-                    ProjectListBox.Remove(selected);
-                    ProjectItemsView.Refresh();
+                    var result = _projectProvider.DeleteProject(selected);
+
+                    if (result != null)
+                    {
+                        var item = ProjectListBox.First(x => x.GuidId == selected.GuidId);
+                        ProjectListBox.Remove(selected);
+                        ProjectItemsView.Refresh();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("c4e38573-382d-4b9f-bf04-e11c13e33c63"), ex.Message, "Problém se smazání projektu.");
             }
         }
 
         private void onDeleteSubModule_Click(object sender, RoutedEventArgs e)
         {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
+            try
             {
-                var result = _projectProvider.DeleteSubModule(selected);
-                if (result != null)
+                var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+                if (selected != null)
                 {
-                    var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
-                    SubModuleListBox.Remove(selected);
-                    SubModuleItemsView.Refresh();
+                    var result = _projectProvider.DeleteSubModule(selected);
+                    if (result != null)
+                    {
+                        var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
+                        SubModuleListBox.Remove(selected);
+                        SubModuleItemsView.Refresh();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("bbb177d5-b2d0-41fc-aa15-8bc3154eda9c"), ex.Message, "Problém se smazání sub modulu.");
             }
         }
 
         private void onEditProject_Click(object sender, RoutedEventArgs e)
         {
-            var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
-
-            if (selected != null)
+            try
             {
-                selected.IsEditable = true;
-                ProjectItemsView.Refresh();
+                var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
+
+                if (selected != null)
+                {
+                    selected.IsEditable = true;
+                    ProjectItemsView.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("5609f4e2-7502-4473-9ecb-b5636356a1c3"), ex.Message, "Problém s editací projektu.");
             }
         }
 
         private void onEditSubModule_Click(object sender, RoutedEventArgs e)
         {
-            var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
-            if (selected != null)
+            try
             {
-                selected.IsEditable = true;
-                SubModuleItemsView.Refresh();
+                var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
+                if (selected != null)
+                {
+                    selected.IsEditable = true;
+                    SubModuleItemsView.Refresh();
+                }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("4064c4c9-2326-43c6-bfa0-a855e9e7c4c0"), ex.Message, "Problém s editací sub modulu.");
             }
         }
 
-        private void onProjectItemsViewChangeHandler(object sender, EventArgs args)
-        {
-            setLblProjectInfo();
-        }
+        private void onProjectItemsViewChangeHandler(object sender, EventArgs args) => setLblProjectInfo();
 
         private void onSaveProject_Click(object parameter)
         {
-            var item = (ProjectListBox)parameter;
-            item.IsEditable = false;
-
-            var result = _projectProvider.SaveProject(item);
-            if (result != null)
+            try
             {
-                var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
-                if (updateItem != null)
+                var item = (ProjectListBox)parameter;
+                item.IsEditable = false;
+
+                var result = _projectProvider.SaveProject(item);
+                if (result != null)
                 {
-                    updateItem.Id = result.Id;
-                    ProjectItemsView.Refresh();
+                    var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
+                    if (updateItem != null)
+                    {
+                        updateItem.Id = result.Id;
+                        ProjectItemsView.Refresh();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("f6e161c0-6406-4c08-b6d7-266f165788ef"), ex.Message, "Problém s uložením projektu.");
             }
         }
 
         private void onSaveSubModule_Click(object parameter)
         {
-            var item = (SubModuleListBox)parameter;
-            item.IsEditable = false;
-
-            var result = _projectProvider.SaveSubModule(item);
-            if (result != null)
+            try
             {
-                var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
-                if (updateItem != null)
-                {
-                    updateItem.Id = result.Id;
-                    ProjectItemsView.Refresh();
-                }
-            }
+                var item = (SubModuleListBox)parameter;
+                item.IsEditable = false;
 
-            SubModuleItemsView.Refresh();
+                var result = _projectProvider.SaveSubModule(item);
+                if (result != null)
+                {
+                    var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
+                    if (updateItem != null)
+                    {
+                        updateItem.Id = result.Id;
+                        ProjectItemsView.Refresh();
+                    }
+                }
+
+                SubModuleItemsView.Refresh();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("1043e657-45cd-4b06-8aec-41ce850fdca5"), ex.Message, "Problém s uložením sub modulu.");
+            }
         }
 
         private void onSubModuleItemsViewChangeHandler(object sender, EventArgs args)
@@ -203,15 +265,9 @@ namespace TimeTracker.Windows
             setLblSubModuleInfo();
         }
 
-        private void setLblProjectInfo()
-        {
-            lblProjectInfo.Content = ProjectListBox.Count();
-        }
+        private void setLblProjectInfo() => lblProjectInfo.Content = ProjectListBox.Count();
 
-        private void setLblSubModuleInfo()
-        {
-            lblSubModuleInfo.Content = SubModuleListBox.Count();
-        }
+        private void setLblSubModuleInfo() => lblSubModuleInfo.Content = SubModuleListBox.Count();
 
         private void setProjectItemsView()
         {
