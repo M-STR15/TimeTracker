@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models;
@@ -24,6 +25,7 @@ namespace TimeTracker.Windows
 
             _eventLogService = new EventLogService();
             _mainStory = mainStory;
+
             _shiftProvider = mainStory.ContainerStore.GetShiftProvider();
 
             _typeShifts = _shiftProvider.GetTypeShifts().Select(x => new TypeShiftRadioButton(x)).ToList();
@@ -59,7 +61,7 @@ namespace TimeTracker.Windows
                     Height = 40,
                     Width = 40,
                     Margin = new Thickness(5),
-                    Tag = item,
+                    Tag = item.Date,
                     Background = getColorButtom(item)
                 };
 
@@ -87,43 +89,58 @@ namespace TimeTracker.Windows
                     shift = planShiftsInDB.First(x => x.StartDate == date);
 
                 var guidId = anyShiftInDb ? shift.GuidId : Guid.Empty;
-                var infoOfDate = new InfoOfDate(date, guidId, anyShiftInDb);
+                var eTypeShift = (eTypeShift)shift.TypeShiftId;
+                var infoOfDate = new InfoOfDate(date, guidId, anyShiftInDb, eTypeShift);
 
                 _dailyList.Add(infoOfDate);
             }
         }
 
+        private SolidColorBrush getColorButtom(ref InfoOfDate infoOfDate, TypeShiftRadioButton typeShiftRadBtn)
+        {
+            var setColor = new SolidColorBrush(Colors.Gray);
+
+            if (infoOfDate.IsPlanShiftInDay && typeShiftRadBtn != null)
+            {
+                var color = (Color)ColorConverter.ConvertFromString(typeShiftRadBtn.Color);
+                setColor = new SolidColorBrush(color);
+            }
+
+            return setColor;
+        }
+
         private SolidColorBrush getColorButtom(InfoOfDate infoOfDate)
         {
-            if (infoOfDate.IsPlanShiftInDay)
+            var typeShift = _typeShifts.FirstOrDefault(x => x.Id == (int)infoOfDate.ETypeShift);
+            var setColor = new SolidColorBrush(Colors.Gray);
+            if (infoOfDate.IsPlanShiftInDay && typeShift != null) 
             {
-                var typeSchift = _typeShifts.FirstOrDefault(x => x.Id == (int)infoOfDate.eTypeShift);
-                if (typeSchift != null)
-                {
-                    var colorString = typeSchift.Color;
-                    var color = (Color)ColorConverter.ConvertFromString(colorString);
-                    return new SolidColorBrush(color);
-                }
-                else
-                {
-                    return new SolidColorBrush(Colors.Gray);
-                }
+                var color = (Color)ColorConverter.ConvertFromString(typeShift.Color);
+                setColor = new SolidColorBrush(color);
             }
-            else
-            {
-                return new SolidColorBrush(Colors.Gray);
-            }
+
+            return setColor;
         }
 
         private void onClickOnBtnDay_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as Button;
-            var infoOfDate = (InfoOfDate)btn.Tag;
-            infoOfDate.IsPlanShiftInDay = (!infoOfDate.IsPlanShiftInDay);
-            var selTypeShift = _typeShifts.FirstOrDefault(x => x.IsSelected);
-            infoOfDate.eTypeShift = (eTypeShift)Enum.ToObject(typeof(eTypeShift), selTypeShift?.Id ?? 0);
+            var infoOfDate = Convert.ToDateTime(btn.Tag);
 
-            btn.Background = getColorButtom(infoOfDate);
+            var setDay = _dailyList.FirstOrDefault(x => x.Date == infoOfDate);
+            if (setDay != null)
+            {
+                setDay.IsPlanShiftInDay = !setDay.IsPlanShiftInDay;
+                var selTypeShift = _typeShifts.FirstOrDefault(x => x.IsSelected);
+                setDay.ETypeShift = (eTypeShift)Enum.ToObject(typeof(eTypeShift), selTypeShift?.Id ?? 0);
+
+                var color = getColorButtom(ref setDay, selTypeShift);
+                btn.Background = color;
+            }
+            else
+            {
+
+            }
         }
 
         private void onChangeItemMontAndYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -151,7 +168,7 @@ namespace TimeTracker.Windows
 
                 foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
                 {
-                    var shift = new Shift(item.GuidId, item.Date, (int)item.eTypeShift);
+                    var shift = new Shift(item.GuidId, item.Date, (int)item.ETypeShift);
                     shifts.Add(shift);
                 }
                 var result = _shiftProvider.SaveShifts(shifts);

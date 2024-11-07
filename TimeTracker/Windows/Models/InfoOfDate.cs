@@ -8,7 +8,7 @@ namespace TimeTracker.Windows.Models
 
         private bool _isPlanShiftInDay;
 
-        public InfoOfDate(DateTime date, Guid guidID, bool isPlanShiftInDay, string? description = null)
+        public InfoOfDate(DateTime date, Guid guidID, bool isPlanShiftInDay, eTypeShift eTypeShift, string? description = null)
         {
             GuidId = guidID;
             Date = date;
@@ -17,7 +17,7 @@ namespace TimeTracker.Windows.Models
             WeekInMont = getWeekInMonth(date);
             Description = description;
             IsPlanShiftInDay = isPlanShiftInDay;
-
+            ETypeShift = eTypeShift;
             IsEdited = false;
         }
 
@@ -50,7 +50,7 @@ namespace TimeTracker.Windows.Models
 
         public int WeekInMont { get; private set; }
 
-        public eTypeShift eTypeShift { get; set; }
+        public eTypeShift ETypeShift { get; set; }
 
         public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
 
