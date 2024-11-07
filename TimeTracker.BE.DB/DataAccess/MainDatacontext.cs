@@ -96,7 +96,7 @@ namespace TimeTracker.BE.DB.DataAccess
                 .HasData(
                 new TypeShift((int)eTypeShift.HomeOffice, eTypeShift.HomeOffice.ToString(), "SkyBlue"),
                 new TypeShift((int)eTypeShift.Office, eTypeShift.Office.ToString(), "Orange"),
-                new TypeShift((int)eTypeShift.Others, eTypeShift.Others.ToString(), "MediumPurple"),
+                new TypeShift((int)eTypeShift.Others, eTypeShift.Others.ToString(), "Magenta"),
                 new TypeShift((int)eTypeShift.Holiday, eTypeShift.Holiday.ToString(), "LawnGreen", false)
                 );
         }

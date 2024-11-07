@@ -31,7 +31,7 @@
                 SelectionChanged="onChangeItemMontAndYear_SelectionChanged" />
             <Label Content="Set type:" />
             <Border BorderBrush="Gray" BorderThickness="2">
-                <ListView x:Name="lvTypeShifts">
+                <ListView x:Name="lvTypeShifts" Background="Gray">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel Orientation="Horizontal" />
@@ -43,6 +43,8 @@
                                 Width="85"
                                 Content="{Binding Name, FallbackValue=Test}"
                                 GroupName="TypeShiftsGroup"
+                                Foreground="{Binding Color}"
+                                FontWeight="Bold"
                                 IsChecked="{Binding IsSelected}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
