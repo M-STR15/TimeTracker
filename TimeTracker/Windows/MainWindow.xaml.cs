@@ -25,6 +25,8 @@ namespace TimeTracker.Windows
         private EventLogService _eventLogService;
         private ShiftProvider _shiftProvider;
 
+        private int _totalActivityTimeBeforeInSecond;
+
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -292,7 +294,10 @@ namespace TimeTracker.Windows
         private void setlblTime()
         {
             var time = (DateTime.Now - _lastRecordActivity.StartTime);
+            var actualActivityInSeconds = time.TotalSeconds;
             lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
+
+            lblTotalTime.Content = TimeSpan.FromSeconds(_totalActivityTimeBeforeInSecond + actualActivityInSeconds).ToString(@"hh\:mm\:ss");
         }
 
         private void startTimer()

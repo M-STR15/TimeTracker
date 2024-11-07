@@ -113,7 +113,7 @@ namespace TimeTracker.Windows
         {
             var typeShift = _typeShifts.FirstOrDefault(x => x.Id == (int)infoOfDate.ETypeShift);
             var setColor = new SolidColorBrush(Colors.Gray);
-            if (infoOfDate.IsPlanShiftInDay && typeShift != null) 
+            if (infoOfDate.IsPlanShiftInDay && typeShift != null)
             {
                 var color = (Color)ColorConverter.ConvertFromString(typeShift.Color);
                 setColor = new SolidColorBrush(color);

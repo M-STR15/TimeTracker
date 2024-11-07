@@ -38,7 +38,7 @@
                             Click="onAddProject_Click"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/add.png" />
+                                <Image Source="../Resources/add.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Add" />
                             </StackPanel>
                         </Button>
@@ -49,7 +49,7 @@
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/save.png" />
+                                <Image Source="../Resources/save.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Edit" />
                             </StackPanel>
                         </Button>
@@ -60,7 +60,7 @@
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/delete.png" />
+                                <Image Source="../Resources/delete.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Delete" />
                             </StackPanel>
                         </Button>
@@ -102,7 +102,7 @@
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/add.png" />
+                                <Image Source="../Resources/add.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Add" />
                             </StackPanel>
                         </Button>
@@ -113,7 +113,7 @@
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/save.png" />
+                                <Image Source="../Resources/save.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Edit" />
                             </StackPanel>
                         </Button>
@@ -124,7 +124,7 @@
                             IsEnabled="False"
                             Style="{StaticResource settingButtonStyle}">
                             <StackPanel Orientation="Horizontal">
-                                <Image Style="{StaticResource btnImage}" Source="../Resources/delete.png" />
+                                <Image Source="../Resources/delete.png" Style="{StaticResource btnImage}" />
                                 <Label Content="Delete" />
                             </StackPanel>
                         </Button>
@@ -167,8 +167,10 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="150" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
@@ -182,7 +184,19 @@
                     Grid.Row="1"
                     Content="Start position main window"
                     ToolTip="Nastavení kde se má zobrazit hlavní okno při startu aplikace." />
-                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cmbPositionList" />
+                <ComboBox
+                    x:Name="cmbPositionList"
+                    Grid.Row="1"
+                    Grid.Column="1" />
+                <Label
+                    Grid.Row="2"
+                    Content="Show shifts backwards"
+                    ToolTip="Zobrazovat směny zpětně." />
+
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Content="[days]" />
             </Grid>
         </TabItem>
     </TabControl>
