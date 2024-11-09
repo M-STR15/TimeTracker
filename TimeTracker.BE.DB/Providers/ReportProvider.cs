@@ -34,6 +34,11 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
+        public List<DayHours> GetWorkHoursShift(Guid shiftGuidID)
+        {
+            return null;
+        }
+
         public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
         {
             var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();

@@ -122,5 +122,15 @@ namespace TimeTracker.BE.DB.Providers
             }
 
         }
+
+        public double GetSumShiftHours(Guid shiftGuidId)
+        {
+            using (var context = new MainDatacontext())
+            {
+
+            }
+
+            return 0;
+        }
     }
 }
