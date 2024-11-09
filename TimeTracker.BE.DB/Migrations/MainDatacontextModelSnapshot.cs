@@ -104,6 +104,10 @@ namespace TimeTracker.BE.DB.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("End_time");
+
                     b.Property<int?>("ProjectId")
                         .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID");
@@ -141,7 +145,7 @@ namespace TimeTracker.BE.DB.Migrations
                     b.HasData(
                         new
                         {
-                            GuidId = new Guid("0047df3a-8f44-4be7-8219-b65a71a64e10"),
+                            GuidId = new Guid("8abad025-5b76-4892-af0e-d4aeac7997c5"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 1, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -149,7 +153,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("02e27805-bc99-4bef-b240-9660a8ab7ff4"),
+                            GuidId = new Guid("f3f762d8-95df-4167-8adb-81f547e304d9"),
                             ActivityId = 2,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 1, 11, 30, 0, 0, DateTimeKind.Unspecified),
@@ -157,7 +161,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("aeb0dc69-e3d4-4b76-92ea-3256df6c3e98"),
+                            GuidId = new Guid("bac7229d-440d-4adc-993c-94535bb5e546"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 1, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -165,7 +169,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("342fc221-8620-4616-8a3c-955d05e70f5c"),
+                            GuidId = new Guid("e7185319-2d67-4f88-83a7-9b8e3944e0ae"),
                             ActivityId = 3,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
@@ -173,7 +177,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("0a329565-902b-4e60-9c0f-c6bf3704c222"),
+                            GuidId = new Guid("aabfd309-0229-47c2-b133-1409ae99cfed"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 2, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -181,7 +185,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("c8b7e51c-45ee-4ed1-beb0-a4986b068d36"),
+                            GuidId = new Guid("f8310969-4e8e-4c7c-ae78-f3d54b09cbbb"),
                             ActivityId = 2,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 2, 11, 30, 0, 0, DateTimeKind.Unspecified),
@@ -189,7 +193,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("29710dea-aea5-4478-93a4-46af0c50d03e"),
+                            GuidId = new Guid("27ec3b05-1f32-40a3-8d30-0a19f5ebac7a"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -197,7 +201,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("aba18402-302f-4aa0-9e65-7b8ef8b8458f"),
+                            GuidId = new Guid("d92177c1-2316-424b-b86c-06d9d19ade48"),
                             ActivityId = 3,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
@@ -205,7 +209,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("61b42096-a2f4-4110-a1c4-9644a80d0e35"),
+                            GuidId = new Guid("6d4818f6-fce2-4bbb-bd66-3aa8af71552a"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 3, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -213,7 +217,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("0768222d-92c1-4d46-88a9-3dafb0d7a0dd"),
+                            GuidId = new Guid("6f0064d2-dbb6-4efa-9048-8eb00c5ae8b4"),
                             ActivityId = 2,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 3, 11, 30, 0, 0, DateTimeKind.Unspecified),
@@ -221,7 +225,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("30ad5a10-1d16-4528-8298-77c997d95a1d"),
+                            GuidId = new Guid("8d9647fc-ac15-49bd-a79f-0026c5f277d5"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 3, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -229,7 +233,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("a77d1158-9167-4852-ae58-33377d6c709e"),
+                            GuidId = new Guid("5598ebbb-c462-4eaf-9107-5ba0502badfa"),
                             ActivityId = 3,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
@@ -237,7 +241,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("ad594748-cd36-48aa-9a4f-1f21ec2c29f5"),
+                            GuidId = new Guid("8b2ed31f-ee9f-46af-8aee-fd3776a1c0c1"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 4, 7, 0, 0, 0, DateTimeKind.Unspecified),
@@ -245,7 +249,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("6dcc239c-226e-4107-936e-2b8017d03c8a"),
+                            GuidId = new Guid("8cbd3b04-b6b1-4fe4-a6bc-d95b3199ed10"),
                             ActivityId = 2,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 4, 11, 40, 0, 0, DateTimeKind.Unspecified),
@@ -253,7 +257,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("bf778a33-99ec-4077-9956-7a061f484eac"),
+                            GuidId = new Guid("36779593-4c6c-4ee7-99c4-7f5432307554"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 4, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -261,7 +265,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("7c57b418-021f-4839-8eb2-f24296a2c973"),
+                            GuidId = new Guid("daa2ed71-cc00-4dea-9260-e3c4183df11d"),
                             ActivityId = 3,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 4, 15, 10, 0, 0, DateTimeKind.Unspecified),
@@ -269,7 +273,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("f8298862-01d0-4d8d-b9fe-1ebe89961915"),
+                            GuidId = new Guid("2bc11d62-a5aa-4717-a255-38d623d5ab97"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 5, 8, 0, 0, 0, DateTimeKind.Unspecified),
@@ -277,7 +281,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("5de33f7b-7709-4cf6-9720-9e4f6af70cd3"),
+                            GuidId = new Guid("be80f7d2-ab43-4fef-a092-9a9763de6779"),
                             ActivityId = 2,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 5, 11, 40, 0, 0, DateTimeKind.Unspecified),
@@ -285,7 +289,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("54994f49-1959-4413-81c4-c0f8f70182ce"),
+                            GuidId = new Guid("b7fbaf6d-7523-43e4-af03-b64775dbcd0c"),
                             ActivityId = 1,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 5, 12, 0, 0, 0, DateTimeKind.Unspecified),
@@ -293,7 +297,7 @@ namespace TimeTracker.BE.DB.Migrations
                         },
                         new
                         {
-                            GuidId = new Guid("a3dfebe2-c033-4172-8d87-d2915a01d49a"),
+                            GuidId = new Guid("fdb64dce-9253-400d-a094-b2a332b77f80"),
                             ActivityId = 3,
                             Description = "",
                             StartTime = new DateTime(2024, 10, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),

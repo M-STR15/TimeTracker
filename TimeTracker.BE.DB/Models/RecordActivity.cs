@@ -92,6 +92,9 @@ namespace TimeTracker.BE.DB.Models
         [Column("Start_time")]
         public DateTime StartTime { get; set; }
 
+        [Column("End_time")]
+        public DateTime? EndTime { get; set; }
+
         [ForeignKey("SubModuleId")]
         public SubModule? SubModule { get; set; }
 
@@ -103,5 +106,7 @@ namespace TimeTracker.BE.DB.Models
 
         [Column("TypeShift_ID")]
         public int TypeShiftId { get; set; }
+
+        public double DurationSec { get => EndTime != null ? ((DateTime)EndTime - StartTime).TotalSeconds : 0; }
     }
 }

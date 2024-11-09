@@ -99,26 +99,20 @@ namespace TimeTracker.BE.DB.Providers
             return planList;
         }
 
-        private List<RecordSum> getRecordSumList(DateTime start, DateTime end)
+        private List<RecordActivity> getRecordSumList(DateTime start, DateTime end)
         {
             using (var context = new MainDatacontext())
             {
                 var basicData = context.RecordActivities
                         .Where(x => x.StartTime >= start && x.StartTime <= end).OrderBy(x => x.StartTime).ToList();
 
-                return basicData
-                        .Zip(basicData.Skip(1), (current, next) => new RecordSum(
-                            activityId: current.ActivityId,
-                            day: current.StartTime.Date,
-                            dateTimeFrom: current.StartTime,
-                            dateTimeTo: next.StartTime,
-                            typeShiftId: current.TypeShiftId)).ToList();
+                return basicData;
             }
         }
 
-        private double getSumHours(List<RecordSum> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
+        private double getSumHours(List<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
         {
-            return Math.Round(list.Where(x => x.Day == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
+            return Math.Round(list.Where(x => x.StartTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
         }
     }
 }
