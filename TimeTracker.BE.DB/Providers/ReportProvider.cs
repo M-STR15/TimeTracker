@@ -2,6 +2,7 @@
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers.Models.Reports;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TimeTracker.BE.DB.Providers
 {
@@ -34,9 +35,46 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
-        public List<DayHours> GetWorkHoursShift(Guid shiftGuidID)
+        public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
+
+        public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
+
+        private double getHours(DateTime date, eActivity eActivity)
         {
-            return null;
+            var sumHours = 0.00;
+            try
+            {
+                using (var context = new MainDatacontext())
+                {
+                    sumHours = context.RecordActivities.Where(x => x.StartTime >= date.Date & x.StartTime <= date.Date.AddDays(1) & x.ActivityId == (int)eActivity).Sum(x => x.DurationSec);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return sumHours;
+        }
+
+        public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
+
+        public double GetPauseHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Pause);
+
+        private double getHoursShif(Guid shiftGuidID, eActivity eActivity)
+        {
+            var sumHours = 0.00;
+            try
+            {
+                using (var context = new MainDatacontext())
+                {
+                    sumHours = context.RecordActivities.Where(x => x.ShiftGuidId == shiftGuidID & x.ActivityId == (int)eActivity.Pause).Sum(x => x.DurationSec);
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+            return sumHours;
         }
 
         public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)

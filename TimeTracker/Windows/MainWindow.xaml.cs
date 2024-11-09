@@ -17,16 +17,15 @@ namespace TimeTracker.Windows
     {
         private readonly MainStory _mainStory;
         private DispatcherTimer _dispatcherTimer;
+        private EventLogService _eventLogService;
         private RecordActivity _lastRecordActivity;
         private ProjectProvider _projectProvider;
         private RecordProvider _recordProvider;
+        private ReportProvider _reportProvider;
         private List<ShiftCmb> _shiftCmbs = new();
-        private List<TypeShift> _typeShifts = new();
-        private EventLogService _eventLogService;
         private ShiftProvider _shiftProvider;
-
         private int _totalActivityTimeBeforeInSecond;
-
+        private List<TypeShift> _typeShifts = new();
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -37,6 +36,7 @@ namespace TimeTracker.Windows
             _shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
             _projectProvider = _mainStory.ContainerStore.GetProjectProvider();
             _recordProvider = _mainStory.ContainerStore.GetRecordProvider();
+            _reportProvider = _mainStory.ContainerStore.GetReportProvider();
 
             loadProjects();
             loadShifts();
@@ -77,7 +77,7 @@ namespace TimeTracker.Windows
                 var result = _recordProvider.SaveRecord(record);
                 if (result != null)
                 {
-                    _lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, activity, typeShift, project, subModule, shift, description);
+                    _lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, activity, typeShift, shift, project, subModule, description);
                 }
 
                 return result != null;
@@ -123,13 +123,6 @@ namespace TimeTracker.Windows
             cmbProjects.SelectedIndex = 0;
         }
 
-        private void loadTypeShifts()
-        {
-            _typeShifts = _shiftProvider.GetTypeShiftsForMainWindow();
-            cmbTypeShift.ItemsSource = _typeShifts;
-            cmbTypeShift.SelectedIndex = 0;
-        }
-
         private void loadShifts()
         {
             var currentDate = DateTime.Now;
@@ -139,6 +132,39 @@ namespace TimeTracker.Windows
             cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
             cmbShift.SelectedIndex = 0;
         }
+
+        private void loadTypeShifts()
+        {
+            _typeShifts = _shiftProvider.GetTypeShiftsForMainWindow();
+            cmbTypeShift.ItemsSource = _typeShifts;
+            cmbTypeShift.SelectedIndex = 0;
+        }
+        private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var window = new ActivitiesOverDaysWindow();
+                window.Show();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("1a0e5889-4d8f-4560-8d18-51040ff5e4a4"), ex.Message, "Problém při otvírání reportu.");
+            }
+        }
+
+        private void mbtnPlanVsRealitaWorkHours_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var window = new PlanVsRealitaWorkHoursWindow();
+                window.Show();
+            }
+            catch (Exception ex)
+            {
+                _eventLogService.WriteError(new Guid("ebb2c705-f5dd-4cc9-81b6-99caf462292a"), ex.Message, "Problém při otvírání reportu.");
+            }
+        }
+
 
         private void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
         {
@@ -157,7 +183,7 @@ namespace TimeTracker.Windows
                 var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
                 var description = getTextFromRichTextBox(rtbDescription);
-                var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selProject, selSubmodule, selShift, description);
+                var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule, description);
 
                 var result = addActivite(selRecordActivity);
                 if (result)
@@ -177,15 +203,20 @@ namespace TimeTracker.Windows
         {
             try
             {
+                var startTimeActivity = DateTime.Now;
                 var activity = new Activity()
                 {
                     Id = (int)eActivity.Stop,
                     Name = eActivity.Stop.ToString()
                 };
 
-                var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+                var selTypeShift = _lastRecordActivity.TypeShift;
+                var selShift = _lastRecordActivity.Shift;
+                var selProject = _lastRecordActivity.Project;
+                var selSubmodule = _lastRecordActivity.SubModule;
+                var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule);
 
-                var result = addActivite(activity, selTypeShift);
+                var result = addActivite(selRecordActivity);
                 if (result)
                 {
                     changeLabels();
@@ -202,15 +233,20 @@ namespace TimeTracker.Windows
         {
             try
             {
+                var startTimeActivity = DateTime.Now;
                 var activity = new Activity()
                 {
                     Id = (int)eActivity.Pause,
                     Name = eActivity.Pause.ToString()
                 };
 
-                var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
+                var selTypeShift = _lastRecordActivity.TypeShift;
+                var selShift = _lastRecordActivity.Shift;
+                var selProject = _lastRecordActivity.Project;
+                var selSubmodule = _lastRecordActivity.SubModule;
+                var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule);
 
-                var result = addActivite(activity, selTypeShift);
+                var result = addActivite(selRecordActivity);
                 if (result)
                 {
                     changeLabels();
@@ -298,38 +334,36 @@ namespace TimeTracker.Windows
             lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
 
             lblTotalTime.Content = TimeSpan.FromSeconds(_totalActivityTimeBeforeInSecond + actualActivityInSeconds).ToString(@"hh\:mm\:ss");
+
+            var selShift = _lastRecordActivity.Shift;
+            var eActivity = (eActivity)_lastRecordActivity.ActivityId;
+            var selRecordActivity= _lastRecordActivity;
+
+            var workHours_actual = (eActivity == eActivity.Start) ? actualActivityInSeconds : 0;
+            var pauseHours_actual = (eActivity == eActivity.Pause) ? actualActivityInSeconds : 0;
+
+            var workHours_fromDB = _reportProvider.GetWorkHours(_lastRecordActivity.StartTime.Date);
+            var pauseHours_fromDB = _reportProvider.GetPauseHours(_lastRecordActivity.StartTime.Date);
+
+            var workShiftHours_actual = (selShift != null && selShift.GuidId != Guid.Empty && eActivity == eActivity.Start) ? actualActivityInSeconds : 0;
+            var pauseShifteHours_actual = (selShift != null && selShift.GuidId != Guid.Empty && eActivity == eActivity.Pause) ? actualActivityInSeconds : 0;
+
+            var workShiftHours_fromDB = selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0;
+            var pauseShiftHours_fromDB = selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0;
+
+            lblWorkerTime.Content = TimeSpan.FromSeconds(workHours_fromDB + workHours_actual).ToString(@"hh\:mm\:ss");
+            lblPauseTime.Content = TimeSpan.FromSeconds(pauseHours_fromDB + pauseHours_actual).ToString(@"hh\:mm\:ss");
+            lblTotalTime.Content = TimeSpan.FromSeconds(workHours_fromDB + pauseHours_fromDB + workHours_actual + pauseHours_actual).ToString(@"hh\:mm\:ss");
+
+            lblWorkShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual).ToString(@"hh\:mm\:ss");
+            lblPauseShiftTime.Content = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
+            lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
         }
 
         private void startTimer()
         {
             if (!_dispatcherTimer.IsEnabled)
                 _dispatcherTimer.Start();
-        }
-
-        private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var window = new ActivitiesOverDaysWindow();
-                window.Show();
-            }
-            catch (Exception ex)
-            {
-                _eventLogService.WriteError(new Guid("1a0e5889-4d8f-4560-8d18-51040ff5e4a4"), ex.Message, "Problém při otvírání reportu.");
-            }
-        }
-
-        private void mbtnPlanVsRealitaWorkHours_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var window = new PlanVsRealitaWorkHoursWindow();
-                window.Show();
-            }
-            catch (Exception ex)
-            {
-                _eventLogService.WriteError(new Guid("ebb2c705-f5dd-4cc9-81b6-99caf462292a"), ex.Message, "Problém při otvírání reportu.");
-            }
         }
     }
 }

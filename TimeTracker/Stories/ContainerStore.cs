@@ -57,5 +57,10 @@ namespace TimeTracker.Stories
         {
             return _container.Get<RecordProvider>();
         }
+
+        public ReportProvider GetReportProvider()
+        {
+            return _container.Get<ReportProvider>();
+        }
     }
 }

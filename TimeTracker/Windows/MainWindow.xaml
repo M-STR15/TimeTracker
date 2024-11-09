@@ -329,7 +329,7 @@
                         Content="00:00:00" />
 
                     <Label
-                        x:Name="lblWorkdShiftTime"
+                        x:Name="lblWorkShiftTime"
                         Grid.Row="1"
                         Grid.Column="2"
                         HorizontalAlignment="Center"
@@ -337,7 +337,7 @@
                         Content="00:00:00" />
 
                     <Label
-                        x:Name="lblWorkShiftTime"
+                        x:Name="lblPauseShiftTime"
                         Grid.Row="2"
                         Grid.Column="2"
                         HorizontalAlignment="Center"
