@@ -1,36 +1,53 @@
-﻿using LiveCharts;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LiveCharts;
 using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
+using TimeTracker.Windows.Reports.Services;
 
 namespace TimeTracker.Windows.Reports
 {
     /// <summary>
     /// Interaction logic for PlanVsRealitaWorkHoursWindow.xaml
     /// </summary>
+    [ObservableObject]
     public partial class PlanVsRealitaWorkHoursWindow : Window
     {
+        [ObservableProperty]
+        private AxesCollection _axisYCollection;
+
+        [ObservableProperty]
+        private string[] _labels;
+
         private ReportProvider _reportProvider = new ReportProvider();
+
+        [ObservableProperty]
+        private SeriesCollection _seriesCollection;
+
+        [ObservableProperty]
+        private Func<double, string> _yFormatter;
 
         public PlanVsRealitaWorkHoursWindow()
         {
             InitializeComponent();
+            var reportParametersService = new ReportParameterService();
+            cmbMonth.ItemsSource = reportParametersService.Monts;
+            cmbMonth.SelectedIndex = 0;
+
 
             createChart();
 
             DataContext = this;
         }
-
-        public SeriesCollection SeriesCollection { get; set; }
-        public string[] Labels { get; set; }
-        public Func<double, string> YFormatter { get; set; }
-
         private void createChart()
         {
-            var start = new DateTime(2024, 10, 1);
-            var end = new DateTime(2024, 11, 1);
+            var selectItemCmb = cmbMonth.SelectedItem as string;
+            var selectDate = Convert.ToDateTime("1." + selectItemCmb);
+
+            var start = selectDate;
+            var end = selectDate.AddMonths(1);
             var typeShifts_Office = new eTypeShift[] { eTypeShift.Office };
             var officeWorkHourslist = _reportProvider.GetWorkHours(start, end, typeShifts_Office);
 
@@ -102,12 +119,15 @@ namespace TimeTracker.Windows.Reports
             YFormatter = value => value.ToString();
 
             AxisYCollection = new AxesCollection
-        {
-            new Axis { Title = "Cum hours", Foreground = Brushes.Gray, Position= AxisPosition.RightTop , MinValue=0 },
-            new Axis { Title = "Hours", Foreground = Brushes.Red , Position= AxisPosition.LeftBottom , MinValue=0 },
-        };
+            {
+                new Axis { Title = "Cum hours", Foreground = Brushes.Gray, Position= AxisPosition.RightTop , MinValue=0 },
+                new Axis { Title = "Hours", Foreground = Brushes.Red , Position= AxisPosition.LeftBottom , MinValue=0 },
+            };
         }
 
-        public AxesCollection AxisYCollection { get; set; }
+        private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            createChart();
+        }
     }
 }

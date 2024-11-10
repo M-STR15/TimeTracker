@@ -31,6 +31,26 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
+        public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                using (var context = new MainDatacontext())
+                {
+                    var recordActivities = context.RecordActivities.Where(x => x.StartTime >= startTime && x.EndTime <= endTime)
+                    .Include(x => x.Project)
+                    .Include(x => x.Activity)
+                    .OrderBy(x => x.StartTime).ToList();
+
+                    return recordActivities;
+                }
+            }
+            catch (Exception)
+            {
+                return new();
+            }
+        }
+
         public RecordActivity GetLastRecordActivity()
         {
             RecordActivity? recordActivity = null;

@@ -21,7 +21,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Content="Month" />
-            <ComboBox x:Name="cmbMonth" Grid.Column="1" SelectionChanged="cmbMonth_SelectionChanged" />
+            <ComboBox x:Name="cmbMonth" Grid.Column="1" SelectionChanged="onCmbMonth_SelectionChanged" />
         </Grid>
         <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Bottom" Grid.Row="1">
             <lvc:CartesianChart.AxisX>

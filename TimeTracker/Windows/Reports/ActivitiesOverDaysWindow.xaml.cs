@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
+using TimeTracker.Windows.Reports.Services;
 
 namespace TimeTracker.Windows.Reports
 {
@@ -14,14 +15,20 @@ namespace TimeTracker.Windows.Reports
     [ObservableObject]
     public partial class ActivitiesOverDaysWindow : Window
     {
-        public List<string> Monts { get; set; }
+        [ObservableProperty]
+        public Func<double, string> _formatter;
+
+        [ObservableProperty]
+        private string[] _labels;
+
+        [ObservableProperty]
+        private SeriesCollection _seriesCollection;
 
         public ActivitiesOverDaysWindow()
         {
             InitializeComponent();
-            Monts = getLastSixMonth();
-
-            cmbMonth.ItemsSource = Monts;
+            var reportParametersService = new ReportParameterService();
+            cmbMonth.ItemsSource = reportParametersService.Monts;
             cmbMonth.SelectedIndex = 0;
 
             createChartData();
@@ -29,20 +36,6 @@ namespace TimeTracker.Windows.Reports
             DataContext = this;
         }
 
-        private List<string> getLastSixMonth()
-        {
-            List<string> lastSixMonths = new List<string>();
-            DateTime currentDate = DateTime.Now;
-
-            for (int i = 0; i < 6; i++)
-            {
-                DateTime month = currentDate.AddMonths(-i);
-                string monthYear = month.ToString("MM.yyyy");
-                lastSixMonths.Add(monthYear);
-            }
-
-            return lastSixMonths;
-        }
 
         private void createChartData()
         {
@@ -109,17 +102,7 @@ namespace TimeTracker.Windows.Reports
             Labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
             Formatter = value => value + " H";
         }
-
-        [ObservableProperty]
-        private SeriesCollection _seriesCollection;
-
-        [ObservableProperty]
-        private string[] _labels;
-
-        [ObservableProperty]
-        public Func<double, string> _formatter;
-
-        private void cmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             createChartData();
         }
