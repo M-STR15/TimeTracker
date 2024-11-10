@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Timer tracker"
-    Height="830"
+    Height="680"
     Style="{StaticResource MainWindow}"
     mc:Ignorable="d">
 
@@ -188,172 +188,172 @@
             </Grid.RowDefinitions>
             <Label Content="Current setting" Style="{StaticResource lblMainTitle}" />
             
-            <Border Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <Label
+            <TabControl>
+                <TabItem Header="Current setting">
+                    <Border Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             Content="Date shift"
                             Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                                <TextBlock
                             x:Name="lblShift_date"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                        <Label Content="Project" Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                                <Label Content="Project" Style="{StaticResource lblStyle2}" />
+                                <TextBlock
                             x:Name="lblProject"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                    </StackPanel>
-                    <StackPanel Grid.Column="1">
-                        <Label Content="Activity" Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <Label Content="Activity" Style="{StaticResource lblStyle2}" />
+                                <TextBlock
                             x:Name="lblActivity"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                        <Label Content="Sub mod." Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                                <Label Content="Sub mod." Style="{StaticResource lblStyle2}" />
+                                <TextBlock
                             x:Name="lblSubModule"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <Label
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             Content="Time"
                             Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                                <TextBlock
                             x:Name="lblTime_time"
                             Margin="0"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                        <Label
+                                <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             Content="Start time"
                             Style="{StaticResource lblStyle2}" />
-                        <TextBlock
+                                <TextBlock
                             x:Name="lblStartTime_time"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                        <TextBlock
+                                <TextBlock
                             x:Name="lblStartTime_date"
                             Style="{StaticResource txbGrid}"
                             Text=" " />
-                    </StackPanel>
-                </Grid>
-            </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Total time">
+                    <Border Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Label
+                 Grid.Row="1"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="Work"
+                 Style="{StaticResource lblStyle2}" />
+                            <Label
+                 Grid.Row="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="Pause"
+                 Style="{StaticResource lblStyle2}" />
+                            <Label
+                 Grid.Row="3"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="Total"
+                 Style="{StaticResource lblStyle2}" />
+
+                            <Label
+                 Grid.Row="0"
+                 Grid.Column="1"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="In day"
+                 Style="{StaticResource lblStyle3}" />
+
+                            <Label
+                 Grid.Row="0"
+                 Grid.Column="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="In shift"
+                 Style="{StaticResource lblStyle3}" />
+
+                            <Label
+                 x:Name="lblWorkerTime"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+
+                            <Label
+                 x:Name="lblPauseTime"
+                 Grid.Row="2"
+                 Grid.Column="1"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+
+                            <Label
+                 x:Name="lblTotalTime"
+                 Grid.Row="3"
+                 Grid.Column="1"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+
+                            <Label
+                 x:Name="lblWorkShiftTime"
+                 Grid.Row="1"
+                 Grid.Column="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+
+                            <Label
+                 x:Name="lblPauseShiftTime"
+                 Grid.Row="2"
+                 Grid.Column="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+
+                            <Label
+                 x:Name="lblTotalShiftTime"
+                 Grid.Row="3"
+                 Grid.Column="2"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Content="00:00:00" />
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
         </Grid>
-        <Grid Grid.Row="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Label Content="Total time" Style="{StaticResource lblMainTitle}" />
-            <Border Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                    </Grid.RowDefinitions>
-                    <Label
-                        Grid.Row="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Work"
-                        Style="{StaticResource lblStyle2}" />
-                    <Label
-                        Grid.Row="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Pause"
-                        Style="{StaticResource lblStyle2}" />
-                    <Label
-                        Grid.Row="3"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Total"
-                        Style="{StaticResource lblStyle2}" />
-
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="In day"
-                        Style="{StaticResource lblStyle3}" />
-
-                    <Label
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="In shift"
-                        Style="{StaticResource lblStyle3}" />
-
-                    <Label
-                        x:Name="lblWorkerTime"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-
-                    <Label
-                        x:Name="lblPauseTime"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-
-                    <Label
-                        x:Name="lblTotalTime"
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-
-                    <Label
-                        x:Name="lblWorkShiftTime"
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-
-                    <Label
-                        x:Name="lblPauseShiftTime"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-
-                    <Label
-                        x:Name="lblTotalShiftTime"
-                        Grid.Row="3"
-                        Grid.Column="2"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="00:00:00" />
-                </Grid>
-            </Border>
-        </Grid>
+       
     </Grid>
 </Window>
