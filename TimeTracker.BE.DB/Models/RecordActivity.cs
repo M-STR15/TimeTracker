@@ -107,6 +107,6 @@ namespace TimeTracker.BE.DB.Models
         [Column("TypeShift_ID")]
         public int TypeShiftId { get; set; }
 
-        public double DurationSec { get => EndTime != null ? ((DateTime)EndTime - StartTime).TotalSeconds : 0; }
+        public double DurationSec () => EndTime != null ? ((DateTime)EndTime - StartTime).TotalSeconds : 0; 
     }
 }

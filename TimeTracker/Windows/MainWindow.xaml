@@ -187,6 +187,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label Content="Current setting" Style="{StaticResource lblMainTitle}" />
+            
             <Border Grid.Row="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -264,10 +265,10 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Label
                         Grid.Row="1"
