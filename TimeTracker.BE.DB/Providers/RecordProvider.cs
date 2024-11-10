@@ -31,6 +31,24 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
+        public RecordActivity GetLastRecordActivity()
+        {
+            RecordActivity? recordActivity = null;
+
+            using (var context = new MainDatacontext())
+            {
+                recordActivity = context.RecordActivities.OrderBy(x => x.StartTime)
+                    .Include(x => x.Project)
+                    .Include(x => x.Activity)
+                    .Include(x => x.Shift)
+                    .Include(x => x.SubModule)
+                    .Include(x => x.TypeShift)
+                    .Last();
+            }
+
+            return recordActivity;
+        }
+
         public RecordActivity SaveRecord(RecordActivity recordActivity)
         {
             try

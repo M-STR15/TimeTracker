@@ -10,22 +10,31 @@ using TimeTracker.Services;
 using TimeTracker.Stories;
 using TimeTracker.ViewModels;
 using TimeTracker.Windows.Reports;
+using Activity = TimeTracker.BE.DB.Models.Activity;
 
 namespace TimeTracker.Windows
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         private readonly MainStory _mainStory;
         private DispatcherTimer _dispatcherTimer;
         private EventLogService _eventLogService;
-        private RecordActivity _lastRecordActivity;
+        private EventHandler _lastRecordActivityHangler;
+        private RecordActivity _lra;
         private ProjectProvider _projectProvider;
+
         private RecordProvider _recordProvider;
+
         private ReportProvider _reportProvider;
+
         private List<ShiftCmb> _shiftCmbs = new();
+
         private ShiftProvider _shiftProvider;
+
         private int _totalActivityTimeBeforeInSecond;
+
         private List<TypeShift> _typeShifts = new();
+
         public MainWindow(MainStory mainStory)
         {
             this.DataContext = new BaseViewModel("Timer tracker");
@@ -50,6 +59,28 @@ namespace TimeTracker.Windows
             cmbShift.DisplayMemberPath = "StartDateStr";
             cmbSubModule.DisplayMemberPath = "Name";
             cmbTypeShift.DisplayMemberPath = "Name";
+
+            _lastRecordActivityHangler += onSetLabelsHandler;
+
+            _lastRecordActivity = _recordProvider.GetLastRecordActivity();
+
+            if (_lastRecordActivity.ActivityId != (int)eActivity.Stop)
+                _dispatcherTimer.Start();
+
+        }
+
+        private RecordActivity _lastRecordActivity
+        {
+            get => _lra;
+            set
+            {
+                _lra = value;
+                onLasRecordActivityChange();
+            }
+        }
+        public void Dispose()
+        {
+            _lastRecordActivityHangler -= onSetLabelsHandler;
         }
 
         private void _dispatcherTimer_Tick(object? sender, EventArgs e)
@@ -94,28 +125,6 @@ namespace TimeTracker.Windows
             return textRange.Text;
         }
 
-        private void changeLabels()
-        {
-            setlblTime();
-            lblActivity.Text = _lastRecordActivity.Activity?.Name ?? "";
-            lblProject.Text = _lastRecordActivity.Project?.Name ?? "";
-            lblSubModule.Text = _lastRecordActivity.SubModule?.Name ?? "";
-            lblStartTime_time.Text = _lastRecordActivity?.StartTime.ToString("HH:mm:ss");
-            lblStartTime_date.Text = _lastRecordActivity?.StartTime.ToString("dd.MM.yy");
-
-            var shift = _lastRecordActivity?.Shift;
-
-            if (shift != null)
-            {
-                var cmdShift = new ShiftCmb(shift);
-                lblShift_date.Text = cmdShift?.StartDateStr ?? "";
-            }
-            else
-            {
-                lblShift_date.Text = "";
-            }
-        }
-
         private void loadProjects()
         {
             cmbProjects.ItemsSource = null;
@@ -139,6 +148,7 @@ namespace TimeTracker.Windows
             cmbTypeShift.ItemsSource = _typeShifts;
             cmbTypeShift.SelectedIndex = 0;
         }
+
         private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -165,7 +175,6 @@ namespace TimeTracker.Windows
             }
         }
 
-
         private void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -189,7 +198,7 @@ namespace TimeTracker.Windows
                 if (result)
                 {
                     rtbDescription.Document.Blocks.Clear();
-                    changeLabels();
+                    setLabels();
                     startTimer();
                 }
             }
@@ -219,7 +228,7 @@ namespace TimeTracker.Windows
                 var result = addActivite(selRecordActivity);
                 if (result)
                 {
-                    changeLabels();
+                    setLabels();
                     _dispatcherTimer.Stop();
                 }
             }
@@ -249,7 +258,7 @@ namespace TimeTracker.Windows
                 var result = addActivite(selRecordActivity);
                 if (result)
                 {
-                    changeLabels();
+                    setLabels();
                     startTimer();
                 }
             }
@@ -259,6 +268,10 @@ namespace TimeTracker.Windows
             }
         }
 
+        private void onLasRecordActivityChange()
+        {
+            _lastRecordActivityHangler.Invoke(this, EventArgs.Empty);
+        }
         private void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
@@ -327,26 +340,60 @@ namespace TimeTracker.Windows
             }
         }
 
+        private void onSetLabelsHandler(object sender, EventArgs eventArgs)
+        {
+            setLabels();
+        }
+        private void setLabels()
+        {
+            setlblTime();
+            lblActivity.Text = _lastRecordActivity.Activity?.Name ?? "";
+            lblProject.Text = _lastRecordActivity.Project?.Name ?? "";
+            lblSubModule.Text = _lastRecordActivity.SubModule?.Name ?? "";
+            lblStartTime_time.Text = _lastRecordActivity?.StartTime.ToString("HH:mm:ss");
+            lblStartTime_date.Text = _lastRecordActivity?.StartTime.ToString("dd.MM.yy");
+
+            var shift = _lastRecordActivity?.Shift;
+
+            if (shift != null)
+            {
+                var cmdShift = new ShiftCmb(shift);
+                lblShift_date.Text = cmdShift?.StartDateStr ?? "";
+            }
+            else
+            {
+                lblShift_date.Text = "";
+            }
+        }
         private void setlblTime()
         {
-            var time = (DateTime.Now - _lastRecordActivity.StartTime);
-            var actualActivityInSeconds = time.TotalSeconds;
-            lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
+            var actualActivityInSeconds = 0.00;
+
+            if (_lastRecordActivity.ActivityId != (int)eActivity.Stop)
+            {
+                var time = (DateTime.Now - _lastRecordActivity.StartTime);
+                actualActivityInSeconds = time.TotalSeconds;
+                lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
+
+            }
+            else
+            {
+                lblTime_time.Text = "00:00:00";
+            }
 
             lblTotalTime.Content = TimeSpan.FromSeconds(_totalActivityTimeBeforeInSecond + actualActivityInSeconds).ToString(@"hh\:mm\:ss");
 
             var selShift = _lastRecordActivity.Shift;
-            var eActivity = (eActivity)_lastRecordActivity.ActivityId;
-            var selRecordActivity= _lastRecordActivity;
+            var activity = (eActivity)_lastRecordActivity.ActivityId;
 
-            var workHours_actual = (eActivity == eActivity.Start) ? actualActivityInSeconds : 0;
-            var pauseHours_actual = (eActivity == eActivity.Pause) ? actualActivityInSeconds : 0;
+            var workHours_actual = (activity == eActivity.Start) ? actualActivityInSeconds : 0;
+            var pauseHours_actual = (activity == eActivity.Pause) ? actualActivityInSeconds : 0;
 
             var workHours_fromDB = _reportProvider.GetWorkHours(_lastRecordActivity.StartTime.Date);
             var pauseHours_fromDB = _reportProvider.GetPauseHours(_lastRecordActivity.StartTime.Date);
 
-            var workShiftHours_actual = (selShift != null && selShift.GuidId != Guid.Empty && eActivity == eActivity.Start) ? actualActivityInSeconds : 0;
-            var pauseShifteHours_actual = (selShift != null && selShift.GuidId != Guid.Empty && eActivity == eActivity.Pause) ? actualActivityInSeconds : 0;
+            var workShiftHours_actual = getTimeShift(selShift, eActivity.Start, actualActivityInSeconds);
+            var pauseShifteHours_actual = getTimeShift(selShift, eActivity.Pause, actualActivityInSeconds);
 
             var workShiftHours_fromDB = selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0;
             var pauseShiftHours_fromDB = selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0;
@@ -360,6 +407,10 @@ namespace TimeTracker.Windows
             lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
         }
 
+        private double getTimeShift(Shift? shift, eActivity activity, double actualActivityInSeconds)
+        {
+            return (shift != null && shift.GuidId != Guid.Empty && activity == eActivity.Start) ? actualActivityInSeconds : 0;
+        }
         private void startTimer()
         {
             if (!_dispatcherTimer.IsEnabled)
