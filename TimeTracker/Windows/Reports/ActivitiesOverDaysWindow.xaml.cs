@@ -100,7 +100,7 @@ namespace TimeTracker.Windows.Reports
             };
 
             Labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
-            Formatter = value => value + " H";
+            Formatter = value => value.ToString();
         }
         private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

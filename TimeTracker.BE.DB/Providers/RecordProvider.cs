@@ -69,7 +69,7 @@ namespace TimeTracker.BE.DB.Providers
             return recordActivity;
         }
 
-        public RecordActivity SaveRecord(RecordActivity recordActivity)
+        public RecordActivity? SaveRecord(RecordActivity recordActivity)
         {
             try
             {
@@ -96,11 +96,6 @@ namespace TimeTracker.BE.DB.Providers
                 using (var context = new MainDatacontext())
                 {
                     var recordActivities = context.RecordActivities.OrderBy(x => x.StartTime).ToList();
-
-                    //foreach (var recordActivity in recordActivities)
-                    //{
-                    //    recordActivity.EndTime=
-                    //}
 
                     var allowedActivities = new List<int>();
                     allowedActivities.Add((int)eActivity.Start);

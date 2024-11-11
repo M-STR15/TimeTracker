@@ -34,9 +34,32 @@ namespace TimeTracker.BE.DB.Providers
             }
         }
 
-        public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
-
         public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
+
+        public double GetPauseHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Pause);
+
+        public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+        {
+            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+            return getPlanList_DayHours(start, end, dateList, typeShifts);
+        }
+
+        public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
+        public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+        {
+            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+            var realData = GetActivityOverDays(start, end);
+            return getRealList_DayHours(dateList, realData, typeShifts);
+        }
+
+        public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
+
+        private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
+        {
+            return Enumerable.Range(0, (end - start).Days)
+                             .Select(offset => start.AddDays(offset))
+                             .ToList();
+        }
 
         private double getHours(DateTime date, eActivity eActivity)
         {
@@ -45,7 +68,6 @@ namespace TimeTracker.BE.DB.Providers
             {
                 using (var context = new MainDatacontext())
                 {
-                    //var count = context.RecordActivities.Where(x => x.StartTime >= date.Date && x.StartTime <= date.Date.AddDays(1) & x.ActivityId == (int)eActivity).Count();
                     foreach (var item in context.RecordActivities.Where(x => x.StartTime >= date.Date && x.StartTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
                     {
                         sumHours += item.DurationSec();
@@ -58,11 +80,6 @@ namespace TimeTracker.BE.DB.Providers
 
             return sumHours;
         }
-
-        public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
-
-        public double GetPauseHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Pause);
-
         private double getHoursShif(Guid shiftGuidID, eActivity eActivity)
         {
             var sumHours = 0.00;
@@ -82,27 +99,6 @@ namespace TimeTracker.BE.DB.Providers
             }
             return sumHours;
         }
-
-        public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
-        {
-            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
-            var realData = GetActivityOverDays(start, end);
-            return getRealList_DayHours(dateList, realData, typeShifts);
-        }
-
-        public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
-        {
-            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
-            return getPlanList_DayHours(start, end, dateList, typeShifts);
-        }
-
-        private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
-        {
-            return Enumerable.Range(0, (end - start).Days)
-                             .Select(offset => start.AddDays(offset))
-                             .ToList();
-        }
-
         private List<DayHours> getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
         {
             var shiftList = new List<Shift>();
