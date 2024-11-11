@@ -416,5 +416,15 @@ namespace TimeTracker.Windows
             if (!_dispatcherTimer.IsEnabled)
                 _dispatcherTimer.Start();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            var screenWidth = SystemParameters.WorkArea.Width;
+            var screenHeight = SystemParameters.WorkArea.Height;
+
+            // Umístění okna na pravý dolní roh
+            this.Left = screenWidth - this.Width;
+            this.Top = screenHeight - this.Height;
+        }
     }
 }
