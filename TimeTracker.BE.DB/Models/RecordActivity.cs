@@ -18,6 +18,14 @@ namespace TimeTracker.BE.DB.Models
             Description = description;
         }
 
+        public RecordActivity(DateTime startTime, DateTime endTime, int activityId, int typeShiftId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, description)
+        {
+            ProjectId = projectId;
+            SubModuleId = subModuleId;
+            TypeShiftId = typeShiftId;
+            EndTime = endTime;
+        }
+
         public RecordActivity(DateTime startTime, int activityId, int typeShiftId, int? projectId = null, int? subModuleId = null, string description = "") : this(startTime, activityId, description)
         {
             ProjectId = projectId;
@@ -107,6 +115,7 @@ namespace TimeTracker.BE.DB.Models
         [Column("TypeShift_ID")]
         public int TypeShiftId { get; set; }
 
-        public double DurationSec () => EndTime != null ? ((DateTime)EndTime - StartTime).TotalSeconds : 0; 
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public double DurationSec => EndTime != null ? ((DateTime)EndTime - StartTime).TotalSeconds : 0;
     }
 }

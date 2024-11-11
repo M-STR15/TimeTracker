@@ -70,7 +70,7 @@ namespace TimeTracker.BE.DB.Providers
                 {
                     foreach (var item in context.RecordActivities.Where(x => x.StartTime >= date.Date && x.StartTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
                     {
-                        sumHours += item.DurationSec();
+                        sumHours += item.DurationSec;
                     }
                 }
             }
@@ -89,7 +89,7 @@ namespace TimeTracker.BE.DB.Providers
                 {
                     foreach (var item in context.RecordActivities.Where(x => x.ShiftGuidId == shiftGuidID && x.ActivityId == (int)eActivity.Pause))
                     {
-                        sumHours += item.DurationSec();
+                        sumHours += item.DurationSec;
                     }
                 }
             }
@@ -152,7 +152,7 @@ namespace TimeTracker.BE.DB.Providers
 
         private double getSumHours(List<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
         {
-            return Math.Round(list.Where(x => x.StartTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec()) / 3600, 2);
+            return Math.Round(list.Where(x => x.StartTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
         }
     }
 }
