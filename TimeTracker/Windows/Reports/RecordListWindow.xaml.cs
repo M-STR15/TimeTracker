@@ -6,15 +6,17 @@ namespace TimeTracker.Windows.Reports
 {
     internal struct reportObj()
     {
+        public string StartDate { get => StartTimeDt.ToString("dd.MM.yyyy"); }
+        public string StartTime { get => StartTimeDt.ToString("HH:mm:ss"); }
+        public string EndDate { get => EndTimeDt.ToString("dd.MM.yyyy"); }
+        public string EndTime { get =>  EndTimeDt.ToString("HH:mm:ss"); }
         public string Activity { get; set; }
-        public string Description { get; set; }
-        public string EndTime { get => EndTimeDt.ToString("HH:mm:ss dd.MM.yyyy"); }
-        public string Project { get; set; }
-        public string StartTime { get => StartTimeDt.ToString("HH:mm:ss dd.MM.yyyy"); }
         public string TotalTime { get => TotalTimeTs.ToString(@"hh\:mm\:ss"); }
+        public string Project { get; set; }
         internal DateTime EndTimeDt { get; set; }
         internal DateTime StartTimeDt { get; set; }
         internal TimeSpan TotalTimeTs { get => EndTimeDt - StartTimeDt; }
+        public string Description { get; set; }
     }
 
     public partial class RecordListWindow : Window
