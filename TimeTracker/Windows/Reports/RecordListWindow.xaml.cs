@@ -25,9 +25,10 @@ namespace TimeTracker.Windows.Reports
             InitializeComponent();
             _mainStoru = mainStore;
 
-            var reportParametersService = new ReportParameterService();
-            cmbMonth.ItemsSource = reportParametersService.Monts;
+            cmbMonth.ItemsSource = new ReportParameterService().Monts;
             cmbMonth.SelectedIndex = 0;
+
+            createChart();
         }
         private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

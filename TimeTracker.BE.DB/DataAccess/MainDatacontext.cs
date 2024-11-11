@@ -42,33 +42,36 @@ namespace TimeTracker.BE.DB.DataAccess
 
         private void testDataRecordActivities()
         {
+            var year=DateTime.Now.Year;
+            var month=DateTime.Now.Month;
+
             _modelBuilder.Entity<RecordActivity>()
-                    .HasData(
-                    new RecordActivity(new DateTime(2024, 10, 1, 7, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 1, 11, 30, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 1, 12, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 1, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
+          .HasData(
+          new RecordActivity(new DateTime(year, month, 1, 7, 0, 0), new DateTime(year, month, 1, 11, 30, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 1, 11, 30, 0), new DateTime(year, month, 1, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 1, 12, 0, 0), new DateTime(year, month, 1, 15, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 1, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
 
-                    new RecordActivity(new DateTime(2024, 10, 2, 7, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 2, 11, 30, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 2, 12, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 2, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 2, 7, 0, 0), new DateTime(year, month, 2, 11, 30, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 2, 11, 30, 0), new DateTime(year, month, 2, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 2, 12, 0, 0), new DateTime(year, month, 2, 15, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 2, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
 
-                    new RecordActivity(new DateTime(2024, 10, 3, 7, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 3, 11, 30, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 3, 12, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
-                    new RecordActivity(new DateTime(2024, 10, 3, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 3, 7, 0, 0), new DateTime(year, month, 3, 11, 30, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 3, 11, 30, 0), new DateTime(year, month, 3, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 3, 12, 0, 0), new DateTime(year, month, 3, 15, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+          new RecordActivity(new DateTime(year, month, 3, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
 
-                    new RecordActivity(new DateTime(2024, 10, 4, 7, 0, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
-                    new RecordActivity(new DateTime(2024, 10, 4, 11, 40, 0), (int)eActivity.Pause, (int)eTypeShift.HomeOffice),
-                    new RecordActivity(new DateTime(2024, 10, 4, 12, 0, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
-                    new RecordActivity(new DateTime(2024, 10, 4, 15, 10, 0), (int)eActivity.Stop, (int)eTypeShift.HomeOffice),
+          new RecordActivity(new DateTime(year, month, 4, 7, 0, 0), new DateTime(year, month, 4, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
+          new RecordActivity(new DateTime(year, month, 4, 11, 40, 0), new DateTime(year, month, 4, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.HomeOffice),
+          new RecordActivity(new DateTime(year, month, 4, 12, 0, 0), new DateTime(year, month, 4, 15, 10, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
+          new RecordActivity(new DateTime(year, month, 4, 15, 10, 0), (int)eActivity.Stop, (int)eTypeShift.HomeOffice),
 
-                    new RecordActivity(new DateTime(2024, 10, 5, 8, 0, 0), (int)eActivity.Start, (int)eTypeShift.Others),
-                    new RecordActivity(new DateTime(2024, 10, 5, 11, 40, 0), (int)eActivity.Pause, (int)eTypeShift.Others),
-                    new RecordActivity(new DateTime(2024, 10, 5, 12, 0, 0), (int)eActivity.Start, (int)eTypeShift.Others),
-                    new RecordActivity(new DateTime(2024, 10, 5, 16, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Others)
-                    );
+          new RecordActivity(new DateTime(year, month, 5, 8, 0, 0), new DateTime(year, month, 5, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.Others),
+          new RecordActivity(new DateTime(year, month, 5, 11, 40, 0), new DateTime(year, month, 5, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Others),
+          new RecordActivity(new DateTime(year, month, 5, 12, 0, 0), new DateTime(year, month, 5, 16, 0, 0), (int)eActivity.Start, (int)eTypeShift.Others),
+          new RecordActivity(new DateTime(year, month, 5, 16, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Others)
+          );
         }
 
         private void setSubModuleTable()
