@@ -37,14 +37,13 @@
                                         <Image
                                             Width="30"
                                             Height="30"
-                                            HorizontalAlignment="Center"
-                                            Source="Resources/Icons/PNG/power_256x256_red.png" />
+                                            HorizontalAlignment="Left"
+                                            Source="Resources/clock-violet.png" />
                                         <Label
                                             Margin="30,0,0,0"
                                             Content="{Binding Title, FallbackValue=TITULEK}"
                                             FontSize="12" />
                                         <StackPanel
-                                            Grid.Row="0"
                                             HorizontalAlignment="Right"
                                             Orientation="Horizontal">
                                             <Button

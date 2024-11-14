@@ -389,8 +389,9 @@ namespace TimeTracker.Windows
             var workHours_actual = (activity == eActivity.Start) ? actualActivityInSeconds : 0;
             var pauseHours_actual = (activity == eActivity.Pause) ? actualActivityInSeconds : 0;
 
-            var workHours_fromDB = _reportProvider.GetWorkHours(_lastRecordActivity.StartTime.Date);
-            var pauseHours_fromDB = _reportProvider.GetPauseHours(_lastRecordActivity.StartTime.Date);
+            var filterToday = DateTime.Now;
+            var workHours_fromDB = _reportProvider.GetWorkHours(filterToday);
+            var pauseHours_fromDB = _reportProvider.GetPauseHours(filterToday);
 
             var workShiftHours_actual = getTimeShift(selShift, eActivity.Start, actualActivityInSeconds);
             var pauseShifteHours_actual = getTimeShift(selShift, eActivity.Pause, actualActivityInSeconds);

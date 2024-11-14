@@ -291,7 +291,7 @@
                                 Grid.Column="1"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Content="In day"
+                                Content="Today"
                                 Style="{StaticResource lblStyle3}" />
 
                             <Label

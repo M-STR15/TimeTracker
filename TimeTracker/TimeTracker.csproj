@@ -6,10 +6,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\clock-violet.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\add.png" />
+    <None Remove="Resources\clock-red.ico" />
+    <None Remove="Resources\clock-red.png" />
+    <None Remove="Resources\clock-violet.ico" />
+    <None Remove="Resources\clock-violet.png" />
+    <None Remove="Resources\close.png" />
     <None Remove="Resources\coffee-cup.png" />
     <None Remove="Resources\cup.png" />
     <None Remove="Resources\delete.png" />
@@ -22,6 +28,10 @@
     <None Remove="Resources\save.png" />
     <None Remove="Resources\stop.png" />
     <None Remove="Resources\timer.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\clock-violet.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +48,11 @@
 
   <ItemGroup>
     <Resource Include="Resources\add.png" />
+    <Resource Include="Resources\clock-red.ico" />
+    <Resource Include="Resources\clock-red.png" />
+    <Resource Include="Resources\clock-violet.ico" />
+    <Resource Include="Resources\clock-violet.png" />
+    <Resource Include="Resources\close.png" />
     <Resource Include="Resources\coffee-cup.png" />
     <Resource Include="Resources\cup.png" />
     <Resource Include="Resources\delete.png" />
