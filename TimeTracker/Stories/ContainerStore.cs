@@ -6,61 +6,40 @@ using TimeTracker.Windows.Reports;
 
 namespace TimeTracker.Stories
 {
-    public class ContainerStore
-    {
-        private IKernel _container;
+	public class ContainerStore
+	{
+		private IKernel _container;
 
-        public ContainerStore()
-        {
-            configureContainer();
-        }
+		public ContainerStore()
+		{
+			configureContainer();
+		}
 
-        private void configureContainer()
-        {
-            _container = new StandardKernel();
+		private void configureContainer()
+		{
+			_container = new StandardKernel();
 
-            _container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
+			_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
 
-            _container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
-            _container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
+			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
+			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 
-            _container.Bind<RecordProvider>().To<RecordProvider>().InSingletonScope();
-            _container.Bind<ShiftProvider>().To<ShiftProvider>().InSingletonScope();
-        }
+			_container.Bind<RecordProvider>().To<RecordProvider>().InSingletonScope();
+			_container.Bind<ShiftProvider>().To<ShiftProvider>().InSingletonScope();
+		}
 
-        public MainWindow GetMainWindow()
-        {
-            return _container.Get<MainWindow>();
-        }
+		public MainWindow GetMainWindow() => _container.Get<MainWindow>();
 
-        public RecordProvider GetDatabaseProvider()
-        {
-            return _container.Get<RecordProvider>();
-        }
+		public RecordProvider GetDatabaseProvider() => _container.Get<RecordProvider>();
 
-        public ShiftProvider GetShiftProvider()
-        {
-            return _container.Get<ShiftProvider>();
-        }
+		public ShiftProvider GetShiftProvider() => _container.Get<ShiftProvider>();
 
-        public ActivityProvider GetActivityProvider()
-        {
-            return _container.Get<ActivityProvider>();
-        }
+		public ActivityProvider GetActivityProvider() => _container.Get<ActivityProvider>();
 
-        public ProjectProvider GetProjectProvider()
-        {
-            return _container.Get<ProjectProvider>();
-        }
+		public ProjectProvider GetProjectProvider() => _container.Get<ProjectProvider>();
 
-        public RecordProvider GetRecordProvider()
-        {
-            return _container.Get<RecordProvider>();
-        }
+		public RecordProvider GetRecordProvider() => _container.Get<RecordProvider>();
 
-        public ReportProvider GetReportProvider()
-        {
-            return _container.Get<ReportProvider>();
-        }
-    }
+		public ReportProvider GetReportProvider() => _container.Get<ReportProvider>();
+	}
 }
