@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:TimeTracker.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:temp="clr-namespace:TimeTracker.Helpers.Models"
-    Title="SettingWindow"
+    Title="Setting"
     Width="800"
     Height="450"
     WindowStartupLocation="CenterScreen"

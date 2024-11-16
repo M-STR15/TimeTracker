@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:TimeTracker.Windows.Reports"
     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="PlanVsRealitaWorkHoursWindow"
+    Title="Plan vs realita work hours"
     Width="800"
     Height="450"
     WindowState="Maximized"
@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -33,7 +33,10 @@
             </Grid.ColumnDefinitions>
 
             <Label Content="Month" />
-            <ComboBox x:Name="cmbMonth" Grid.Column="1" SelectionChanged="onCmbMonth_SelectionChanged" />
+            <ComboBox
+                x:Name="cmbMonth"
+                Grid.Column="1"
+                SelectionChanged="onCmbMonth_SelectionChanged" />
         </Grid>
         <lvc:CartesianChart
             Grid.Row="1"
