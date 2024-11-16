@@ -163,7 +163,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem Header="Set main window">
+        <TabItem Header="Set main window" Visibility="Collapsed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
