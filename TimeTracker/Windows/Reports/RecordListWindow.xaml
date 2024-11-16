@@ -42,7 +42,78 @@
             x:Name="dtgRecordActivities"
             Grid.Row="1"
             d:ItemsSource="{d:SampleData ItemCount=5}"
-            IsReadOnly="True" />
+            AutoGenerateColumns="False"
+            BeginningEdit="dtgRecordActivities_BeginningEdit"
+            RowEditEnding="dtgRecordActivities_RowEditEnding"
+            SelectionChanged="dtgRecordActivities_SelectionChanged">
+            <DataGrid.Columns>
+                <!--  Běžný editovatelný textový sloupec  -->
+                <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->
+
+                <DataGridTemplateColumn Header="Start-date">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding StartDate, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTextColumn Binding="{Binding StartTime, Mode=TwoWay}" Header="StartTime" />
+                <!--<DataGridTextColumn Binding="{Binding EndDate, Mode=TwoWay}" Header="EndDate" />-->
+
+                <DataGridTemplateColumn Header="End-date">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding EndDate, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding EndTime, Mode=TwoWay}" Header="EndTime" />
+
+                <DataGridTemplateColumn Header="Activity">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Activity, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Activity}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding TotalTime, Mode=OneTime}" Header="TotalTime" />
+
+                <DataGridTemplateColumn Header="Project">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Project, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Project}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Binding="{Binding Description, Mode=TwoWay}" Header="Description" />
+
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label Content="Rows" />
             <Label x:Name="lblCount" Content="0" />

@@ -5,7 +5,7 @@ using TimeTracker.BE.DB.Models;
 
 public class ProjectProvider
 {
-	public List<Project> GetProjects()
+	public ICollection<Project> GetProjects()
 	{
 		try
 		{
@@ -20,7 +20,7 @@ public class ProjectProvider
 		}
 	}
 
-	public List<SubModule> GetSubModules()
+	public ICollection<SubModule> GetSubModules()
 	{
 		try
 		{
@@ -35,7 +35,7 @@ public class ProjectProvider
 		}
 	}
 
-	public List<SubModule> GetSubModules(int ptojectId)
+	public ICollection<SubModule> GetSubModules(int ptojectId)
 	{
 		try
 		{
