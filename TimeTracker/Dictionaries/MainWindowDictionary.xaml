@@ -30,16 +30,15 @@
     <Style x:Key="lblStyle3" TargetType="Label">
         <Setter Property="Margin" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="txbGrid" TargetType="TextBlock">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        
         <Setter Property="TextWrapping" Value="WrapWithOverflow" />
     </Style>
     <Style TargetType="Border">
