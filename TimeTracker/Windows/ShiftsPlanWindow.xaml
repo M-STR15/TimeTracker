@@ -8,6 +8,7 @@
     Title="ShiftsPlanWindow"
     Width="680"
     Height="430"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
         <ResourceDictionary>
