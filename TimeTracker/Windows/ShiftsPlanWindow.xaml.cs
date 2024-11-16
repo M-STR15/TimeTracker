@@ -156,7 +156,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("ee6b3d6c-5dd4-4db9-a083-d7144229bf80"), ex.Message, "Problém s přepnutí měsíců.");
+                _eventLogService.WriteError(new Guid("ee6b3d6c-5dd4-4db9-a083-d7144229bf80"), ex, "Problém s přepnutí měsíců.");
             }
         }
 
@@ -177,7 +177,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("f40f8f19-9bb9-40e5-a293-1e95acc63384"), ex.Message, "Problém s uložením směn.");
+                _eventLogService.WriteError(new Guid("f40f8f19-9bb9-40e5-a293-1e95acc63384"), ex, "Problém s uložením směn.");
             }
         }
 

@@ -158,7 +158,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("1a0e5889-4d8f-4560-8d18-51040ff5e4a4"), ex.Message, "Problém při otvírání reportu.");
+                _eventLogService.WriteError(new Guid("1a0e5889-4d8f-4560-8d18-51040ff5e4a4"), ex, "Problém při otvírání reportu.");
             }
         }
 
@@ -171,7 +171,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("ebb2c705-f5dd-4cc9-81b6-99caf462292a"), ex.Message, "Problém při otvírání reportu.");
+                _eventLogService.WriteError(new Guid("ebb2c705-f5dd-4cc9-81b6-99caf462292a"), ex, "Problém při otvírání reportu.");
             }
         }
 
@@ -204,7 +204,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("51905c9e-51c5-4fa4-bac2-fe60543bc170"), ex.Message, "Problém při vkláání akivity.");
+                _eventLogService.WriteError(new Guid("51905c9e-51c5-4fa4-bac2-fe60543bc170"), ex, "Problém při vkláání akivity.");
             }
         }
 
@@ -234,7 +234,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("d769b7d8-adea-4011-babe-4415f3258467"), ex.Message, "Problém při ukládání konce směny.");
+                _eventLogService.WriteError(new Guid("d769b7d8-adea-4011-babe-4415f3258467"), ex, "Problém při ukládání konce směny.");
             }
         }
 
@@ -264,7 +264,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("aa2467f9-bddd-4c6b-a3bd-b4554936314f"), ex.Message, "Problém při ukládání pauzy.");
+                _eventLogService.WriteError(new Guid("aa2467f9-bddd-4c6b-a3bd-b4554936314f"), ex, "Problém při ukládání pauzy.");
             }
         }
 
@@ -287,7 +287,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("01c4c769-2c67-48ab-9c15-156609f49e0d"), ex.Message, "Problém při přepnutí projectu.");
+                _eventLogService.WriteError(new Guid("01c4c769-2c67-48ab-9c15-156609f49e0d"), ex, "Problém při přepnutí projectu.");
             }
         }
 
@@ -300,7 +300,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("9d0de4e8-d44e-4404-bf96-ca312a7556fa"), ex.Message, "Problém při otvírání okna s reportem.");
+                _eventLogService.WriteError(new Guid("9d0de4e8-d44e-4404-bf96-ca312a7556fa"), ex, "Problém při otvírání okna s reportem.");
             }
         }
 
@@ -315,7 +315,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("d070dfde-f70c-4aa3-a486-3d97d4f1688a"), ex.Message, "Problém při otvírání okna s nastavením.");
+                _eventLogService.WriteError(new Guid("d070dfde-f70c-4aa3-a486-3d97d4f1688a"), ex, "Problém při otvírání okna s nastavením.");
             }
         }
 
@@ -336,7 +336,7 @@ namespace TimeTracker.Windows
             }
             catch (Exception ex)
             {
-                _eventLogService.WriteError(new Guid("1234980a-9768-40b0-bbb6-9ab6927adb1a"), ex.Message, "Problém při otvírání okna se směnami.");
+                _eventLogService.WriteError(new Guid("1234980a-9768-40b0-bbb6-9ab6927adb1a"), ex, "Problém při otvírání okna se směnami.");
             }
         }
 

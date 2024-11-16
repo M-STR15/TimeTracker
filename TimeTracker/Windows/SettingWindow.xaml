@@ -9,6 +9,7 @@
     Title="SettingWindow"
     Width="800"
     Height="450"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <Window.Resources>
