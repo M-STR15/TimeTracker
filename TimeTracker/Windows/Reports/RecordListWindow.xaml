@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:TimeTracker.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:valid="clr-namespace:TimeTracker.Helpers.Validations"
     Title="Record list"
     Width="800"
     Height="450"
@@ -98,12 +99,23 @@
                 <DataGridTemplateColumn Header="StartTime">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock  Text="{Binding StartTime, Mode=TwoWay}" Style="{StaticResource CellTemplate_TextBlock}"/>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartTime, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox  Text="{Binding StartTime, Mode=TwoWay}" />
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="StartTime"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <valid:TimeFormatValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -124,16 +136,27 @@
                 <DataGridTemplateColumn Header="EndTime">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock  Text="{Binding EndTime, Mode=TwoWay}" Style="{StaticResource CellTemplate_TextBlock}"/>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndTime, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox  Text="{Binding EndTime, Mode=TwoWay}"/>
+                            <TextBox>
+                                <TextBox.Text>
+                                    <Binding
+                                        Mode="TwoWay"
+                                        Path="EndTime"
+                                        UpdateSourceTrigger="PropertyChanged">
+                                        <Binding.ValidationRules>
+                                            <valid:TimeFormatValidationRule />
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Header="Activity">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -200,12 +223,12 @@
                 <DataGridTemplateColumn Header="Description">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock  Text="{Binding Description, Mode=TwoWay}" />
+                            <TextBlock Text="{Binding Description, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox   Text="{Binding Description, Mode=TwoWay}"/>
+                            <TextBox Text="{Binding Description, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
