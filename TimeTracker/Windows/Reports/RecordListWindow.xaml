@@ -15,7 +15,25 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/Shared/ReportSharedDictionary.xaml" />
+                <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/RecordListWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="CellTemplate_TextBlock" TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="CellTemplate_TextBlockTitle" TargetType="{x:Type TextBlock}">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="CustomDataGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="Padding" Value="10" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -44,16 +62,30 @@
             d:ItemsSource="{d:SampleData ItemCount=5}"
             AutoGenerateColumns="False"
             BeginningEdit="dtgRecordActivities_BeginningEdit"
+            BorderThickness="0"
+            CellStyle="{StaticResource BezOhraniceniCellStyle}"
+            ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
+            GridLinesVisibility="Horizontal"
             RowEditEnding="dtgRecordActivities_RowEditEnding"
             SelectionChanged="dtgRecordActivities_SelectionChanged">
             <DataGrid.Columns>
                 <!--  Běžný editovatelný textový sloupec  -->
                 <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->
+                <DataGridTemplateColumn Header="DELETE">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Margin="5"
+                                Padding="5"
+                                Content="DELETE" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Start-date">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding StartDate, Mode=TwoWay}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartDate, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -63,14 +95,23 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-
-                <DataGridTextColumn Binding="{Binding StartTime, Mode=TwoWay}" Header="StartTime" />
-                <!--<DataGridTextColumn Binding="{Binding EndDate, Mode=TwoWay}" Header="EndDate" />-->
+                <DataGridTemplateColumn Header="StartTime">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding StartTime, Mode=TwoWay}" Style="{StaticResource CellTemplate_TextBlock}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox  Text="{Binding StartTime, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="End-date">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding EndDate, Mode=TwoWay}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -80,37 +121,94 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding EndTime, Mode=TwoWay}" Header="EndTime" />
-
-                <DataGridTemplateColumn Header="Activity">
+                <DataGridTemplateColumn Header="EndTime">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Activity, Mode=TwoWay}" />
+                            <TextBlock  Text="{Binding EndTime, Mode=TwoWay}" Style="{StaticResource CellTemplate_TextBlock}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Activity}" />
+                            <TextBox  Text="{Binding EndTime, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Header="Activity">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Activity.Name, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Activity.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding TotalTime, Mode=OneTime}" Header="TotalTime" />
+                <DataGridTemplateColumn Header="TotalTime" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding TotalTime, Mode=OneTime}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Project">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Project, Mode=TwoWay}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Project.Name, Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Project}" />
+                            <ComboBox ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Project.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Binding="{Binding Description, Mode=TwoWay}" Header="Description" />
+                <DataGridTemplateColumn Header="Sub module">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding SubModule.Name, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding Project.SubModules}"
+                                SelectedItem="{Binding SubModule}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Shift">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Shift.StartDate, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.Shifts, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Shift.StartDate}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Description">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock  Text="{Binding Description, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox   Text="{Binding Description, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
             </DataGrid.Columns>
         </DataGrid>

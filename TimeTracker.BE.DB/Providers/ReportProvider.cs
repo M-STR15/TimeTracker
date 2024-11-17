@@ -68,7 +68,7 @@ namespace TimeTracker.BE.DB.Providers
             {
                 using (var context = new MainDatacontext())
                 {
-                    foreach (var item in context.RecordActivities.Where(x => x.StartTime >= date.Date && x.StartTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
+                    foreach (var item in context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
                     {
                         sumHours += item.DurationSec;
                     }
@@ -144,7 +144,7 @@ namespace TimeTracker.BE.DB.Providers
             using (var context = new MainDatacontext())
             {
                 var basicData = context.RecordActivities
-                        .Where(x => x.StartTime >= start && x.StartTime <= end).OrderBy(x => x.StartTime).ToList();
+                        .Where(x => x.StartDateTime >= start && x.StartDateTime <= end).OrderBy(x => x.StartDateTime).ToList();
 
                 return basicData;
             }
@@ -152,7 +152,7 @@ namespace TimeTracker.BE.DB.Providers
 
         private double getSumHours(List<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
         {
-            return Math.Round(list.Where(x => x.StartTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
+            return Math.Round(list.Where(x => x.StartDateTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
         }
     }
 }

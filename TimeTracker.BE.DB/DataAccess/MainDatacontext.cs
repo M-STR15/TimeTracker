@@ -33,7 +33,6 @@ namespace TimeTracker.BE.DB.DataAccess
 			_modelBuilder = modelBuilder;
 			insertDefaultValues_Activities();
 			insertDefaultValues_TypeShifts();
-			insertDefaultValues_Projects();
 
 			setSubModuleTable();
 
@@ -42,8 +41,10 @@ namespace TimeTracker.BE.DB.DataAccess
 
 		private void createTestData()
 		{
-			createTestDataRecordActivities();
+			createTestDataProjects();
+			createTestDataSubModules();
 			createTestDataShifts();
+			createTestDataRecordActivities();
 		}
 
 		private void createTestDataRecordActivities()
@@ -63,17 +64,20 @@ namespace TimeTracker.BE.DB.DataAccess
 			  new RecordActivity(new DateTime(year, month, 2, 12, 0, 0), new DateTime(year, month, 2, 15, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
 			  new RecordActivity(new DateTime(year, month, 2, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
 
-			  new RecordActivity(new DateTime(year, month, 3, 7, 0, 0), new DateTime(year, month, 3, 11, 30, 0), (int)eActivity.Start, (int)eTypeShift.Office),
+			  new RecordActivity(new DateTime(year, month, 3, 7, 0, 0), new DateTime(year, month, 3, 11, 30, 0), (int)eActivity.Start, (int)eTypeShift.Office, 2),
 			  new RecordActivity(new DateTime(year, month, 3, 11, 30, 0), new DateTime(year, month, 3, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Office),
 			  new RecordActivity(new DateTime(year, month, 3, 12, 0, 0), new DateTime(year, month, 3, 15, 0, 0), (int)eActivity.Start, (int)eTypeShift.Office),
 			  new RecordActivity(new DateTime(year, month, 3, 15, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Office),
 
-			  new RecordActivity(new DateTime(year, month, 4, 7, 0, 0), new DateTime(year, month, 4, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
+			  new RecordActivity(new DateTime(year, month, 4, 7, 0, 0), new DateTime(year, month, 4, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice, 1, 1),
 			  new RecordActivity(new DateTime(year, month, 4, 11, 40, 0), new DateTime(year, month, 4, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.HomeOffice),
 			  new RecordActivity(new DateTime(year, month, 4, 12, 0, 0), new DateTime(year, month, 4, 15, 10, 0), (int)eActivity.Start, (int)eTypeShift.HomeOffice),
 			  new RecordActivity(new DateTime(year, month, 4, 15, 10, 0), (int)eActivity.Stop, (int)eTypeShift.HomeOffice),
 
-			  new RecordActivity(new DateTime(year, month, 5, 8, 0, 0), new DateTime(year, month, 5, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.Others),
+			  new RecordActivity(new DateTime(year, month, 5, 8, 0, 0), new DateTime(year, month, 5, 11, 40, 0), (int)eActivity.Start, (int)eTypeShift.Others, 1, null, "Test poznamky")
+			  {
+				  ShiftGuidId = Guid.Parse("d434a034-f93d-4f68-a69a-60243a16d21d")
+			  },
 			  new RecordActivity(new DateTime(year, month, 5, 11, 40, 0), new DateTime(year, month, 5, 12, 0, 0), (int)eActivity.Pause, (int)eTypeShift.Others),
 			  new RecordActivity(new DateTime(year, month, 5, 12, 0, 0), new DateTime(year, month, 5, 16, 0, 0), (int)eActivity.Start, (int)eTypeShift.Others),
 			  new RecordActivity(new DateTime(year, month, 5, 16, 0, 0), (int)eActivity.Stop, (int)eTypeShift.Others)
@@ -129,12 +133,21 @@ namespace TimeTracker.BE.DB.DataAccess
 				);
 		}
 
-		private void insertDefaultValues_Projects()
+		private void createTestDataProjects()
 		{
 			_modelBuilder.Entity<Project>()
 				.HasData(
 				new Project(1, "Project 1"),
 				new Project(2, "Project 2")
+				);
+		}
+
+		private void createTestDataSubModules()
+		{
+			_modelBuilder.Entity<SubModule>()
+				.HasData(
+				new SubModule(1, "SubModule 1", 1),
+				new SubModule(2, "SubModule 2", 1)
 				);
 		}
 	}

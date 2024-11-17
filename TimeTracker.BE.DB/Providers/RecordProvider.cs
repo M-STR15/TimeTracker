@@ -5,122 +5,129 @@ using TimeTracker.BE.DB.Models.Enums;
 
 namespace TimeTracker.BE.DB.Providers
 {
-    public class RecordProvider
-    {
-        public RecordProvider()
-        {
-        }
+	public class RecordProvider
+	{
+		public RecordProvider()
+		{
+		}
 
-        public List<RecordActivity> GetRecords()
-        {
-            try
-            {
-                using (var context = new MainDatacontext())
-                {
-                    var recordActivities = context.RecordActivities
-                    .Include(x => x.Project)
-                    .Include(x => x.Activity)
-                    .OrderBy(x => x.StartTime).ToList();
+		public List<RecordActivity> GetRecords()
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities
+					.Include(x => x.Project)
+					.Include(x => x.Activity)
+					.OrderBy(x => x.StartDateTime).ToList();
 
-                    return recordActivities;
-                }
-            }
-            catch (Exception)
-            {
-                return new();
-            }
-        }
+					return recordActivities;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
 
-        public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
-        {
-            try
-            {
-                using (var context = new MainDatacontext())
-                {
-                    var recordActivities = context.RecordActivities.Where(x => x.StartTime >= startTime && x.EndTime <= endTime)
-                    .Include(x => x.Project)
-                    .Include(x => x.Activity)
-                    .OrderBy(x => x.StartTime).ToList();
+		public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && (x.EndDateTime <= endTime || x.EndDateTime == null))
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.OrderBy(x => x.StartDateTime).ToList();
 
-                    return recordActivities;
-                }
-            }
-            catch (Exception)
-            {
-                return new();
-            }
-        }
+					return recordActivities;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
 
-        public RecordActivity GetLastRecordActivity()
-        {
-            RecordActivity? recordActivity = null;
+		public RecordActivity GetLastRecordActivity()
+		{
+			try
+			{
+				RecordActivity? recordActivity = null;
 
-            using (var context = new MainDatacontext())
-            {
-                recordActivity = context.RecordActivities.OrderBy(x => x.StartTime)
-                    .Include(x => x.Project)
-                    .Include(x => x.Activity)
-                    .Include(x => x.Shift)
-                    .Include(x => x.SubModule)
-                    .Include(x => x.TypeShift)
-                    .Last();
-            }
+				using (var context = new MainDatacontext())
+				{
+					recordActivity = context.RecordActivities.OrderBy(x => x.StartDateTime)
+						.Include(x => x.Project)
+						.Include(x => x.Activity)
+						.Include(x => x.Shift)
+						.Include(x => x.SubModule)
+						.Include(x => x.TypeShift)
+						.Last();
+				}
 
-            return recordActivity;
-        }
+				return recordActivity;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
 
-        public RecordActivity? SaveRecord(RecordActivity recordActivity)
-        {
-            try
-            {
-                using (var context = new MainDatacontext())
-                {
-                    context.RecordActivities.Add(recordActivity);
-                    context.SaveChanges();
-                }
+		public RecordActivity? SaveRecord(RecordActivity recordActivity)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					context.RecordActivities.Add(recordActivity);
+					context.SaveChanges();
+				}
 
-                UpdateRefreshEndTime();
+				UpdateRefreshEndTime();
 
-                return recordActivity;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
+				return recordActivity;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
 
-        public void UpdateRefreshEndTime()
-        {
-            try
-            {
-                using (var context = new MainDatacontext())
-                {
-                    var recordActivities = context.RecordActivities.OrderBy(x => x.StartTime).ToList();
+		public void UpdateRefreshEndTime()
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities.OrderBy(x => x.StartDateTime).ToList();
 
-                    var allowedActivities = new List<int>();
-                    allowedActivities.Add((int)eActivity.Start);
-                    allowedActivities.Add((int)eActivity.Pause);
+					var allowedActivities = new List<int>();
+					allowedActivities.Add((int)eActivity.Start);
+					allowedActivities.Add((int)eActivity.Pause);
 
-                    for (int i = 0; i < recordActivities.Count - 1; i++)
-                    {
-                        var currentItem = recordActivities[i];
-                        if (allowedActivities.Any(x => x == currentItem.ActivityId))
-                        {
-                            var nextItem = recordActivities[i + 1];
+					for (int i = 0; i < recordActivities.Count - 1; i++)
+					{
+						var currentItem = recordActivities[i];
+						if (allowedActivities.Any(x => x == currentItem.ActivityId))
+						{
+							var nextItem = recordActivities[i + 1];
 
-                            // Nastavíme EndTime aktuální položky na StartTime následující položky
-                            currentItem.EndTime = nextItem.StartTime;
-                        }
-                    }
+							// Nastavíme EndTime aktuální položky na StartTime následující položky
+							currentItem.EndDateTime = nextItem.StartDateTime;
+						}
+					}
 
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-    }
+					context.SaveChanges();
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+	}
 }

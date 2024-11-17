@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
 using TimeTracker.Stories;
@@ -8,35 +9,43 @@ using TimeTracker.Windows.Reports.Services;
 
 namespace TimeTracker.Windows.Reports
 {
-	internal class ReportObj
+	internal class RecordActivityReport : RecordActivity
 	{
-		public string StartDate { get; set; }
-		public string StartTime { get; set; }
-		public string EndDate { get; set; }
-		public string EndTime { get; set; }
-		public string Activity { get; set; }
-		public string TotalTime { get; set; }
-		public string Project { get; set; }
-		protected DateTime EndTimeDt { get; set; }
-		protected DateTime StartTimeDt { get; set; }
-		protected TimeSpan TotalTimeTs { get; private set; }
-		public string Description { get; set; }
-		public bool CanEdit { get; set; }
 
-		internal ReportObj(DateTime startTimeDt, DateTime endTimeDt, string activity, string project, string description)
+		public RecordActivityReport(RecordActivity recordActivity) : base(recordActivity.GuidId, recordActivity.StartDateTime, recordActivity.EndDateTime, recordActivity.Activity, recordActivity.TypeShift, recordActivity.Shift, recordActivity.Project, recordActivity.SubModule, recordActivity.Description)
 		{
-			StartTimeDt = startTimeDt;
-			EndTimeDt = endTimeDt;
+			StartDate = base.StartDate;
+			StartTime = base.StartTime;
+			EndDate = base.EndDate;
+			EndTime = base.EndTime;
+			TotalTime = TimeSpan.FromSeconds(base.DurationSec);
+		}
+		public new string? StartDate
+		{
+			get;
+			set;
+		}
+		public new string? StartTime
+		{
+			get;
+			set;
+		}
+		public new string? EndDate
+		{
+			get;
+			set;
+		}
 
-			StartDate = StartTimeDt.ToString("dd.MM.yyyy");
-			StartTime = StartTimeDt.ToString("HH:mm:ss");
-			EndDate = EndTimeDt.ToString("dd.MM.yyyy");
-			EndTime = EndTimeDt.ToString("HH:mm:ss");
-			TotalTime = TotalTimeTs.ToString(@"hh\:mm\:ss");
-			Activity = activity;
-			Project = project;
-			TotalTimeTs = EndTimeDt - StartTimeDt;
-			TotalTime = TotalTimeTs.ToString(@"hh\:mm\:ss");
+		public new string? EndTime
+		{
+			get;
+			set;
+		}
+
+		public new TimeSpan? TotalTime
+		{
+			get;
+			set;
 		}
 	}
 
@@ -46,6 +55,8 @@ namespace TimeTracker.Windows.Reports
 
 		public ICollection<string> Activities { get; set; }
 		public ICollection<string> Projects { get; set; }
+
+		public ICollection<string> Shifts { get; set; }
 
 		public RecordListWindow(MainStory mainStore)
 		{
@@ -59,6 +70,9 @@ namespace TimeTracker.Windows.Reports
 			var projectProvider = new ProjectProvider();
 			var projects = projectProvider.GetProjects();
 			Projects = new ObservableCollection<string>(from pr in projects select pr.Name);
+			var shiftProvider = new ShiftProvider();
+			var shifts = shiftProvider.GetShifts();
+			Shifts = new ObservableCollection<string>(from sh in shifts select sh.StartDate.ToString("dd.MM.yyyy"));
 
 			createList();
 
@@ -80,26 +94,19 @@ namespace TimeTracker.Windows.Reports
 				{
 					var list = origList.Select((record, index) =>
 					{
-						var startTimeDt = record.StartTime;
-						var endTimeDt = (origList.Count != (index + 1) ? origList[index + 1].StartTime : DateTime.Now);
-						var activity = record.Activity.Name;
-						var project = record?.Project?.Name ?? "";
-						var description = record?.Description ?? "";
-
-						return new ReportObj(startTimeDt, endTimeDt, activity, project, description)
+						return new RecordActivityReport(record)
 						;
-					});
-					dtgRecordActivities.ItemsSource = list.ToList();
+					}).ToList();
+					dtgRecordActivities.ItemsSource = list;
 				}
 				lblCount.Content = (origList?.Count ?? 0).ToString();
 			}
 		}
 
-
 		private void dtgRecordActivities_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
 		{
-			var row = e.Row.Item as ReportObj;
-			if (row == null || !row.CanEdit) // Vlastnost CanEdit určuje, zda lze řádek upravit
+			var row = e.Row.Item as RecordActivity;
+			if (row == null) // Vlastnost CanEdit určuje, zda lze řádek upravit
 			{
 				e.Cancel = true;
 			}
@@ -115,9 +122,9 @@ namespace TimeTracker.Windows.Reports
 
 		private void dtgRecordActivities_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (dtgRecordActivities.SelectedItem is ReportObj selectedRow)
+			if (dtgRecordActivities.SelectedItem is RecordActivity selectedRow)
 			{
-				selectedRow.CanEdit = true;
+
 			}
 		}
 	}
