@@ -6,8 +6,8 @@ namespace TimeTracker.BE.DB.Models
 {
     [Table("TypeShifts", Schema = "dbo")]
     [Comment("Tabulka všech možných směn.")]
-    public class TypeShift
-    {
+    public class TypeShift: IIdentifiable
+	{
         [Key]
         [Column("TypeShift_ID")]
         public int Id { get; set; }

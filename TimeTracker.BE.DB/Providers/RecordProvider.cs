@@ -20,6 +20,8 @@ namespace TimeTracker.BE.DB.Providers
 					var recordActivities = context.RecordActivities
 					.Include(x => x.Project)
 					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
 					.OrderBy(x => x.StartDateTime).ToList();
 
 					return recordActivities;
@@ -41,6 +43,8 @@ namespace TimeTracker.BE.DB.Providers
 					.Include(x => x.Project)
 						.ThenInclude(x => x.SubModules)
 					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
 					.OrderBy(x => x.StartDateTime).ToList();
 
 					return recordActivities;
@@ -83,7 +87,11 @@ namespace TimeTracker.BE.DB.Providers
 			{
 				using (var context = new MainDatacontext())
 				{
-					context.RecordActivities.Add(recordActivity);
+					if (recordActivity.GuidId != Guid.Empty)
+						context.RecordActivities.Update(recordActivity);
+					else
+						context.RecordActivities.Add(recordActivity);
+
 					context.SaveChanges();
 				}
 

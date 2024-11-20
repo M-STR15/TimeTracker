@@ -6,8 +6,8 @@ namespace TimeTracker.BE.DB.Models
 {
     [Index(nameof(Name), IsUnique = true)]
     [Table("Project", Schema = "dbo")]
-    public class Project : IProjectWithoutColl
-    {
+    public class Project : IProjectWithoutColl, IIdentifiable
+	{
         [Key]
         [Column("Project_ID")]
         public virtual int Id { get; set; }

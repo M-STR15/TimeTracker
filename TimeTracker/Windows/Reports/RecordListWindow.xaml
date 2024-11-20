@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:TimeTracker.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:valid="clr-namespace:TimeTracker.Helpers.Validations"
+    xmlns:converters="clr-namespace:TimeTracker.Helpers.Convertors" 
     Title="Record list"
     Width="800"
     Height="450"
@@ -18,6 +19,7 @@
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/Shared/ReportSharedDictionary.xaml" />
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/RecordListWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converters:ActivityConvert x:Key="activityConvert"/>
 
             <Style x:Key="CellTemplate_TextBlock" TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -35,6 +37,7 @@
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
                 <Setter Property="Padding" Value="10" />
             </Style>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -83,7 +86,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Start-date">
+                <DataGridTemplateColumn Header="Start-date" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartDate, Mode=TwoWay}" />
@@ -96,7 +99,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="StartTime">
+                <DataGridTemplateColumn Header="StartTime" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartTime, Mode=TwoWay}" />
@@ -120,7 +123,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="End-date">
+                <DataGridTemplateColumn Header="End-date" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate, Mode=TwoWay}" />
@@ -133,7 +136,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="EndTime">
+                <DataGridTemplateColumn Header="EndTime" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndTime, Mode=TwoWay}" />
@@ -157,7 +160,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Activity">
+                <DataGridTemplateColumn Header="Activity" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Activity.Name, Mode=TwoWay}" />
@@ -165,7 +168,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Activity.Name}" />
+                            <ComboBox
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}"
+                                SelectedIndex="{Binding ActivityIndex}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -178,7 +184,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Project">
+                <DataGridTemplateColumn Header="Project" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Project.Name, Mode=TwoWay}" />
@@ -186,12 +192,15 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Project.Name}" />
+                            <ComboBox
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}"
+                                SelectedIndex="{Binding ProjectIndex}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Sub module">
+                <DataGridTemplateColumn Header="Sub module" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding SubModule.Name, Mode=TwoWay}" />
@@ -202,12 +211,12 @@
                             <ComboBox
                                 DisplayMemberPath="Name"
                                 ItemsSource="{Binding Project.SubModules}"
-                                SelectedItem="{Binding SubModule}" />
+                                SelectedIndex="{Binding SubModuleIndex}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Shift">
+                <DataGridTemplateColumn Header="Shift" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Shift.StartDate, Mode=TwoWay}" />
@@ -215,12 +224,31 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Shifts, RelativeSource={RelativeSource AncestorType=Window}}" SelectedItem="{Binding Shift.StartDate}" />
+                            <ComboBox
+                                DisplayMemberPath="StartDateLongStr"
+                                ItemsSource="{Binding DataContext.Shifts, RelativeSource={RelativeSource AncestorType=Window}}"
+                                SelectedIndex="{Binding ShiftIndex}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Description">
+                <DataGridTemplateColumn Header="Type shift">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TypeShift.Name, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox
+                                DisplayMemberPath="Name"
+                                ItemsSource="{Binding DataContext.TypeShifts, RelativeSource={RelativeSource AncestorType=Window}}"
+                                SelectedIndex="{Binding TypeShiftIndex}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="400" Header="Description">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Description, Mode=TwoWay}" />

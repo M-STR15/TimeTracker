@@ -6,8 +6,8 @@ namespace TimeTracker.BE.DB.Models
 {
     [Index(nameof(Name), IsUnique = true)]
     [Table("Activities", Schema = "dbo")]
-    public class Activity
-    {
+    public class Activity: IIdentifiable
+	{
         [Key]
         [Column("Activity_ID")]
         public int Id { get; set; }

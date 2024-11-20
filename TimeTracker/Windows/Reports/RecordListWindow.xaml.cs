@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.BE.DB.Models;
@@ -20,61 +21,56 @@ namespace TimeTracker.Windows.Reports
 			EndTime = base.EndTime;
 			TotalTime = TimeSpan.FromSeconds(base.DurationSec);
 		}
-		public new string? StartDate
-		{
-			get;
-			set;
-		}
-		public new string? StartTime
-		{
-			get;
-			set;
-		}
-		public new string? EndDate
-		{
-			get;
-			set;
-		}
+		public new string? StartDate { get; set; }
+		public new string? StartTime { get; set; }
+		public new string? EndDate { get; set; }
 
-		public new string? EndTime
-		{
-			get;
-			set;
-		}
+		public int ActivityIndex { get; set; }
+		public int ProjectIndex { get; set; }
+		public int ShiftIndex { get; set; }
+		public int SubModuleIndex { get; set; }
+		public int TypeShiftIndex { get; set; }
 
-		public new TimeSpan? TotalTime
-		{
-			get;
-			set;
-		}
+		public new string? EndTime { get; set; }
+
+		public new TimeSpan? TotalTime { get; set; }
 	}
 
 	public partial class RecordListWindow : Window
 	{
 		private MainStory _mainStoru;
 
-		public ICollection<string> Activities { get; set; }
-		public ICollection<string> Projects { get; set; }
+		public ICollection<Activity> Activities { get; set; }
+		public ICollection<Project> Projects { get; set; }
+		public ICollection<Shift> Shifts { get; set; }
+		public ICollection<TypeShift> TypeShifts { get; set; }
 
-		public ICollection<string> Shifts { get; set; }
+		private RecordProvider _recordProvider { get; set; }
+		private ActivityProvider _activityProvider { get; set; }
 
 		public RecordListWindow(MainStory mainStore)
 		{
 			InitializeComponent();
 			_mainStoru = mainStore;
+			_recordProvider = _mainStoru.ContainerStore.GetRecordProvider();
+			_activityProvider = _mainStoru.ContainerStore.GetActivityProvider();
 
-			Activities = new ObservableCollection<string>(Enum.GetNames<eActivity>());
+			Activities = _activityProvider.GetActivities();
+			new ObservableCollection<string>(Enum.GetNames<eActivity>());
 			cmbMonth.ItemsSource = new ReportParameterService().Monts;
 			cmbMonth.SelectedIndex = 0;
 
 			var projectProvider = new ProjectProvider();
 			var projects = projectProvider.GetProjects();
-			Projects = new ObservableCollection<string>(from pr in projects select pr.Name);
+			Projects = new ObservableCollection<Project>(from pr in projects select pr);
 			var shiftProvider = new ShiftProvider();
 			var shifts = shiftProvider.GetShifts();
-			Shifts = new ObservableCollection<string>(from sh in shifts select sh.StartDate.ToString("dd.MM.yyyy"));
+			Shifts = new ObservableCollection<Shift>(from sh in shifts select sh);
 
+			var typeShifts = shiftProvider.GetTypeShifts();
+			TypeShifts = new ObservableCollection<TypeShift>(from ts in typeShifts select ts);
 			createList();
+
 
 			DataContext = this;
 		}
@@ -89,12 +85,17 @@ namespace TimeTracker.Windows.Reports
 			{
 				var startTime = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
 				var endTime = startTime.AddMonths(1);
-				var origList = _mainStoru.ContainerStore.GetRecordProvider().GetRecords(startTime, endTime);
+				var origList = _recordProvider.GetRecords(startTime, endTime);
 				if (origList != null)
 				{
 					var list = origList.Select((record, index) =>
 					{
-						return new RecordActivityReport(record)
+						var repObj = new RecordActivityReport(record);
+						repObj.ActivityIndex = getIndex(Activities, repObj.ActivityId);
+						repObj.ProjectIndex = getIndex(Projects, repObj.ProjectId);
+						repObj.ShiftIndex = getIndex(Shifts, repObj.ShiftGuidId);
+						repObj.TypeShiftIndex = getIndex(TypeShifts, repObj.TypeShiftId);
+						return repObj;
 						;
 					}).ToList();
 					dtgRecordActivities.ItemsSource = list;
@@ -103,9 +104,21 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
+		private int getIndex<T>(IEnumerable<T> collection, int? objectId)
+			where T : IIdentifiable
+		{
+			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.Id == objectId)?.index ?? -1;
+		}
+
+		private int getIndex<T>(IEnumerable<T> collection, Guid? objectId)
+			where T : IIdentifiableGuid
+		{
+			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.GuidId == objectId)?.index ?? -1;
+		}
+
 		private void dtgRecordActivities_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
 		{
-			var row = e.Row.Item as RecordActivity;
+			var row = e.Row.Item as RecordActivityReport;
 			if (row == null) // Vlastnost CanEdit určuje, zda lze řádek upravit
 			{
 				e.Cancel = true;
@@ -115,9 +128,16 @@ namespace TimeTracker.Windows.Reports
 		private void dtgRecordActivities_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
 		{
 			// Zpracujte úpravy řádku
-			var editedRow = e.Row.Item; // Upravená data
-										// Zde můžete uložit změny do databáze nebo kolekce
-										//MessageBox.Show($"Řádek byl upraven: {editedRow}");
+			var editedRow = e.Row.Item as RecordActivityReport;
+			if (editedRow == null) // Vlastnost CanEdit určuje, zda lze řádek upravit
+			{
+				editedRow.ProjectId = 1;
+				//editedRow.ActivityId = Activities.ToList().FirstOrDefault(x=>x);
+				editedRow.ShiftGuidId = Guid.Empty;
+				editedRow.SubModuleId = 1;
+				editedRow.TypeShiftId = 1;
+				_recordProvider.SaveRecord(editedRow);
+			}
 		}
 
 		private void dtgRecordActivities_SelectionChanged(object sender, SelectionChangedEventArgs e)
