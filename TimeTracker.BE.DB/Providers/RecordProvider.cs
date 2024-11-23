@@ -85,6 +85,12 @@ namespace TimeTracker.BE.DB.Providers
 		{
 			try
 			{
+				recordActivity.Activity = null;
+				recordActivity.Shift = null;
+				recordActivity.SubModule = null;
+				recordActivity.TypeShift = null;
+				recordActivity.Project = null;
+	
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)

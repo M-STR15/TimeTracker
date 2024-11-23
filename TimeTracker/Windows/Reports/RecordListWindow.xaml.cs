@@ -1,52 +1,26 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
 using TimeTracker.Stories;
+using TimeTracker.Windows.Models;
 using TimeTracker.Windows.Reports.Services;
+using Activity = TimeTracker.BE.DB.Models.Activity;
 
 namespace TimeTracker.Windows.Reports
 {
-	internal class RecordActivityReport : RecordActivity
-	{
-
-		public RecordActivityReport(RecordActivity recordActivity) : base(recordActivity.GuidId, recordActivity.StartDateTime, recordActivity.EndDateTime, recordActivity.Activity, recordActivity.TypeShift, recordActivity.Shift, recordActivity.Project, recordActivity.SubModule, recordActivity.Description)
-		{
-			StartDate = base.StartDate;
-			StartTime = base.StartTime;
-			EndDate = base.EndDate;
-			EndTime = base.EndTime;
-			TotalTime = TimeSpan.FromSeconds(base.DurationSec);
-		}
-		public new string? StartDate { get; set; }
-		public new string? StartTime { get; set; }
-		public new string? EndDate { get; set; }
-
-		public int ActivityIndex { get; set; }
-		public int ProjectIndex { get; set; }
-		public int ShiftIndex { get; set; }
-		public int SubModuleIndex { get; set; }
-		public int TypeShiftIndex { get; set; }
-
-		public new string? EndTime { get; set; }
-
-		public new TimeSpan? TotalTime { get; set; }
-	}
-
 	public partial class RecordListWindow : Window
 	{
 		private MainStory _mainStoru;
-
 		public ICollection<Activity> Activities { get; set; }
 		public ICollection<Project> Projects { get; set; }
 		public ICollection<Shift> Shifts { get; set; }
 		public ICollection<TypeShift> TypeShifts { get; set; }
-
 		private RecordProvider _recordProvider { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
+		public ICollection<RecordActivityReport> RecordActivityReportList { get; set; }
 
 		public RecordListWindow(MainStory mainStore)
 		{
@@ -62,17 +36,34 @@ namespace TimeTracker.Windows.Reports
 
 			var projectProvider = new ProjectProvider();
 			var projects = projectProvider.GetProjects();
-			Projects = new ObservableCollection<Project>(from pr in projects select pr);
+			Projects = convertCollection<Project>(projects);
+
 			var shiftProvider = new ShiftProvider();
 			var shifts = shiftProvider.GetShifts();
-			Shifts = new ObservableCollection<Shift>(from sh in shifts select sh);
+			Shifts = convertCollection<Shift>(shifts);
 
 			var typeShifts = shiftProvider.GetTypeShifts();
-			TypeShifts = new ObservableCollection<TypeShift>(from ts in typeShifts select ts);
+			TypeShifts = convertCollection<TypeShift>(typeShifts, false);
+
 			createList();
 
-
 			DataContext = this;
+		}
+
+		private ICollection<T> convertCollection<T>(ICollection<T> collection, bool emptyValue = true)
+			where T : new()
+		{
+			var list = new ObservableCollection<T>();
+
+			if (emptyValue)
+				list.Add(new());
+
+			foreach (var item in collection)
+			{
+				list.Add(item);
+			}
+
+			return list;
 		}
 		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -90,7 +81,7 @@ namespace TimeTracker.Windows.Reports
 				{
 					var list = origList.Select((record, index) =>
 					{
-						var repObj = new RecordActivityReport(record);
+						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
 						repObj.ActivityIndex = getIndex(Activities, repObj.ActivityId);
 						repObj.ProjectIndex = getIndex(Projects, repObj.ProjectId);
 						repObj.ShiftIndex = getIndex(Shifts, repObj.ShiftGuidId);
@@ -98,7 +89,9 @@ namespace TimeTracker.Windows.Reports
 						return repObj;
 						;
 					}).ToList();
-					dtgRecordActivities.ItemsSource = list;
+
+					RecordActivityReportList = list;
+					dtgRecordActivities.ItemsSource = RecordActivityReportList;
 				}
 				lblCount.Content = (origList?.Count ?? 0).ToString();
 			}
@@ -116,35 +109,26 @@ namespace TimeTracker.Windows.Reports
 			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.GuidId == objectId)?.index ?? -1;
 		}
 
-		private void dtgRecordActivities_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+		private void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
-			var row = e.Row.Item as RecordActivityReport;
-			if (row == null) // Vlastnost CanEdit určuje, zda lze řádek upravit
-			{
-				e.Cancel = true;
-			}
-		}
-
-		private void dtgRecordActivities_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-		{
-			// Zpracujte úpravy řádku
 			var editedRow = e.Row.Item as RecordActivityReport;
-			if (editedRow == null) // Vlastnost CanEdit určuje, zda lze řádek upravit
+			if (editedRow != null)
 			{
-				editedRow.ProjectId = 1;
-				//editedRow.ActivityId = Activities.ToList().FirstOrDefault(x=>x);
-				editedRow.ShiftGuidId = Guid.Empty;
-				editedRow.SubModuleId = 1;
-				editedRow.TypeShiftId = 1;
-				_recordProvider.SaveRecord(editedRow);
-			}
-		}
-
-		private void dtgRecordActivities_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			if (dtgRecordActivities.SelectedItem is RecordActivity selectedRow)
-			{
-
+				var recordActivity = new RecordActivity(editedRow.GuidId, editedRow.StartDateTime, editedRow.EndDateTime, editedRow.Activity, editedRow.TypeShift, editedRow.Shift, editedRow.Project, editedRow.SubModule, editedRow.Description);
+				_recordProvider.SaveRecord(recordActivity);
+				RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = new RecordActivityReport(recordActivity)
+				{
+					Activity = editedRow.Activity,
+					ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
+					TypeShift = editedRow.TypeShift,
+					TypeShiftIndex = getIndex(TypeShifts, editedRow?.TypeShift?.Id),
+					Shift = editedRow.Shift,
+					ShiftIndex = getIndex(Shifts, editedRow?.Shift?.GuidId),
+					Project = editedRow.Project,
+					ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
+					SubModule = editedRow.SubModule,
+					SubModuleIndex = 0
+				});
 			}
 		}
 	}

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace TimeTracker.BE.DB.Models
 {
 	[Table("Record_activities", Schema = "dbo")]
-	public class RecordActivity
+	public class RecordActivity : IRecordActivity
 	{
 		private string _endDate;
 

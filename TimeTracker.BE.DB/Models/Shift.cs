@@ -17,7 +17,7 @@ namespace TimeTracker.BE.DB.Models
 		[Column("Start_date")]
 		public DateTime StartDate { get; set; }
 		[NotMapped]
-		public string StartDateLongStr { get => StartDate.Date.ToString("dd.MM.yyyy"); }
+		public string StartDateLongStr { get => (GuidId==Guid.Empty ? "": StartDate.Date.ToString("dd.MM.yyyy")); }
 
 		public string? Description { get; set; }
 
