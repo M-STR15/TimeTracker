@@ -43,6 +43,14 @@
                 <Setter Property="Padding" Value="10" />
             </Style>
 
+            <Style x:Key="CustomTextboxStyle" TargetType="{x:Type TextBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="CustomComboboxtyle" TargetType="{x:Type ComboBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -103,6 +111,8 @@
                                         <Setter Property="Language" Value="cs-CZ" />
                                         <Setter Property="FirstDayOfWeek" Value="Monday" />
                                         <Setter Property="SelectedDateFormat" Value="Short" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
                                     </Style>
                                 </DatePicker.Resources>
                             </DatePicker>
@@ -118,7 +128,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox>
+                            <TextBox Style="{StaticResource CustomTextboxStyle}">
                                 <TextBox.Text>
                                     <Binding
                                         Mode="TwoWay"
@@ -145,7 +155,8 @@
                             <ComboBox
                                 DisplayMemberPath="Name"
                                 ItemsSource="{Binding DataContext.Activities, RelativeSource={RelativeSource AncestorType=Window}}"
-                                SelectedIndex="{Binding ActivityIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedIndex="{Binding ActivityIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -179,7 +190,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox>
+                            <TextBox Style="{StaticResource CustomTextboxStyle}">
                                 <TextBox.Text>
                                     <Binding
                                         Mode="TwoWay"
@@ -198,7 +209,15 @@
                 <DataGridTemplateColumn Header="TotalTime" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding TotalTime,Converter={StaticResource totalTimeConvert}}" />
+                            <Grid
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Background="Violet">
+                                <TextBlock
+                                    Style="{StaticResource CellTemplate_TextBlock}"
+                                    Text="{Binding TotalTime, Converter={StaticResource totalTimeConvert}, Mode=OneWay}"
+                                    TextAlignment="Center" />
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -214,7 +233,8 @@
                             <ComboBox
                                 DisplayMemberPath="Name"
                                 ItemsSource="{Binding DataContext.Projects, RelativeSource={RelativeSource AncestorType=Window}}"
-                                SelectedIndex="{Binding ProjectIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedIndex="{Binding ProjectIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -230,7 +250,8 @@
                             <ComboBox
                                 DisplayMemberPath="Name"
                                 ItemsSource="{Binding Project.SubModules}"
-                                SelectedIndex="{Binding SubModuleIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedIndex="{Binding SubModuleIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -246,7 +267,8 @@
                             <ComboBox
                                 DisplayMemberPath="StartDateLongStr"
                                 ItemsSource="{Binding DataContext.Shifts, RelativeSource={RelativeSource AncestorType=Window}}"
-                                SelectedIndex="{Binding ShiftIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedIndex="{Binding ShiftIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -262,7 +284,8 @@
                             <ComboBox
                                 DisplayMemberPath="Name"
                                 ItemsSource="{Binding DataContext.TypeShifts, RelativeSource={RelativeSource AncestorType=Window}}"
-                                SelectedIndex="{Binding TypeShiftIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedIndex="{Binding TypeShiftIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>

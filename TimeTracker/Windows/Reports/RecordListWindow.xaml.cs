@@ -20,7 +20,7 @@ namespace TimeTracker.Windows.Reports
 		public ICollection<TypeShift> TypeShifts { get; set; }
 		private RecordProvider _recordProvider { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
-		public ICollection<RecordActivityReport> RecordActivityReportList { get; set; }
+		public List<RecordActivityReport> RecordActivityReportList { get; set; }
 
 		public RecordListWindow(MainStory mainStore)
 		{
@@ -135,7 +135,13 @@ namespace TimeTracker.Windows.Reports
 					SubModuleIndex = 0
 				};
 
-				RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
+
+				var index = RecordActivityReportList.FindIndex(x => x.GuidId == editedRow.GuidId);
+				if (index >= 0)
+					RecordActivityReportList[index] = newRecordActivityReport;
+
+
+				//RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
 			}
 		}
 	}

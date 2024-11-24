@@ -106,8 +106,11 @@ namespace TimeTracker.Windows.Models
 				StartTime = StartDateTime.ToString("HH:mm:ss");
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
-				var durationSec= EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+				var durationSec = EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+				//TotalTime = null;
 				TotalTime = TimeSpan.FromSeconds(durationSec);
+
+				//OnPropertyChanged(nameof(TotalTime));
 			}
 		}
 		public int ActivityIndex
