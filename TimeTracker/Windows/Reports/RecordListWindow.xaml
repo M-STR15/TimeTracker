@@ -19,6 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:ActivityConvert x:Key="activityConvert" />
             <converters:DateTimeToDateConvert x:Key="dateTimeToDateConvert" />
+            <converters:TotalTimeConvert x:Key="totalTimeConvert" />
 
             <Style x:Key="CellTemplate_TextBlock" TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -197,7 +198,7 @@
                 <DataGridTemplateColumn Header="TotalTime" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding TotalTime, Mode=OneTime}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding TotalTime,Converter={StaticResource totalTimeConvert}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

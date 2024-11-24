@@ -44,7 +44,7 @@ namespace TimeTracker.BE.DB.DataAccess
 			createTestDataProjects();
 			createTestDataSubModules();
 			createTestDataShifts();
-			createTestDataRecordActivities();
+			//createTestDataRecordActivities();
 		}
 
 		private void createTestDataRecordActivities()

@@ -106,7 +106,8 @@ namespace TimeTracker.Windows.Models
 				StartTime = StartDateTime.ToString("HH:mm:ss");
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
-				TotalTime = TimeSpan.FromSeconds(DurationSec);
+				var durationSec= EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+				TotalTime = TimeSpan.FromSeconds(durationSec);
 			}
 		}
 		public int ActivityIndex
@@ -129,7 +130,7 @@ namespace TimeTracker.Windows.Models
 			}
 		}
 
-		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
+		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
 		public int ProjectIndex
 		{
 			get => _projectIndex;
