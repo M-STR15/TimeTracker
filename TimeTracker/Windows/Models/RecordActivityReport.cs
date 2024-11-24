@@ -7,45 +7,108 @@ namespace TimeTracker.Windows.Models
 	[ObservableObject]
 	public partial class RecordActivityReport : IRecordActivity
 	{
+		[ObservableProperty]
+		public string? _description;
+
 		private static ICollection<Activity>? _activities;
 		private static ICollection<Project>? _projects;
 		private static ICollection<Shift>? _shifts;
 		private static ICollection<SubModule>? _subModules;
 		private static ICollection<TypeShift>? _typeShifts;
+		[ObservableProperty]
+		private Activity _activity;
+
+		[ObservableProperty]
+		private int _activityId;
+
+		[ObservableProperty]
+		private string? _endDate;
+
+		[ObservableProperty]
+		private DateTime? _endDateTime;
+
+		[ObservableProperty]
+		private string? _endTime;
+
+		[ObservableProperty]
+		private Guid _guidId;
+
+		[ObservableProperty]
+		private Project? _project;
+
+		[ObservableProperty]
+		private int? _projectId;
+
+		private int _projectIndex;
+
+		[ObservableProperty]
+		private Shift? _shift;
+
+		[ObservableProperty]
+		private Guid? _shiftGuidId;
+
+		private int _shiftIndex;
+
+		[ObservableProperty]
+		private string? _startDate;
+
+		[ObservableProperty]
+		private DateTime _startDateTime;
+
+		[ObservableProperty]
+		private string? _startTime;
+
+		[ObservableProperty]
+		private SubModule? _subModule;
+
+		[ObservableProperty]
+		private int? _subModuleId;
+
+		private int _subModuleIndex;
+
+		[ObservableProperty]
+		private TimeSpan? _totalTime;
+
+		[ObservableProperty]
+		private TypeShift _typeShift;
+
+		[ObservableProperty]
+		private int? _typeShiftId;
+
+		private int _typeShiftIndex;
+
 		public RecordActivityReport(RecordActivity recordActivity, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
 		{
-			GuidId = recordActivity.GuidId;
-			Activity = recordActivity.Activity;
-			Project = recordActivity.Project;
-			SubModule = recordActivity.SubModule;
-			Shift = recordActivity.Shift;
-			TypeShift = recordActivity.TypeShift;
+			if (recordActivity != null)
+			{
+				_activities = activities;
+				_projects = projects;
+				_shifts = shifts;
+				_subModules = subModules;
+				_typeShifts = typeShifts;
+				GuidId = recordActivity.GuidId;
+				Activity = recordActivity.Activity;
+				Project = recordActivity.Project;
+				SubModule = recordActivity.SubModule;
+				Shift = recordActivity.Shift;
+				TypeShift = recordActivity.TypeShift;
 
-			ActivityId = recordActivity.ActivityId;
-			ProjectId = recordActivity.ProjectId;
-			SubModuleId = recordActivity.SubModuleId;
-			ShiftGuidId = recordActivity.ShiftGuidId;
-			Description = recordActivity?.Description;
-			StartDateTime = recordActivity.StartDateTime;
-			EndDateTime = recordActivity.EndDateTime;
-			TypeShiftId = TypeShift?.Id ?? null;
+				ActivityId = recordActivity.ActivityId;
+				ProjectId = recordActivity.ProjectId;
+				SubModuleId = recordActivity.SubModuleId;
+				ShiftGuidId = recordActivity.ShiftGuidId;
+				Description = recordActivity?.Description;
+				StartDateTime = recordActivity?.StartDateTime ?? DateTime.Now;
+				EndDateTime = recordActivity?.EndDateTime ?? DateTime.Now;
+				TypeShiftId = TypeShift?.Id ?? null;
 
-			StartDate = StartDateTime.ToString("dd.MM.yyyy");
-			StartTime = StartDateTime.ToString("HH:mm:ss");
-			EndDate = EndDateTime?.ToString("dd.MM.yyyy");
-			EndTime = EndDateTime?.ToString("HH:mm:ss");
-			TotalTime = TimeSpan.FromSeconds(DurationSec);
-			_activities = activities;
-			_projects = projects;
-			_shifts = shifts;
-			_subModules = subModules;
-			_typeShifts = typeShifts;
+				StartDate = StartDateTime.ToString("dd.MM.yyyy");
+				StartTime = StartDateTime.ToString("HH:mm:ss");
+				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
+				EndTime = EndDateTime?.ToString("HH:mm:ss");
+				TotalTime = TimeSpan.FromSeconds(DurationSec);
+			}
 		}
-		public string? StartDate { get; set; }
-		public string? StartTime { get; set; }
-		public string? EndDate { get; set; }
-
-		private int _activityIndex { get; set; }
 		public int ActivityIndex
 		{
 			get => _activityIndex;
@@ -65,7 +128,8 @@ namespace TimeTracker.Windows.Models
 				}
 			}
 		}
-		private int _projectIndex;
+
+		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
 		public int ProjectIndex
 		{
 			get => _projectIndex;
@@ -89,7 +153,7 @@ namespace TimeTracker.Windows.Models
 				}
 			}
 		}
-		private int _shiftIndex;
+
 		public int ShiftIndex
 		{
 			get => _shiftIndex;
@@ -110,8 +174,6 @@ namespace TimeTracker.Windows.Models
 			}
 		}
 
-
-		private int _subModuleIndex;
 		public int SubModuleIndex
 		{
 			get => _subModuleIndex;
@@ -131,7 +193,7 @@ namespace TimeTracker.Windows.Models
 				}
 			}
 		}
-		private int _typeShiftIndex;
+
 		public int TypeShiftIndex
 		{
 			get => _typeShiftIndex;
@@ -151,38 +213,7 @@ namespace TimeTracker.Windows.Models
 				}
 			}
 		}
-		public string? EndTime { get; set; }
-		public TimeSpan? TotalTime { get; set; }
 
-		[ObservableProperty]
-		private Activity _activity;
-		[ObservableProperty]
-		private int _activityId;
-		[ObservableProperty]
-		public string? _description;
-
-		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
-		[ObservableProperty]
-		private DateTime? _endDateTime;
-		[ObservableProperty]
-		private Guid _guidId;
-		[ObservableProperty]
-		private Project? _project;
-		[ObservableProperty]
-		private int? _projectId;
-		[ObservableProperty]
-		private Shift? _shift;
-		[ObservableProperty]
-		private Guid? _shiftGuidId;
-		[ObservableProperty]
-		private DateTime _startDateTime;
-		[ObservableProperty]
-		private SubModule? _subModule;
-		[ObservableProperty]
-		private int? _subModuleId;
-		[ObservableProperty]
-		private TypeShift _typeShift;
-		[ObservableProperty]
-		private int? _typeShiftId;
+		private int _activityIndex { get; set; }
 	}
 }

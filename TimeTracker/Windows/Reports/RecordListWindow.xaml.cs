@@ -114,9 +114,14 @@ namespace TimeTracker.Windows.Reports
 			var editedRow = e.Row.Item as RecordActivityReport;
 			if (editedRow != null)
 			{
-				var recordActivity = new RecordActivity(editedRow.GuidId, editedRow.StartDateTime, editedRow.EndDateTime, editedRow.Activity, editedRow.TypeShift, editedRow.Shift, editedRow.Project, editedRow.SubModule, editedRow.Description);
+				var convertDataTrimeStringStart = Convert.ToDateTime(editedRow.StartDate).ToString("dd.MM.yyyy");
+				var startDateTime = Convert.ToDateTime(convertDataTrimeStringStart	+ " " + editedRow.StartTime);
+				var convertDataTrimeStringEnd = Convert.ToDateTime(editedRow.EndDate).ToString("dd.MM.yyyy");
+				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + editedRow.EndTime);
+
+				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, endDateTime, editedRow.Activity, editedRow.TypeShift, editedRow.Shift, editedRow.Project, editedRow.SubModule, editedRow.Description);
 				_recordProvider.SaveRecord(recordActivity);
-				RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = new RecordActivityReport(recordActivity)
+				var newRecordActivityReport = new RecordActivityReport(recordActivity)
 				{
 					Activity = editedRow.Activity,
 					ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
@@ -128,7 +133,9 @@ namespace TimeTracker.Windows.Reports
 					ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
 					SubModule = editedRow.SubModule,
 					SubModuleIndex = 0
-				});
+				};
+
+				RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
 			}
 		}
 	}

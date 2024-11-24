@@ -18,6 +18,7 @@
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/RecordListWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:ActivityConvert x:Key="activityConvert" />
+            <converters:DateTimeToDateConvert x:Key="dateTimeToDateConvert" />
 
             <Style x:Key="CellTemplate_TextBlock" TargetType="{x:Type TextBlock}">
                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -69,10 +70,10 @@
             d:ItemsSource="{d:SampleData ItemCount=5}"
             AutoGenerateColumns="False"
             BorderThickness="0"
+            CellEditEnding="dtgRecordActivities_CellEditEnding"
             CellStyle="{StaticResource BezOhraniceniCellStyle}"
             ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
-            GridLinesVisibility="Horizontal"
-           CellEditEnding="dtgRecordActivities_CellEditEnding">
+            GridLinesVisibility="Horizontal">
             <DataGrid.Columns>
                 <!--  Běžný editovatelný textový sloupec  -->
                 <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->
@@ -90,12 +91,20 @@
                 <DataGridTemplateColumn Width="100" Header="Start-date">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartDate}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding StartDate, Converter={StaticResource dateTimeToDateConvert}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='dd.MM.yyyy'}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePicker">
+                                        <Setter Property="Language" Value="cs-CZ" />
+                                        <Setter Property="FirstDayOfWeek" Value="Monday" />
+                                        <Setter Property="SelectedDateFormat" Value="Short" />
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -143,12 +152,20 @@
                 <DataGridTemplateColumn Width="100" Header="End-date">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate, Converter={StaticResource dateTimeToDateConvert}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding EndDate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePicker">
+                                        <Setter Property="Language" Value="cs-CZ" />
+                                        <Setter Property="FirstDayOfWeek" Value="Monday" />
+                                        <Setter Property="SelectedDateFormat" Value="Short" />
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -220,7 +237,7 @@
                 <DataGridTemplateColumn Width="100" Header="Shift">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}"  Text="{Binding Shift.StartDateLongStr}" />
+                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding Shift.StartDateLongStr}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -248,7 +265,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-   
+
                 <DataGridTemplateColumn Width="400" Header="Description">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -257,7 +274,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox  Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
+                            <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
