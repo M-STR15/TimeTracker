@@ -92,7 +92,9 @@
                             <Button
                                 Margin="5"
                                 Padding="5"
-                                Content="DELETE" />
+                                Content="DELETE" 
+                                Tag="{Binding GuidId}"
+                                x:Name="btnDelete" Click="btnDelete_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

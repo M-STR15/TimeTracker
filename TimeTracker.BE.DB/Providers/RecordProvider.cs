@@ -64,13 +64,16 @@ namespace TimeTracker.BE.DB.Providers
 
 				using (var context = new MainDatacontext())
 				{
-					recordActivity = context.RecordActivities.OrderBy(x => x.StartDateTime)
-						.Include(x => x.Project)
-						.Include(x => x.Activity)
-						.Include(x => x.Shift)
-						.Include(x => x.SubModule)
-						.Include(x => x.TypeShift)
-						.Last();
+					if (context.RecordActivities.Count() > 0)
+					{
+						recordActivity = context.RecordActivities.OrderBy(x => x.StartDateTime)
+							.Include(x => x.Project)
+							.Include(x => x.Activity)
+							.Include(x => x.Shift)
+							.Include(x => x.SubModule)
+							.Include(x => x.TypeShift)
+							.Last();
+					}
 				}
 
 				return recordActivity;
@@ -90,7 +93,7 @@ namespace TimeTracker.BE.DB.Providers
 				recordActivity.SubModule = null;
 				recordActivity.TypeShift = null;
 				recordActivity.Project = null;
-	
+
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)
@@ -104,6 +107,27 @@ namespace TimeTracker.BE.DB.Providers
 				UpdateRefreshEndTime();
 
 				return recordActivity;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+
+		public bool DeleteRecord(Guid guidId)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var selectRow = context.RecordActivities.FirstOrDefault(x => x.GuidId == guidId);
+					context.RecordActivities.Remove(selectRow);
+					context.SaveChanges();
+				}
+
+				UpdateRefreshEndTime();
+
+				return true;
 			}
 			catch (Exception ex)
 			{

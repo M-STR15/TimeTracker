@@ -20,7 +20,7 @@ namespace TimeTracker.BE.DB.Models
 
 		public RecordActivity()
 		{
-			GuidId = Guid.NewGuid();
+			GuidId = Guid.Empty;
 		}
 
 		public RecordActivity(DateTime startTime, int activityId, string description = "") : this()
@@ -96,11 +96,11 @@ namespace TimeTracker.BE.DB.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
 
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public virtual string? EndDate
-		{
-			get => EndDateTime?.ToString("dd.MM.yyyy");
-		}
+		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		//public virtual string? EndDate
+		//{
+		//	get => EndDateTime?.ToString("dd.MM.yyyy");
+		//}
 
 		[Column("End_DateTime")]
 		public virtual DateTime? EndDateTime
@@ -113,11 +113,11 @@ namespace TimeTracker.BE.DB.Models
 			}
 		}
 
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public virtual string? EndTime
-		{
-			get => EndDateTime?.ToString("HH:mm:ss");
-		}
+		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		//public virtual string? EndTime
+		//{
+		//	get => EndDateTime?.ToString("HH:mm:ss");
+		//}
 
 		[Key]
 		[Column("Guid_ID")]
@@ -151,11 +151,11 @@ namespace TimeTracker.BE.DB.Models
 					_startDateTime = value;
 			}
 		}
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public virtual string StartTime
-		{
-			get => StartDateTime.ToString("HH:mm:ss");
-		}
+		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		//public virtual string StartTime
+		//{
+		//	get => StartDateTime.ToString("HH:mm:ss");
+		//}
 		[ForeignKey("SubModuleId")]
 		public virtual SubModule? SubModule { get; set; }
 

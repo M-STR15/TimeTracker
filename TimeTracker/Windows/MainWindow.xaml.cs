@@ -64,7 +64,7 @@ namespace TimeTracker.Windows
 
 			_lastRecordActivity = _recordProvider.GetLastRecordActivity();
 
-			if (_lastRecordActivity.ActivityId != (int)eActivity.Stop)
+			if (_lastRecordActivity!=null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
 				_dispatcherTimer.Start();
 
 		}
@@ -113,7 +113,7 @@ namespace TimeTracker.Windows
 
 				return result != null;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				return false;
 			}
@@ -347,29 +347,32 @@ namespace TimeTracker.Windows
 		private void setLabels()
 		{
 			setlblTime();
-			lblActivity.Text = _lastRecordActivity.Activity?.Name ?? "";
-			lblProject.Text = _lastRecordActivity.Project?.Name ?? "";
-			lblSubModule.Text = _lastRecordActivity.SubModule?.Name ?? "";
-			lblStartTime_time.Text = _lastRecordActivity?.StartDateTime.ToString("HH:mm:ss");
-			lblStartTime_date.Text = _lastRecordActivity?.StartDateTime.ToString("dd.MM.yy");
-
-			var shift = _lastRecordActivity?.Shift;
-
-			if (shift != null)
+			if (_lastRecordActivity != null)
 			{
-				var cmdShift = new ShiftCmb(shift);
-				lblShift_date.Text = cmdShift?.StartDateStr ?? "";
-			}
-			else
-			{
-				lblShift_date.Text = "";
+				lblActivity.Text = _lastRecordActivity.Activity?.Name ?? "";
+				lblProject.Text = _lastRecordActivity.Project?.Name ?? "";
+				lblSubModule.Text = _lastRecordActivity.SubModule?.Name ?? "";
+				lblStartTime_time.Text = _lastRecordActivity?.StartDateTime.ToString("HH:mm:ss");
+				lblStartTime_date.Text = _lastRecordActivity?.StartDateTime.ToString("dd.MM.yy");
+
+				var shift = _lastRecordActivity?.Shift;
+
+				if (shift != null)
+				{
+					var cmdShift = new ShiftCmb(shift);
+					lblShift_date.Text = cmdShift?.StartDateStr ?? "";
+				}
+				else
+				{
+					lblShift_date.Text = "";
+				}
 			}
 		}
 		private void setlblTime()
 		{
 			var actualActivityInSeconds = 0.00;
 
-			if (_lastRecordActivity.ActivityId != (int)eActivity.Stop)
+			if (_lastRecordActivity != null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
 			{
 				var time = (DateTime.Now - _lastRecordActivity.StartDateTime);
 				actualActivityInSeconds = time.TotalSeconds;
@@ -383,29 +386,32 @@ namespace TimeTracker.Windows
 
 			lblTotalTime.Content = TimeSpan.FromSeconds(_totalActivityTimeBeforeInSecond + actualActivityInSeconds).ToString(@"hh\:mm\:ss");
 
-			var selShift = _lastRecordActivity.Shift;
-			var activity = (eActivity)_lastRecordActivity.ActivityId;
+			if (_lastRecordActivity != null)
+			{
+				var selShift = _lastRecordActivity.Shift;
+				var activity = (eActivity)_lastRecordActivity.ActivityId;
 
-			var workHours_actual = (activity == eActivity.Start) ? actualActivityInSeconds : 0;
-			var pauseHours_actual = (activity == eActivity.Pause) ? actualActivityInSeconds : 0;
+				var workHours_actual = (activity == eActivity.Start) ? actualActivityInSeconds : 0;
+				var pauseHours_actual = (activity == eActivity.Pause) ? actualActivityInSeconds : 0;
 
-			var filterToday = DateTime.Now;
-			var workHours_fromDB = _reportProvider.GetWorkHours(filterToday);
-			var pauseHours_fromDB = _reportProvider.GetPauseHours(filterToday);
+				var filterToday = DateTime.Now;
+				var workHours_fromDB = _reportProvider.GetWorkHours(filterToday);
+				var pauseHours_fromDB = _reportProvider.GetPauseHours(filterToday);
 
-			var workShiftHours_actual = getTimeShift(selShift, eActivity.Start, actualActivityInSeconds);
-			var pauseShifteHours_actual = getTimeShift(selShift, eActivity.Pause, actualActivityInSeconds);
+				var workShiftHours_actual = getTimeShift(selShift, eActivity.Start, actualActivityInSeconds);
+				var pauseShifteHours_actual = getTimeShift(selShift, eActivity.Pause, actualActivityInSeconds);
 
-			var workShiftHours_fromDB = selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0;
-			var pauseShiftHours_fromDB = selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0;
+				var workShiftHours_fromDB = selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0;
+				var pauseShiftHours_fromDB = selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0;
 
-			lblWorkerTime.Content = TimeSpan.FromSeconds(workHours_fromDB + workHours_actual).ToString(@"hh\:mm\:ss");
-			lblPauseTime.Content = TimeSpan.FromSeconds(pauseHours_fromDB + pauseHours_actual).ToString(@"hh\:mm\:ss");
-			lblTotalTime.Content = TimeSpan.FromSeconds(workHours_fromDB + pauseHours_fromDB + workHours_actual + pauseHours_actual).ToString(@"hh\:mm\:ss");
+				lblWorkerTime.Content = TimeSpan.FromSeconds(workHours_fromDB + workHours_actual).ToString(@"hh\:mm\:ss");
+				lblPauseTime.Content = TimeSpan.FromSeconds(pauseHours_fromDB + pauseHours_actual).ToString(@"hh\:mm\:ss");
+				lblTotalTime.Content = TimeSpan.FromSeconds(workHours_fromDB + pauseHours_fromDB + workHours_actual + pauseHours_actual).ToString(@"hh\:mm\:ss");
 
-			lblWorkShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual).ToString(@"hh\:mm\:ss");
-			lblPauseShiftTime.Content = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
-			lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
+				lblWorkShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual).ToString(@"hh\:mm\:ss");
+				lblPauseShiftTime.Content = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
+				lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
+			}
 		}
 
 		private double getTimeShift(Shift? shift, eActivity activity, double actualActivityInSeconds)

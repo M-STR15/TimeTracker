@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
@@ -21,6 +23,8 @@ namespace TimeTracker.Windows.Reports
 		private RecordProvider _recordProvider { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
 		public List<RecordActivityReport> RecordActivityReportList { get; set; }
+
+		public ICollectionView RecordActivityReportListcollectionView { get; set; }
 
 		public RecordListWindow(MainStory mainStore)
 		{
@@ -45,9 +49,17 @@ namespace TimeTracker.Windows.Reports
 			var typeShifts = shiftProvider.GetTypeShifts();
 			TypeShifts = convertCollection<TypeShift>(typeShifts, false);
 
-			createList();
+			setRecordActivityReportList();
+			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
+			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
 
 			DataContext = this;
+		}
+
+		private void setRecordActivityReportList()
+		{
+			RecordActivityReportList = getRecordActivityReportList();
+			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
 
 		private ICollection<T> convertCollection<T>(ICollection<T> collection, bool emptyValue = true)
@@ -67,10 +79,10 @@ namespace TimeTracker.Windows.Reports
 		}
 		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			createList();
+			setRecordActivityReportList();
 		}
 
-		private void createList()
+		private List<RecordActivityReport> getRecordActivityReportList()
 		{
 			if (cmbMonth.Text != "")
 			{
@@ -90,11 +102,11 @@ namespace TimeTracker.Windows.Reports
 						;
 					}).ToList();
 
-					RecordActivityReportList = list;
-					dtgRecordActivities.ItemsSource = RecordActivityReportList;
+					return list;
 				}
-				lblCount.Content = (origList?.Count ?? 0).ToString();
 			}
+
+			return new List<RecordActivityReport>();
 		}
 
 		private int getIndex<T>(IEnumerable<T> collection, int? objectId)
@@ -115,7 +127,7 @@ namespace TimeTracker.Windows.Reports
 			if (editedRow != null)
 			{
 				var convertDataTrimeStringStart = Convert.ToDateTime(editedRow.StartDate).ToString("dd.MM.yyyy");
-				var startDateTime = Convert.ToDateTime(convertDataTrimeStringStart	+ " " + editedRow.StartTime);
+				var startDateTime = Convert.ToDateTime(convertDataTrimeStringStart + " " + editedRow.StartTime);
 				var convertDataTrimeStringEnd = Convert.ToDateTime(editedRow.EndDate).ToString("dd.MM.yyyy");
 				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + editedRow.EndTime);
 
@@ -140,8 +152,33 @@ namespace TimeTracker.Windows.Reports
 				if (index >= 0)
 					RecordActivityReportList[index] = newRecordActivityReport;
 
-
+				//RecordActivityReportListcollectionView.Refresh();
 				//RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
+			}
+		}
+
+		private void btnDelete_Click(object sender, RoutedEventArgs e)
+		{
+			try
+			{
+				if (sender is Button btn)
+				{
+					var guidDeleteRow = Guid.Parse(btn.Tag.ToString());
+					var result = _recordProvider.DeleteRecord(guidDeleteRow);
+					if (result)
+					{
+						var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
+						if (findRow != null)
+						{
+							RecordActivityReportList.Remove(findRow);
+							RecordActivityReportListcollectionView.Refresh();
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+
 			}
 		}
 	}

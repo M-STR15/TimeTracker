@@ -11,8 +11,8 @@ using TimeTracker.BE.DB.DataAccess;
 namespace TimeTracker.BE.DB.Migrations
 {
     [DbContext(typeof(MainDatacontext))]
-    [Migration("20241124150039_Mod2")]
-    partial class Mod2
+    [Migration("20241125210303_InicializeCreate")]
+    partial class InicializeCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
