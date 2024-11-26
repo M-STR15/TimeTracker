@@ -57,7 +57,7 @@ namespace TimeTracker.BE.DB.Models
 			GuidId = guidId;
 		}
 
-		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid shiftGuidId, string description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid? shiftGuidId, DateTime? endDateTime=null, string? description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
 		{
 			GuidId = guidId;
 			ShiftGuidId = shiftGuidId;

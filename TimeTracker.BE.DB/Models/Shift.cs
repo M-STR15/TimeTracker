@@ -41,5 +41,10 @@ namespace TimeTracker.BE.DB.Models
 			Description = description;
 			TypeShiftId = typeShiftId;
 		}
+
+		public override string ToString()
+		{
+			return StartDate.ToString();
+		}
 	}
 }

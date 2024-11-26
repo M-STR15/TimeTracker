@@ -33,5 +33,10 @@ namespace TimeTracker.BE.DB.Models
             Color = color;
             IsVisibleInMainWindow = isVisibleInMainWindow;
         }
-    }
+
+		public override string ToString()
+		{
+			return Name.ToString();
+		}
+	}
 }

@@ -33,6 +33,28 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		public RecordActivity GetRecord(Guid guidId)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivitiy = context.RecordActivities
+					.Include(x => x.Project)
+					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
+					.OrderBy(x => x.StartDateTime).FirstOrDefault(x => x.GuidId == guidId);
+
+					return recordActivitiy;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
 		public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
 		{
 			try
@@ -88,13 +110,14 @@ namespace TimeTracker.BE.DB.Providers
 		{
 			try
 			{
+				var findValue = recordActivity;
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)
 					{
-						var findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
+						findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
 						findValue.SetBasicValues(recordActivity);
-						//context.RecordActivities.Update(recordActivity);
+						context.RecordActivities.Update(findValue);
 					}
 					else
 					{
@@ -106,7 +129,8 @@ namespace TimeTracker.BE.DB.Providers
 
 				UpdateRefreshEndTime();
 
-				return recordActivity;
+				var getDat= GetRecord(recordActivity.GuidId);
+				return getDat;
 			}
 			catch (Exception ex)
 			{

@@ -16,10 +16,10 @@ namespace TimeTracker.Windows.Reports
 	public partial class RecordListWindow : Window
 	{
 		private MainStory _mainStoru;
-		public ICollection<Activity> Activities { get; set; }
-		public ICollection<Project> Projects { get; set; }
-		public ICollection<Shift> Shifts { get; set; }
-		public ICollection<TypeShift> TypeShifts { get; set; }
+		public List<Activity> Activities { get; set; }
+		public List<Project> Projects { get; set; }
+		public List<Shift> Shifts { get; set; }
+		public List<TypeShift> TypeShifts { get; set; }
 		private RecordProvider _recordProvider { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
 		public List<RecordActivityReport> RecordActivityReportList { get; set; }
@@ -40,14 +40,14 @@ namespace TimeTracker.Windows.Reports
 
 			var projectProvider = new ProjectProvider();
 			var projects = projectProvider.GetProjects();
-			Projects = convertCollection<Project>(projects);
+			Projects = convertCollection<Project>(projects).ToList();
 
 			var shiftProvider = new ShiftProvider();
 			var shifts = shiftProvider.GetShifts();
-			Shifts = convertCollection<Shift>(shifts);
+			Shifts = convertCollection<Shift>(shifts).ToList();
 
 			var typeShifts = shiftProvider.GetTypeShifts();
-			TypeShifts = convertCollection<TypeShift>(typeShifts, false);
+			TypeShifts = convertCollection<TypeShift>(typeShifts, false).ToList();
 
 			setRecordActivityReportList();
 			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
@@ -131,19 +131,22 @@ namespace TimeTracker.Windows.Reports
 				var convertDataTrimeStringEnd = Convert.ToDateTime(editedRow.EndDate).ToString("dd.MM.yyyy");
 				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + editedRow.EndTime);
 
-				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, endDateTime, editedRow.Activity, editedRow.TypeShift, editedRow.Shift, editedRow.Project, editedRow.SubModule, editedRow.Description);
-				_recordProvider.SaveRecord(recordActivity);
-				var newRecordActivityReport = new RecordActivityReport(recordActivity)
+				var activityId = (Activities[editedRow.ActivityIndex]).Id;
+				var typeShiftId = (TypeShifts[editedRow.TypeShiftIndex]).Id;
+				var shiftGuidId = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
+				var projectId = (Projects[editedRow.ProjectIndex]).Id;
+				var subModuleId = 0;
+
+
+				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, null, shiftGuidId, editedRow.EndDateTime, editedRow?.Description);
+
+				var updateRecordAct = _recordProvider.SaveRecord(recordActivity);
+				var newRecordActivityReport = new RecordActivityReport(updateRecordAct)
 				{
-					Activity = editedRow.Activity,
 					ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
-					TypeShift = editedRow.TypeShift,
 					TypeShiftIndex = getIndex(TypeShifts, editedRow?.TypeShift?.Id),
-					Shift = editedRow.Shift,
 					ShiftIndex = getIndex(Shifts, editedRow?.Shift?.GuidId),
-					Project = editedRow.Project,
 					ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
-					SubModule = editedRow.SubModule,
 					SubModuleIndex = 0
 				};
 
@@ -154,6 +157,29 @@ namespace TimeTracker.Windows.Reports
 
 				//RecordActivityReportListcollectionView.Refresh();
 				//RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
+
+				// Dokončení úprav aktuálního řádku
+				dtgRecordActivities.Dispatcher.BeginInvoke(new Action(() =>
+				{
+					dtgRecordActivities.CommitEdit(DataGridEditingUnit.Row, true);
+					RecordActivityReportListcollectionView.Refresh();
+				}), System.Windows.Threading.DispatcherPriority.Background);
+
+				//// Odložení volání Refresh po dokončení úprav
+				//Dispatcher.BeginInvoke(new Action(() =>
+				//{
+				//	if (RecordActivityReportListcollectionView != null)
+				//	{
+				//		try
+				//		{
+				//			RecordActivityReportListcollectionView.Refresh();
+				//		}
+				//		catch (Exception ex)
+				//		{
+				//			MessageBox.Show($"Chyba při obnově dat: {ex.Message}");
+				//		}
+				//	}
+				//}), System.Windows.Threading.DispatcherPriority.Background);
 			}
 		}
 
