@@ -90,11 +90,12 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
+                                x:Name="btnDelete"
                                 Margin="5"
                                 Padding="5"
-                                Content="DELETE" 
-                                Tag="{Binding GuidId}"
-                                x:Name="btnDelete" Click="btnDelete_Click"/>
+                                Click="btnDelete_Click"
+                                Content="DELETE"
+                                Tag="{Binding GuidId}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

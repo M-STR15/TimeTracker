@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Enums;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
 namespace TimeTracker.Windows.Models
@@ -66,8 +67,22 @@ namespace TimeTracker.Windows.Models
 
 		private int _subModuleIndex;
 
-		[ObservableProperty]
-		private TimeSpan? _totalTime;
+		public TimeSpan? TotalTime
+		{
+			get
+			{
+				var duration = 0.00;
+				if (ActivityId != (int)eActivity.Stop)
+				{
+					duration = EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+					return TimeSpan.FromSeconds(duration);
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
 
 		[ObservableProperty]
 		private TypeShift _typeShift;
@@ -99,16 +114,15 @@ namespace TimeTracker.Windows.Models
 				ShiftGuidId = recordActivity.ShiftGuidId;
 				Description = recordActivity?.Description;
 				StartDateTime = recordActivity?.StartDateTime ?? DateTime.Now;
-				EndDateTime = recordActivity?.EndDateTime ?? DateTime.Now;
+				if (ActivityId != (int)eActivity.Stop)
+					EndDateTime = recordActivity?.EndDateTime ?? null;
+
 				TypeShiftId = TypeShift?.Id ?? null;
 
 				StartDate = StartDateTime.ToString("dd.MM.yyyy");
 				StartTime = StartDateTime.ToString("HH:mm:ss");
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
-				var durationSec = EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
-				//TotalTime = null;
-				TotalTime = TimeSpan.FromSeconds(durationSec);
 
 				//OnPropertyChanged(nameof(TotalTime));
 			}

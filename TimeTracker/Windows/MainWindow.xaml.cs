@@ -64,7 +64,7 @@ namespace TimeTracker.Windows
 
 			_lastRecordActivity = _recordProvider.GetLastRecordActivity();
 
-			if (_lastRecordActivity!=null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
+			if (_lastRecordActivity != null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
 				_dispatcherTimer.Start();
 
 		}
@@ -103,7 +103,7 @@ namespace TimeTracker.Windows
 				if (shift != null && shift.GuidId != Guid.Empty)
 					record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
 				else
-					record = new RecordActivity(startTimeActivity, activity.Id, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
+					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
 				var result = _recordProvider.SaveRecord(record);
 				if (result != null)
@@ -219,11 +219,11 @@ namespace TimeTracker.Windows
 					Name = eActivity.Stop.ToString()
 				};
 
-				var selTypeShift = _lastRecordActivity.TypeShift;
-				var selShift = _lastRecordActivity.Shift;
-				var selProject = _lastRecordActivity.Project;
-				var selSubmodule = _lastRecordActivity.SubModule;
-				var selRecordActivity = new RecordActivity(startTimeActivity, null, activity, selTypeShift, selShift, selProject, selSubmodule);
+				//var selTypeShift = _lastRecordActivity.TypeShift;
+				//var selShift = _lastRecordActivity.Shift;
+				//var selProject = _lastRecordActivity.Project;
+				//var selSubmodule = null;
+				var selRecordActivity = new RecordActivity(startTimeActivity, null, activity, null, null, null, null);
 
 				var result = addActivite(selRecordActivity);
 				if (result)

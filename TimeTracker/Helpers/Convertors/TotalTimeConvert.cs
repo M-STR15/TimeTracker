@@ -7,9 +7,14 @@ namespace TimeTracker.Helpers.Convertors
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			
-				return value;
-			
+			if (value!=null && value is TimeSpan timeSpanValue)
+			{
+				return timeSpanValue.ToString(@"hh\:mm\:ss");
+			}
+			else
+			{
+				return "";
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

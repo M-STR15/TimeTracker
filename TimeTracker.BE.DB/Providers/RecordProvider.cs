@@ -88,18 +88,18 @@ namespace TimeTracker.BE.DB.Providers
 		{
 			try
 			{
-				recordActivity.Activity = null;
-				recordActivity.Shift = null;
-				recordActivity.SubModule = null;
-				recordActivity.TypeShift = null;
-				recordActivity.Project = null;
-
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)
-						context.RecordActivities.Update(recordActivity);
+					{
+						var findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
+						findValue.SetBasicValues(recordActivity);
+						//context.RecordActivities.Update(recordActivity);
+					}
 					else
+					{
 						context.RecordActivities.Add(recordActivity);
+					}
 
 					context.SaveChanges();
 				}
@@ -150,7 +150,7 @@ namespace TimeTracker.BE.DB.Providers
 					for (int i = 0; i < recordActivities.Count - 1; i++)
 					{
 						var currentItem = recordActivities[i];
-						if (allowedActivities.Any(x => x == currentItem.ActivityId))
+						if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
 						{
 							var nextItem = recordActivities[i + 1];
 
