@@ -25,9 +25,14 @@ namespace TimeTracker.BE.DB.Models
 			GuidId = Guid.Empty;
 		}
 
+		private DateTime modFormatDatetime(DateTime st)
+		{
+			return new DateTime(st.Year, st.Month, st.Day, st.Hour, st.Minute, st.Second);
+		}
+
 		public RecordActivity(DateTime startTime, int activityId, string description = "") : this()
 		{
-			StartDateTime = startTime;
+			StartDateTime = modFormatDatetime(startTime);
 			ActivityId = activityId;
 			Description = description;
 		}
@@ -57,18 +62,18 @@ namespace TimeTracker.BE.DB.Models
 			GuidId = guidId;
 		}
 
-		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid? shiftGuidId, DateTime? endDateTime=null, string? description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid? shiftGuidId, DateTime? endDateTime = null, string? description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
 		{
 			GuidId = guidId;
 			ShiftGuidId = shiftGuidId;
 		}
 
-		public RecordActivity(Guid guidId, DateTime startDateTime, DateTime? endDateTime, Activity activity, TypeShift typeShift, Shift? shift = null, Project? project = null, SubModule? subModule = null, string description = "") : this(startDateTime, endDateTime, activity, typeShift, shift, project, subModule, description)
+		public RecordActivity(Guid guidId, DateTime startDateTime, DateTime? endDateTime, Activity activity, TypeShift typeShift, Shift? shift = null, Project? project = null, SubModule? subModule = null, string description = "") : this(startDateTime, activity, typeShift, shift, project, subModule, description, endDateTime)
 		{
 			GuidId = guidId;
 		}
 
-		public RecordActivity(DateTime startDateTime, DateTime? endDateTime, Activity activity, TypeShift typeShift, Shift? shift = null, Project? project = null, SubModule? subModule = null, string description = "") : this()
+		public RecordActivity(DateTime startDateTime, Activity activity, TypeShift? typeShift = null, Shift? shift = null, Project? project = null, SubModule? subModule = null, string description = "", DateTime? endDateTime = null) : this()
 		{
 			Activity = activity;
 			Project = project;
@@ -81,7 +86,7 @@ namespace TimeTracker.BE.DB.Models
 			SubModuleId = subModule?.Id ?? null;
 			ShiftGuidId = shift?.GuidId ?? null;
 			Description = description;
-			StartDateTime = startDateTime;
+			StartDateTime = modFormatDatetime(startDateTime);
 			EndDateTime = endDateTime;
 			TypeShiftId = typeShift?.Id ?? null;
 		}
@@ -94,7 +99,7 @@ namespace TimeTracker.BE.DB.Models
 			SubModuleId = recordActivity.SubModuleId;
 			ShiftGuidId = recordActivity.ShiftGuidId;
 			Description = recordActivity.Description;
-			StartDateTime = recordActivity.StartDateTime;
+			StartDateTime = modFormatDatetime(recordActivity.StartDateTime);
 			EndDateTime = recordActivity.EndDateTime;
 			TypeShiftId = recordActivity.TypeShiftId;
 		}

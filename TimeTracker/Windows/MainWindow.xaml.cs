@@ -192,7 +192,7 @@ namespace TimeTracker.Windows
 				var selTypeShift = (TypeShift)cmbTypeShift.SelectedItem;
 
 				var description = getTextFromRichTextBox(rtbDescription);
-				var selRecordActivity = new RecordActivity(startTimeActivity, null, activity, selTypeShift, selShift, selProject, selSubmodule, description);
+				var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule, description);
 
 				var result = addActivite(selRecordActivity);
 				if (result)
@@ -219,11 +219,7 @@ namespace TimeTracker.Windows
 					Name = eActivity.Stop.ToString()
 				};
 
-				//var selTypeShift = _lastRecordActivity.TypeShift;
-				//var selShift = _lastRecordActivity.Shift;
-				//var selProject = _lastRecordActivity.Project;
-				//var selSubmodule = null;
-				var selRecordActivity = new RecordActivity(startTimeActivity, null, activity, null, null, null, null);
+				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
 				var result = addActivite(selRecordActivity);
 				if (result)
@@ -249,11 +245,7 @@ namespace TimeTracker.Windows
 					Name = eActivity.Pause.ToString()
 				};
 
-				var selTypeShift = _lastRecordActivity.TypeShift;
-				var selShift = _lastRecordActivity.Shift;
-				var selProject = _lastRecordActivity.Project;
-				var selSubmodule = _lastRecordActivity.SubModule;
-				var selRecordActivity = new RecordActivity(startTimeActivity, null, activity, selTypeShift, selShift, selProject, selSubmodule);
+				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
 				var result = addActivite(selRecordActivity);
 				if (result)
