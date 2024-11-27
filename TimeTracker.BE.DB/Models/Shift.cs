@@ -7,7 +7,7 @@ namespace TimeTracker.BE.DB.Models
 	[Index(nameof(StartDate), IsUnique = true)]
 	[Table("Shifts", Schema = "dbo")]
 	[Comment("Tabulka slouží k naplánování směny.")]
-	public class Shift: IIdentifiableGuid
+	public class Shift : Stamp, IIdentifiableGuid
 	{
 		[Key]
 		[Column("Guid_ID")]
@@ -17,7 +17,7 @@ namespace TimeTracker.BE.DB.Models
 		[Column("Start_date")]
 		public DateTime StartDate { get; set; }
 		[NotMapped]
-		public string StartDateLongStr { get => (GuidId==Guid.Empty ? "": StartDate.Date.ToString("dd.MM.yyyy")); }
+		public string StartDateLongStr { get => (GuidId == Guid.Empty ? "" : StartDate.Date.ToString("dd.MM.yyyy")); }
 
 		public string? Description { get; set; }
 
@@ -30,7 +30,7 @@ namespace TimeTracker.BE.DB.Models
 		[ForeignKey("TypeShiftId")]
 		public TypeShift TypeShift { get; set; }
 
-		public Shift()
+		public Shift() : base()
 		{
 		}
 

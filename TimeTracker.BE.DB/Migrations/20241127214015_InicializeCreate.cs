@@ -101,7 +101,8 @@ namespace TimeTracker.BE.DB.Migrations
                     Start_date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: false),
-                    ShiftGuidId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    ShiftGuidId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Stamp_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,7 +136,8 @@ namespace TimeTracker.BE.DB.Migrations
                     Shift_GuidID = table.Column<Guid>(type: "TEXT", nullable: true),
                     Start_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SubModule_ID = table.Column<int>(type: "INTEGER", nullable: true),
-                    TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: true)
+                    TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Stamp_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -209,19 +211,19 @@ namespace TimeTracker.BE.DB.Migrations
             migrationBuilder.InsertData(
                 schema: "dbo",
                 table: "Shifts",
-                columns: new[] { "Guid_ID", "Description", "ShiftGuidId", "Start_date", "TypeShift_ID" },
+                columns: new[] { "Guid_ID", "Description", "ShiftGuidId", "Stamp_DateTime", "Start_date", "TypeShift_ID" },
                 values: new object[,]
                 {
-                    { new Guid("31402227-1064-4455-872f-df218a85aca3"), null, null, new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { new Guid("68dbc51a-9546-4450-bf46-e614397021e4"), null, null, new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { new Guid("865370c2-1115-4b23-b4c9-f7cdebbbe86d"), null, null, new DateTime(2024, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { new Guid("9ad8ec6d-6bd8-4cf5-b681-c46c86c508f3"), null, null, new DateTime(2024, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { new Guid("a634ce0f-ab0c-4061-babb-70f656277fa1"), null, null, new DateTime(2024, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
-                    { new Guid("a9f6f060-c255-43e5-b5d5-e9d7860ab14d"), null, null, new DateTime(2024, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { new Guid("d10f4bf4-c1a4-404b-9213-803ad4cee509"), null, null, new DateTime(2024, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { new Guid("d434a034-f93d-4f68-a69a-60243a16d21d"), null, null, new DateTime(2024, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
-                    { new Guid("d917a220-5a2c-401c-90cc-c746aaada412"), null, null, new DateTime(2024, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
-                    { new Guid("fa1db3cb-f2c4-4efd-aee9-cd3487366229"), null, null, new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 }
+                    { new Guid("31402227-1064-4455-872f-df218a85aca3"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8796), new DateTime(2024, 11, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { new Guid("68dbc51a-9546-4450-bf46-e614397021e4"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8787), new DateTime(2024, 11, 4, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
+                    { new Guid("865370c2-1115-4b23-b4c9-f7cdebbbe86d"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8823), new DateTime(2024, 11, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { new Guid("9ad8ec6d-6bd8-4cf5-b681-c46c86c508f3"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8767), new DateTime(2024, 11, 2, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { new Guid("a634ce0f-ab0c-4061-babb-70f656277fa1"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8814), new DateTime(2024, 11, 9, 0, 0, 0, 0, DateTimeKind.Unspecified), 3 },
+                    { new Guid("a9f6f060-c255-43e5-b5d5-e9d7860ab14d"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8831), new DateTime(2024, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
+                    { new Guid("d10f4bf4-c1a4-404b-9213-803ad4cee509"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8840), new DateTime(2024, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { new Guid("d434a034-f93d-4f68-a69a-60243a16d21d"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8805), new DateTime(2024, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 },
+                    { new Guid("d917a220-5a2c-401c-90cc-c746aaada412"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8777), new DateTime(2024, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), 2 },
+                    { new Guid("fa1db3cb-f2c4-4efd-aee9-cd3487366229"), null, null, new DateTime(2024, 11, 27, 22, 40, 14, 639, DateTimeKind.Local).AddTicks(8748), new DateTime(2024, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1 }
                 });
 
             migrationBuilder.InsertData(
