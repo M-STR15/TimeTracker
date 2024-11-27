@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using TimeTracker.BE.DB.Models.Enums;
 
 namespace TimeTracker.BE.DB.Models
 {
@@ -116,12 +114,6 @@ namespace TimeTracker.BE.DB.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
 
-		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		//public virtual string? EndDate
-		//{
-		//	get => EndDateTime?.ToString("dd.MM.yyyy");
-		//}
-
 		[Column("End_DateTime")]
 		public virtual DateTime? EndDateTime
 		{
@@ -132,12 +124,6 @@ namespace TimeTracker.BE.DB.Models
 					_endDateTime = value;
 			}
 		}
-
-		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		//public virtual string? EndTime
-		//{
-		//	get => EndDateTime?.ToString("HH:mm:ss");
-		//}
 
 		[Key]
 		[Column("Guid_ID")]
@@ -171,11 +157,7 @@ namespace TimeTracker.BE.DB.Models
 					_startDateTime = value;
 			}
 		}
-		//[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		//public virtual string StartTime
-		//{
-		//	get => StartDateTime.ToString("HH:mm:ss");
-		//}
+
 		[ForeignKey("SubModuleId")]
 		public virtual SubModule? SubModule { get; set; }
 
