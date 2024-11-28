@@ -26,36 +26,44 @@ namespace TimeTracker.Windows
 		public SettingWindow(MainStory mainStory)
 		{
 			_eventLogService = new EventLogService();
-			_mainStory = mainStory;
-			_projectProvider = _mainStory.ContainerStore.GetProjectProvider();
+			try
+			{
+				_mainStory = mainStory;
+				_projectProvider = _mainStory.ContainerStore.GetProjectProvider();
 
-			InitializeComponent();
+				InitializeComponent();
 
-			ProjectListBox = new ObservableCollection<ProjectListBox>();
-			SubModuleListBox = new ObservableCollection<SubModuleListBox>();
+				ProjectListBox = new ObservableCollection<ProjectListBox>();
+				SubModuleListBox = new ObservableCollection<SubModuleListBox>();
 
-			loadProjects();
-			setProjectItemsView();
-			setSubModulesItemsView();
+				loadProjects();
+				setProjectItemsView();
+				setSubModulesItemsView();
 
-			CmdProjectSave = new RelayCommand(onSaveProject_Click);
-			CmdSubModuleSave = new RelayCommand(onSaveSubModule_Click);
+				CmdProjectSave = new RelayCommand(onSaveProject_Click);
+				CmdSubModuleSave = new RelayCommand(onSaveSubModule_Click);
 
-			DataContext = this;
+				DataContext = this;
 
-			PositionList.Add("H:Left-V:Top");
-			PositionList.Add("H:Left-V:Center");
-			PositionList.Add("H:Left-V:Bottom");
+				PositionList.Add("H:Left-V:Top");
+				PositionList.Add("H:Left-V:Center");
+				PositionList.Add("H:Left-V:Bottom");
 
-			PositionList.Add("H:Center-V:Top");
-			PositionList.Add("H:Center-V:Center");
-			PositionList.Add("H:Center-V:Bottom");
+				PositionList.Add("H:Center-V:Top");
+				PositionList.Add("H:Center-V:Center");
+				PositionList.Add("H:Center-V:Bottom");
 
-			PositionList.Add("H:Rght-V:Top");
-			PositionList.Add("H:Right-V:Center");
-			PositionList.Add("H:Right-V:Bottom");
+				PositionList.Add("H:Rght-V:Top");
+				PositionList.Add("H:Right-V:Center");
+				PositionList.Add("H:Right-V:Bottom");
 
-			cmbPositionList.ItemsSource = PositionList;
+				cmbPositionList.ItemsSource = PositionList;
+
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.WriteError(new Guid("333f942b-9655-4e66-a8ca-7b06bc5db7c4"), ex, "Problém při otvírání setting okna.");
+			}
 		}
 
 		public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
