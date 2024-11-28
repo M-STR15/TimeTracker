@@ -132,9 +132,9 @@ namespace TimeTracker.Windows.Reports
 				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + editedRow.EndTime);
 
 				var activityId = (Activities[editedRow.ActivityIndex]).Id;
-				var typeShiftId = (TypeShifts[editedRow.TypeShiftIndex]).Id;
+				var typeShiftId = (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
 				var shiftGuidId = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
-				var projectId = (Projects[editedRow.ProjectIndex]).Id;
+				var projectId = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
 				var subModuleId = 0;
 
 
