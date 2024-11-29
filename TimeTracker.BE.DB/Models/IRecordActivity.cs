@@ -20,7 +20,7 @@ namespace TimeTracker.BE.DB.Models
 		//string StartTime { get; }
 		SubModule? SubModule { get; set; }
 		int? SubModuleId { get; set; }
-		TypeShift TypeShift { get; set; }
+		TypeShift? TypeShift { get; set; }
 		int? TypeShiftId { get; set; }
 	}
 }

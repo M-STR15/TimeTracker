@@ -85,12 +85,48 @@ namespace TimeTracker.Windows.Models
 		}
 
 		[ObservableProperty]
-		private TypeShift _typeShift;
+		private TypeShift? _typeShift;
 
 		[ObservableProperty]
 		private int? _typeShiftId;
 
 		private int _typeShiftIndex;
+
+		public RecordActivityReport(RecordActivityReport recordActivityReport, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null) 
+		{
+			if (recordActivityReport != null)
+			{
+				_activities = activities;
+				_projects = projects;
+				_shifts = shifts;
+				_subModules = subModules;
+				_typeShifts = typeShifts;
+				GuidId = recordActivityReport.GuidId;
+				Activity = recordActivityReport.Activity;
+				Project = recordActivityReport.Project;
+				SubModule = recordActivityReport.SubModule;
+				Shift = recordActivityReport.Shift;
+				TypeShift = recordActivityReport.TypeShift;
+
+				ActivityId = recordActivityReport.ActivityId;
+				ProjectId = recordActivityReport.ProjectId;
+				SubModuleId = recordActivityReport.SubModuleId;
+				ShiftGuidId = recordActivityReport.ShiftGuidId;
+				Description = recordActivityReport?.Description;
+				StartDateTime = recordActivityReport?.StartDateTime ?? DateTime.Now;
+				if (ActivityId != (int)eActivity.Stop)
+					EndDateTime = recordActivityReport?.EndDateTime ?? null;
+
+				TypeShiftId = TypeShift?.Id ?? null;
+
+				StartDate = StartDateTime.ToString("dd.MM.yyyy");
+				StartTime = StartDateTime.ToString("HH:mm:ss");
+				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
+				EndTime = EndDateTime?.ToString("HH:mm:ss");
+
+				//OnPropertyChanged(nameof(TotalTime));
+			}
+		}
 
 		public RecordActivityReport(RecordActivity recordActivity, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
 		{

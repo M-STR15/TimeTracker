@@ -72,6 +72,10 @@
                 x:Name="cmbMonth"
                 Grid.Column="1"
                 SelectionChanged="onCmbMonth_SelectionChanged" />
+            <Button
+                Grid.Column="2"
+                Click="Button_Click"
+                Content="Refresh" />
         </Grid>
         <DataGrid
             x:Name="dtgRecordActivities"
@@ -82,7 +86,8 @@
             CellEditEnding="dtgRecordActivities_CellEditEnding"
             CellStyle="{StaticResource BezOhraniceniCellStyle}"
             ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
-            GridLinesVisibility="Horizontal">
+            GridLinesVisibility="Horizontal"
+            SelectedCellsChanged="dtgRecordActivities_SelectedCellsChanged">
             <DataGrid.Columns>
                 <!--  Běžný editovatelný textový sloupec  -->
                 <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->

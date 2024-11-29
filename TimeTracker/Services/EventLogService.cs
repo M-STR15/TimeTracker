@@ -21,7 +21,7 @@ namespace TimeTracker.Services
 		{
 			try
 			{
-				//_notification.Create(eNotificationType.Error, notificationMessange);
+				_notification.Create(eNotificationType.Error, notificationMessange);
 			}
 			catch (Exception)
 			{

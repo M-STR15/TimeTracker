@@ -116,8 +116,11 @@ namespace TimeTracker.BE.DB.Providers
 					if (recordActivity.GuidId != Guid.Empty)
 					{
 						findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
-						findValue.SetBasicValues(recordActivity);
-						context.RecordActivities.Update(findValue);
+						if (findValue != null)
+						{
+							findValue.SetBasicValues(recordActivity);
+							context.RecordActivities.Update(findValue);
+						}
 					}
 					else
 					{
@@ -129,7 +132,7 @@ namespace TimeTracker.BE.DB.Providers
 
 				UpdateRefreshEndTime();
 
-				var getDat= GetRecord(recordActivity.GuidId);
+				var getDat = GetRecord(recordActivity.GuidId);
 				return getDat;
 			}
 			catch (Exception ex)

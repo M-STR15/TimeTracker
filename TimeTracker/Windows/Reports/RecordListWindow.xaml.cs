@@ -6,6 +6,7 @@ using System.Windows.Data;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
+using TimeTracker.Services;
 using TimeTracker.Stories;
 using TimeTracker.Windows.Models;
 using TimeTracker.Windows.Reports.Services;
@@ -22,43 +23,58 @@ namespace TimeTracker.Windows.Reports
 		public List<TypeShift> TypeShifts { get; set; }
 		private RecordProvider _recordProvider { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
-		public List<RecordActivityReport> RecordActivityReportList { get; set; }
+		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 
 		public ICollectionView RecordActivityReportListcollectionView { get; set; }
 
+		private EventLogService _eventLogService;
+
 		public RecordListWindow(MainStory mainStore)
 		{
-			InitializeComponent();
-			_mainStoru = mainStore;
-			_recordProvider = _mainStoru.ContainerStore.GetRecordProvider();
-			_activityProvider = _mainStoru.ContainerStore.GetActivityProvider();
+			_eventLogService = new EventLogService();
+			try
+			{
+				InitializeComponent();
+				_mainStoru = mainStore;
+				_recordProvider = _mainStoru.ContainerStore.GetRecordProvider();
+				_activityProvider = _mainStoru.ContainerStore.GetActivityProvider();
 
-			Activities = _activityProvider.GetActivities();
-			new ObservableCollection<string>(Enum.GetNames<eActivity>());
-			cmbMonth.ItemsSource = new ReportParameterService().Monts;
-			cmbMonth.SelectedIndex = 0;
+				Activities = _activityProvider.GetActivities();
+				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
-			var projectProvider = new ProjectProvider();
-			var projects = projectProvider.GetProjects();
-			Projects = convertCollection<Project>(projects).ToList();
+				var projectProvider = new ProjectProvider();
+				var projects = projectProvider.GetProjects();
+				Projects = convertCollection<Project>(projects).ToList();
 
-			var shiftProvider = new ShiftProvider();
-			var shifts = shiftProvider.GetShifts();
-			Shifts = convertCollection<Shift>(shifts).ToList();
+				var shiftProvider = new ShiftProvider();
+				var shifts = shiftProvider.GetShifts();
+				Shifts = convertCollection<Shift>(shifts).ToList();
 
-			var typeShifts = shiftProvider.GetTypeShifts();
-			TypeShifts = convertCollection<TypeShift>(typeShifts, false).ToList();
+				var typeShifts = shiftProvider.GetTypeShifts();
+				TypeShifts = convertCollection<TypeShift>(typeShifts, false).ToList();
 
-			setRecordActivityReportList();
-			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
-			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
+				cmbMonth.ItemsSource = new ReportParameterService().Monts;
+				cmbMonth.SelectedIndex = 0;
 
-			DataContext = this;
+				setRecordActivityReportList();
+				RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
+				dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
+
+				DataContext = this;
+
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.WriteError(Guid.Parse("1acd3061-db78-4f29-befa-ea1f72d2a036"), null, "Problém se spouštěním record list window.");
+			}
 		}
 
 		private void setRecordActivityReportList()
 		{
-			RecordActivityReportList = getRecordActivityReportList();
+			var getRecordActiviList = getRecordActivityReportList();
+			if (getRecordActiviList != null)
+				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x)));
+
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
 
@@ -121,6 +137,22 @@ namespace TimeTracker.Windows.Reports
 			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.GuidId == objectId)?.index ?? -1;
 		}
 
+		private int? getProjectId(RecordActivityReport editedRow)
+		{
+			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
+			return result == 0 ? null : result;
+		}
+
+		private Guid? getShiftGuidId(RecordActivityReport editedRow)
+		{
+			var result = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
+			if (result == null)
+				return null;
+			else
+				return result == Guid.Empty ? null : result;
+		}
+
+
 		private void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
 			var editedRow = e.Row.Item as RecordActivityReport;
@@ -133,52 +165,38 @@ namespace TimeTracker.Windows.Reports
 
 				var activityId = (Activities[editedRow.ActivityIndex]).Id;
 				var typeShiftId = (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
-				var shiftGuidId = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
-				var projectId = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
-				var subModuleId = 0;
+				var shiftGuidId = getShiftGuidId(editedRow);
+				var projectId = getProjectId(editedRow);
+				var subModuleId = (int?)null;
 
 
-				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, null, shiftGuidId, editedRow.EndDateTime, editedRow?.Description);
+				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, editedRow.EndDateTime, editedRow?.Description);
 
 				var updateRecordAct = _recordProvider.SaveRecord(recordActivity);
-				var newRecordActivityReport = new RecordActivityReport(updateRecordAct)
+				if (updateRecordAct != null)
 				{
-					ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
-					TypeShiftIndex = getIndex(TypeShifts, editedRow?.TypeShift?.Id),
-					ShiftIndex = getIndex(Shifts, editedRow?.Shift?.GuidId),
-					ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
-					SubModuleIndex = 0
-				};
+					var newRecordActivityReport = new RecordActivityReport(updateRecordAct)
+					{
+						ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
+						TypeShiftIndex = getIndex(TypeShifts, editedRow?.TypeShift?.Id),
+						ShiftIndex = getIndex(Shifts, editedRow?.Shift?.GuidId),
+						ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
+						SubModuleIndex = 0
+					};
+
+					if (editedRow != null)
+					{
+						RecordActivityReportList.Remove(editedRow);
+						RecordActivityReportList.Add(newRecordActivityReport);
+					}
+				}
 
 
-				var index = RecordActivityReportList.FindIndex(x => x.GuidId == editedRow.GuidId);
-				if (index >= 0)
-					RecordActivityReportList[index] = newRecordActivityReport;
+				//dtgRecordActivities.CommitEdit(DataGridEditingUnit.Row, true);
 
-				//RecordActivityReportListcollectionView.Refresh();
-				//RecordActivityReportList.Where(x => x.GuidId == editedRow.GuidId).Select(x => x = newRecordActivityReport);
-
-				// Dokončení úprav aktuálního řádku
-				dtgRecordActivities.Dispatcher.BeginInvoke(new Action(() =>
-				{
-					dtgRecordActivities.CommitEdit(DataGridEditingUnit.Row, true);
-					RecordActivityReportListcollectionView.Refresh();
-				}), System.Windows.Threading.DispatcherPriority.Background);
-
-				//// Odložení volání Refresh po dokončení úprav
-				//Dispatcher.BeginInvoke(new Action(() =>
+				//dtgRecordActivities.Dispatcher.BeginInvoke(new Action(() =>
 				//{
-				//	if (RecordActivityReportListcollectionView != null)
-				//	{
-				//		try
-				//		{
-				//			RecordActivityReportListcollectionView.Refresh();
-				//		}
-				//		catch (Exception ex)
-				//		{
-				//			MessageBox.Show($"Chyba při obnově dat: {ex.Message}");
-				//		}
-				//	}
+				//	RecordActivityReportListcollectionView.Refresh();
 				//}), System.Windows.Threading.DispatcherPriority.Background);
 			}
 		}
@@ -206,6 +224,16 @@ namespace TimeTracker.Windows.Reports
 			{
 
 			}
+		}
+
+		private void dtgRecordActivities_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+		{
+			//RecordActivityReportListcollectionView.Refresh();
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			RecordActivityReportListcollectionView.Refresh();
 		}
 	}
 }
