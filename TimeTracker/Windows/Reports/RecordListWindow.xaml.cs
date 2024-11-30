@@ -25,7 +25,7 @@ namespace TimeTracker.Windows.Reports
 		private ActivityProvider _activityProvider { get; set; }
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 
-		//public ICollectionView RecordActivityReportListcollectionView { get; set; }
+		public ICollectionView RecordActivityReportListcollectionView { get; set; }
 
 		private EventLogService _eventLogService;
 
@@ -57,8 +57,7 @@ namespace TimeTracker.Windows.Reports
 				cmbMonth.SelectedIndex = 0;
 
 				setRecordActivityReportList();
-				//RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
-				dtgRecordActivities.ItemsSource = RecordActivityReportList;
+				setRecordActivityReportListcollectionView();
 
 				DataContext = this;
 
@@ -69,11 +68,21 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
+		private void setRecordActivityReportListcollectionView()
+		{
+			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
+			RecordActivityReportListcollectionView.SortDescriptions.Clear();
+			RecordActivityReportListcollectionView.SortDescriptions.Add(new SortDescription(nameof(RecordActivityReport.StartDateTime), ListSortDirection.Ascending));
+			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
+		}
+
 		private void setRecordActivityReportList()
 		{
 			var getRecordActiviList = getRecordActivityReportList();
 			if (getRecordActiviList != null)
+			{
 				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
+			}
 
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
@@ -96,6 +105,7 @@ namespace TimeTracker.Windows.Reports
 		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			setRecordActivityReportList();
+			setRecordActivityReportListcollectionView();
 		}
 
 		private List<RecordActivityReport> getRecordActivityReportList()
@@ -111,7 +121,7 @@ namespace TimeTracker.Windows.Reports
 					{
 						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
 						return repObj;
-						;
+
 					}).ToList();
 
 					return list;
@@ -120,22 +130,6 @@ namespace TimeTracker.Windows.Reports
 
 			return new List<RecordActivityReport>();
 		}
-
-		//private int getIndex<T>(IEnumerable<T> collection, int? objectId)
-		//	where T : IIdentifiable
-		//{
-		//	var newColection = collection.Select((row, index) => new { row, index }).ToList();
-		//	var result = newColection.FirstOrDefault(x => x.row.Id == objectId)?.index ?? -1;
-		//	return result;
-		//}
-
-		//private int getIndex<T>(IEnumerable<T> collection, Guid? objectId)
-		//	where T : IIdentifiableGuid
-		//{
-		//	var newColection = collection.Select((row, index) => new { row, index }).ToList();
-		//	var result = newColection.FirstOrDefault(x => x.row.GuidId == objectId)?.index ?? -1;
-		//	return result;
-		//}
 
 		private int? getProjectId(RecordActivityReport editedRow)
 		{
@@ -184,17 +178,21 @@ namespace TimeTracker.Windows.Reports
 					{
 						RecordActivityReportList.Remove(editedRow);
 						RecordActivityReportList.Add(newRecordActivityReport);
+
+						selectRow(newRecordActivityReport);
+						RecordActivityReportListcollectionView.Refresh();
 					}
 				}
-
-
-				//dtgRecordActivities.CommitEdit(DataGridEditingUnit.Row, true);
-
-				//dtgRecordActivities.Dispatcher.BeginInvoke(new Action(() =>
-				//{
-				//	RecordActivityReportListcollectionView.Refresh();
-				//}), System.Windows.Threading.DispatcherPriority.Background);
 			}
+		}
+
+		private void selectRow(RecordActivityReport rowItem)
+		{
+			RecordActivityReportListcollectionView.MoveCurrentTo(rowItem);
+
+			dtgRecordActivities.ScrollIntoView(rowItem);
+			dtgRecordActivities.SelectedItem = rowItem;
+			//dtgRecordActivities.CurrentItem = rowItem;
 		}
 
 		private DateTime? dateTimegroupDateTime(string? date, string? time)
@@ -231,7 +229,6 @@ namespace TimeTracker.Windows.Reports
 						if (findRow != null)
 						{
 							RecordActivityReportList.Remove(findRow);
-							//RecordActivityReportListcollectionView.Refresh();
 						}
 					}
 				}
@@ -240,16 +237,6 @@ namespace TimeTracker.Windows.Reports
 			{
 
 			}
-		}
-
-		private void dtgRecordActivities_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-		{
-			//RecordActivityReportListcollectionView.Refresh();
-		}
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			//RecordActivityReportListcollectionView.Refresh();
 		}
 	}
 }

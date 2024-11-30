@@ -51,6 +51,12 @@
                 <Setter Property="VerticalContentAlignment" Value="Center" />
                 <Setter Property="HorizontalContentAlignment" Value="Center" />
             </Style>
+
+            <Style x:Key="GridcalcGrid" TargetType="{x:Type Grid}">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="Background" Value="Violet" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -72,10 +78,6 @@
                 x:Name="cmbMonth"
                 Grid.Column="1"
                 SelectionChanged="onCmbMonth_SelectionChanged" />
-            <Button
-                Grid.Column="2"
-                Click="Button_Click"
-                Content="Refresh" />
         </Grid>
         <DataGrid
             x:Name="dtgRecordActivities"
@@ -86,8 +88,7 @@
             CellEditEnding="dtgRecordActivities_CellEditEnding"
             CellStyle="{StaticResource BezOhraniceniCellStyle}"
             ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
-            GridLinesVisibility="Horizontal"
-            SelectedCellsChanged="dtgRecordActivities_SelectedCellsChanged">
+            GridLinesVisibility="Horizontal">
             <DataGrid.Columns>
                 <!--  Běžný editovatelný textový sloupec  -->
                 <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->
@@ -172,55 +173,27 @@
                 <DataGridTemplateColumn Width="100" Header="End-date">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate, Converter={StaticResource dateTimeToDateConvert}}" />
+                            <Grid Style="{StaticResource GridcalcGrid}">
+                                <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndDate, Converter={StaticResource dateTimeToDateConvert}}" />
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                <DatePicker.Resources>
-                                    <Style TargetType="DatePicker">
-                                        <Setter Property="Language" Value="cs-CZ" />
-                                        <Setter Property="FirstDayOfWeek" Value="Monday" />
-                                        <Setter Property="SelectedDateFormat" Value="Short" />
-                                    </Style>
-                                </DatePicker.Resources>
-                            </DatePicker>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Width="100" Header="EndTime">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Grid Style="{StaticResource GridcalcGrid}">
+                                <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding EndTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <TextBox Style="{StaticResource CustomTextboxStyle}">
-                                <TextBox.Text>
-                                    <Binding
-                                        Mode="TwoWay"
-                                        Path="EndTime"
-                                        UpdateSourceTrigger="PropertyChanged">
-                                        <Binding.ValidationRules>
-                                            <valid:TimeFormatValidationRule />
-                                        </Binding.ValidationRules>
-                                    </Binding>
-                                </TextBox.Text>
-                            </TextBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="TotalTime" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Background="Violet">
+                            <Grid Style="{StaticResource GridcalcGrid}">
                                 <TextBlock
                                     Style="{StaticResource CellTemplate_TextBlock}"
                                     Text="{Binding TotalTime, Converter={StaticResource totalTimeConvert}, Mode=OneWay}"
@@ -310,50 +283,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-
-
-
-                <DataGridTemplateColumn Width="400" Header="ActivityIndex">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding ActivityIndex}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="400" Header="ShiftIndex">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding ShiftIndex}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="400" Header="ProjectIndex">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding SubModuleIndex}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                <DataGridTemplateColumn Width="400" Header="ProjectIndex">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding SubModuleIndex}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-
-                <DataGridTemplateColumn Width="400" Header="TypeShiftIndex">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Style="{StaticResource CellTemplate_TextBlock}" Text="{Binding TypeShiftIndex}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
