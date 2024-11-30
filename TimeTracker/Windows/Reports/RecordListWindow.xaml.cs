@@ -16,19 +16,8 @@ namespace TimeTracker.Windows.Reports
 {
 	public partial class RecordListWindow : Window
 	{
-		private MainStory _mainStoru;
-		public List<Activity> Activities { get; set; }
-		public List<Project> Projects { get; set; }
-		public List<Shift> Shifts { get; set; }
-		public List<TypeShift> TypeShifts { get; set; }
-		private RecordProvider _recordProvider { get; set; }
-		private ActivityProvider _activityProvider { get; set; }
-		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
-
-		public ICollectionView RecordActivityReportListcollectionView { get; set; }
-
 		private EventLogService _eventLogService;
-
+		private MainStory _mainStoru;
 		public RecordListWindow(MainStory mainStore)
 		{
 			_eventLogService = new EventLogService();
@@ -68,23 +57,36 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
-		private void setRecordActivityReportListcollectionView()
+		public List<Activity> Activities { get; set; }
+		public List<Project> Projects { get; set; }
+		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
+		public ICollectionView RecordActivityReportListcollectionView { get; set; }
+		public List<Shift> Shifts { get; set; }
+		public List<TypeShift> TypeShifts { get; set; }
+		private ActivityProvider _activityProvider { get; set; }
+		private RecordProvider _recordProvider { get; set; }
+		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
-			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
-			RecordActivityReportListcollectionView.SortDescriptions.Clear();
-			RecordActivityReportListcollectionView.SortDescriptions.Add(new SortDescription(nameof(RecordActivityReport.StartDateTime), ListSortDirection.Ascending));
-			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
-		}
-
-		private void setRecordActivityReportList()
-		{
-			var getRecordActiviList = getRecordActivityReportList();
-			if (getRecordActiviList != null)
+			try
 			{
-				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
+				if (sender is Button btn)
+				{
+					var guidDeleteRow = Guid.Parse(btn.Tag.ToString());
+					var result = _recordProvider.DeleteRecord(guidDeleteRow);
+					if (result)
+					{
+						var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
+						if (findRow != null)
+						{
+							RecordActivityReportList.Remove(findRow);
+						}
+					}
+				}
 			}
+			catch (Exception)
+			{
 
-			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
+			}
 		}
 
 		private ICollection<T> convertCollection<T>(ICollection<T> collection, bool emptyValue = true)
@@ -102,55 +104,26 @@ namespace TimeTracker.Windows.Reports
 
 			return list;
 		}
-		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			setRecordActivityReportList();
-			setRecordActivityReportListcollectionView();
-		}
 
-		private List<RecordActivityReport> getRecordActivityReportList()
+		private DateTime? dateTimegroupDateTime(string? date, string? time)
 		{
-			if (cmbMonth.Text != "")
+			if (date == null && time == null)
 			{
-				var startTime = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
-				var endTime = startTime.AddMonths(1);
-				var origList = _recordProvider.GetRecords(startTime, endTime);
-				if (origList != null)
-				{
-					var list = origList.Select((record, index) =>
-					{
-						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
-						return repObj;
-
-					}).ToList();
-
-					return list;
-				}
-			}
-
-			return new List<RecordActivityReport>();
-		}
-
-		private int? getProjectId(RecordActivityReport editedRow)
-		{
-			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
-			return result == 0 ? null : result;
-		}
-
-		private Guid? getShiftGuidId(RecordActivityReport editedRow)
-		{
-			var result = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
-			if (result == null)
 				return null;
+			}
+			else if (date != null && time == null)
+			{
+				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
+				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + "00:00:00");
+				return endDateTime;
+			}
 			else
-				return result == Guid.Empty ? null : result;
+			{
+				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
+				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + time);
+				return endDateTime;
+			}
 		}
-
-		private int? getActivityId(RecordActivityReport editedRow)
-		{
-			return (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
-		}
-
 
 		private void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
@@ -186,6 +159,55 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
+		private int? getActivityId(RecordActivityReport editedRow)
+		{
+			return (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
+		}
+
+		private int? getProjectId(RecordActivityReport editedRow)
+		{
+			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
+			return result == 0 ? null : result;
+		}
+
+		private List<RecordActivityReport> getRecordActivityReportList()
+		{
+			if (cmbMonth.Text != "")
+			{
+				var startTime = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
+				var endTime = startTime.AddMonths(1);
+				var origList = _recordProvider.GetRecords(startTime, endTime);
+				if (origList != null)
+				{
+					var list = origList.Select((record, index) =>
+					{
+						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
+						return repObj;
+
+					}).ToList();
+
+					return list;
+				}
+			}
+
+			return new List<RecordActivityReport>();
+		}
+
+		private Guid? getShiftGuidId(RecordActivityReport editedRow)
+		{
+			var result = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
+			if (result == null)
+				return null;
+			else
+				return result == Guid.Empty ? null : result;
+		}
+
+		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			setRecordActivityReportList();
+			setRecordActivityReportListcollectionView();
+		}
+
 		private void selectRow(RecordActivityReport rowItem)
 		{
 			RecordActivityReportListcollectionView.MoveCurrentTo(rowItem);
@@ -195,48 +217,23 @@ namespace TimeTracker.Windows.Reports
 			//dtgRecordActivities.CurrentItem = rowItem;
 		}
 
-		private DateTime? dateTimegroupDateTime(string? date, string? time)
+		private void setRecordActivityReportList()
 		{
-			if (date == null && time == null)
+			var getRecordActiviList = getRecordActivityReportList();
+			if (getRecordActiviList != null)
 			{
-				return null;
+				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
 			}
-			else if (date != null && time == null)
-			{
-				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
-				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + "00:00:00");
-				return endDateTime;
-			}
-			else
-			{
-				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
-				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + time);
-				return endDateTime;
-			}
+
+			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
 
-		private void btnDelete_Click(object sender, RoutedEventArgs e)
+		private void setRecordActivityReportListcollectionView()
 		{
-			try
-			{
-				if (sender is Button btn)
-				{
-					var guidDeleteRow = Guid.Parse(btn.Tag.ToString());
-					var result = _recordProvider.DeleteRecord(guidDeleteRow);
-					if (result)
-					{
-						var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
-						if (findRow != null)
-						{
-							RecordActivityReportList.Remove(findRow);
-						}
-					}
-				}
-			}
-			catch (Exception)
-			{
-
-			}
+			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
+			RecordActivityReportListcollectionView.SortDescriptions.Clear();
+			RecordActivityReportListcollectionView.SortDescriptions.Add(new SortDescription(nameof(RecordActivityReport.StartDateTime), ListSortDirection.Ascending));
+			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
 		}
 	}
 }
