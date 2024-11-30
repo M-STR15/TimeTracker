@@ -110,17 +110,17 @@ namespace TimeTracker.BE.DB.Providers
 		{
 			try
 			{
-				var findValue = recordActivity;
+				//var findValue = recordActivity;
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)
 					{
-						findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
-						if (findValue != null)
-						{
-							findValue.SetBasicValues(recordActivity);
-							context.RecordActivities.Update(findValue);
-						}
+						//findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
+						//if (findValue != null)
+						//{
+							//findValue.SetBasicValues(recordActivity);
+							context.RecordActivities.Update(recordActivity);
+						//}
 					}
 					else
 					{

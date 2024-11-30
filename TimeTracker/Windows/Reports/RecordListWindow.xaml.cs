@@ -25,7 +25,7 @@ namespace TimeTracker.Windows.Reports
 		private ActivityProvider _activityProvider { get; set; }
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 
-		public ICollectionView RecordActivityReportListcollectionView { get; set; }
+		//public ICollectionView RecordActivityReportListcollectionView { get; set; }
 
 		private EventLogService _eventLogService;
 
@@ -57,8 +57,8 @@ namespace TimeTracker.Windows.Reports
 				cmbMonth.SelectedIndex = 0;
 
 				setRecordActivityReportList();
-				RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
-				dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
+				//RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
+				dtgRecordActivities.ItemsSource = RecordActivityReportList;
 
 				DataContext = this;
 
@@ -73,7 +73,7 @@ namespace TimeTracker.Windows.Reports
 		{
 			var getRecordActiviList = getRecordActivityReportList();
 			if (getRecordActiviList != null)
-				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x)));
+				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
 
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
@@ -110,10 +110,6 @@ namespace TimeTracker.Windows.Reports
 					var list = origList.Select((record, index) =>
 					{
 						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
-						repObj.ActivityIndex = getIndex(Activities, repObj.ActivityId);
-						repObj.ProjectIndex = getIndex(Projects, repObj.ProjectId);
-						repObj.ShiftIndex = getIndex(Shifts, repObj.ShiftGuidId);
-						repObj.TypeShiftIndex = getIndex(TypeShifts, repObj.TypeShiftId);
 						return repObj;
 						;
 					}).ToList();
@@ -125,17 +121,21 @@ namespace TimeTracker.Windows.Reports
 			return new List<RecordActivityReport>();
 		}
 
-		private int getIndex<T>(IEnumerable<T> collection, int? objectId)
-			where T : IIdentifiable
-		{
-			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.Id == objectId)?.index ?? -1;
-		}
+		//private int getIndex<T>(IEnumerable<T> collection, int? objectId)
+		//	where T : IIdentifiable
+		//{
+		//	var newColection = collection.Select((row, index) => new { row, index }).ToList();
+		//	var result = newColection.FirstOrDefault(x => x.row.Id == objectId)?.index ?? -1;
+		//	return result;
+		//}
 
-		private int getIndex<T>(IEnumerable<T> collection, Guid? objectId)
-			where T : IIdentifiableGuid
-		{
-			return collection.Select((radek, index) => new { radek, index }).FirstOrDefault(x => x.radek.GuidId == objectId)?.index ?? -1;
-		}
+		//private int getIndex<T>(IEnumerable<T> collection, Guid? objectId)
+		//	where T : IIdentifiableGuid
+		//{
+		//	var newColection = collection.Select((row, index) => new { row, index }).ToList();
+		//	var result = newColection.FirstOrDefault(x => x.row.GuidId == objectId)?.index ?? -1;
+		//	return result;
+		//}
 
 		private int? getProjectId(RecordActivityReport editedRow)
 		{
@@ -152,37 +152,33 @@ namespace TimeTracker.Windows.Reports
 				return result == Guid.Empty ? null : result;
 		}
 
+		private int? getActivityId(RecordActivityReport editedRow)
+		{
+			return (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
+		}
+
 
 		private void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
 			var editedRow = e.Row.Item as RecordActivityReport;
 			if (editedRow != null)
 			{
-				var convertDataTrimeStringStart = Convert.ToDateTime(editedRow.StartDate).ToString("dd.MM.yyyy");
-				var startDateTime = Convert.ToDateTime(convertDataTrimeStringStart + " " + editedRow.StartTime);
-				var convertDataTrimeStringEnd = Convert.ToDateTime(editedRow.EndDate).ToString("dd.MM.yyyy");
-				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + editedRow.EndTime);
+				var startDateTime = (DateTime)dateTimegroupDateTime(editedRow.StartDate, editedRow.StartTime);
+				var endDateTime = dateTimegroupDateTime(editedRow.EndDate, editedRow.EndTime);
 
 				var activityId = (Activities[editedRow.ActivityIndex]).Id;
-				var typeShiftId = (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
+				var typeShiftId = getActivityId(editedRow);
 				var shiftGuidId = getShiftGuidId(editedRow);
 				var projectId = getProjectId(editedRow);
 				var subModuleId = (int?)null;
 
 
-				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, editedRow.EndDateTime, editedRow?.Description);
+				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
 				var updateRecordAct = _recordProvider.SaveRecord(recordActivity);
 				if (updateRecordAct != null)
 				{
-					var newRecordActivityReport = new RecordActivityReport(updateRecordAct)
-					{
-						ActivityIndex = getIndex(Activities, editedRow?.Activity?.Id),
-						TypeShiftIndex = getIndex(TypeShifts, editedRow?.TypeShift?.Id),
-						ShiftIndex = getIndex(Shifts, editedRow?.Shift?.GuidId),
-						ProjectIndex = getIndex(Projects, editedRow?.Project?.Id),
-						SubModuleIndex = 0
-					};
+					var newRecordActivityReport = new RecordActivityReport(updateRecordAct, Activities, Projects, Shifts, TypeShifts);
 
 					if (editedRow != null)
 					{
@@ -201,6 +197,26 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
+		private DateTime? dateTimegroupDateTime(string? date, string? time)
+		{
+			if (date == null && time == null)
+			{
+				return null;
+			}
+			else if (date != null && time == null)
+			{
+				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
+				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + "00:00:00");
+				return endDateTime;
+			}
+			else
+			{
+				var convertDataTrimeStringEnd = Convert.ToDateTime(date).ToString("dd.MM.yyyy");
+				var endDateTime = Convert.ToDateTime(convertDataTrimeStringEnd + " " + time);
+				return endDateTime;
+			}
+		}
+
 		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
 			try
@@ -215,7 +231,7 @@ namespace TimeTracker.Windows.Reports
 						if (findRow != null)
 						{
 							RecordActivityReportList.Remove(findRow);
-							RecordActivityReportListcollectionView.Refresh();
+							//RecordActivityReportListcollectionView.Refresh();
 						}
 					}
 				}
@@ -233,7 +249,7 @@ namespace TimeTracker.Windows.Reports
 
 		private void Button_Click(object sender, RoutedEventArgs e)
 		{
-			RecordActivityReportListcollectionView.Refresh();
+			//RecordActivityReportListcollectionView.Refresh();
 		}
 	}
 }

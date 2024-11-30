@@ -60,7 +60,7 @@ namespace TimeTracker.BE.DB.Models
 			GuidId = guidId;
 		}
 
-		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid? shiftGuidId, DateTime? endDateTime = null, string? description = "") : this(startTime, activityId, typeShiftId, projectId, subModuleId, description)
+		public RecordActivity(Guid guidId, DateTime startTime, int activityId, int? typeShiftId, int? projectId, int? subModuleId, Guid? shiftGuidId, DateTime? endDateTime = null, string? description = "") : this(startTime, endDateTime, activityId, typeShiftId, projectId, subModuleId, description)
 		{
 			GuidId = guidId;
 			ShiftGuidId = shiftGuidId;
@@ -89,18 +89,18 @@ namespace TimeTracker.BE.DB.Models
 			TypeShiftId = typeShift?.Id ?? null;
 		}
 
-		public void SetBasicValues(RecordActivity recordActivity)
-		{
-			GuidId = recordActivity.GuidId;
-			ActivityId = recordActivity.ActivityId;
-			ProjectId = recordActivity.ProjectId;
-			SubModuleId = recordActivity.SubModuleId;
-			ShiftGuidId = recordActivity.ShiftGuidId;
-			Description = recordActivity.Description;
-			StartDateTime = modFormatDatetime(recordActivity.StartDateTime);
-			EndDateTime = recordActivity.EndDateTime;
-			TypeShiftId = recordActivity.TypeShiftId;
-		}
+		//public void SetBasicValues(RecordActivity recordActivity)
+		//{
+		//	GuidId = recordActivity.GuidId;
+		//	ActivityId = recordActivity.ActivityId;
+		//	ProjectId = recordActivity.ProjectId;
+		//	SubModuleId = recordActivity.SubModuleId;
+		//	ShiftGuidId = recordActivity.ShiftGuidId;
+		//	Description = recordActivity.Description;
+		//	StartDateTime = modFormatDatetime(recordActivity.StartDateTime);
+		//	EndDateTime = recordActivity.EndDateTime;
+		//	TypeShiftId = recordActivity.TypeShiftId;
+		//}
 
 		[ForeignKey("ActivityId")]
 		public virtual Activity Activity { get; set; }

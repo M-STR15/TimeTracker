@@ -11,11 +11,8 @@ namespace TimeTracker.Windows.Models
 		[ObservableProperty]
 		public string? _description;
 
-		private static ICollection<Activity>? _activities;
-		private static ICollection<Project>? _projects;
-		private static ICollection<Shift>? _shifts;
-		private static ICollection<SubModule>? _subModules;
-		private static ICollection<TypeShift>? _typeShifts;
+		[ObservableProperty]
+		private ICollection<Activity>? _activities;
 		[ObservableProperty]
 		private Activity _activity;
 
@@ -43,6 +40,8 @@ namespace TimeTracker.Windows.Models
 		private int _projectIndex;
 
 		[ObservableProperty]
+		private ICollection<Project>? _projects;
+		[ObservableProperty]
 		private Shift? _shift;
 
 		[ObservableProperty]
@@ -50,6 +49,8 @@ namespace TimeTracker.Windows.Models
 
 		private int _shiftIndex;
 
+		[ObservableProperty]
+		private ICollection<Shift>? _shifts;
 		[ObservableProperty]
 		private string? _startDate;
 
@@ -67,23 +68,8 @@ namespace TimeTracker.Windows.Models
 
 		private int _subModuleIndex;
 
-		public TimeSpan? TotalTime
-		{
-			get
-			{
-				var duration = 0.00;
-				if (ActivityId != (int)eActivity.Stop)
-				{
-					duration = EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
-					return TimeSpan.FromSeconds(duration);
-				}
-				else
-				{
-					return null;
-				}
-			}
-		}
-
+		[ObservableProperty]
+		private ICollection<SubModule>? _subModules;
 		[ObservableProperty]
 		private TypeShift? _typeShift;
 
@@ -92,7 +78,9 @@ namespace TimeTracker.Windows.Models
 
 		private int _typeShiftIndex;
 
-		public RecordActivityReport(RecordActivityReport recordActivityReport, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null) 
+		[ObservableProperty]
+		private ICollection<TypeShift>? _typeShifts;
+		public RecordActivityReport(RecordActivityReport recordActivityReport, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
 		{
 			if (recordActivityReport != null)
 			{
@@ -160,9 +148,14 @@ namespace TimeTracker.Windows.Models
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
 
+				ActivityIndex = getIndex(Activities, ActivityId);
+				ProjectIndex = getIndex(Projects, ProjectId);
+				ShiftIndex = getIndex(Shifts, ShiftGuidId);
+				TypeShiftIndex = getIndex(TypeShifts, TypeShiftId);
 				//OnPropertyChanged(nameof(TotalTime));
 			}
 		}
+
 		public int ActivityIndex
 		{
 			get => _activityIndex;
@@ -178,12 +171,14 @@ namespace TimeTracker.Windows.Models
 						Activity = _activities.ElementAtOrDefault(value);
 						ActivityId = Activity.Id;
 						OnPropertyChanged(nameof(Activity));
+						OnPropertyChanged(nameof(ActivityId));
 					}
 				}
 			}
 		}
 
 		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+
 		public int ProjectIndex
 		{
 			get => _projectIndex;
@@ -199,6 +194,7 @@ namespace TimeTracker.Windows.Models
 						Project = _projects.ElementAtOrDefault(value);
 						ProjectId = Project.Id;
 						OnPropertyChanged(nameof(Project));
+						OnPropertyChanged(nameof(ProjectId));
 
 						_subModules = null;
 						SubModuleId = null;
@@ -223,6 +219,7 @@ namespace TimeTracker.Windows.Models
 						Shift = _shifts.ElementAtOrDefault(value);
 						ShiftGuidId = Shift.GuidId;
 						OnPropertyChanged(nameof(Shift));
+						OnPropertyChanged(nameof(ShiftGuidId));
 					}
 				}
 			}
@@ -243,11 +240,28 @@ namespace TimeTracker.Windows.Models
 						SubModule = _subModules.ElementAtOrDefault(value);
 						SubModuleId = SubModule.Id;
 						OnPropertyChanged(nameof(SubModule));
+						OnPropertyChanged(nameof(SubModuleId));
 					}
 				}
 			}
 		}
 
+		public TimeSpan? TotalTime
+		{
+			get
+			{
+				var duration = 0.00;
+				if (ActivityId != (int)eActivity.Stop)
+				{
+					duration = EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
+					return TimeSpan.FromSeconds(duration);
+				}
+				else
+				{
+					return null;
+				}
+			}
+		}
 		public int TypeShiftIndex
 		{
 			get => _typeShiftIndex;
@@ -263,11 +277,28 @@ namespace TimeTracker.Windows.Models
 						TypeShift = _typeShifts.ElementAtOrDefault(value);
 						TypeShiftId = TypeShift.Id;
 						OnPropertyChanged(nameof(TypeShift));
+						OnPropertyChanged(nameof(TypeShiftId));
 					}
 				}
 			}
 		}
 
 		private int _activityIndex { get; set; }
+
+		private int getIndex<T>(IEnumerable<T> collection, int? objectId)
+						where T : IIdentifiable
+		{
+			var newColection = collection.Select((row, index) => new { row, index }).ToList();
+			var result = newColection.FirstOrDefault(x => x.row.Id == objectId)?.index ?? -1;
+			return result;
+		}
+
+		private int getIndex<T>(IEnumerable<T> collection, Guid? objectId)
+			where T : IIdentifiableGuid
+		{
+			var newColection = collection.Select((row, index) => new { row, index }).ToList();
+			var result = newColection.FirstOrDefault(x => x.row.GuidId == objectId)?.index ?? -1;
+			return result;
+		}
 	}
 }
