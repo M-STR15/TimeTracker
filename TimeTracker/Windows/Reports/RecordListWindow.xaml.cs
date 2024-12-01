@@ -57,6 +57,7 @@ namespace TimeTracker.Windows.Reports
 
 		public List<Activity> Activities { get; set; }
 		public List<Project> Projects { get; set; }
+		public List<SubModule>? SubModules { get; set; }
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 		public List<Shift> Shifts { get; set; }
 		public List<TypeShift> TypeShifts { get; set; }
@@ -132,7 +133,7 @@ namespace TimeTracker.Windows.Reports
 				var typeShiftId = getID_ActivityId(editedRow);
 				var shiftGuidId = getD_ShiftGuidId(editedRow);
 				var projectId = getID_ProjectId(editedRow);
-				var subModuleId = (int?)null;
+				var subModuleId = getID_SubModuleId(editedRow);
 
 
 				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
@@ -152,6 +153,8 @@ namespace TimeTracker.Windows.Reports
 						selectRow(newRecordActivityReport);
 					}
 				}
+
+				SubModules = null;
 			}
 		}
 
@@ -173,6 +176,19 @@ namespace TimeTracker.Windows.Reports
 		{
 			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
 			return result == 0 ? null : result;
+		}
+
+		private int? getID_SubModuleId(RecordActivityReport editedRow)
+		{
+			if (editedRow.SubModuleId != null)
+			{
+				var result = (int?)(editedRow.SubModuleId == -1 ? null : (SubModules[editedRow.SubModuleIndex]).Id);
+				return result == 0 ? null : result;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		private List<RecordActivityReport> getRecordActivityReportList()
 		{
@@ -224,5 +240,26 @@ namespace TimeTracker.Windows.Reports
 		}
 
 		private void setRecordActivityReportListcollectionView() => dtgRecordActivities.ItemsSource = RecordActivityReportList;
+
+		private void dtgRecordActivities_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+		{
+			var column = e.Column; // Sloupec, který se edituje
+
+			if (column.Header.ToString() == "Sub module")
+			{
+				var row = e.Row;       // Řádek, který se edituje
+				var item = (RecordActivityReport)row.Item;
+				if (item.ProjectId != null)
+				{
+					var subModules = new List<SubModule>();
+					subModules.Add(new SubModule());
+					foreach (var itemList in Projects.FirstOrDefault(x => x.Id == item.ProjectId).SubModules.ToList())
+					{
+						subModules.Add(itemList);
+					}
+					SubModules = subModules;
+				}
+			}
+		}
 	}
 }

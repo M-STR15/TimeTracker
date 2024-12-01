@@ -50,6 +50,7 @@
             AutoGenerateColumns="False"
             BorderThickness="0"
             CellEditEnding="dtgRecordActivities_CellEditEnding"
+            BeginningEdit="dtgRecordActivities_BeginningEdit"
             CellStyle="{StaticResource BezOhraniceniCellStyle}"
             ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
             
@@ -216,7 +217,7 @@
                         <DataTemplate>
                             <ComboBox
                                 DisplayMemberPath="Name"
-                                ItemsSource="{Binding Project.SubModules}"
+                                ItemsSource="{Binding DataContext.SubModules, RelativeSource={RelativeSource AncestorType=Window}}"
                                 SelectedIndex="{Binding SubModuleIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource CustomComboboxtyle}" />
                         </DataTemplate>

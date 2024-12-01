@@ -1,5 +1,6 @@
 ﻿namespace TimeTracker.BE.DB.Providers;
 
+using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
@@ -11,7 +12,8 @@ public class ProjectProvider
 		{
 			using (var context = new MainDatacontext())
 			{
-				return context.Projects.OrderBy(x => x.Name).ToList();
+				return context.Projects.OrderBy(x => x.Name)
+					.Include(x => x.SubModules).ToList();
 			}
 		}
 		catch (Exception)

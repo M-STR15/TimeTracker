@@ -19,6 +19,7 @@ namespace TimeTracker.BE.DB.Providers
 				{
 					var recordActivities = context.RecordActivities
 					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
 					.Include(x => x.Activity)
 					.Include(x => x.TypeShift)
 					.Include(x => x.Shift)
@@ -41,6 +42,7 @@ namespace TimeTracker.BE.DB.Providers
 				{
 					var recordActivitiy = context.RecordActivities
 					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
 					.Include(x => x.Activity)
 					.Include(x => x.TypeShift)
 					.Include(x => x.Shift)
@@ -61,7 +63,7 @@ namespace TimeTracker.BE.DB.Providers
 			{
 				using (var context = new MainDatacontext())
 				{
-					var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && (x.EndDateTime <= endTime || x.EndDateTime == null))
+					var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
 					.Include(x => x.Project)
 						.ThenInclude(x => x.SubModules)
 					.Include(x => x.Activity)
@@ -90,6 +92,7 @@ namespace TimeTracker.BE.DB.Providers
 					{
 						recordActivity = context.RecordActivities.OrderBy(x => x.StartDateTime)
 							.Include(x => x.Project)
+								.ThenInclude(x => x.SubModules)
 							.Include(x => x.Activity)
 							.Include(x => x.Shift)
 							.Include(x => x.SubModule)
@@ -118,8 +121,8 @@ namespace TimeTracker.BE.DB.Providers
 						//findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
 						//if (findValue != null)
 						//{
-							//findValue.SetBasicValues(recordActivity);
-							context.RecordActivities.Update(recordActivity);
+						//findValue.SetBasicValues(recordActivity);
+						context.RecordActivities.Update(recordActivity);
 						//}
 					}
 					else
@@ -174,14 +177,16 @@ namespace TimeTracker.BE.DB.Providers
 					allowedActivities.Add((int)eActivity.Start);
 					allowedActivities.Add((int)eActivity.Pause);
 
-					for (int i = 0; i < recordActivities.Count - 1; i++)
+					for (int i = 0; i <= recordActivities.Count - 1; i++)
 					{
 						var currentItem = recordActivities[i];
-						if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
+						if (i == (recordActivities.Count - 1))
+						{
+							currentItem.EndDateTime = null;
+						}
+						else if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
 						{
 							var nextItem = recordActivities[i + 1];
-
-							// Nastavíme EndTime aktuální položky na StartTime následující položky
 							currentItem.EndDateTime = nextItem.StartDateTime;
 						}
 					}
