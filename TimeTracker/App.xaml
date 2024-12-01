@@ -7,6 +7,11 @@
         <SolidColorBrush x:Key="Background" Color="#fff" />
         <SolidColorBrush x:Key="BorderWindow" Color="LightGray" />
 
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightGray" />
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Purple" />
+        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="LightGray" />
+
+
         <Style x:Key="MainWindow" TargetType="Window">
             <Setter Property="Focusable" Value="True" />
             <Setter Property="SizeToContent" Value="Manual" />

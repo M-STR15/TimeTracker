@@ -60,7 +60,7 @@ namespace TimeTracker.Windows.Reports
 		public List<Activity> Activities { get; set; }
 		public List<Project> Projects { get; set; }
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
-		public ICollectionView RecordActivityReportListcollectionView { get; set; }
+		//public ICollectionView RecordActivityReportListcollectionView { get; set; }
 		public List<Shift> Shifts { get; set; }
 		public List<TypeShift> TypeShifts { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
@@ -134,9 +134,9 @@ namespace TimeTracker.Windows.Reports
 				var endDateTime = dateTimegroupDateTime(editedRow.EndDate, editedRow.EndTime);
 
 				var activityId = (Activities[editedRow.ActivityIndex]).Id;
-				var typeShiftId = getActivityId(editedRow);
-				var shiftGuidId = getShiftGuidId(editedRow);
-				var projectId = getProjectId(editedRow);
+				var typeShiftId = getID_ActivityId(editedRow);
+				var shiftGuidId = getD_ShiftGuidId(editedRow);
+				var projectId = getID_ProjectId(editedRow);
 				var subModuleId = (int?)null;
 
 
@@ -152,24 +152,33 @@ namespace TimeTracker.Windows.Reports
 						RecordActivityReportList.Remove(editedRow);
 						RecordActivityReportList.Add(newRecordActivityReport);
 
+						setRecordActivityReportList();
+						setRecordActivityReportListcollectionView();
 						selectRow(newRecordActivityReport);
-						RecordActivityReportListcollectionView.Refresh();
 					}
 				}
 			}
 		}
 
-		private int? getActivityId(RecordActivityReport editedRow)
+		private Guid? getD_ShiftGuidId(RecordActivityReport editedRow)
+		{
+			var result = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
+			if (result == null)
+				return null;
+			else
+				return result == Guid.Empty ? null : result;
+		}
+
+		private int? getID_ActivityId(RecordActivityReport editedRow)
 		{
 			return (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
 		}
 
-		private int? getProjectId(RecordActivityReport editedRow)
+		private int? getID_ProjectId(RecordActivityReport editedRow)
 		{
 			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
 			return result == 0 ? null : result;
 		}
-
 		private List<RecordActivityReport> getRecordActivityReportList()
 		{
 			if (cmbMonth.Text != "")
@@ -192,16 +201,6 @@ namespace TimeTracker.Windows.Reports
 
 			return new List<RecordActivityReport>();
 		}
-
-		private Guid? getShiftGuidId(RecordActivityReport editedRow)
-		{
-			var result = (Guid?)(editedRow.ShiftIndex == -1 ? null : (Shifts[editedRow.ShiftIndex]).GuidId);
-			if (result == null)
-				return null;
-			else
-				return result == Guid.Empty ? null : result;
-		}
-
 		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			setRecordActivityReportList();
@@ -210,11 +209,12 @@ namespace TimeTracker.Windows.Reports
 
 		private void selectRow(RecordActivityReport rowItem)
 		{
-			RecordActivityReportListcollectionView.MoveCurrentTo(rowItem);
-
-			dtgRecordActivities.ScrollIntoView(rowItem);
-			dtgRecordActivities.SelectedItem = rowItem;
-			//dtgRecordActivities.CurrentItem = rowItem;
+			var selectRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == rowItem.GuidId);
+			if (selectRow != null)
+			{
+				dtgRecordActivities.ScrollIntoView(selectRow);
+				dtgRecordActivities.SelectedItem = selectRow;
+			}
 		}
 
 		private void setRecordActivityReportList()
@@ -222,7 +222,7 @@ namespace TimeTracker.Windows.Reports
 			var getRecordActiviList = getRecordActivityReportList();
 			if (getRecordActiviList != null)
 			{
-				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
+				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.OrderBy(x => x.StartDateTime).Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
 			}
 
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
@@ -230,10 +230,7 @@ namespace TimeTracker.Windows.Reports
 
 		private void setRecordActivityReportListcollectionView()
 		{
-			RecordActivityReportListcollectionView = CollectionViewSource.GetDefaultView(RecordActivityReportList);
-			RecordActivityReportListcollectionView.SortDescriptions.Clear();
-			RecordActivityReportListcollectionView.SortDescriptions.Add(new SortDescription(nameof(RecordActivityReport.StartDateTime), ListSortDirection.Ascending));
-			dtgRecordActivities.ItemsSource = RecordActivityReportListcollectionView;
+			dtgRecordActivities.ItemsSource = RecordActivityReportList;
 		}
 	}
 }

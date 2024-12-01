@@ -11,4 +11,41 @@
     <Style x:Key="BezOhraniceniCellStyle" TargetType="DataGridCell">
         <Setter Property="BorderThickness" Value="0" />
     </Style>
+
+    <Style x:Key="CellTemplate_TextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="CellTemplate_TextBlock2" TargetType="{x:Type TextBlock}">
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="CellTemplate_TextBlockTitle" TargetType="{x:Type TextBlock}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="CustomDataGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <Style x:Key="CustomTextboxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="CustomComboboxtyle" TargetType="{x:Type ComboBox}">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="GridcalcGrid" TargetType="{x:Type Grid}">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Violet" />
+    </Style>
 </ResourceDictionary>
