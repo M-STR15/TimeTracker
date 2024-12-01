@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Providers;
@@ -60,7 +58,6 @@ namespace TimeTracker.Windows.Reports
 		public List<Activity> Activities { get; set; }
 		public List<Project> Projects { get; set; }
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
-		//public ICollectionView RecordActivityReportListcollectionView { get; set; }
 		public List<Shift> Shifts { get; set; }
 		public List<TypeShift> TypeShifts { get; set; }
 		private ActivityProvider _activityProvider { get; set; }
@@ -77,15 +74,13 @@ namespace TimeTracker.Windows.Reports
 					{
 						var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
 						if (findRow != null)
-						{
 							RecordActivityReportList.Remove(findRow);
-						}
 					}
 				}
 			}
 			catch (Exception)
 			{
-
+				_eventLogService.WriteError(Guid.Parse("7a322e9b-26cb-4491-a98f-af54887459a7"), null, "Problém při mazáná zýznamu.");
 			}
 		}
 
@@ -228,9 +223,6 @@ namespace TimeTracker.Windows.Reports
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
 		}
 
-		private void setRecordActivityReportListcollectionView()
-		{
-			dtgRecordActivities.ItemsSource = RecordActivityReportList;
-		}
+		private void setRecordActivityReportListcollectionView() => dtgRecordActivities.ItemsSource = RecordActivityReportList;
 	}
 }
