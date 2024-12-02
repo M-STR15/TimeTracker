@@ -264,5 +264,17 @@ namespace TimeTracker.Windows.Reports
 				}
 			}
 		}
+
+		private void btnAdd_Click(object sender, RoutedEventArgs e)
+		{
+			var datefilter = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
+			var countDayInMont = DateTime.DaysInMonth(datefilter.Year, datefilter.Month);
+			var date = new DateTime(datefilter.Year, datefilter.Month, countDayInMont, 23, 59, 59);
+			var newRecord = new RecordActivity(date, (int)eActivity.Start);
+			_recordProvider.SaveRecord(newRecord);
+
+			setRecordActivityReportList();
+			setRecordActivityReportListcollectionView();
+		}
 	}
 }

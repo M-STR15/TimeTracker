@@ -108,7 +108,6 @@ namespace TimeTracker.Windows.Models
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
 
-				//OnPropertyChanged(nameof(TotalTime));
 				if (_activities != null)
 					ActivityIndex = getIndex(_activities, ActivityId);
 				if (_projects != null)
@@ -122,6 +121,8 @@ namespace TimeTracker.Windows.Models
 					TypeShiftIndex = getIndex(_typeShifts, TypeShiftId);
 				if (_subModules != null)
 					SubModuleIndex = getIndex(_subModules, SubModuleId);
+
+				OnPropertyChanged(nameof(TotalTime));
 			}
 		}
 
