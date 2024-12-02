@@ -44,14 +44,14 @@ namespace TimeTracker.Windows.Reports
 				cmbMonth.ItemsSource = new ReportParameterService().Monts;
 				cmbMonth.SelectedIndex = 0;
 
+				RecordActivityReport.SetIndexCollection(Activities, Projects, Shifts, TypeShifts);
+
 				setRecordActivityReportList();
 				setRecordActivityReportListcollectionView();
 
-
-				RecordActivityReport.SetIndexCollection(Activities, Projects, Shifts, TypeShifts);
 				DataContext = this;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				_eventLogService.WriteError(Guid.Parse("1acd3061-db78-4f29-befa-ea1f72d2a036"), null, "Problém se spouštěním record list window.");
 			}
@@ -131,8 +131,7 @@ namespace TimeTracker.Windows.Reports
 				var startDateTime = (DateTime)dateTimegroupDateTime(editedRow.StartDate, editedRow.StartTime);
 				var endDateTime = dateTimegroupDateTime(editedRow.EndDate, editedRow.EndTime);
 
-				var column = e.Column; // Sloupec, který se edituje
-
+				//var column = e.Column; // Sloupec, který se edituje
 
 				var projectId = getID_ProjectId(editedRow);
 				var subModuleId = getID_SubModuleId(editedRow);
@@ -145,7 +144,7 @@ namespace TimeTracker.Windows.Reports
 				var updateRecordAct = _recordProvider.SaveRecord(recordActivity);
 				if (updateRecordAct != null)
 				{
-					var newRecordActivityReport = new RecordActivityReport(updateRecordAct, Activities, Projects, Shifts, TypeShifts);
+					var newRecordActivityReport = new RecordActivityReport(updateRecordAct);
 
 					if (editedRow != null)
 					{
@@ -157,7 +156,6 @@ namespace TimeTracker.Windows.Reports
 						selectRow(newRecordActivityReport);
 					}
 				}
-
 			}
 		}
 
@@ -204,9 +202,7 @@ namespace TimeTracker.Windows.Reports
 				{
 					var list = origList.Select((record, index) =>
 					{
-						var repObj = new RecordActivityReport(record, Activities, Projects, Shifts, TypeShifts);
-						return repObj;
-
+						return new RecordActivityReport(record);
 					}).ToList();
 
 					return list;
@@ -256,11 +252,15 @@ namespace TimeTracker.Windows.Reports
 				{
 					var subModules = new List<SubModule>();
 					subModules.Add(new SubModule());
-					foreach (var itemList in Projects.FirstOrDefault(x => x.Id == item.ProjectId).SubModules.ToList())
+					var project = Projects.FirstOrDefault(x => x.Id == item.ProjectId);
+					if (project != null)
 					{
-						subModules.Add(itemList);
+						foreach (var itemList in project.SubModules.ToList())
+						{
+							subModules.Add(itemList);
+						}
+						SubModules = subModules;
 					}
-					SubModules = subModules;
 				}
 			}
 		}

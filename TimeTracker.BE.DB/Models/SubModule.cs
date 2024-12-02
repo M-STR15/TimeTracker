@@ -6,7 +6,7 @@ namespace TimeTracker.BE.DB.Models
 {
 	[Index(nameof(ProjectId), nameof(Name), IsUnique = true)]
 	[Table("SubModule", Schema = "dbo")]
-	public class SubModule : ISubModuleWithoutColl
+	public class SubModule : ISubModuleWithoutColl, IIdentifiable
 	{
 		[Key]
 		[Column("SubModule_ID")]

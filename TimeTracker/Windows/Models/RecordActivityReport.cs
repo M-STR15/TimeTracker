@@ -66,7 +66,6 @@ namespace TimeTracker.Windows.Models
 
 		private int _subModuleIndex;
 
-		private static ICollection<SubModule>? _subModules;
 		[ObservableProperty]
 		private TypeShift? _typeShift;
 
@@ -76,15 +75,16 @@ namespace TimeTracker.Windows.Models
 		private int _typeShiftIndex;
 		private static ICollection<TypeShift>? _typeShifts;
 
-		public static void SetIndexCollection(ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
+		private ICollection<SubModule> _subModules;
+
+		public static void SetIndexCollection(ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null)
 		{
 			_activities = activities;
-			_projects = projects;
 			_shifts = shifts;
-			_subModules = subModules;
 			_typeShifts = typeShifts;
+			_projects = projects;
 		}
-		public RecordActivityReport(RecordActivityReport recordActivityReport)
+		public RecordActivityReport(IRecordActivity recordActivityReport)
 		{
 			if (recordActivityReport != null)
 			{
@@ -112,52 +112,80 @@ namespace TimeTracker.Windows.Models
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
 
 				//OnPropertyChanged(nameof(TotalTime));
-			}
-		}
-
-		public RecordActivityReport(RecordActivity recordActivity, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
-		{
-			if (recordActivity != null)
-			{
-				_activities = activities;
-				_projects = projects;
-				_shifts = shifts;
-				_subModules = subModules;
-				_typeShifts = typeShifts;
-				GuidId = recordActivity.GuidId;
-				Activity = recordActivity.Activity;
-				Project = recordActivity.Project;
-				SubModule = recordActivity.SubModule;
-				Shift = recordActivity.Shift;
-				TypeShift = recordActivity.TypeShift;
-
-				ActivityId = recordActivity.ActivityId;
-				ProjectId = recordActivity.ProjectId;
-				SubModuleId = recordActivity.SubModuleId;
-				ShiftGuidId = recordActivity.ShiftGuidId;
-				Description = recordActivity?.Description;
-				StartDateTime = recordActivity?.StartDateTime ?? DateTime.Now;
-				if (ActivityId != (int)eActivity.Stop)
-					EndDateTime = recordActivity?.EndDateTime ?? null;
-
-				TypeShiftId = TypeShift?.Id ?? null;
-
-				StartDate = StartDateTime.ToString("dd.MM.yyyy");
-				StartTime = StartDateTime.ToString("HH:mm:ss");
-				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
-				EndTime = EndDateTime?.ToString("HH:mm:ss");
-
 				if (_activities != null)
 					ActivityIndex = getIndex(_activities, ActivityId);
 				if (_projects != null)
+				{
 					ProjectIndex = getIndex(_projects, ProjectId);
+					createSumModuleList();
+				}
 				if (_shifts != null)
 					ShiftIndex = getIndex(_shifts, ShiftGuidId);
 				if (_typeShifts != null)
 					TypeShiftIndex = getIndex(_typeShifts, TypeShiftId);
-				//OnPropertyChanged(nameof(TotalTime));
+				if (_subModules != null)
+					SubModuleIndex = getIndex(_subModules, SubModuleId);
 			}
 		}
+
+		private void createSumModuleList()
+		{
+			if (ProjectId != null)
+			{
+				_subModules = new List<SubModule>();
+				_subModules.Add(new SubModule());
+				foreach (var item in Project.SubModules)
+				{
+					_subModules.Add(item);
+				}
+			}
+		}
+
+		//public RecordActivityReport(RecordActivity recordActivity)
+		//{
+		//	if (recordActivity != null)
+		//	{
+		//		GuidId = recordActivity.GuidId;
+		//		Activity = recordActivity.Activity;
+		//		Project = recordActivity.Project;
+		//		SubModule = recordActivity.SubModule;
+		//		Shift = recordActivity.Shift;
+		//		TypeShift = recordActivity.TypeShift;
+
+		//		ActivityId = recordActivity.ActivityId;
+		//		ProjectId = recordActivity.ProjectId;
+		//		SubModuleId = recordActivity.SubModuleId;
+		//		ShiftGuidId = recordActivity.ShiftGuidId;
+		//		Description = recordActivity?.Description;
+		//		StartDateTime = recordActivity?.StartDateTime ?? DateTime.Now;
+		//		if (ActivityId != (int)eActivity.Stop)
+		//			EndDateTime = recordActivity?.EndDateTime ?? null;
+
+		//		TypeShiftId = TypeShift?.Id ?? null;
+
+		//		StartDate = StartDateTime.ToString("dd.MM.yyyy");
+		//		StartTime = StartDateTime.ToString("HH:mm:ss");
+		//		EndDate = EndDateTime?.ToString("dd.MM.yyyy");
+		//		EndTime = EndDateTime?.ToString("HH:mm:ss");
+
+		//		if (_activities != null)
+		//			ActivityIndex = getIndex(_activities, ActivityId);
+		//		if (_projects != null)
+		//		{ 
+		//			ProjectIndex = getIndex(_projects, ProjectId);
+		//			createSumModuleList();
+		//		}
+		//		if (_shifts != null)
+		//			ShiftIndex = getIndex(_shifts, ShiftGuidId);
+		//		if (_typeShifts != null)
+		//			TypeShiftIndex = getIndex(_typeShifts, TypeShiftId);
+		//		if (_subModules != null)
+		//			SubModuleIndex = getIndex(_subModules, SubModuleId);
+		//		//OnPropertyChanged(nameof(TotalTime));
+		//	}
+		//}
+
+
 
 		public int ActivityIndex
 		{
