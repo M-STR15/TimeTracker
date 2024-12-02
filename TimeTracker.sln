@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.BE.DB", "TimeTr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{3C409BD9-6E53-4D3E-B992-FA59249E0366}"
 	ProjectSection(SolutionItems) = preProject
-		TimeTracker\README.md = TimeTracker\README.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Global
