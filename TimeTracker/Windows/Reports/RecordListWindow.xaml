@@ -17,7 +17,7 @@
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/Shared/ReportSharedDictionary.xaml" />
                 <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/RecordListWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <converters:ActivityConvert x:Key="activityConvert" />
             <converters:DateTimeToDateConvert x:Key="dateTimeToDateConvert" />
             <converters:TotalTimeConvert x:Key="totalTimeConvert" />
@@ -48,25 +48,24 @@
             Grid.Row="1"
             d:ItemsSource="{d:SampleData ItemCount=5}"
             AutoGenerateColumns="False"
+            BeginningEdit="dtgRecordActivities_BeginningEdit"
             BorderThickness="0"
             CellEditEnding="dtgRecordActivities_CellEditEnding"
-            BeginningEdit="dtgRecordActivities_BeginningEdit"
             CellStyle="{StaticResource BezOhraniceniCellStyle}"
             ColumnHeaderStyle="{StaticResource CustomDataGridHeaderStyle}"
-            
             GridLinesVisibility="Horizontal">
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="White" />
                     <Setter Property="Foreground" Value="Black" />
-                    
+
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="LightGray" />  
+                            <Setter Property="Background" Value="LightGray" />
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="BorderBrush" Value="Violet"/>
-                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="BorderBrush" Value="Violet" />
+                            <Setter Property="BorderThickness" Value="1" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
                             <Setter Property="Background" Value="LightGray" />
@@ -75,7 +74,7 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
-            
+
             <DataGrid.Columns>
                 <!--  Běžný editovatelný textový sloupec  -->
                 <!--<DataGridTextColumn Binding="{Binding StartDate, Mode=TwoWay}" Header="StartDate" />-->

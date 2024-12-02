@@ -11,8 +11,7 @@ namespace TimeTracker.Windows.Models
 		[ObservableProperty]
 		public string? _description;
 
-		[ObservableProperty]
-		private ICollection<Activity>? _activities;
+		private static ICollection<Activity>? _activities;
 		[ObservableProperty]
 		private Activity _activity;
 
@@ -39,8 +38,7 @@ namespace TimeTracker.Windows.Models
 
 		private int _projectIndex;
 
-		[ObservableProperty]
-		private ICollection<Project>? _projects;
+		private static ICollection<Project>? _projects;
 		[ObservableProperty]
 		private Shift? _shift;
 
@@ -49,8 +47,8 @@ namespace TimeTracker.Windows.Models
 
 		private int _shiftIndex;
 
-		[ObservableProperty]
-		private ICollection<Shift>? _shifts;
+
+		private static ICollection<Shift>? _shifts;
 		[ObservableProperty]
 		private string? _startDate;
 
@@ -68,8 +66,7 @@ namespace TimeTracker.Windows.Models
 
 		private int _subModuleIndex;
 
-		[ObservableProperty]
-		private ICollection<SubModule>? _subModules;
+		private static ICollection<SubModule>? _subModules;
 		[ObservableProperty]
 		private TypeShift? _typeShift;
 
@@ -77,18 +74,20 @@ namespace TimeTracker.Windows.Models
 		private int? _typeShiftId;
 
 		private int _typeShiftIndex;
+		private static ICollection<TypeShift>? _typeShifts;
 
-		[ObservableProperty]
-		private ICollection<TypeShift>? _typeShifts;
-		public RecordActivityReport(RecordActivityReport recordActivityReport, ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
+		public static void SetIndexCollection(ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null, ICollection<SubModule>? subModules = null)
+		{
+			_activities = activities;
+			_projects = projects;
+			_shifts = shifts;
+			_subModules = subModules;
+			_typeShifts = typeShifts;
+		}
+		public RecordActivityReport(RecordActivityReport recordActivityReport)
 		{
 			if (recordActivityReport != null)
 			{
-				_activities = activities;
-				_projects = projects;
-				_shifts = shifts;
-				_subModules = subModules;
-				_typeShifts = typeShifts;
 				GuidId = recordActivityReport.GuidId;
 				Activity = recordActivityReport.Activity;
 				Project = recordActivityReport.Project;
@@ -148,10 +147,14 @@ namespace TimeTracker.Windows.Models
 				EndDate = EndDateTime?.ToString("dd.MM.yyyy");
 				EndTime = EndDateTime?.ToString("HH:mm:ss");
 
-				ActivityIndex = getIndex(Activities, ActivityId);
-				ProjectIndex = getIndex(Projects, ProjectId);
-				ShiftIndex = getIndex(Shifts, ShiftGuidId);
-				TypeShiftIndex = getIndex(TypeShifts, TypeShiftId);
+				if (_activities != null)
+					ActivityIndex = getIndex(_activities, ActivityId);
+				if (_projects != null)
+					ProjectIndex = getIndex(_projects, ProjectId);
+				if (_shifts != null)
+					ShiftIndex = getIndex(_shifts, ShiftGuidId);
+				if (_typeShifts != null)
+					TypeShiftIndex = getIndex(_typeShifts, TypeShiftId);
 				//OnPropertyChanged(nameof(TotalTime));
 			}
 		}
@@ -166,13 +169,13 @@ namespace TimeTracker.Windows.Models
 					_activityIndex = value;
 					OnPropertyChanged();
 
-					if (_activities != null && value != -1)
-					{
-						Activity = _activities.ElementAtOrDefault(value);
-						ActivityId = Activity.Id;
-						OnPropertyChanged(nameof(Activity));
-						OnPropertyChanged(nameof(ActivityId));
-					}
+					//if (_activities != null && value != -1)
+					//{
+					//	Activity = _activities.ElementAtOrDefault(value);
+					//	ActivityId = Activity.Id;
+					//	OnPropertyChanged(nameof(Activity));
+					//	OnPropertyChanged(nameof(ActivityId));
+					//}
 				}
 			}
 		}
@@ -189,17 +192,17 @@ namespace TimeTracker.Windows.Models
 					_projectIndex = value;
 					OnPropertyChanged();
 
-					if (_projects != null && value != -1)
-					{
-						Project = _projects.ElementAtOrDefault(value);
-						ProjectId = Project.Id;
-						OnPropertyChanged(nameof(Project));
-						OnPropertyChanged(nameof(ProjectId));
+					//if (_projects != null && value != -1)
+					//{
+					//	Project = _projects.ElementAtOrDefault(value);
+					//	ProjectId = Project.Id;
+					//	OnPropertyChanged(nameof(Project));
+					//	OnPropertyChanged(nameof(ProjectId));
 
-						_subModules = null;
-						SubModuleId = null;
-						SubModuleIndex = -1;
-					}
+					//	_subModules = null;
+					//	SubModuleId = null;
+					//	SubModuleIndex = -1;
+					//}
 				}
 			}
 		}
@@ -214,13 +217,13 @@ namespace TimeTracker.Windows.Models
 					_shiftIndex = value;
 					OnPropertyChanged();
 
-					if (_shifts != null && value != -1)
-					{
-						Shift = _shifts.ElementAtOrDefault(value);
-						ShiftGuidId = Shift.GuidId;
-						OnPropertyChanged(nameof(Shift));
-						OnPropertyChanged(nameof(ShiftGuidId));
-					}
+					//if (_shifts != null && value != -1)
+					//{
+					//	Shift = _shifts.ElementAtOrDefault(value);
+					//	ShiftGuidId = Shift.GuidId;
+					//	OnPropertyChanged(nameof(Shift));
+					//	OnPropertyChanged(nameof(ShiftGuidId));
+					//}
 				}
 			}
 		}
@@ -235,13 +238,13 @@ namespace TimeTracker.Windows.Models
 					_subModuleIndex = value;
 					OnPropertyChanged();
 
-					if (_subModules != null && value != -1)
-					{
-						SubModule = _subModules.ElementAtOrDefault(value);
-						SubModuleId = SubModule.Id;
-						OnPropertyChanged(nameof(SubModule));
-						OnPropertyChanged(nameof(SubModuleId));
-					}
+					//if (_subModules != null && value != -1)
+					//{
+					//	SubModule = _subModules.ElementAtOrDefault(value);
+					//	SubModuleId = SubModule.Id;
+					//	OnPropertyChanged(nameof(SubModule));
+					//	OnPropertyChanged(nameof(SubModuleId));
+					//}
 				}
 			}
 		}
@@ -272,13 +275,13 @@ namespace TimeTracker.Windows.Models
 					_typeShiftIndex = value;
 					OnPropertyChanged();
 
-					if (_typeShifts != null && value != -1)
-					{
-						TypeShift = _typeShifts.ElementAtOrDefault(value);
-						TypeShiftId = TypeShift.Id;
-						OnPropertyChanged(nameof(TypeShift));
-						OnPropertyChanged(nameof(TypeShiftId));
-					}
+					//if (_typeShifts != null && value != -1)
+					//{
+					//	TypeShift = _typeShifts.ElementAtOrDefault(value);
+					//	TypeShiftId = TypeShift.Id;
+					//	OnPropertyChanged(nameof(TypeShift));
+					//	OnPropertyChanged(nameof(TypeShiftId));
+					//}
 				}
 			}
 		}

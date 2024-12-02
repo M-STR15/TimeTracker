@@ -19,6 +19,7 @@ namespace TimeTracker.Windows.Reports
 		public RecordListWindow(MainStory mainStore)
 		{
 			_eventLogService = new EventLogService();
+
 			try
 			{
 				InitializeComponent();
@@ -46,10 +47,11 @@ namespace TimeTracker.Windows.Reports
 				setRecordActivityReportList();
 				setRecordActivityReportListcollectionView();
 
-				DataContext = this;
 
+				RecordActivityReport.SetIndexCollection(Activities, Projects, Shifts, TypeShifts);
+				DataContext = this;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				_eventLogService.WriteError(Guid.Parse("1acd3061-db78-4f29-befa-ea1f72d2a036"), null, "Problém se spouštěním record list window.");
 			}
@@ -81,7 +83,7 @@ namespace TimeTracker.Windows.Reports
 			}
 			catch (Exception)
 			{
-				_eventLogService.WriteError(Guid.Parse("7a322e9b-26cb-4491-a98f-af54887459a7"), null, "Problém při mazáná zýznamu.");
+				_eventLogService.WriteError(Guid.Parse("7a322e9b-26cb-4491-a98f-af54887459a7"), null, "Problém při mazáná záznamu.");
 			}
 		}
 
@@ -129,12 +131,14 @@ namespace TimeTracker.Windows.Reports
 				var startDateTime = (DateTime)dateTimegroupDateTime(editedRow.StartDate, editedRow.StartTime);
 				var endDateTime = dateTimegroupDateTime(editedRow.EndDate, editedRow.EndTime);
 
-				var activityId = (Activities[editedRow.ActivityIndex]).Id;
-				var typeShiftId = getID_ActivityId(editedRow);
-				var shiftGuidId = getD_ShiftGuidId(editedRow);
+				var column = e.Column; // Sloupec, který se edituje
+
+
 				var projectId = getID_ProjectId(editedRow);
 				var subModuleId = getID_SubModuleId(editedRow);
-
+				var shiftGuidId = getD_ShiftGuidId(editedRow);
+				var typeShiftId = getID_ActivityId(editedRow);
+				var activityId = (Activities[editedRow.ActivityIndex]).Id;
 
 				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
@@ -154,7 +158,6 @@ namespace TimeTracker.Windows.Reports
 					}
 				}
 
-				SubModules = null;
 			}
 		}
 
@@ -164,30 +167,30 @@ namespace TimeTracker.Windows.Reports
 			if (result == null)
 				return null;
 			else
-				return result == Guid.Empty ? null : result;
+				return result == Guid.Empty ? editedRow.ShiftGuidId : result;
 		}
 
 		private int? getID_ActivityId(RecordActivityReport editedRow)
 		{
-			return (int?)(editedRow.TypeShiftIndex == -1 ? null : (TypeShifts[editedRow.TypeShiftIndex]).Id);
+			return (int?)(editedRow.TypeShiftIndex == -1 ? editedRow.ActivityId : (TypeShifts[editedRow.TypeShiftIndex]).Id);
 		}
 
 		private int? getID_ProjectId(RecordActivityReport editedRow)
 		{
 			var result = (int?)(editedRow.ProjectIndex == -1 ? null : (Projects[editedRow.ProjectIndex]).Id);
-			return result == 0 ? null : result;
+			return result == 0 ? editedRow.ProjectId : result;
 		}
 
 		private int? getID_SubModuleId(RecordActivityReport editedRow)
 		{
-			if (editedRow.SubModuleId != null)
+			if (SubModules != null && editedRow.SubModuleIndex != null && editedRow.SubModuleIndex != -1)
 			{
-				var result = (int?)(editedRow.SubModuleId == -1 ? null : (SubModules[editedRow.SubModuleIndex]).Id);
-				return result == 0 ? null : result;
+				var result = (int?)(editedRow.SubModuleIndex == -1 ? null : (SubModules[editedRow.SubModuleIndex]).Id);
+				return result == 0 ? editedRow.SubModuleId : result;
 			}
 			else
 			{
-				return null;
+				return editedRow.SubModuleId;
 			}
 		}
 		private List<RecordActivityReport> getRecordActivityReportList()
@@ -233,7 +236,7 @@ namespace TimeTracker.Windows.Reports
 			var getRecordActiviList = getRecordActivityReportList();
 			if (getRecordActiviList != null)
 			{
-				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.OrderBy(x => x.StartDateTime).Select(x => new RecordActivityReport(x, Activities, Projects, Shifts, TypeShifts)));
+				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.OrderBy(x => x.StartDateTime).Select(x => new RecordActivityReport(x)));
 			}
 
 			lblCount.Content = (RecordActivityReportList?.Count ?? 0).ToString();
