@@ -11,6 +11,10 @@ namespace TimeTracker.BE.DB.Providers
 		{
 		}
 
+		/// <summary>
+		/// Získá všechny záznamy aktivit z databáze.
+		/// </summary>
+		/// <returns>Seznam všech záznamů aktivit.</returns>
 		public List<RecordActivity> GetRecords()
 		{
 			try
@@ -34,6 +38,11 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá záznam aktivity podle zadaného Guid.
+		/// </summary>
+		/// <param name="guidId">Guid záznamu aktivity.</param>
+		/// <returns>Záznam aktivity.</returns>
 		public RecordActivity GetRecord(Guid guidId)
 		{
 			try
@@ -57,6 +66,12 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá záznamy aktivit v zadaném časovém rozmezí.
+		/// </summary>
+		/// <param name="startTime">Počáteční časový bod.</param>
+		/// <param name="endTime">Koncový časový bod.</param>
+		/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
 		public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
 		{
 			try

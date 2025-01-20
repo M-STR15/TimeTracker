@@ -6,6 +6,10 @@ using TimeTracker.BE.DB.Models;
 
 public class ProjectProvider
 {
+	/// <summary>
+	/// Získá všechny projekty z databáze, seřazené podle názvu a včetně jejich podmodulů.
+	/// </summary>
+	/// <returns>Kolekce projektů.</returns>
 	public ICollection<Project> GetProjects()
 	{
 		try
@@ -22,6 +26,10 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Získá všechny podmoduly z databáze, seřazené podle názvu.
+	/// </summary>
+	/// <returns>Kolekce podmodulů.</returns>
 	public ICollection<SubModule> GetSubModules()
 	{
 		try
@@ -37,6 +45,11 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Získá všechny podmoduly z databáze podle ID projektu, seřazené podle názvu.
+	/// </summary>
+	/// <param name="ptojectId">ID projektu</param>
+	/// <returns>Kolekce podmodulů.</returns>
 	public ICollection<SubModule> GetSubModules(int ptojectId)
 	{
 		try
@@ -55,6 +68,11 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Uloží projekt do databáze. Pokud projekt neexistuje, přidá ho, jinak ho aktualizuje.
+	/// </summary>
+	/// <param name="project">Projekt k uložení.</param>
+	/// <returns>Uložený projekt nebo null, pokud projekt s daným názvem již existuje.</returns>
 	public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
 	{
 		try
@@ -86,6 +104,11 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Odstraní projekt z databáze.
+	/// </summary>
+	/// <param name="project">Projekt k odstranění.</param>
+	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
 	public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
 	{
 		try
@@ -111,6 +134,11 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Uloží podmodul do databáze. Pokud podmodul neexistuje, přidá ho, jinak ho aktualizuje.
+	/// </summary>
+	/// <param name="subModule">Podmodul k uložení.</param>
+	/// <returns>Uložený podmodul nebo null, pokud došlo k chybě.</returns>
 	public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
 	{
 		try
@@ -139,6 +167,11 @@ public class ProjectProvider
 		}
 	}
 
+	/// <summary>
+	/// Odstraní podmodul z databáze.
+	/// </summary>
+	/// <param name="subModule">Podmodul k odstranění.</param>
+	/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
 	public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
 	{
 		try
