@@ -95,6 +95,10 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá poslední záznam aktivity z databáze.
+		/// </summary>
+		/// <returns>Poslední záznam aktivity.</returns>
 		public RecordActivity GetLastRecordActivity()
 		{
 			try
@@ -124,21 +128,21 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Uloží záznam aktivity do databáze.
+		/// Pokud záznam obsahuje Guid, aktualizuje existující záznam, jinak přidá nový.
+		/// </summary>
+		/// <param name="recordActivity">Záznam aktivity k uložení.</param>
+		/// <returns>Uložený záznam aktivity.</returns>
 		public RecordActivity? SaveRecord(RecordActivity recordActivity)
 		{
 			try
 			{
-				//var findValue = recordActivity;
 				using (var context = new MainDatacontext())
 				{
 					if (recordActivity.GuidId != Guid.Empty)
 					{
-						//findValue = context.RecordActivities.FirstOrDefault(x => x.GuidId == recordActivity.GuidId);
-						//if (findValue != null)
-						//{
-						//findValue.SetBasicValues(recordActivity);
 						context.RecordActivities.Update(recordActivity);
-						//}
 					}
 					else
 					{
@@ -159,6 +163,11 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Odstraní záznam aktivity podle zadaného Guid.
+		/// </summary>
+		/// <param name="guidId">Guid záznamu aktivity.</param>
+		/// <returns>Vrací true, pokud byl záznam úspěšně odstraněn.</returns>
 		public bool DeleteRecord(Guid guidId)
 		{
 			try
@@ -180,6 +189,11 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Aktualizuje čas ukončení záznamů aktivit.
+		/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
+		/// pokud se nejedná o poslední záznam nebo aktivitu typu Stop.
+		/// </summary>
 		public void UpdateRefreshEndTime()
 		{
 			try

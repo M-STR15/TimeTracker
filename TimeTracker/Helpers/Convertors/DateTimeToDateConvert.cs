@@ -5,6 +5,10 @@ namespace TimeTracker.Helpers.Convertors
 {
 	public class DateTimeToDateConvert : IValueConverter
 	{
+		/// <summary>
+		/// Metoda převádí objekt typu DateTime na řetězec ve formátu "dd.MM.yyyy".
+		/// Pokud je vstupní hodnota null nebo není typu DateTime, vrací původní hodnotu.
+		/// </summary>
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			try

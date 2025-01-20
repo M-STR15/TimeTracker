@@ -9,6 +9,9 @@ namespace TimeTracker.BE.DB.Providers
 		public ShiftProvider()
 		{ }
 
+		/// <summary>
+		/// Získá všechny směny z databáze, seřazené podle data začátku.
+		/// </summary>
 		public List<Shift> GetShifts()
 		{
 			try
@@ -25,6 +28,12 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá všechny směny v zadaném časovém rozmezí.
+		/// </summary>
+		/// <param name="dateFrom">Počáteční datum.</param>
+		/// <param name="dateTo">Koncové datum.</param>
+		/// <returns>Seznam směn v zadaném časovém rozmezí.</returns>
 		public List<Shift> GetShifts(DateTime dateFrom, DateTime dateTo)
 		{
 			try
@@ -41,6 +50,9 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá všechny typy směn z databáze.
+		/// </summary>
 		public List<TypeShift> GetTypeShifts()
 		{
 			try
@@ -57,6 +69,9 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Získá všechny typy směn, které jsou viditelné v hlavním okně.
+		/// </summary>
 		public List<TypeShift> GetTypeShiftsForMainWindow()
 		{
 			try
@@ -73,6 +88,11 @@ namespace TimeTracker.BE.DB.Providers
 			}
 		}
 
+		/// <summary>
+		/// Uloží seznam směn do databáze. Aktualizuje existující směny, přidá nové a odstraní ty, které již nejsou v seznamu.
+		/// </summary>
+		/// <param name="shifts">Seznam směn k uložení.</param>
+		/// <returns>Vrací true, pokud operace proběhla úspěšně, jinak false.</returns>
 		public bool SaveShifts(List<Shift> shifts)
 		{
 			try
@@ -88,15 +108,15 @@ namespace TimeTracker.BE.DB.Providers
 					var from = new DateTime(year, month, 1);
 					var to = from.AddMonths(1);
 					var actualDataInDB = context.Shifts
-						.Where(x => x.StartDate >= from && x.StartDate < to)
-						.AsNoTracking()
-						.ToList();
+					.Where(x => x.StartDate >= from && x.StartDate < to)
+					.AsNoTracking()
+					.ToList();
 
 					var updateList = shifts.Where(x => x.GuidId != Guid.Empty).ToList();
 					var addList = shifts.Where(x => x.GuidId == Guid.Empty).ToList();
 					var dellList = actualDataInDB
-						.ExceptBy(shifts.Select(e => e.GuidId), x => x.GuidId)
-						.ToList();
+					.ExceptBy(shifts.Select(e => e.GuidId), x => x.GuidId)
+					.ToList();
 
 					if (dellList != null && dellList.Count > 0)
 					{
@@ -122,7 +142,11 @@ namespace TimeTracker.BE.DB.Providers
 			}
 
 		}
-
+		/// <summary>
+		/// METHODA NENÍ DOKONČENÁ
+		/// </summary>
+		/// <param name="shiftGuidId"></param>
+		/// <returns></returns>
 		public double GetSumShiftHours(Guid shiftGuidId)
 		{
 			using (var context = new MainDatacontext())

@@ -6,7 +6,7 @@ namespace TimeTracker.Services
 	public class EventLogService
 	{
 		private NotificationManagement _notification;
-		private string _versionSW;
+		//private string _versionSW;
 		public EventLogService()
 		{
 			_notification = new NotificationManagement(5, 450);

@@ -52,7 +52,12 @@ namespace TimeTracker.Windows.Models
 
         public eTypeShift ETypeShift { get; set; }
 
-        public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
+		/// <summary>
+		/// Vrátí sloupec odpovídající danému dni v týdnu.
+		/// </summary>
+		/// <param name="dayOfWeek">Den v týdnu.</param>
+		/// <returns>Číslo sloupce, kde neděle je 6 a ostatní dny jsou posunuty o -1.</returns>
+		public static int GetColumn(DayOfWeek dayOfWeek) => (dayOfWeek == DayOfWeek.Sunday) ? 6 : (int)dayOfWeek - 1;
 
         private static int getWeekInMonth(DateTime date)
         {

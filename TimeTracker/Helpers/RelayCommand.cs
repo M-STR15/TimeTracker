@@ -13,15 +13,24 @@ namespace TimeTracker.Helpers
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
+		/// <summary>
+		/// Určuje, zda může být příkaz vykonán.
+		/// </summary>
+		/// <param name="parameter">Parametr příkazu.</param>
+		/// <returns>Vrací true, pokud příkaz může být vykonán; jinak false.</returns>
+		public bool CanExecute(object parameter)
+		{
+			return _canExecute == null || _canExecute(parameter);
+		}
 
-        public void Execute(object parameter)
-        {
-            _execute(parameter);
-        }
+		/// <summary>
+		/// Provede příkaz.
+		/// </summary>
+		/// <param name="parameter">Parametr příkazu.</param>
+		public void Execute(object parameter)
+		{
+			_execute(parameter);
+		}
 
         public event EventHandler CanExecuteChanged
         {

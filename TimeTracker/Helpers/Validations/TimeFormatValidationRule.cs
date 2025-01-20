@@ -5,6 +5,12 @@ namespace TimeTracker.Helpers.Validations
 {
 	public class TimeFormatValidationRule : ValidationRule
 	{
+		/// <summary>
+		/// Ověřuje, zda je zadaná hodnota platným časovým formátem HH:mm:ss.
+		/// </summary>
+		/// <param name="value">Hodnota k ověření.</param>
+		/// <param name="cultureInfo">Kulturní informace pro formátování.</param>
+		/// <returns>Výsledek ověření, který indikuje, zda je hodnota platná.</returns>
 		public override ValidationResult Validate(object value, CultureInfo cultureInfo)
 		{
 			if (value == null || string.IsNullOrWhiteSpace(value.ToString()))

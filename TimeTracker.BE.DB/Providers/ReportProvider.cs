@@ -7,52 +7,74 @@ namespace TimeTracker.BE.DB.Providers
 {
     public class ReportProvider
     {
-        public List<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
-        {
-            var activities = new List<RecordActivity>();
+		/// <summary>
+		/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
+		/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
+		/// </summary>
+		public List<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
+		{
+			var activities = new List<RecordActivity>();
 
-            try
-            {
-                var modBasicData = getRecordSumList(start, end);
-                var list = new List<SumInDay>();
-                var dayList = getDatesInRange(start, end);
-                foreach (var item in dayList)
-                {
-                    foreach (eTypeShift typeShift in Enum.GetValues(typeof(eTypeShift)))
-                    {
-                        var workHours = getSumHours(modBasicData, item.Date, typeShift, eActivity.Start);
-                        var pauseHours = getSumHours(modBasicData, item.Date, typeShift, eActivity.Pause);
-                        list.Add(new SumInDay(item.Date, typeShift, workHours, pauseHours));
-                    }
-                }
+			try
+			{
+				var modBasicData = getRecordSumList(start, end);
+				var list = new List<SumInDay>();
+				var dayList = getDatesInRange(start, end);
+				foreach (var item in dayList)
+				{
+					foreach (eTypeShift typeShift in Enum.GetValues(typeof(eTypeShift)))
+					{
+						var workHours = getSumHours(modBasicData, item.Date, typeShift, eActivity.Start);
+						var pauseHours = getSumHours(modBasicData, item.Date, typeShift, eActivity.Pause);
+						list.Add(new SumInDay(item.Date, typeShift, workHours, pauseHours));
+					}
+				}
 
-                return list;
-            }
-            catch (Exception)
-            {
-                return new List<SumInDay>();
-            }
-        }
+				return list;
+			}
+			catch (Exception)
+			{
+				return new List<SumInDay>();
+			}
+		}
 
-        public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
+		/// <summary>
+		/// Metoda získává počet hodin pauzy pro zadané datum.
+		/// </summary>
+		public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
 
-        public double GetPauseHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Pause);
+		/// <summary>
+		/// Metoda získává počet hodin pauzy pro zadanou směnu.
+		/// </summary>
+		public double GetPauseHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Pause);
 
-        public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
-        {
-            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
-            return getPlanList_DayHours(start, end, dateList, typeShifts);
-        }
+		/// <summary>
+		/// Metoda získává plánované pracovní hodiny pro zadaný rozsah dat a typy směn.
+		/// </summary>
+		public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+		{
+			var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+			return getPlanList_DayHours(start, end, dateList, typeShifts);
+		}
 
-        public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
-        public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
-        {
-            var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
-            var realData = GetActivityOverDays(start, end);
-            return getRealList_DayHours(dateList, realData, typeShifts);
-        }
+		/// <summary>
+		/// Metoda získává počet hodin práce pro zadané datum.
+		/// </summary>
+		public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
+		/// <summary>
+		/// Metoda získává pracovní hodiny pro zadaný rozsah dat a typy směn.
+		/// </summary>
+		public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+		{
+			var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
+			var realData = GetActivityOverDays(start, end);
+			return getRealList_DayHours(dateList, realData, typeShifts);
+		}
 
-        public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
+		/// <summary>
+		/// Metoda získává počet hodin práce pro zadanou směnu.
+		/// </summary>
+		public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
 
         private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
         {

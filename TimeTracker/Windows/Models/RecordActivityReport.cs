@@ -139,8 +139,16 @@ namespace TimeTracker.Windows.Models
 			}
 		}
 
+		/// <summary>
+		/// Vypočítá dobu trvání v sekundách mezi počátečním a koncovým časem.
+		/// Pokud není koncový čas nastaven, vrátí 0.
+		/// </summary>
 		public double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - (DateTime)StartDateTime).TotalSeconds : 0;
 
+		/// <summary>
+		/// Vypočítá celkový čas trvání aktivity.
+		/// Pokud je aktivita zastavena, vrátí null.
+		/// </summary>
 		public TimeSpan? TotalTime
 		{
 			get
@@ -160,6 +168,9 @@ namespace TimeTracker.Windows.Models
 
 		private int _activityIndex { get; set; }
 
+		/// <summary>
+		/// Nastaví kolekce indexů pro aktivity, projekty, směny a typy směn.
+		/// </summary>
 		public static void SetIndexCollection(ICollection<Activity>? activities = null, ICollection<Project>? projects = null, ICollection<Shift>? shifts = null, ICollection<TypeShift>? typeShifts = null)
 		{
 			_activities = activities;
