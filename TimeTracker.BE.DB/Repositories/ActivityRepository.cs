@@ -1,27 +1,25 @@
 ﻿using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.BE.DB.Repositories
+namespace TimeTracker.BE.DB.Repositories;
+public class ActivityRepository
 {
-	public class ActivityRepository
+	/// <summary>
+	/// Získá seznam všech aktivit z databáze.
+	/// </summary>
+	/// <returns>Seznam aktivit.</returns>
+	public List<Activity> GetActivities()
 	{
-		/// <summary>
-		/// Získá seznam všech aktivit z databáze.
-		/// </summary>
-		/// <returns>Seznam aktivit.</returns>
-		public List<Activity> GetActivities()
+		try
 		{
-			try
+			using (var context = new MainDatacontext())
 			{
-				using (var context = new MainDatacontext())
-				{
-					return context.Activities.ToList();
-				}
+				return context.Activities.ToList();
 			}
-			catch (Exception)
-			{
-				return new();
-			}
+		}
+		catch (Exception)
+		{
+			return new();
 		}
 	}
 }
