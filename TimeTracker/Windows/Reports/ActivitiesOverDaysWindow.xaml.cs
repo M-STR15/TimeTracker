@@ -47,7 +47,7 @@ namespace TimeTracker.Windows.Reports
 			var dateTo = dateFrom.AddMonths(1);
 			var list = getProvider.GetActivityOverDays(dateFrom, dateTo);
 
-			_seriesCollection = new SeriesCollection
+			SeriesCollection = new SeriesCollection
 			{
 				new StackedColumnSeries
 				{
@@ -99,8 +99,8 @@ namespace TimeTracker.Windows.Reports
 				}
 			};
 
-			_labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
-			_formatter = value => value.ToString();
+			Labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
+			Formatter = value => value.ToString();
 		}
 		private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
