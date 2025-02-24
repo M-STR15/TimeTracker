@@ -9,6 +9,12 @@ namespace TimeTracker.BE.DB.Models
 	[Comment("Tabulka projektů.")]
 	public class Project : IProjectWithoutColl, IIdentifiable
 	{
+		[Comment("Aktivity spojené s projektem.")]
+		public ICollection<RecordActivity>? Activities { get; set; }
+
+		[Comment("Popis projektu.")]
+		public virtual string? Description { get; set; }
+
 		[Key]
 		[Column("Project_ID")]
 		[Comment("Primární klíč projektu.")]
@@ -17,15 +23,8 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[Comment("Název projektu.")]
 		public virtual string Name { get; set; }
-
-		[Comment("Popis projektu.")]
-		public virtual string? Description { get; set; }
-
-		[Comment("Aktivity spojené s projektem.")]
-		public ICollection<RecordActivity> Activities { get; set; }
-
 		[Comment("Podmoduly spojené s projektem.")]
-		public ICollection<SubModule> SubModules { get; set; }
+		public ICollection<SubModule>? SubModules { get; set; }
 
 		public Project()
 		{

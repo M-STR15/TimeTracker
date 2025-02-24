@@ -8,29 +8,27 @@ namespace TimeTracker.BE.DB.Models
     [Comment("Tabulka všech možných směn.")]
 	public class TypeShift : IIdentifiable
 	{
+		[Column("Color")]
+		[Comment("Barva směny.")]
+		public string Color { get; set; } = "";
+
 		[Key]
 		[Column("TypeShift_ID")]
 		[Comment("Primární klíč typu směny.")]
 		public int Id { get; set; }
 
+		[Comment("Viditelnost směny v hlavním okně.")]
+		public bool IsVisibleInMainWindow { get; set; }
+
 		[Required]
 		[Column("Name")]
 		[Comment("Název typu směny.")]
 		public string Name { get; set; } = "";
-
-		[Column("Color")]
-		[Comment("Barva směny.")]
-		public string Color { get; set; } = "";
-
-		[Comment("Viditelnost směny v hlavním okně.")]
-		public bool IsVisibleInMainWindow { get; set; }
+		[Comment("Kolekce aktivit záznamů.")]
+		public ICollection<RecordActivity>? RecordActivity { get; set; }
 
 		[Comment("Kolekce typů směn.")]
-		public ICollection<TypeShift> TypeShifts { get; set; }
-
-		[Comment("Kolekce aktivit záznamů.")]
-		public ICollection<RecordActivity> RecordActivity { get; set; }
-
+		public ICollection<TypeShift>? TypeShifts { get; set; }
 		public TypeShift() { }
 
 		public TypeShift(int id, string name, string color, bool isVisibleInMainWindow = true) : this()

@@ -9,6 +9,8 @@ namespace TimeTracker.BE.DB.Models
 	[Comment("Primární klíč aktivity.")]
 	public class Activity : IIdentifiable
 	{
+		public ICollection<RecordActivity>? Activities { get; set; }
+
 		[Key]
 		[Column("Activity_ID")]
 		[Comment("Primární klíč aktivity.")]
@@ -27,9 +29,6 @@ namespace TimeTracker.BE.DB.Models
 			Name = name;
 			Id = id;
 		}
-
-		public ICollection<RecordActivity>? Activities { get; set; }
-
 		public override string ToString()
 		{
 			return Name;

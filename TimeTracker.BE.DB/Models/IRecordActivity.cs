@@ -3,7 +3,7 @@ namespace TimeTracker.BE.DB.Models
 {
 	public interface IRecordActivity
 	{
-		Activity Activity { get; set; }
+		Activity? Activity { get; set; }
 		int ActivityId { get; set; }
 		string? Description { get; set; }
 		double DurationSec { get; }

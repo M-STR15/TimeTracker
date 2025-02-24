@@ -19,14 +19,82 @@ namespace TimeTracker.BE.DB.Models
 
 		private string _startTime;
 
+		[ForeignKey("ActivityId")]
+		public virtual Activity? Activity { get; set; }
+
+		[Required]
+		[Column("Activity_ID")]
+		[Comment("Primární klíč aktivity.")]
+		public virtual int ActivityId { get; set; }
+
+		[Comment("Popis aktivity.")]
+		public virtual string? Description { get; set; }
+
+		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
+
+		[Column("End_DateTime")]
+		[Comment("Datum a čas ukončení aktivity.")]
+		public virtual DateTime? EndDateTime
+		{
+			get => _endDateTime;
+			set
+			{
+				if (_endDateTime != value)
+					_endDateTime = value;
+			}
+		}
+
+		[Key]
+		[Column("Guid_ID")]
+		public virtual Guid GuidId { get; set; }
+
+		[ForeignKey("ProjectId")]
+		public virtual Project? Project { get; set; }
+
+		[Column("Project_ID")]
+		public virtual int? ProjectId { get; set; }
+
+		[ForeignKey("ShiftGuidId")]
+		public virtual Shift? Shift { get; set; }
+
+		[Column("Shift_GuidID")]
+		public virtual Guid? ShiftGuidId { get; set; }
+
+		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+		public virtual string StartDate
+		{
+			get => StartDateTime.ToString("dd.MM.yyyy");
+		}
+
+		[Required]
+		[Column("Start_DateTime")]
+		[Comment("Datum a čas zahájení aktivity.")]
+		public virtual DateTime StartDateTime
+		{
+			get => _startDateTime;
+			set
+			{
+				if (_startDateTime != value)
+					_startDateTime = value;
+			}
+		}
+
+		[ForeignKey("SubModuleId")]
+		public virtual SubModule? SubModule { get; set; }
+
+		[Column("SubModule_ID")]
+		public virtual int? SubModuleId { get; set; }
+
+		[ForeignKey("TypeShiftId")]
+		public virtual TypeShift? TypeShift { get; set; }
+
+		[Column("TypeShift_ID")]
+		public virtual int? TypeShiftId { get; set; }
+
 		public RecordActivity() : base()
 		{
 			GuidId = Guid.Empty;
-		}
-
-		private DateTime modFormatDatetime(DateTime st)
-		{
-			return new DateTime(st.Year, st.Month, st.Day, st.Hour, st.Minute, st.Second);
 		}
 
 		public RecordActivity(DateTime startTime, int activityId, string description = "") : this()
@@ -90,89 +158,9 @@ namespace TimeTracker.BE.DB.Models
 			TypeShiftId = typeShift?.Id ?? null;
 		}
 
-		//public void SetBasicValues(RecordActivity recordActivity)
-		//{
-		//	GuidId = recordActivity.GuidId;
-		//	ActivityId = recordActivity.ActivityId;
-		//	ProjectId = recordActivity.ProjectId;
-		//	SubModuleId = recordActivity.SubModuleId;
-		//	ShiftGuidId = recordActivity.ShiftGuidId;
-		//	Description = recordActivity.Description;
-		//	StartDateTime = modFormatDatetime(recordActivity.StartDateTime);
-		//	EndDateTime = recordActivity.EndDateTime;
-		//	TypeShiftId = recordActivity.TypeShiftId;
-		//}
-
-		[ForeignKey("ActivityId")]
-		public virtual Activity Activity { get; set; }
-
-		[Required]
-		[Column("Activity_ID")]
-		[Comment("Primární klíč aktivity.")]
-		public virtual int ActivityId { get; set; }
-
-		[Comment("Popis aktivity.")]
-		public virtual string? Description { get; set; }
-
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
-
-		[Column("End_DateTime")]
-		[Comment("Datum a čas ukončení aktivity.")]
-		public virtual DateTime? EndDateTime
+		private DateTime modFormatDatetime(DateTime st)
 		{
-			get => _endDateTime;
-			set
-			{
-				if (_endDateTime != value)
-					_endDateTime = value;
-			}
+			return new DateTime(st.Year, st.Month, st.Day, st.Hour, st.Minute, st.Second);
 		}
-
-		[Key]
-		[Column("Guid_ID")]
-		public virtual Guid GuidId { get; set; }
-
-		[ForeignKey("ProjectId")]
-		public virtual Project? Project { get; set; }
-
-		[Column("Project_ID")]
-		public virtual int? ProjectId { get; set; }
-
-		[ForeignKey("ShiftGuidId")]
-		public virtual Shift? Shift { get; set; }
-
-		[Column("Shift_GuidID")]
-		public virtual Guid? ShiftGuidId { get; set; }
-		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public virtual string StartDate
-		{
-			get => StartDateTime.ToString("dd.MM.yyyy");
-		}
-
-		[Required]
-		[Column("Start_DateTime")]
-		[Comment("Datum a čas zahájení aktivity.")]
-		public virtual DateTime StartDateTime
-		{
-			get => _startDateTime;
-			set
-			{
-				if (_startDateTime != value)
-					_startDateTime = value;
-			}
-		}
-
-		[ForeignKey("SubModuleId")]
-		public virtual SubModule? SubModule { get; set; }
-
-		[Column("SubModule_ID")]
-		public virtual int? SubModuleId { get; set; }
-
-		[ForeignKey("TypeShiftId")]
-		public virtual TypeShift? TypeShift { get; set; }
-
-		[Column("TypeShift_ID")]
-		public virtual int? TypeShiftId { get; set; }
 	}
 }

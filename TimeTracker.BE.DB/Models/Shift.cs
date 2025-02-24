@@ -9,27 +9,25 @@ namespace TimeTracker.BE.DB.Models
 	[Comment("Tabulka slouží k naplánování směny.")]
 	public class Shift : Stamp, IIdentifiableGuid
 	{
+		public string? Description { get; set; }
+
 		[Key]
 		[Column("Guid_ID")]
 		public Guid GuidId { get; set; }
+
+		public ICollection<Shift>? Shifts { get; set; }
 
 		[Required]
 		[Column("Start_date")]
 		public DateTime StartDate { get; set; }
 		[NotMapped]
 		public string StartDateLongStr { get => (GuidId == Guid.Empty ? "" : StartDate.Date.ToString("dd.MM.yyyy")); }
-
-		public string? Description { get; set; }
-
-		public ICollection<Shift> Shifts { get; set; }
+		[ForeignKey("TypeShiftId")]
+		public TypeShift? TypeShift { get; set; }
 
 		[Required]
 		[Column("TypeShift_ID")]
 		public int TypeShiftId { get; set; }
-
-		[ForeignKey("TypeShiftId")]
-		public TypeShift TypeShift { get; set; }
-
 		public Shift() : base()
 		{
 		}
