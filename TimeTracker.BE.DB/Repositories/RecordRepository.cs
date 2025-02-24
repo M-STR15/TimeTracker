@@ -3,93 +3,31 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 
-namespace TimeTracker.BE.DB.Providers
+namespace TimeTracker.BE.DB.Repositories
 {
-	public class RecordProvider
+	public class RecordRepository
 	{
-		public RecordProvider()
-		{
-		}
-
 		/// <summary>
-		/// Získá všechny záznamy aktivit z databáze.
-		/// </summary>
-		/// <returns>Seznam všech záznamů aktivit.</returns>
-		public List<RecordActivity> GetRecords()
-		{
-			try
-			{
-				using (var context = new MainDatacontext())
-				{
-					var recordActivities = context.RecordActivities
-					.Include(x => x.Project)
-						.ThenInclude(x => x.SubModules)
-					.Include(x => x.Activity)
-					.Include(x => x.TypeShift)
-					.Include(x => x.Shift)
-					.OrderBy(x => x.StartDateTime).ToList();
-
-					return recordActivities;
-				}
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
-
-		/// <summary>
-		/// Získá záznam aktivity podle zadaného Guid.
+		/// Odstraní záznam aktivity podle zadaného Guid.
 		/// </summary>
 		/// <param name="guidId">Guid záznamu aktivity.</param>
-		/// <returns>Záznam aktivity.</returns>
-		public RecordActivity GetRecord(Guid guidId)
+		/// <returns>Vrací true, pokud byl záznam úspěšně odstraněn.</returns>
+		public bool DeleteRecord(Guid guidId)
 		{
 			try
 			{
 				using (var context = new MainDatacontext())
 				{
-					var recordActivitiy = context.RecordActivities
-					.Include(x => x.Project)
-						.ThenInclude(x => x.SubModules)
-					.Include(x => x.Activity)
-					.Include(x => x.TypeShift)
-					.Include(x => x.Shift)
-					.OrderBy(x => x.StartDateTime).FirstOrDefault(x => x.GuidId == guidId);
-
-					return recordActivitiy;
+					var selectRow = context.RecordActivities.FirstOrDefault(x => x.GuidId == guidId);
+					context.RecordActivities.Remove(selectRow);
+					context.SaveChanges();
 				}
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
 
-		/// <summary>
-		/// Získá záznamy aktivit v zadaném časovém rozmezí.
-		/// </summary>
-		/// <param name="startTime">Počáteční časový bod.</param>
-		/// <param name="endTime">Koncový časový bod.</param>
-		/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
-		public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
-		{
-			try
-			{
-				using (var context = new MainDatacontext())
-				{
-					var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
-					.Include(x => x.Project)
-						.ThenInclude(x => x.SubModules)
-					.Include(x => x.Activity)
-					.Include(x => x.TypeShift)
-					.Include(x => x.Shift)
-					.OrderBy(x => x.StartDateTime).ToList();
+				UpdateRefreshEndTime();
 
-					return recordActivities;
-				}
+				return true;
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
 				throw;
 			}
@@ -129,6 +67,88 @@ namespace TimeTracker.BE.DB.Providers
 		}
 
 		/// <summary>
+		/// Získá záznam aktivity podle zadaného Guid.
+		/// </summary>
+		/// <param name="guidId">Guid záznamu aktivity.</param>
+		/// <returns>Záznam aktivity.</returns>
+		public RecordActivity GetRecord(Guid guidId)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivitiy = context.RecordActivities
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
+					.OrderBy(x => x.StartDateTime).FirstOrDefault(x => x.GuidId == guidId);
+
+					return recordActivitiy;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		/// <summary>
+		/// Získá všechny záznamy aktivit z databáze.
+		/// </summary>
+		/// <returns>Seznam všech záznamů aktivit.</returns>
+		public List<RecordActivity> GetRecords()
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
+					.OrderBy(x => x.StartDateTime).ToList();
+
+					return recordActivities;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+		/// <summary>
+		/// Získá záznamy aktivit v zadaném časovém rozmezí.
+		/// </summary>
+		/// <param name="startTime">Počáteční časový bod.</param>
+		/// <param name="endTime">Koncový časový bod.</param>
+		/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
+		public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
+		{
+			try
+			{
+				using (var context = new MainDatacontext())
+				{
+					var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.TypeShift)
+					.Include(x => x.Shift)
+					.OrderBy(x => x.StartDateTime).ToList();
+
+					return recordActivities;
+				}
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+		/// <summary>
 		/// Uloží záznam aktivity do databáze.
 		/// Pokud záznam obsahuje Guid, aktualizuje existující záznam, jinak přidá nový.
 		/// </summary>
@@ -162,33 +182,6 @@ namespace TimeTracker.BE.DB.Providers
 				throw;
 			}
 		}
-
-		/// <summary>
-		/// Odstraní záznam aktivity podle zadaného Guid.
-		/// </summary>
-		/// <param name="guidId">Guid záznamu aktivity.</param>
-		/// <returns>Vrací true, pokud byl záznam úspěšně odstraněn.</returns>
-		public bool DeleteRecord(Guid guidId)
-		{
-			try
-			{
-				using (var context = new MainDatacontext())
-				{
-					var selectRow = context.RecordActivities.FirstOrDefault(x => x.GuidId == guidId);
-					context.RecordActivities.Remove(selectRow);
-					context.SaveChanges();
-				}
-
-				UpdateRefreshEndTime();
-
-				return true;
-			}
-			catch (Exception ex)
-			{
-				throw;
-			}
-		}
-
 		/// <summary>
 		/// Aktualizuje čas ukončení záznamů aktivit.
 		/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
@@ -209,7 +202,7 @@ namespace TimeTracker.BE.DB.Providers
 					for (int i = 0; i <= recordActivities.Count - 1; i++)
 					{
 						var currentItem = recordActivities[i];
-						if (i == (recordActivities.Count - 1))
+						if (i == recordActivities.Count - 1)
 						{
 							currentItem.EndDateTime = null;
 						}

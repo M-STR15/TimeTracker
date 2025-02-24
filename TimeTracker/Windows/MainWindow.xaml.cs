@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
-using TimeTracker.BE.DB.Providers;
+using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Models;
 using TimeTracker.Services;
 using TimeTracker.Stories;
@@ -21,15 +21,15 @@ namespace TimeTracker.Windows
 		private EventLogService _eventLogService;
 		private EventHandler _lastRecordActivityHangler;
 		private RecordActivity _lra;
-		private ProjectProvider _projectProvider;
+		private ProjectRepository _projectProvider;
 
-		private RecordProvider _recordProvider;
+		private RecordRepository _recordProvider;
 
-		private ReportProvider _reportProvider;
+		private ReportRepository _reportProvider;
 
 		private List<ShiftCmb> _shiftCmbs = new();
 
-		private ShiftProvider _shiftProvider;
+		private ShiftRepository _shiftProvider;
 
 		private int _totalActivityTimeBeforeInSecond;
 

@@ -4,34 +4,35 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeTracker.BE.DB.Models
 {
-    [Index(nameof(Name), IsUnique = true)]
-    [Table("Activities", Schema = "dbo")]
-    public class Activity: IIdentifiable
+	[Index(nameof(Name), IsUnique = true)]
+	[Table("Activities", Schema = "dbo")]
+	[Comment("Primární klíč aktivity.")]
+	public class Activity : IIdentifiable
 	{
-        [Key]
-        [Column("Activity_ID")]
-        public int Id { get; set; }
+		[Key]
+		[Column("Activity_ID")]
+		[Comment("Primární klíč aktivity.")]
+		public int Id { get; set; }
 
-        [Required]
-        [MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
-        public string Name { get; set; }
+		[Required]
+		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
+		[Comment("Název aktivity.")]
+		public string Name { get; set; } = string.Empty;
 
-        public ICollection<RecordActivity> Activities { get; set; }
+		public Activity()
+		{
+		}
+		public Activity(int id, string name)
+		{
+			Name = name;
+			Id = id;
+		}
 
-        public Activity()
-        {
-            Name = "";
-        }
+		public ICollection<RecordActivity>? Activities { get; set; }
 
-        public Activity(int id, string name) : this()
-        {
-            Id = id;
-            Name = name;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
+		public override string ToString()
+		{
+			return Name;
+		}
+	}
 }

@@ -1,10 +1,10 @@
 ﻿using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.BE.DB.Providers
+namespace TimeTracker.BE.DB.Repositories
 {
-    public class ActivityProvider
-    {
+	public class ActivityRepository
+	{
 		/// <summary>
 		/// Získá seznam všech aktivit z databáze.
 		/// </summary>
@@ -23,5 +23,5 @@ namespace TimeTracker.BE.DB.Providers
 				return new();
 			}
 		}
-    }
+	}
 }

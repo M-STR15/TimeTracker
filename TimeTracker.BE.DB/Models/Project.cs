@@ -4,44 +4,51 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeTracker.BE.DB.Models
 {
-    [Index(nameof(Name), IsUnique = true)]
-    [Table("Project", Schema = "dbo")]
-    public class Project : IProjectWithoutColl, IIdentifiable
+	[Index(nameof(Name), IsUnique = true)]
+	[Table("Project", Schema = "dbo")]
+	[Comment("Tabulka projektů.")]
+	public class Project : IProjectWithoutColl, IIdentifiable
 	{
-        [Key]
-        [Column("Project_ID")]
-        public virtual int Id { get; set; }
+		[Key]
+		[Column("Project_ID")]
+		[Comment("Primární klíč projektu.")]
+		public virtual int Id { get; set; }
 
-        [Required]
-        public virtual string Name { get; set; }
+		[Required]
+		[Comment("Název projektu.")]
+		public virtual string Name { get; set; }
 
-        public virtual string? Description { get; set; }
+		[Comment("Popis projektu.")]
+		public virtual string? Description { get; set; }
 
-        public ICollection<RecordActivity> Activities { get; set; }
-        public ICollection<SubModule> SubModules { get; set; }
+		[Comment("Aktivity spojené s projektem.")]
+		public ICollection<RecordActivity> Activities { get; set; }
 
-        public Project()
-        {
-            Name = "";
-        }
+		[Comment("Podmoduly spojené s projektem.")]
+		public ICollection<SubModule> SubModules { get; set; }
 
-        public Project(IProjectWithoutColl project) : this()
-        {
-            Id = project.Id;
-            Name = project.Name;
-            Description = project.Description;
-        }
+		public Project()
+		{
+			Name = "";
+		}
 
-        public Project(int id, string name, string description = "") : this()
-        {
-            Id = id;
-            Name = name;
-            Description = description;
-        }
+		public Project(IProjectWithoutColl project) : this()
+		{
+			Id = project.Id;
+			Name = project.Name;
+			Description = project.Description;
+		}
 
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
+		public Project(int id, string name, string description = "") : this()
+		{
+			Id = id;
+			Name = name;
+			Description = description;
+		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
+	}
 }

@@ -1,6 +1,6 @@
 ﻿using Ninject;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Providers;
+using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Windows;
 using TimeTracker.Windows.Reports;
 
@@ -24,22 +24,22 @@ namespace TimeTracker.Stories
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 
-			_container.Bind<RecordProvider>().To<RecordProvider>().InSingletonScope();
-			_container.Bind<ShiftProvider>().To<ShiftProvider>().InSingletonScope();
+			_container.Bind<RecordRepository>().To<RecordRepository>().InSingletonScope();
+			_container.Bind<ShiftRepository>().To<ShiftRepository>().InSingletonScope();
 		}
 
 		public MainWindow GetMainWindow() => _container.Get<MainWindow>();
 
-		public RecordProvider GetDatabaseProvider() => _container.Get<RecordProvider>();
+		public RecordRepository GetDatabaseProvider() => _container.Get<RecordRepository>();
 
-		public ShiftProvider GetShiftProvider() => _container.Get<ShiftProvider>();
+		public ShiftRepository GetShiftProvider() => _container.Get<ShiftRepository>();
 
-		public ActivityProvider GetActivityProvider() => _container.Get<ActivityProvider>();
+		public ActivityRepository GetActivityProvider() => _container.Get<ActivityRepository>();
 
-		public ProjectProvider GetProjectProvider() => _container.Get<ProjectProvider>();
+		public ProjectRepository GetProjectProvider() => _container.Get<ProjectRepository>();
 
-		public RecordProvider GetRecordProvider() => _container.Get<RecordProvider>();
+		public RecordRepository GetRecordProvider() => _container.Get<RecordRepository>();
 
-		public ReportProvider GetReportProvider() => _container.Get<ReportProvider>();
+		public ReportRepository GetReportProvider() => _container.Get<ReportRepository>();
 	}
 }

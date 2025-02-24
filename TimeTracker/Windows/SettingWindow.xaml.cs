@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using TimeTracker.BE.DB.Providers;
+using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Helpers;
 using TimeTracker.Models;
 using TimeTracker.Services;
@@ -17,7 +17,7 @@ namespace TimeTracker.Windows
 	public partial class SettingWindow : Window
 	{
 		private readonly MainStory _mainStory;
-		private readonly ProjectProvider _projectProvider;
+		private readonly ProjectRepository _projectProvider;
 
 		private EventLogService _eventLogService;
 		private ProjectListBox _selectProjectListBox;

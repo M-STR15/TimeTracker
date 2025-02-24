@@ -1,11 +1,71 @@
-﻿namespace TimeTracker.BE.DB.Providers;
+﻿namespace TimeTracker.BE.DB.Repositories;
 
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
-public class ProjectProvider
+public class ProjectRepository
 {
+	/// <summary>
+	/// Odstraní projekt z databáze.
+	/// </summary>
+	/// <param name="project">Projekt k odstranění.</param>
+	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
+	public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
+	{
+		try
+		{
+			using (var context = new MainDatacontext())
+			{
+				var item = context.Projects.FirstOrDefault(x => x.Id == project.Id);
+				if (item != null)
+				{
+					context.Projects.Remove(item);
+					context.SaveChanges();
+				}
+				else
+				{
+					return null;
+				}
+				return item;
+			}
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	/// <summary>
+	/// Odstraní podmodul z databáze.
+	/// </summary>
+	/// <param name="subModule">Podmodul k odstranění.</param>
+	/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
+	public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
+	{
+		try
+		{
+			using (var context = new MainDatacontext())
+			{
+				var item = context.SubModules.FirstOrDefault(x => x.Id == subModule.Id);
+				if (item != null)
+				{
+					context.SubModules.Remove(item);
+					context.SaveChanges();
+				}
+				else
+				{
+					return null;
+				}
+				return item;
+			}
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
 	/// <summary>
 	/// Získá všechny projekty z databáze, seřazené podle názvu a včetně jejich podmodulů.
 	/// </summary>
@@ -103,37 +163,6 @@ public class ProjectProvider
 			throw;
 		}
 	}
-
-	/// <summary>
-	/// Odstraní projekt z databáze.
-	/// </summary>
-	/// <param name="project">Projekt k odstranění.</param>
-	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
-	{
-		try
-		{
-			using (var context = new MainDatacontext())
-			{
-				var item = context.Projects.FirstOrDefault(x => x.Id == project.Id);
-				if (item != null)
-				{
-					context.Projects.Remove(item);
-					context.SaveChanges();
-				}
-				else
-				{
-					return null;
-				}
-				return item;
-			}
-		}
-		catch (Exception)
-		{
-			throw;
-		}
-	}
-
 	/// <summary>
 	/// Uloží podmodul do databáze. Pokud podmodul neexistuje, přidá ho, jinak ho aktualizuje.
 	/// </summary>
@@ -160,36 +189,6 @@ public class ProjectProvider
 			}
 
 			return item;
-		}
-		catch (Exception)
-		{
-			throw;
-		}
-	}
-
-	/// <summary>
-	/// Odstraní podmodul z databáze.
-	/// </summary>
-	/// <param name="subModule">Podmodul k odstranění.</param>
-	/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
-	public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
-	{
-		try
-		{
-			using (var context = new MainDatacontext())
-			{
-				var item = context.SubModules.FirstOrDefault(x => x.Id == subModule.Id);
-				if (item != null)
-				{
-					context.SubModules.Remove(item);
-					context.SaveChanges();
-				}
-				else
-				{
-					return null;
-				}
-				return item;
-			}
 		}
 		catch (Exception)
 		{

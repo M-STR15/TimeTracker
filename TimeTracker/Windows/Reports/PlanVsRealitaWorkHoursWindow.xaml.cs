@@ -4,15 +4,15 @@ using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models.Enums;
-using TimeTracker.BE.DB.Providers;
+using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Windows.Reports.Services;
 
 namespace TimeTracker.Windows.Reports
 {
-    /// <summary>
-    /// Interaction logic for PlanVsRealitaWorkHoursWindow.xaml
-    /// </summary>
-    [ObservableObject]
+	/// <summary>
+	/// Interaction logic for PlanVsRealitaWorkHoursWindow.xaml
+	/// </summary>
+	[ObservableObject]
     public partial class PlanVsRealitaWorkHoursWindow : Window
     {
         [ObservableProperty]
@@ -21,7 +21,7 @@ namespace TimeTracker.Windows.Reports
         [ObservableProperty]
         private string[] _labels;
 
-        private ReportProvider _reportProvider = new ReportProvider();
+        private ReportRepository _reportProvider = new ReportRepository();
 
         [ObservableProperty]
         private SeriesCollection _seriesCollection;

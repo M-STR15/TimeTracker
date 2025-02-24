@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
-using TimeTracker.BE.DB.Providers;
+using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Services;
 using TimeTracker.Stories;
 using TimeTracker.Windows.Models;
@@ -30,11 +30,11 @@ namespace TimeTracker.Windows.Reports
 				Activities = _activityProvider.GetActivities();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
-				var projectProvider = new ProjectProvider();
+				var projectProvider = new ProjectRepository();
 				var projects = projectProvider.GetProjects();
 				Projects = convertCollection<Project>(projects).ToList();
 
-				var shiftProvider = new ShiftProvider();
+				var shiftProvider = new ShiftRepository();
 				var shifts = shiftProvider.GetShifts();
 				Shifts = convertCollection<Shift>(shifts).ToList();
 
@@ -63,8 +63,8 @@ namespace TimeTracker.Windows.Reports
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 		public List<Shift> Shifts { get; set; }
 		public List<TypeShift> TypeShifts { get; set; }
-		private ActivityProvider _activityProvider { get; set; }
-		private RecordProvider _recordProvider { get; set; }
+		private ActivityRepository _activityProvider { get; set; }
+		private RecordRepository _recordProvider { get; set; }
 		private void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
 			try

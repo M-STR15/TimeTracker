@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeTracker.BE.DB.Models
@@ -107,14 +108,17 @@ namespace TimeTracker.BE.DB.Models
 
 		[Required]
 		[Column("Activity_ID")]
+		[Comment("Primární klíč aktivity.")]
 		public virtual int ActivityId { get; set; }
 
+		[Comment("Popis aktivity.")]
 		public virtual string? Description { get; set; }
 
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
 
 		[Column("End_DateTime")]
+		[Comment("Datum a čas ukončení aktivity.")]
 		public virtual DateTime? EndDateTime
 		{
 			get => _endDateTime;
@@ -148,6 +152,7 @@ namespace TimeTracker.BE.DB.Models
 
 		[Required]
 		[Column("Start_DateTime")]
+		[Comment("Datum a čas zahájení aktivity.")]
 		public virtual DateTime StartDateTime
 		{
 			get => _startDateTime;
