@@ -19,11 +19,14 @@ public class RecordRepository
 			using (var context = new MainDatacontext())
 			{
 				var selectRow = await context.RecordActivities.FirstOrDefaultAsync(x => x.GuidId == guidId);
-				context.RecordActivities.Remove(selectRow);
-				await context.SaveChangesAsync();
+				if (selectRow != null)
+				{
+					context.RecordActivities.Remove(selectRow);
+					await context.SaveChangesAsync();
+				}
 			}
 
-			UpdateRefreshEndTimeAsync();
+			await UpdateRefreshEndTimeAsync();
 
 			return true;
 		}
