@@ -11,13 +11,13 @@ public class ShiftRepository
 	/// <summary>
 	/// Získá všechny směny z databáze, seřazené podle data začátku.
 	/// </summary>
-	public List<Shift> GetShifts()
+	public async Task<List<Shift>> GetShiftsAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var shifts = context.Shifts.OrderBy(x => x.StartDate).AsNoTracking().ToList();
+				var shifts = await context.Shifts.OrderBy(x => x.StartDate).AsNoTracking().ToListAsync();
 				return shifts;
 			}
 		}
@@ -33,13 +33,13 @@ public class ShiftRepository
 	/// <param name="dateFrom">Počáteční datum.</param>
 	/// <param name="dateTo">Koncové datum.</param>
 	/// <returns>Seznam směn v zadaném časovém rozmezí.</returns>
-	public List<Shift> GetShifts(DateTime dateFrom, DateTime dateTo)
+	public async Task<List<Shift>> GetShiftsAsync(DateTime dateFrom, DateTime dateTo)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var shifts = context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToList();
+				var shifts = await context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToListAsync();
 				return shifts;
 			}
 		}
@@ -52,13 +52,13 @@ public class ShiftRepository
 	/// <summary>
 	/// Získá všechny typy směn z databáze.
 	/// </summary>
-	public List<TypeShift> GetTypeShifts()
+	public async Task<List<TypeShift>> GetTypeShiftsAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var typeShifts = context.TypeShifts.AsNoTracking().ToList();
+				var typeShifts = await context.TypeShifts.AsNoTracking().ToListAsync();
 				return typeShifts;
 			}
 		}
@@ -71,13 +71,13 @@ public class ShiftRepository
 	/// <summary>
 	/// Získá všechny typy směn, které jsou viditelné v hlavním okně.
 	/// </summary>
-	public List<TypeShift> GetTypeShiftsForMainWindow()
+	public async Task<List<TypeShift>> GetTypeShiftsForMainWindowAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var typeShifts = context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToList();
+				var typeShifts = await context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToListAsync();
 				return typeShifts;
 			}
 		}

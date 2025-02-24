@@ -14,22 +14,25 @@ namespace TimeTracker.Windows
 	{
 		private List<InfoOfDate> _dailyList = new();
 		private List<TypeShiftRadioButton> _typeShifts = new();
-		private MainStory _mainStory;
+		private readonly MainStory _mainStory;
 		private ShiftRepository _shiftProvider;
 		private EventLogService _eventLogService;
 
 		public ShiftsPlanWindow(MainStory mainStory)
 		{
 			_eventLogService = new EventLogService();
+			_mainStory = mainStory;
+			inicialization();
+		}
+
+		private async void inicialization()
+		{
 			try
 			{
 				InitializeComponent();
+				_shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
 
-				_mainStory = mainStory;
-
-				_shiftProvider = mainStory.ContainerStore.GetShiftProvider();
-
-				_typeShifts = _shiftProvider.GetTypeShifts().Select(x => new TypeShiftRadioButton(x)).ToList();
+				_typeShifts = (await _shiftProvider.GetTypeShiftsAsync()).Select(x => new TypeShiftRadioButton(x)).ToList();
 				if (_typeShifts.Count > 0)
 					_typeShifts.First().IsSelected = true;
 
@@ -79,13 +82,13 @@ namespace TimeTracker.Windows
 			}
 		}
 
-		private void generateDateList()
+		private async void generateDateList()
 		{
 			var firstDate = Convert.ToDateTime("01." + cmbMontAndYear.SelectedItem);
 			var days = DateTime.DaysInMonth(firstDate.Year, firstDate.Month);
 			var lastDate = Convert.ToDateTime(days + "." + cmbMontAndYear.SelectedItem);
 
-			var planShiftsInDB = _shiftProvider.GetShifts(firstDate, lastDate);
+			var planShiftsInDB = await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
 			for (int i = 1; i <= days; i++)
 			{
 				var date = Convert.ToDateTime(i + "." + cmbMontAndYear.SelectedItem);

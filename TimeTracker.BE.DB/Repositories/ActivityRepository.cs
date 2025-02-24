@@ -1,4 +1,5 @@
-﻿using TimeTracker.BE.DB.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
@@ -8,18 +9,18 @@ public class ActivityRepository
 	/// Získá seznam všech aktivit z databáze.
 	/// </summary>
 	/// <returns>Seznam aktivit.</returns>
-	public List<Activity> GetActivities()
+	public async Task<List<Activity>> GetActivitiesAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				return context.Activities.ToList();
+				return await context.Activities.ToListAsync();
 			}
 		}
 		catch (Exception)
 		{
-			return new();
+			throw;
 		}
 	}
 }

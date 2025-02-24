@@ -14,31 +14,35 @@ namespace TimeTracker.Windows.Reports
 {
 	public partial class RecordListWindow : Window
 	{
-		private EventLogService _eventLogService;
-		private MainStory _mainStoru;
+		private readonly EventLogService _eventLogService;
+		private readonly MainStory _mainStoru;
 		public RecordListWindow(MainStory mainStore)
 		{
 			_eventLogService = new EventLogService();
+			_mainStoru = mainStore;
+			inicialization();
+		}
 
+		private async void inicialization()
+		{
 			try
 			{
 				InitializeComponent();
-				_mainStoru = mainStore;
 				_recordProvider = _mainStoru.ContainerStore.GetRecordProvider();
 				_activityProvider = _mainStoru.ContainerStore.GetActivityProvider();
 
-				Activities = _activityProvider.GetActivities();
+				Activities = await _activityProvider.GetActivitiesAsync();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
 				var projectProvider = new ProjectRepository();
-				var projects = projectProvider.GetProjects();
+				var projects = await projectProvider.GetProjectsAsync();
 				Projects = convertCollection<Project>(projects).ToList();
 
 				var shiftProvider = new ShiftRepository();
-				var shifts = shiftProvider.GetShifts();
+				var shifts = await shiftProvider.GetShiftsAsync();
 				Shifts = convertCollection<Shift>(shifts).ToList();
 
-				var typeShifts = shiftProvider.GetTypeShifts();
+				var typeShifts = await shiftProvider.GetTypeShiftsAsync();
 				TypeShifts = convertCollection<TypeShift>(typeShifts, false).ToList();
 
 				cmbMonth.ItemsSource = new ReportParameterService().Monts;
@@ -51,7 +55,7 @@ namespace TimeTracker.Windows.Reports
 
 				DataContext = this;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				_eventLogService.WriteError(Guid.Parse("1acd3061-db78-4f29-befa-ea1f72d2a036"), null, "Problém se spouštěním record list window.");
 			}
@@ -65,20 +69,18 @@ namespace TimeTracker.Windows.Reports
 		public List<TypeShift> TypeShifts { get; set; }
 		private ActivityRepository _activityProvider { get; set; }
 		private RecordRepository _recordProvider { get; set; }
-		private void btnDelete_Click(object sender, RoutedEventArgs e)
+		private async void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
 				if (sender is Button btn)
 				{
-					var guidDeleteRow = Guid.Parse(btn.Tag.ToString());
-					var result = _recordProvider.DeleteRecord(guidDeleteRow);
-					if (result)
-					{
-						var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
-						if (findRow != null)
-							RecordActivityReportList.Remove(findRow);
-					}
+					var guidDeleteRow = Guid.Parse(btn.Tag?.ToString());
+					var result = await _recordProvider.DeleteRecordAsync(guidDeleteRow);
+
+					var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
+					if (findRow != null)
+						RecordActivityReportList.Remove(findRow);
 				}
 			}
 			catch (Exception)
@@ -123,7 +125,7 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
-		private void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+		private async void dtgRecordActivities_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
 		{
 			var editedRow = e.Row.Item as RecordActivityReport;
 			if (editedRow != null)
@@ -141,7 +143,7 @@ namespace TimeTracker.Windows.Reports
 
 				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
-				var updateRecordAct = _recordProvider.SaveRecord(recordActivity);
+				var updateRecordAct = await _recordProvider.SaveRecordAsync(recordActivity);
 				if (updateRecordAct != null)
 				{
 					var newRecordActivityReport = new RecordActivityReport(updateRecordAct);
@@ -191,13 +193,13 @@ namespace TimeTracker.Windows.Reports
 				return editedRow.SubModuleId;
 			}
 		}
-		private List<RecordActivityReport> getRecordActivityReportList()
+		private async Task<List<RecordActivityReport>> getRecordActivityReportListAsync()
 		{
 			if (cmbMonth.Text != "")
 			{
 				var startTime = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
 				var endTime = startTime.AddMonths(1);
-				var origList = _recordProvider.GetRecords(startTime, endTime);
+				var origList = await _recordProvider.GetRecordsAsync(startTime, endTime);
 				if (origList != null)
 				{
 					var list = origList.Select((record, index) =>
@@ -227,9 +229,9 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
-		private void setRecordActivityReportList()
+		private async void setRecordActivityReportList()
 		{
-			var getRecordActiviList = getRecordActivityReportList();
+			var getRecordActiviList = await getRecordActivityReportListAsync();
 			if (getRecordActiviList != null)
 			{
 				RecordActivityReportList = new ObservableCollection<RecordActivityReport>(getRecordActiviList.OrderBy(x => x.StartDateTime).Select(x => new RecordActivityReport(x)));
@@ -253,7 +255,7 @@ namespace TimeTracker.Windows.Reports
 					var subModules = new List<SubModule>();
 					subModules.Add(new SubModule());
 					var project = Projects.FirstOrDefault(x => x.Id == item.ProjectId);
-					if (project != null)
+					if (project != null && project.SubModules != null)
 					{
 						foreach (var itemList in project.SubModules.ToList())
 						{
@@ -265,13 +267,13 @@ namespace TimeTracker.Windows.Reports
 			}
 		}
 
-		private void btnAdd_Click(object sender, RoutedEventArgs e)
+		private async void btnAdd_Click(object sender, RoutedEventArgs e)
 		{
 			var datefilter = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
 			var countDayInMont = DateTime.DaysInMonth(datefilter.Year, datefilter.Month);
 			var date = new DateTime(datefilter.Year, datefilter.Month, countDayInMont, 23, 59, 59);
 			var newRecord = new RecordActivity(date, (int)eActivity.Start);
-			_recordProvider.SaveRecord(newRecord);
+			await _recordProvider.SaveRecordAsync(newRecord);
 
 			setRecordActivityReportList();
 			setRecordActivityReportListcollectionView();

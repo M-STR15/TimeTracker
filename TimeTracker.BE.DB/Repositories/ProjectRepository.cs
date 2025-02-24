@@ -11,17 +11,17 @@ public class ProjectRepository
 	/// </summary>
 	/// <param name="project">Projekt k odstranění.</param>
 	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public IProjectWithoutColl DeleteProject(IProjectWithoutColl project)
+	public async Task<IProjectWithoutColl?> DeleteProjectAsync(IProjectWithoutColl project)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var item = context.Projects.FirstOrDefault(x => x.Id == project.Id);
+				var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
 				if (item != null)
 				{
 					context.Projects.Remove(item);
-					context.SaveChanges();
+					await context.SaveChangesAsync();
 				}
 				else
 				{
@@ -41,17 +41,17 @@ public class ProjectRepository
 	/// </summary>
 	/// <param name="subModule">Podmodul k odstranění.</param>
 	/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
-	public ISubModuleWithoutColl? DeleteSubModule(ISubModuleWithoutColl subModule)
+	public async Task<ISubModuleWithoutColl?> DeleteSubModuleAsync(ISubModuleWithoutColl subModule)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var item = context.SubModules.FirstOrDefault(x => x.Id == subModule.Id);
+				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
 				if (item != null)
 				{
 					context.SubModules.Remove(item);
-					context.SaveChanges();
+					await context.SaveChangesAsync();
 				}
 				else
 				{
@@ -70,14 +70,14 @@ public class ProjectRepository
 	/// Získá všechny projekty z databáze, seřazené podle názvu a včetně jejich podmodulů.
 	/// </summary>
 	/// <returns>Kolekce projektů.</returns>
-	public ICollection<Project> GetProjects()
+	public async Task<ICollection<Project>> GetProjectsAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				return context.Projects.OrderBy(x => x.Name)
-					.Include(x => x.SubModules).ToList();
+				return await context.Projects.OrderBy(x => x.Name)
+					.Include(x => x.SubModules).ToListAsync();
 			}
 		}
 		catch (Exception)
@@ -90,13 +90,13 @@ public class ProjectRepository
 	/// Získá všechny podmoduly z databáze, seřazené podle názvu.
 	/// </summary>
 	/// <returns>Kolekce podmodulů.</returns>
-	public ICollection<SubModule> GetSubModules()
+	public async Task<ICollection<SubModule>> GetSubModulesAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				return context.SubModules.OrderBy(x => x.Name).ToList();
+				return await context.SubModules.OrderBy(x => x.Name).ToListAsync();
 			}
 		}
 		catch (Exception)
@@ -110,16 +110,16 @@ public class ProjectRepository
 	/// </summary>
 	/// <param name="ptojectId">ID projektu</param>
 	/// <returns>Kolekce podmodulů.</returns>
-	public ICollection<SubModule> GetSubModules(int ptojectId)
+	public async Task<ICollection<SubModule>?> GetSubModulesAsync(int ptojectId)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
 				if (context.SubModules.Any(x => x.ProjectId == ptojectId))
-					return context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToList();
+					return await context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToListAsync();
 				else
-					return new List<SubModule>();
+					return null;
 			}
 		}
 		catch (Exception)
@@ -133,7 +133,7 @@ public class ProjectRepository
 	/// </summary>
 	/// <param name="project">Projekt k uložení.</param>
 	/// <returns>Uložený projekt nebo null, pokud projekt s daným názvem již existuje.</returns>
-	public IProjectWithoutColl? SaveProject(IProjectWithoutColl project)
+	public async Task<IProjectWithoutColl?> SaveProjectAsync(IProjectWithoutColl project)
 	{
 		try
 		{
@@ -141,14 +141,14 @@ public class ProjectRepository
 
 			using (var context = new MainDatacontext())
 			{
-				if (context.Projects.Any(x => x.Name != project.Name))
+				if (await context.Projects.AnyAsync(x => x.Name != project.Name))
 				{
 					if (item.Id == 0)
-						context.Projects.Add(item);
+						await context.Projects.AddAsync(item);
 					else
 						context.Projects.Update(item);
 
-					context.SaveChanges();
+					await context.SaveChangesAsync();
 				}
 				else
 				{
@@ -168,7 +168,7 @@ public class ProjectRepository
 	/// </summary>
 	/// <param name="subModule">Podmodul k uložení.</param>
 	/// <returns>Uložený podmodul nebo null, pokud došlo k chybě.</returns>
-	public ISubModuleWithoutColl? SaveSubModule(ISubModuleWithoutColl subModule)
+	public async Task<ISubModuleWithoutColl?> SaveSubModuleAsync(ISubModuleWithoutColl subModule)
 	{
 		try
 		{
@@ -177,15 +177,11 @@ public class ProjectRepository
 			using (var context = new MainDatacontext())
 			{
 				if (item.Id == 0)
-				{
-					context.SubModules.Add(item);
-				}
+					await context.SubModules.AddAsync(item);
 				else
-				{
 					context.SubModules.Update(item);
-				}
 
-				context.SaveChanges();
+				await context.SaveChangesAsync();
 			}
 
 			return item;

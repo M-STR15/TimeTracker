@@ -20,7 +20,7 @@ namespace TimeTracker.Windows
 		private DispatcherTimer _dispatcherTimer;
 		private EventLogService _eventLogService;
 		private EventHandler _lastRecordActivityHangler;
-		private RecordActivity _lra;
+		private RecordActivity? _lra;
 		private ProjectRepository _projectProvider;
 
 		private RecordRepository _recordProvider;
@@ -38,11 +38,16 @@ namespace TimeTracker.Windows
 		public MainWindow(MainStory mainStory)
 		{
 			_eventLogService = new EventLogService();
+			_mainStory = mainStory;
+			inicialization();
+		}
+
+		private async void inicialization()
+		{
 			try
 			{
 				this.DataContext = new BaseViewModel("Timer tracker");
 				InitializeComponent();
-				_mainStory = mainStory;
 
 				_shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
 				_projectProvider = _mainStory.ContainerStore.GetProjectProvider();
@@ -64,7 +69,7 @@ namespace TimeTracker.Windows
 
 				_lastRecordActivityHangler += onSetLabelsHandler;
 
-				_lastRecordActivity = _recordProvider.GetLastRecordActivity();
+				_lastRecordActivity = await _recordProvider.GetLastRecordActivityAsync();
 
 				if (_lastRecordActivity != null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
 					_dispatcherTimer.Start();
@@ -73,10 +78,9 @@ namespace TimeTracker.Windows
 			{
 				_eventLogService.WriteError(new Guid("def4de22-6fc4-4ab4-9f7e-0aba95e5337c"), ex, "Problém při otevírání hlavního okna.");
 			}
-
 		}
 
-		private RecordActivity _lastRecordActivity
+		private RecordActivity? _lastRecordActivity
 		{
 			get => _lra;
 			set
@@ -95,12 +99,12 @@ namespace TimeTracker.Windows
 			setlblTime();
 		}
 
-		private bool addActivite(RecordActivity recordActivity)
+		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
 		{
-			return addActivite(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+			return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
 		}
 
-		private bool addActivite(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
 		{
 			try
 			{
@@ -112,7 +116,7 @@ namespace TimeTracker.Windows
 				else
 					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
-				var result = _recordProvider.SaveRecord(record);
+				var result = await _recordProvider.SaveRecordAsync(record);
 				if (result != null)
 				{
 					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
@@ -120,9 +124,9 @@ namespace TimeTracker.Windows
 
 				return result != null;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				return false;
+				throw;
 			}
 		}
 
@@ -137,26 +141,26 @@ namespace TimeTracker.Windows
 			return (shift != null && shift.GuidId != Guid.Empty && activity == eActivity.Start) ? actualActivityInSeconds : 0;
 		}
 
-		private void loadProjects()
+		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
-			cmbProjects.ItemsSource = _projectProvider.GetProjects();
+			cmbProjects.ItemsSource = await _projectProvider.GetProjectsAsync();
 			cmbProjects.SelectedIndex = 0;
 		}
 
-		private void loadShifts()
+		private async void loadShifts()
 		{
 			var currentDate = DateTime.Now;
-			var getList = _shiftProvider.GetShifts(currentDate.AddDays(-7), currentDate.AddDays(3));
+			var getList = await _shiftProvider.GetShiftsAsync(currentDate.AddDays(-7), currentDate.AddDays(3));
 			_shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
 			_shiftCmbs.Add(new ShiftCmb());
 			cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
 			cmbShift.SelectedIndex = 0;
 		}
 
-		private void loadTypeShifts()
+		private async void loadTypeShifts()
 		{
-			_typeShifts = _shiftProvider.GetTypeShiftsForMainWindow();
+			_typeShifts = await _shiftProvider.GetTypeShiftsForMainWindowAsync();
 			cmbTypeShift.ItemsSource = _typeShifts;
 			cmbTypeShift.SelectedIndex = 0;
 		}
@@ -187,7 +191,7 @@ namespace TimeTracker.Windows
 			}
 		}
 
-		private void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
+		private async void onActionAfterClickActivate_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -206,7 +210,7 @@ namespace TimeTracker.Windows
 				var description = getTextFromRichTextBox(rtbDescription);
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule, description);
 
-				var result = addActivite(selRecordActivity);
+				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
 					rtbDescription.Document.Blocks.Clear();
@@ -220,7 +224,7 @@ namespace TimeTracker.Windows
 			}
 		}
 
-		private void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
+		private async void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -233,7 +237,7 @@ namespace TimeTracker.Windows
 
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
-				var result = addActivite(selRecordActivity);
+				var result =  await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
 					setLabels();
@@ -246,7 +250,7 @@ namespace TimeTracker.Windows
 			}
 		}
 
-		private void onActionAfterClickPause_Click(object sender, RoutedEventArgs e)
+		private async void onActionAfterClickPause_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -259,7 +263,7 @@ namespace TimeTracker.Windows
 
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
-				var result = addActivite(selRecordActivity);
+				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
 					setLabels();
@@ -276,16 +280,16 @@ namespace TimeTracker.Windows
 		{
 			_lastRecordActivityHangler.Invoke(this, EventArgs.Empty);
 		}
-		private void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private async void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			try
 			{
 				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
-					var subModules = _projectProvider.GetSubModules(projectId);
+					var subModules = await _projectProvider.GetSubModulesAsync(projectId);
 					cmbSubModule.ItemsSource = subModules;
-					if (subModules.Count > 0)
+					if (subModules != null && subModules.Count > 0)
 						cmbSubModule.SelectedIndex = 0;
 				}
 			}

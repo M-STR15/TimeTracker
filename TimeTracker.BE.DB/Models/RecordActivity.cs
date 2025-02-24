@@ -7,17 +7,8 @@ namespace TimeTracker.BE.DB.Models
 	[Table("Record_activities", Schema = "dbo")]
 	public class RecordActivity : Stamp, IRecordActivity
 	{
-		private string _endDate;
-
 		private DateTime? _endDateTime;
-
-		private string _endTime;
-
-		private string _startDate;
-
 		private DateTime _startDateTime;
-
-		private string _startTime;
 
 		[ForeignKey("ActivityId")]
 		public virtual Activity? Activity { get; set; }

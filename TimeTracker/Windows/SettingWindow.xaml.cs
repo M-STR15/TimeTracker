@@ -68,13 +68,13 @@ namespace TimeTracker.Windows
 
 		public ICollection<SubModuleListBox> SubModuleListBox { get; set; }
 
-		private void loadProjects()
+		private async void loadProjects()
 		{
-			var list = _projectProvider.GetProjects();
+			var list = await _projectProvider.GetProjectsAsync();
 			ProjectListBox = new ObservableCollection<ProjectListBox>(list.Select(x => new ProjectListBox(x)).ToList());
 		}
 
-		private void onActionAfterChangeItemInListProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private async void onActionAfterChangeItemInListProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			try
 			{
@@ -82,12 +82,15 @@ namespace TimeTracker.Windows
 
 				if (selected != null)
 				{
-					var list = _projectProvider.GetSubModules(selected.Id);
+					var list = await _projectProvider.GetSubModulesAsync(selected.Id);
 
-					SubModuleListBox.Clear();
-					foreach (var item in list.Select(x => new SubModuleListBox(x)).ToList())
+					if (list != null)
 					{
-						SubModuleListBox.Add(item);
+						SubModuleListBox.Clear();
+						foreach (var item in list.Select(x => new SubModuleListBox(x)).ToList())
+						{
+							SubModuleListBox.Add(item);
+						}
 					}
 				}
 			}
@@ -139,7 +142,7 @@ namespace TimeTracker.Windows
 				var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _projectProvider.DeleteProject(selected);
+					var result = _projectProvider.DeleteProjectAsync(selected);
 
 					if (result != null)
 					{
@@ -162,7 +165,7 @@ namespace TimeTracker.Windows
 				var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _projectProvider.DeleteSubModule(selected);
+					var result = _projectProvider.DeleteSubModuleAsync(selected);
 					if (result != null)
 					{
 						var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
@@ -221,7 +224,7 @@ namespace TimeTracker.Windows
 				var item = (ProjectListBox)parameter;
 				item.IsEditable = false;
 
-				var result = _projectProvider.SaveProject(item);
+				var result = _projectProvider.SaveProjectAsync(item);
 				if (result != null)
 				{
 					var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
@@ -245,7 +248,7 @@ namespace TimeTracker.Windows
 				var item = (SubModuleListBox)parameter;
 				item.IsEditable = false;
 
-				var result = _projectProvider.SaveSubModule(item);
+				var result = _projectProvider.SaveSubModuleAsync(item);
 				if (result != null)
 				{
 					var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);

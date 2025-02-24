@@ -1,4 +1,5 @@
-﻿using TimeTracker.BE.DB.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories.Models.Reports;
@@ -12,11 +13,19 @@ public class ReportRepository
 	/// </summary>
 	public List<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
 	{
+		return GetActivityOverDaysAsync(start, end).Result;
+	}
+	/// <summary>
+	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
+	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
+	/// </summary>
+	public async Task<List<SumInDay>> GetActivityOverDaysAsync(DateTime start, DateTime end)
+	{
 		var activities = new List<RecordActivity>();
 
 		try
 		{
-			var modBasicData = getRecordSumList(start, end);
+			var modBasicData = await getRecordSumListAsync(start, end);
 			var list = new List<SumInDay>();
 			var dayList = getDatesInRange(start, end);
 			foreach (var item in dayList)
@@ -160,12 +169,12 @@ public class ReportRepository
 		return planList;
 	}
 
-	private List<RecordActivity> getRecordSumList(DateTime start, DateTime end)
+	private async Task<List<RecordActivity>> getRecordSumListAsync(DateTime start, DateTime end)
 	{
 		using (var context = new MainDatacontext())
 		{
-			var basicData = context.RecordActivities
-					.Where(x => x.StartDateTime >= start && x.StartDateTime <= end).OrderBy(x => x.StartDateTime).ToList();
+			var basicData = await context.RecordActivities
+					.Where(x => x.StartDateTime >= start && x.StartDateTime <= end).OrderBy(x => x.StartDateTime).ToListAsync();
 
 			return basicData;
 		}

@@ -12,22 +12,22 @@ public class RecordRepository
 	/// </summary>
 	/// <param name="guidId">Guid záznamu aktivity.</param>
 	/// <returns>Vrací true, pokud byl záznam úspěšně odstraněn.</returns>
-	public bool DeleteRecord(Guid guidId)
+	public async Task<bool?> DeleteRecordAsync(Guid guidId)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var selectRow = context.RecordActivities.FirstOrDefault(x => x.GuidId == guidId);
+				var selectRow = await context.RecordActivities.FirstOrDefaultAsync(x => x.GuidId == guidId);
 				context.RecordActivities.Remove(selectRow);
-				context.SaveChanges();
+				await context.SaveChangesAsync();
 			}
 
-			UpdateRefreshEndTime();
+			UpdateRefreshEndTimeAsync();
 
 			return true;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			throw;
 		}
@@ -37,7 +37,7 @@ public class RecordRepository
 	/// Získá poslední záznam aktivity z databáze.
 	/// </summary>
 	/// <returns>Poslední záznam aktivity.</returns>
-	public RecordActivity GetLastRecordActivity()
+	public async Task<RecordActivity?> GetLastRecordActivityAsync()
 	{
 		try
 		{
@@ -47,14 +47,14 @@ public class RecordRepository
 			{
 				if (context.RecordActivities.Count() > 0)
 				{
-					recordActivity = context.RecordActivities.OrderBy(x => x.StartDateTime)
+					recordActivity = await context.RecordActivities.OrderBy(x => x.StartDateTime)
 						.Include(x => x.Project)
 							.ThenInclude(x => x.SubModules)
 						.Include(x => x.Activity)
 						.Include(x => x.Shift)
 						.Include(x => x.SubModule)
 						.Include(x => x.TypeShift)
-						.Last();
+						.LastAsync();
 				}
 			}
 
@@ -71,19 +71,19 @@ public class RecordRepository
 	/// </summary>
 	/// <param name="guidId">Guid záznamu aktivity.</param>
 	/// <returns>Záznam aktivity.</returns>
-	public RecordActivity GetRecord(Guid guidId)
+	public async Task<RecordActivity?> GetRecordAsync(Guid guidId)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var recordActivitiy = context.RecordActivities
+				var recordActivitiy = await context.RecordActivities
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
 				.Include(x => x.TypeShift)
 				.Include(x => x.Shift)
-				.OrderBy(x => x.StartDateTime).FirstOrDefault(x => x.GuidId == guidId);
+				.OrderBy(x => x.StartDateTime).FirstOrDefaultAsync(x => x.GuidId == guidId);
 
 				return recordActivitiy;
 			}
@@ -98,19 +98,19 @@ public class RecordRepository
 	/// Získá všechny záznamy aktivit z databáze.
 	/// </summary>
 	/// <returns>Seznam všech záznamů aktivit.</returns>
-	public List<RecordActivity> GetRecords()
+	public async Task<List<RecordActivity>> GetRecordsAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var recordActivities = context.RecordActivities
+				var recordActivities = await context.RecordActivities
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
 				.Include(x => x.TypeShift)
 				.Include(x => x.Shift)
-				.OrderBy(x => x.StartDateTime).ToList();
+				.OrderBy(x => x.StartDateTime).ToListAsync();
 
 				return recordActivities;
 			}
@@ -126,19 +126,19 @@ public class RecordRepository
 	/// <param name="startTime">Počáteční časový bod.</param>
 	/// <param name="endTime">Koncový časový bod.</param>
 	/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
-	public List<RecordActivity> GetRecords(DateTime startTime, DateTime endTime)
+	public async Task<List<RecordActivity>> GetRecordsAsync(DateTime startTime, DateTime endTime)
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var recordActivities = context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
+				var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
 				.Include(x => x.TypeShift)
 				.Include(x => x.Shift)
-				.OrderBy(x => x.StartDateTime).ToList();
+				.OrderBy(x => x.StartDateTime).ToListAsync();
 
 				return recordActivities;
 			}
@@ -154,7 +154,7 @@ public class RecordRepository
 	/// </summary>
 	/// <param name="recordActivity">Záznam aktivity k uložení.</param>
 	/// <returns>Uložený záznam aktivity.</returns>
-	public RecordActivity? SaveRecord(RecordActivity recordActivity)
+	public async Task<RecordActivity?> SaveRecordAsync(RecordActivity recordActivity)
 	{
 		try
 		{
@@ -166,18 +166,18 @@ public class RecordRepository
 				}
 				else
 				{
-					context.RecordActivities.Add(recordActivity);
+					await context.RecordActivities.AddAsync(recordActivity);
 				}
 
-				context.SaveChanges();
+				await context.SaveChangesAsync();
 			}
 
-			UpdateRefreshEndTime();
+			await UpdateRefreshEndTimeAsync();
 
-			var getDat = GetRecord(recordActivity.GuidId);
+			var getDat = await GetRecordAsync(recordActivity.GuidId);
 			return getDat;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			throw;
 		}
@@ -187,13 +187,13 @@ public class RecordRepository
 	/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
 	/// pokud se nejedná o poslední záznam nebo aktivitu typu Stop.
 	/// </summary>
-	public void UpdateRefreshEndTime()
+	public async Task UpdateRefreshEndTimeAsync()
 	{
 		try
 		{
 			using (var context = new MainDatacontext())
 			{
-				var recordActivities = context.RecordActivities.OrderBy(x => x.StartDateTime).ToList();
+				var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
 
 				var allowedActivities = new List<int>();
 				allowedActivities.Add((int)eActivity.Start);
@@ -213,7 +213,7 @@ public class RecordRepository
 					}
 				}
 
-				context.SaveChanges();
+				await context.SaveChangesAsync();
 			}
 		}
 		catch (Exception)
