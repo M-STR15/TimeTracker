@@ -9,6 +9,10 @@
     <ApplicationIcon>Resources\clock-violet.ico</ApplicationIcon>
   </PropertyGroup>
 
+	<!--<PropertyGroup>
+		<Authors>M-Str</Authors>
+	</PropertyGroup>-->
+
   <ItemGroup>
     <None Remove="Resources\add.png" />
     <None Remove="Resources\clock-red.ico" />

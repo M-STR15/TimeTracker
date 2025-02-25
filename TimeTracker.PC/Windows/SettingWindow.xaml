@@ -15,7 +15,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/SettingWindowDictionary.xaml" />
+                <ResourceDictionary Source="/TimeTracker.PC;Component/Dictionaries/SettingWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

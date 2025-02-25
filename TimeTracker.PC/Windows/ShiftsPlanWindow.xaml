@@ -13,7 +13,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/ShiftsPlanWindowDictionary.xaml" />
+                <ResourceDictionary Source="/TimeTracker.PC;Component/Dictionaries/ShiftsPlanWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

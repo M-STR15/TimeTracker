@@ -14,8 +14,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/Shared/ReportSharedDictionary.xaml" />
-                <ResourceDictionary Source="/TimeTracker;Component/Dictionaries/RecordListWindowDictionary.xaml" />
+                <ResourceDictionary Source="/TimeTracker.PC;Component/Dictionaries/Shared/ReportSharedDictionary.xaml" />
+                <ResourceDictionary Source="/TimeTracker.PC;Component/Dictionaries/RecordListWindowDictionary.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <converters:ActivityConvert x:Key="activityConvert" />

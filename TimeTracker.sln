@@ -3,14 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker", "TimeTracker\TimeTracker.csproj", "{8107465D-71B2-45DA-93E3-0F0B2A4A4E03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.PC", "TimeTracker.PC\TimeTracker.PC.csproj", "{8107465D-71B2-45DA-93E3-0F0B2A4A4E03}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeTracker.BE.DB", "TimeTracker.BE.DB\TimeTracker.BE.DB.csproj", "{27EC6AC3-EBAD-4630-9207-D65D96D94138}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{3C409BD9-6E53-4D3E-B992-FA59249E0366}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Documents", "_Documents", "{3C409BD9-6E53-4D3E-B992-FA59249E0366}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BE", "BE", "{6C3DA257-6962-4EAA-9552-DDEA2495EDC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{27EC6AC3-EBAD-4630-9207-D65D96D94138} = {6C3DA257-6962-4EAA-9552-DDEA2495EDC6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B973CB15-9F5A-4D35-A12E-6A398AEDD263}
