@@ -6,6 +6,7 @@ namespace TimeTracker.BE.DB.Models
 	public abstract class Stamp
 	{
 		private DateTime _stampDateTime;
+
 		[Required]
 		[Column("Stamp_DateTime")]
 		public virtual DateTime StampDateTime

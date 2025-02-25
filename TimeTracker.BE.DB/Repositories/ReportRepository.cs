@@ -5,6 +5,7 @@ using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories.Models.Reports;
 
 namespace TimeTracker.BE.DB.Repositories;
+
 public class ReportRepository
 {
 	/// <summary>
@@ -15,6 +16,7 @@ public class ReportRepository
 	{
 		return GetActivityOverDaysAsync(start, end).Result;
 	}
+
 	/// <summary>
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
@@ -69,6 +71,7 @@ public class ReportRepository
 	/// Metoda získává počet hodin práce pro zadané datum.
 	/// </summary>
 	public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
+
 	/// <summary>
 	/// Metoda získává pracovní hodiny pro zadaný rozsah dat a typy směn.
 	/// </summary>
@@ -110,6 +113,7 @@ public class ReportRepository
 
 		return sumHours;
 	}
+
 	private double getHoursShif(Guid shiftGuidID, eActivity eActivity)
 	{
 		var sumHours = 0.00;
@@ -125,10 +129,10 @@ public class ReportRepository
 		}
 		catch (Exception)
 		{
-
 		}
 		return sumHours;
 	}
+
 	private List<DayHours> getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
 	{
 		var shiftList = new List<Shift>();

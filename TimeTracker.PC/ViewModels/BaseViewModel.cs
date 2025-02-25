@@ -37,6 +37,7 @@ namespace TimeTracker.PC.ViewModels
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
+
 		protected virtual void cmd_Close(object parameter) => close();
 
 		protected virtual void cmd_minimalize(object parameter) => minimalize();

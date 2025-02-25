@@ -3,6 +3,7 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
+
 public class ShiftRepository
 {
 	public ShiftRepository()
@@ -139,8 +140,8 @@ public class ShiftRepository
 			Console.WriteLine(ex.Message); // Například log do konzole
 			throw new ArgumentException("Chyba při ukládání směny do DB.", ex);
 		}
-
 	}
+
 	/// <summary>
 	/// METHODA NENÍ DOKONČENÁ
 	/// </summary>
@@ -150,7 +151,6 @@ public class ShiftRepository
 	{
 		using (var context = new MainDatacontext())
 		{
-
 		}
 
 		return 0;

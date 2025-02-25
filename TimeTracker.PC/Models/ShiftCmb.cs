@@ -2,30 +2,30 @@
 
 namespace TimeTracker.PC.Models
 {
-    public class ShiftCmb : Shift
-    {
-        public string StartDateStr
-        {
-            get
-            {
-                var result = "";
-                if (StartDate != DateTime.MaxValue)
-                    result = StartDate.ToString("dd.MM.yy");
+	public class ShiftCmb : Shift
+	{
+		public string StartDateStr
+		{
+			get
+			{
+				var result = "";
+				if (StartDate != DateTime.MaxValue)
+					result = StartDate.ToString("dd.MM.yy");
 
-                return result;
-            }
-        }
+				return result;
+			}
+		}
 
-        public ShiftCmb()
-        {
-            StartDate = DateTime.MaxValue;
-        }
+		public ShiftCmb()
+		{
+			StartDate = DateTime.MaxValue;
+		}
 
-        public ShiftCmb(Shift shift) : this()
-        {
-            GuidId = shift.GuidId;
-            Description = shift.Description;
-            StartDate = shift.StartDate;
-        }
-    }
+		public ShiftCmb(Shift shift) : this()
+		{
+			GuidId = shift.GuidId;
+			Description = shift.Description;
+			StartDate = shift.StartDate;
+		}
+	}
 }

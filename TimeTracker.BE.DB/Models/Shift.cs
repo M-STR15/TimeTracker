@@ -20,14 +20,17 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[Column("Start_date")]
 		public DateTime StartDate { get; set; }
+
 		[NotMapped]
 		public string StartDateLongStr { get => (GuidId == Guid.Empty ? "" : StartDate.Date.ToString("dd.MM.yyyy")); }
+
 		[ForeignKey("TypeShiftId")]
 		public TypeShift? TypeShift { get; set; }
 
 		[Required]
 		[Column("TypeShift_ID")]
 		public int TypeShiftId { get; set; }
+
 		public Shift() : base()
 		{
 		}

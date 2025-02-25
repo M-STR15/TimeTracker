@@ -2,16 +2,16 @@
 
 namespace TimeTracker.PC.Helpers
 {
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Func<object, bool>? _canExecute;
+	public class RelayCommand : ICommand
+	{
+		private readonly Action<object> _execute;
+		private readonly Func<object, bool>? _canExecute;
 
-        public RelayCommand(Action<object> execute, Func<object, bool>? canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+		public RelayCommand(Action<object> execute, Func<object, bool>? canExecute = null)
+		{
+			_execute = execute;
+			_canExecute = canExecute;
+		}
 
 		/// <summary>
 		/// Určuje, zda může být příkaz vykonán.
@@ -32,10 +32,10 @@ namespace TimeTracker.PC.Helpers
 			_execute(parameter);
 		}
 
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-    }
+		public event EventHandler CanExecuteChanged
+		{
+			add { CommandManager.RequerySuggested += value; }
+			remove { CommandManager.RequerySuggested -= value; }
+		}
+	}
 }

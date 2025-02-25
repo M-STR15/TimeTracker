@@ -6,6 +6,7 @@ namespace TimeTracker.PC.Services
 	public class EventLogService
 	{
 		private NotificationManagement _notification;
+
 		//private string _versionSW;
 		public EventLogService()
 		{
@@ -25,7 +26,6 @@ namespace TimeTracker.PC.Services
 			}
 			catch (Exception)
 			{
-
 			}
 		}
 

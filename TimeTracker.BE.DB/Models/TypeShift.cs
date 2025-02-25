@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeTracker.BE.DB.Models
 {
-    [Table("TypeShifts", Schema = "dbo")]
-    [Comment("Tabulka všech možných směn.")]
+	[Table("TypeShifts", Schema = "dbo")]
+	[Comment("Tabulka všech možných směn.")]
 	public class TypeShift : IIdentifiable
 	{
 		[Column("Color")]
@@ -24,12 +24,15 @@ namespace TimeTracker.BE.DB.Models
 		[Column("Name")]
 		[Comment("Název typu směny.")]
 		public string Name { get; set; } = "";
+
 		[Comment("Kolekce aktivit záznamů.")]
 		public ICollection<RecordActivity>? RecordActivity { get; set; }
 
 		[Comment("Kolekce typů směn.")]
 		public ICollection<TypeShift>? TypeShifts { get; set; }
-		public TypeShift() { }
+
+		public TypeShift()
+		{ }
 
 		public TypeShift(int id, string name, string color, bool isVisibleInMainWindow = true) : this()
 		{

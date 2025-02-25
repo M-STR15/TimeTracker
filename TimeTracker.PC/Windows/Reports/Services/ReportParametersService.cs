@@ -8,6 +8,7 @@
 		}
 
 		public List<string> Monts { get; set; }
+
 		private List<string> getLastSixMonth()
 		{
 			List<string> lastSixMonths = new List<string>();
@@ -22,6 +23,5 @@
 
 			return lastSixMonths;
 		}
-
 	}
 }

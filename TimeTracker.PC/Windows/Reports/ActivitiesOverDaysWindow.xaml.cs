@@ -36,7 +36,6 @@ namespace TimeTracker.PC.Windows.Reports
 			DataContext = this;
 		}
 
-
 		private void createChartData()
 		{
 			var getProvider = new ReportRepository();
@@ -102,6 +101,7 @@ namespace TimeTracker.PC.Windows.Reports
 			Labels = list.Select(x => x.Date.ToString("dd.MM") + " [" + x.WeekDay + "]").ToArray();
 			Formatter = value => value.ToString();
 		}
+
 		private void onCmbMonth_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
 			createChartData();

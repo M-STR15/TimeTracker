@@ -16,6 +16,7 @@ namespace TimeTracker.PC.Windows.Reports
 	{
 		private readonly EventLogService _eventLogService;
 		private readonly MainStory _mainStoru;
+
 		public RecordListWindow(MainStory mainStore)
 		{
 			_eventLogService = new EventLogService();
@@ -69,6 +70,7 @@ namespace TimeTracker.PC.Windows.Reports
 		public List<TypeShift> TypeShifts { get; set; }
 		private ActivityRepository _activityProvider { get; set; }
 		private RecordRepository _recordProvider { get; set; }
+
 		private async void btnDelete_Click(object sender, RoutedEventArgs e)
 		{
 			try
@@ -197,6 +199,7 @@ namespace TimeTracker.PC.Windows.Reports
 				return editedRow.SubModuleId;
 			}
 		}
+
 		private async Task<List<RecordActivityReport>> getRecordActivityReportListAsync()
 		{
 			if (cmbMonth.Text != "")
@@ -217,6 +220,7 @@ namespace TimeTracker.PC.Windows.Reports
 
 			return new List<RecordActivityReport>();
 		}
+
 		private void onCmbMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			setRecordActivityReportList();

@@ -163,6 +163,7 @@ public class ProjectRepository
 			throw;
 		}
 	}
+
 	/// <summary>
 	/// Uloží podmodul do databáze. Pokud podmodul neexistuje, přidá ho, jinak ho aktualizuje.
 	/// </summary>

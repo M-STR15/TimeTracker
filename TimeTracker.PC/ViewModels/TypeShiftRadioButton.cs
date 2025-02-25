@@ -3,13 +3,13 @@ using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.PC.ViewModels
 {
-    [ObservableObject]
-    public partial class TypeShiftRadioButton : TypeShift
-    {
-        [ObservableProperty]
-        private bool _isSelected;
+	[ObservableObject]
+	public partial class TypeShiftRadioButton : TypeShift
+	{
+		[ObservableProperty]
+		private bool _isSelected;
 
-        public TypeShiftRadioButton(TypeShift typeShift) : base(typeShift.Id, typeShift.Name, typeShift.Color, typeShift.IsVisibleInMainWindow)
-        { }
-    }
+		public TypeShiftRadioButton(TypeShift typeShift) : base(typeShift.Id, typeShift.Name, typeShift.Color, typeShift.IsVisibleInMainWindow)
+		{ }
+	}
 }

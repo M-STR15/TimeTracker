@@ -58,7 +58,6 @@ namespace TimeTracker.PC.Windows
 				PositionList.Add("H:Right-V:Bottom");
 
 				cmbPositionList.ItemsSource = PositionList;
-
 			}
 			catch (Exception ex)
 			{

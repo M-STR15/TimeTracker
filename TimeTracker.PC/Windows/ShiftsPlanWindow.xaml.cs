@@ -148,7 +148,6 @@ namespace TimeTracker.PC.Windows
 			}
 			else
 			{
-
 			}
 		}
 

@@ -43,8 +43,8 @@ namespace TimeTracker.PC.ViewModels
 		private int? _projectId;
 
 		[ObservableProperty]
-
 		private int _projectIndex;
+
 		[ObservableProperty]
 		private Shift? _shift;
 
@@ -53,6 +53,7 @@ namespace TimeTracker.PC.ViewModels
 
 		[ObservableProperty]
 		private int _shiftIndex;
+
 		[ObservableProperty]
 		private string? _startDate;
 
@@ -81,6 +82,7 @@ namespace TimeTracker.PC.ViewModels
 
 		[ObservableProperty]
 		private int _typeShiftIndex;
+
 		public RecordActivityReport(IRecordActivity recordActivityReport)
 		{
 			if (recordActivityReport != null)
@@ -178,6 +180,7 @@ namespace TimeTracker.PC.ViewModels
 			_typeShifts = typeShifts;
 			_projects = projects;
 		}
+
 		private void createSumModuleList()
 		{
 			if (ProjectId != null)
@@ -193,6 +196,7 @@ namespace TimeTracker.PC.ViewModels
 				}
 			}
 		}
+
 		private int getIndex<T>(IEnumerable<T> collection, int? objectId)
 						where T : IIdentifiable
 		{

@@ -24,11 +24,13 @@ namespace TimeTracker.BE.DB.Models
 		public Activity()
 		{
 		}
+
 		public Activity(int id, string name)
 		{
 			Name = name;
 			Id = id;
 		}
+
 		public override string ToString()
 		{
 			return Name;

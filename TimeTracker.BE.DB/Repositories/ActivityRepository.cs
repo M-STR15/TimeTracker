@@ -3,6 +3,7 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
+
 public class ActivityRepository
 {
 	/// <summary>

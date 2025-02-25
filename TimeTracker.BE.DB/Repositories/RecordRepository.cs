@@ -123,6 +123,7 @@ public class RecordRepository
 			throw;
 		}
 	}
+
 	/// <summary>
 	/// Získá záznamy aktivit v zadaném časovém rozmezí.
 	/// </summary>
@@ -151,6 +152,7 @@ public class RecordRepository
 			throw;
 		}
 	}
+
 	/// <summary>
 	/// Uloží záznam aktivity do databáze.
 	/// Pokud záznam obsahuje Guid, aktualizuje existující záznam, jinak přidá nový.
@@ -185,6 +187,7 @@ public class RecordRepository
 			throw;
 		}
 	}
+
 	/// <summary>
 	/// Aktualizuje čas ukončení záznamů aktivit.
 	/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,

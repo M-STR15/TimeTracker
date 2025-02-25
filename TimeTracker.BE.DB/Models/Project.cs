@@ -23,6 +23,7 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[Comment("Název projektu.")]
 		public virtual string Name { get; set; }
+
 		[Comment("Podmoduly spojené s projektem.")]
 		public ICollection<SubModule>? SubModules { get; set; }
 

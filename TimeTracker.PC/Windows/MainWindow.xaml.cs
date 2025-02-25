@@ -89,6 +89,7 @@ namespace TimeTracker.PC.Windows
 				onLasRecordActivityChange();
 			}
 		}
+
 		public void Dispose()
 		{
 			_lastRecordActivityHangler -= onSetLabelsHandler;
@@ -237,7 +238,7 @@ namespace TimeTracker.PC.Windows
 
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
-				var result =  await addActiviteAsync(selRecordActivity);
+				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
 					setLabels();
@@ -280,6 +281,7 @@ namespace TimeTracker.PC.Windows
 		{
 			_lastRecordActivityHangler.Invoke(this, EventArgs.Empty);
 		}
+
 		private async void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			try
@@ -352,6 +354,7 @@ namespace TimeTracker.PC.Windows
 		{
 			setLabels();
 		}
+
 		private void setLabels()
 		{
 			setlblTime();
@@ -376,6 +379,7 @@ namespace TimeTracker.PC.Windows
 				}
 			}
 		}
+
 		private void setlblTime()
 		{
 			var actualActivityInSeconds = 0.00;
@@ -385,7 +389,6 @@ namespace TimeTracker.PC.Windows
 				var time = (DateTime.Now - _lastRecordActivity.StartDateTime);
 				actualActivityInSeconds = time.TotalSeconds;
 				lblTime_time.Text = time.ToString(@"hh\:mm\:ss");
-
 			}
 			else
 			{
@@ -421,6 +424,7 @@ namespace TimeTracker.PC.Windows
 				lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
 			}
 		}
+
 		private void startTimer()
 		{
 			if (!_dispatcherTimer.IsEnabled)
