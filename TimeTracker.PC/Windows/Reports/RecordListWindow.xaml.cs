@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
-using TimeTracker.PC.Windows.Models;
+using TimeTracker.PC.ViewModels;
 using TimeTracker.PC.Windows.Reports.Services;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
@@ -143,7 +143,7 @@ namespace TimeTracker.PC.Windows.Reports
 
 				if (startDateTime != null)
 				{
-					var startDateTimeConv=(DateTime)startDateTime;
+					var startDateTimeConv = (DateTime)startDateTime;
 					var recordActivity = new RecordActivity(editedRow.GuidId, startDateTimeConv, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
 					var updateRecordAct = await _recordProvider.SaveRecordAsync(recordActivity);

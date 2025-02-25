@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.PC.Windows.Models
+namespace TimeTracker.PC.ViewModels
 {
     [ObservableObject]
     public partial class TypeShiftRadioButton : TypeShift
