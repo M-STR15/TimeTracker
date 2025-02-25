@@ -1,12 +1,12 @@
 ﻿<Window
-    x:Class="TimeTracker.Windows.Reports.RecordListWindow"
+    x:Class="TimeTracker.PC.Windows.Reports.RecordListWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:TimeTracker.Helpers.Convertors"
+    xmlns:converters="clr-namespace:TimeTracker.PC.Helpers.Convertors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:TimeTracker.Windows"
+    xmlns:local="clr-namespace:TimeTracker.PC.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:valid="clr-namespace:TimeTracker.Helpers.Validations"
+    xmlns:valid="clr-namespace:TimeTracker.PC.Helpers.Validations"
     Title="Record list"
     WindowState="Maximized"
     mc:Ignorable="d">

@@ -5,9 +5,9 @@ using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Windows.Reports.Services;
+using TimeTracker.PC.Windows.Reports.Services;
 
-namespace TimeTracker.Windows.Reports
+namespace TimeTracker.PC.Windows.Reports
 {
 	/// <summary>
 	/// Interaction logic for PlanVsRealitaWorkHoursWindow.xaml

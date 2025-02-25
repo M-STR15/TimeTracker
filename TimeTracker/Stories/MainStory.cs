@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Stories
+﻿namespace TimeTracker.PC.Stories
 {
     public class MainStory
     {

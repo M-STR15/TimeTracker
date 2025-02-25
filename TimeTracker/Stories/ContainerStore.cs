@@ -1,10 +1,10 @@
 ﻿using Ninject;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Windows;
-using TimeTracker.Windows.Reports;
+using TimeTracker.PC.Windows;
+using TimeTracker.PC.Windows.Reports;
 
-namespace TimeTracker.Stories
+namespace TimeTracker.PC.Stories
 {
 	public class ContainerStore
 	{

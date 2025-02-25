@@ -4,13 +4,13 @@ using System.Windows.Controls;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Services;
-using TimeTracker.Stories;
-using TimeTracker.Windows.Models;
-using TimeTracker.Windows.Reports.Services;
+using TimeTracker.PC.Services;
+using TimeTracker.PC.Stories;
+using TimeTracker.PC.Windows.Models;
+using TimeTracker.PC.Windows.Reports.Services;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
-namespace TimeTracker.Windows.Reports
+namespace TimeTracker.PC.Windows.Reports
 {
 	public partial class RecordListWindow : Window
 	{

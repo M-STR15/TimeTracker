@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace TimeTracker.Helpers
+namespace TimeTracker.PC.Helpers
 {
     public class RelayCommand : ICommand
     {

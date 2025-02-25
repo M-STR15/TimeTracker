@@ -5,14 +5,14 @@ using System.Windows.Threading;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Models;
-using TimeTracker.Services;
-using TimeTracker.Stories;
-using TimeTracker.ViewModels;
-using TimeTracker.Windows.Reports;
+using TimeTracker.PC.Models;
+using TimeTracker.PC.Services;
+using TimeTracker.PC.Stories;
+using TimeTracker.PC.ViewModels;
+using TimeTracker.PC.Windows.Reports;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
-namespace TimeTracker.Windows
+namespace TimeTracker.PC.Windows
 {
 	public partial class MainWindow : Window, IDisposable
 	{

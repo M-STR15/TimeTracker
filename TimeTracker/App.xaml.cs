@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using TimeTracker.Stories;
+using TimeTracker.PC.Stories;
 
-namespace TimeTracker
+namespace TimeTracker.PC
 {
     /// <summary>
     /// Interaction logic for App.xaml

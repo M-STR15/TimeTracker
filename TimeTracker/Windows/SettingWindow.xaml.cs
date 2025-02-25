@@ -6,12 +6,12 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Helpers;
-using TimeTracker.Models;
-using TimeTracker.Services;
-using TimeTracker.Stories;
+using TimeTracker.PC.Helpers;
+using TimeTracker.PC.Models;
+using TimeTracker.PC.Services;
+using TimeTracker.PC.Stories;
 
-namespace TimeTracker.Windows
+namespace TimeTracker.PC.Windows
 {
 	[ObservableObject]
 	public partial class SettingWindow : Window

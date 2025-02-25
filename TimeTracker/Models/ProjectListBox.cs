@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.Models
+namespace TimeTracker.PC.Models
 {
 	[ObservableObject]
 	public partial class ProjectListBox : IProjectWithoutColl, IListBox

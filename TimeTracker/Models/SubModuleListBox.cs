@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.Models
+namespace TimeTracker.PC.Models
 {
 	/// <summary>
 	/// Třída slouží pro manipulaci v Listboxu, je to mezi vrstva mezi DB a editování dat.

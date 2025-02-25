@@ -4,11 +4,11 @@ using System.Windows.Media;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Services;
-using TimeTracker.Stories;
-using TimeTracker.Windows.Models;
+using TimeTracker.PC.Services;
+using TimeTracker.PC.Stories;
+using TimeTracker.PC.Windows.Models;
 
-namespace TimeTracker.Windows
+namespace TimeTracker.PC.Windows
 {
 	public partial class ShiftsPlanWindow : Window
 	{

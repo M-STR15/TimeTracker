@@ -1,6 +1,6 @@
 ﻿using TimeTracker.BE.DB.Models.Enums;
 
-namespace TimeTracker.Windows.Models
+namespace TimeTracker.PC.Windows.Models
 {
     internal class InfoOfDate
     {

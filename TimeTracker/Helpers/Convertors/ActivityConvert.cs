@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Data;
 
-namespace TimeTracker.Helpers.Convertors
+namespace TimeTracker.PC.Helpers.Convertors
 {
 	public class ActivityConvert : IValueConverter
 	{

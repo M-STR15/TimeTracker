@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using TimeTracker.Models;
+using TimeTracker.PC.Models;
 
-namespace TimeTracker.Helpers.Models
+namespace TimeTracker.PC.Helpers.Models
 {
     public class SubModuleTemplateSelector : DataTemplateSelector
     {

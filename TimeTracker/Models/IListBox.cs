@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Models
+﻿namespace TimeTracker.PC.Models
 {
     public interface IListBox
     {

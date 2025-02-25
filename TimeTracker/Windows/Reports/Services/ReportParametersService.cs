@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Windows.Reports.Services
+﻿namespace TimeTracker.PC.Windows.Reports.Services
 {
 	public class ReportParameterService
 	{

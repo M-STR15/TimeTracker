@@ -1,6 +1,6 @@
 ﻿using TimeTracker.BE.DB.Models;
 
-namespace TimeTracker.Models
+namespace TimeTracker.PC.Models
 {
     public class ShiftCmb : Shift
     {

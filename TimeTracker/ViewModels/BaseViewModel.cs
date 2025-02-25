@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Effects;
 
-namespace TimeTracker.ViewModels
+namespace TimeTracker.PC.ViewModels
 {
 	public class BaseViewModel : INotifyPropertyChanged
 	{

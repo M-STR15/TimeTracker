@@ -3,7 +3,7 @@ using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
-namespace TimeTracker.Windows.Models
+namespace TimeTracker.PC.Windows.Models
 {
 	[ObservableObject]
 	public partial class RecordActivityReport : IRecordActivity

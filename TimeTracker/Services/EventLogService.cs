@@ -1,7 +1,7 @@
 ﻿using NotificationWpf;
 using NotificationWpf.Models;
 
-namespace TimeTracker.Services
+namespace TimeTracker.PC.Services
 {
 	public class EventLogService
 	{

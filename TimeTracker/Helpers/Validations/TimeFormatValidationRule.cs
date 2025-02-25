@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
 
-namespace TimeTracker.Helpers.Validations
+namespace TimeTracker.PC.Helpers.Validations
 {
 	public class TimeFormatValidationRule : ValidationRule
 	{

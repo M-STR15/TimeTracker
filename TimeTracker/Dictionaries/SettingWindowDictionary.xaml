@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:temp="clr-namespace:TimeTracker.Helpers.Models">
+    xmlns:temp="clr-namespace:TimeTracker.PC.Helpers.Models">
     <!--  Šablona pro Editable Project  -->
     <DataTemplate x:Key="ProjectEditableTemplate">
         <Grid HorizontalAlignment="Stretch">
