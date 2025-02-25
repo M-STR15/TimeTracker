@@ -5,87 +5,88 @@ using System.Windows.Media.Effects;
 
 namespace TimeTracker.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
-    {
-        private string _title;
+	public class BaseViewModel : INotifyPropertyChanged
+	{
+		private string _title = string.Empty;
 
-        public BaseViewModel(string title)
-        {
-            CloseCommand = new Helpers.RelayCommand(cmd_Close);
-            CloseWindowCommand = new Helpers.RelayCommand(cmd_CloseWindow);
-            MinimalizationCommand = new Helpers.RelayCommand(cmd_minimalize);
+		public ICommand CloseCommand { get; private set; }
 
-            Title = title;
-        }
+		public ICommand CloseWindowCommand { get; private set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+		public ICommand MinimalizationCommand { get; private set; }
 
-        public ICommand CloseCommand { get; private set; }
-        public ICommand CloseWindowCommand { get; private set; }
-        public ICommand MinimalizationCommand { get; private set; }
+		public string Title
+		{
+			get => _title;
+			set
+			{
+				_title = value;
+				OnPropertyChanged(nameof(Title));
+			}
+		}
 
-        public string Title
-        {
-            get => _title;
-            set
-            {
-                _title = value;
-                OnPropertyChanged(nameof(Title));
-            }
-        }
+		public Window Window { get; set; }
 
-        public Window Window { get; set; }
+		public BaseViewModel(string title)
+		{
+			CloseCommand = new Helpers.RelayCommand(cmd_Close);
+			CloseWindowCommand = new Helpers.RelayCommand(cmd_CloseWindow);
+			MinimalizationCommand = new Helpers.RelayCommand(cmd_minimalize);
 
-        protected virtual void cmd_Close(object parameter) => close();
+			Title = title;
+		}
 
-        protected virtual void cmd_minimalize(object parameter) => minimalize();
+		public event PropertyChangedEventHandler PropertyChanged;
+		protected virtual void cmd_Close(object parameter) => close();
 
-        protected virtual void minimalize() => App.Current.MainWindow.WindowState = WindowState.Minimized;
+		protected virtual void cmd_minimalize(object parameter) => minimalize();
 
-        private void close()
-        {
-            App.Current.Shutdown();
-        }
+		protected virtual void minimalize() => App.Current.MainWindow.WindowState = WindowState.Minimized;
 
-        /// <summary>
-        /// Zavře okno.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="viewModel"> Je potřeba zadat ViewModel pro okno co se má zavřít</param>
-        /// <returns>Funkce napíše, zda se podařilo okno zavřít či nikoliv.</returns>
-        private bool closeWindow<T>(T viewModel)
-             where T : BaseViewModel
-        {
-            try
-            {
-                if (viewModel.Window is Window)
-                {
-                    BlurEffect objBlur = new BlurEffect();
-                    objBlur.Radius = 0;
-                    viewModel.Window.Owner.Effect = objBlur;
-                }
+		private void close()
+		{
+			App.Current.Shutdown();
+		}
 
-                viewModel.Window?.Close();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+		/// <summary>
+		/// Zavře okno.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="viewModel"> Je potřeba zadat ViewModel pro okno co se má zavřít</param>
+		/// <returns>Funkce napíše, zda se podařilo okno zavřít či nikoliv.</returns>
+		private bool closeWindow<T>(T viewModel)
+			 where T : BaseViewModel
+		{
+			try
+			{
+				if (viewModel.Window is Window)
+				{
+					BlurEffect objBlur = new BlurEffect();
+					objBlur.Radius = 0;
+					viewModel.Window.Owner.Effect = objBlur;
+				}
 
-        private void cmd_CloseWindow(object parameter)
-        {
-            closeWindow<BaseViewModel>(this);
-        }
+				viewModel.Window?.Close();
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
 
-        private void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(info));
-            }
-        }
-    }
+		private void cmd_CloseWindow(object parameter)
+		{
+			closeWindow<BaseViewModel>(this);
+		}
+
+		private void OnPropertyChanged(string info)
+		{
+			PropertyChangedEventHandler handler = PropertyChanged;
+			if (handler != null)
+			{
+				handler(this, new PropertyChangedEventArgs(info));
+			}
+		}
+	}
 }

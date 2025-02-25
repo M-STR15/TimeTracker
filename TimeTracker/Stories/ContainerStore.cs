@@ -8,7 +8,7 @@ namespace TimeTracker.Stories
 {
 	public class ContainerStore
 	{
-		private IKernel _container;
+		private IKernel _container = new StandardKernel();
 
 		public ContainerStore()
 		{
@@ -17,8 +17,6 @@ namespace TimeTracker.Stories
 
 		private void configureContainer()
 		{
-			_container = new StandardKernel();
-
 			_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
 
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();

@@ -6,8 +6,8 @@ namespace TimeTracker.Helpers.Models
 {
     public class SubModuleTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate EditableTemplate { get; set; }
-        public DataTemplate ReadOnlyTemplate { get; set; }
+        public required DataTemplate EditableTemplate { get; set; }
+        public required DataTemplate ReadOnlyTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {

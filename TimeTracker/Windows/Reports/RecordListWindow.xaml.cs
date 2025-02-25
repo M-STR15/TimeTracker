@@ -130,7 +130,7 @@ namespace TimeTracker.Windows.Reports
 			var editedRow = e.Row.Item as RecordActivityReport;
 			if (editedRow != null)
 			{
-				var startDateTime = (DateTime)dateTimegroupDateTime(editedRow.StartDate, editedRow.StartTime);
+				var startDateTime = (DateTime?)dateTimegroupDateTime(editedRow.StartDate, editedRow.StartTime);
 				var endDateTime = dateTimegroupDateTime(editedRow.EndDate, editedRow.EndTime);
 
 				//var column = e.Column; // Sloupec, který se edituje
@@ -141,21 +141,25 @@ namespace TimeTracker.Windows.Reports
 				var typeShiftId = getID_ActivityId(editedRow);
 				var activityId = (Activities[editedRow.ActivityIndex]).Id;
 
-				var recordActivity = new RecordActivity(editedRow.GuidId, startDateTime, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
-
-				var updateRecordAct = await _recordProvider.SaveRecordAsync(recordActivity);
-				if (updateRecordAct != null)
+				if (startDateTime != null)
 				{
-					var newRecordActivityReport = new RecordActivityReport(updateRecordAct);
+					var startDateTimeConv=(DateTime)startDateTime;
+					var recordActivity = new RecordActivity(editedRow.GuidId, startDateTimeConv, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
-					if (editedRow != null)
+					var updateRecordAct = await _recordProvider.SaveRecordAsync(recordActivity);
+					if (updateRecordAct != null)
 					{
-						RecordActivityReportList.Remove(editedRow);
-						RecordActivityReportList.Add(newRecordActivityReport);
+						var newRecordActivityReport = new RecordActivityReport(updateRecordAct);
 
-						setRecordActivityReportList();
-						setRecordActivityReportListcollectionView();
-						selectRow(newRecordActivityReport);
+						if (editedRow != null)
+						{
+							RecordActivityReportList.Remove(editedRow);
+							RecordActivityReportList.Add(newRecordActivityReport);
+
+							setRecordActivityReportList();
+							setRecordActivityReportListcollectionView();
+							selectRow(newRecordActivityReport);
+						}
 					}
 				}
 			}

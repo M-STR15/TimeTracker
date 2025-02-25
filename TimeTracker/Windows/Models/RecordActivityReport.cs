@@ -19,7 +19,7 @@ namespace TimeTracker.Windows.Models
 		private static ICollection<TypeShift>? _typeShifts;
 
 		[ObservableProperty]
-		private Activity _activity;
+		private Activity? _activity;
 
 		[ObservableProperty]
 		private int _activityId;
@@ -184,9 +184,12 @@ namespace TimeTracker.Windows.Models
 			{
 				_subModules = new List<SubModule>();
 				_subModules.Add(new SubModule());
-				foreach (var item in Project.SubModules)
+				if (Project?.SubModules != null)
 				{
-					_subModules.Add(item);
+					foreach (var item in Project.SubModules)
+					{
+						_subModules.Add(item);
+					}
 				}
 			}
 		}
