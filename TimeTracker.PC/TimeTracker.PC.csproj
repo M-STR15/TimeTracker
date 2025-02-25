@@ -9,6 +9,14 @@
     <ApplicationIcon>Resources\clock-violet.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TIMETRACKER_PC</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants);TIMETRACKER_PC</DefineConstants>
+  </PropertyGroup>
+
 	<!--<PropertyGroup>
 		<Authors>M-Str</Authors>
 	</PropertyGroup>-->

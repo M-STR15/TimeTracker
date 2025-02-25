@@ -1,7 +1,6 @@
-﻿using LiveCharts.Wpf;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Ninject;
-using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.DB.Services;
 using TimeTracker.PC.Windows;

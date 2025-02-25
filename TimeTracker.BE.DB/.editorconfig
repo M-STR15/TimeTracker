@@ -82,12 +82,12 @@ csharp_style_var_when_type_is_apparent = true
 
 # Expression-bodied members
 csharp_style_expression_bodied_accessors = true:suggestion
-csharp_style_expression_bodied_constructors = false
-csharp_style_expression_bodied_indexers = true
-csharp_style_expression_bodied_lambdas = true
-csharp_style_expression_bodied_local_functions = true
-csharp_style_expression_bodied_methods = false
-csharp_style_expression_bodied_operators = false
+csharp_style_expression_bodied_constructors = false:silent
+csharp_style_expression_bodied_indexers = true:silent
+csharp_style_expression_bodied_lambdas = true:silent
+csharp_style_expression_bodied_local_functions = true:silent
+csharp_style_expression_bodied_methods = false:silent
+csharp_style_expression_bodied_operators = false:silent
 csharp_style_expression_bodied_properties = true:suggestion
 
 # Pattern matching preferences
@@ -108,12 +108,12 @@ csharp_style_prefer_readonly_struct = true
 csharp_style_prefer_readonly_struct_member = true
 
 # Code-block preferences
-csharp_prefer_braces = true
-csharp_prefer_simple_using_statement = true
-csharp_style_namespace_declarations = block_scoped
-csharp_style_prefer_method_group_conversion = true
-csharp_style_prefer_primary_constructors = true
-csharp_style_prefer_top_level_statements = true
+csharp_prefer_braces = true:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_prefer_method_group_conversion = true:silent
+csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_top_level_statements = true:silent
 
 # Expression-level preferences
 csharp_prefer_simple_default_expression = true
@@ -131,7 +131,7 @@ csharp_style_unused_value_assignment_preference = discard_variable
 csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
 
 # 'using' directive preferences
-csharp_using_directive_placement = outside_namespace
+csharp_using_directive_placement = outside_namespace:silent
 
 # New line preferences
 csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = true
@@ -209,7 +209,7 @@ dotnet_naming_rule.class_public_or_internal_should_be_pascal_case.style = pascal
 
 dotnet_naming_rule.class_private_or_protected_should_be_camel_case.severity = suggestion
 dotnet_naming_rule.class_private_or_protected_should_be_camel_case.symbols = class_private_or_protected
-dotnet_naming_rule.class_private_or_protected_should_be_camel_case.style = camel_case
+dotnet_naming_rule.class_private_or_protected_should_be_camel_case.style = private_methods
 
 dotnet_naming_rule.struct_public_or_internal_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.struct_public_or_internal_should_be_pascal_case.symbols = struct_public_or_internal
@@ -217,11 +217,11 @@ dotnet_naming_rule.struct_public_or_internal_should_be_pascal_case.style = pasca
 
 dotnet_naming_rule.struct_private_or_protected_should_be_camel_case.severity = suggestion
 dotnet_naming_rule.struct_private_or_protected_should_be_camel_case.symbols = struct_private_or_protected
-dotnet_naming_rule.struct_private_or_protected_should_be_camel_case.style = camel_case
+dotnet_naming_rule.struct_private_or_protected_should_be_camel_case.style = private_methods
 
 dotnet_naming_rule.method_public_should_be_public_methods.severity = suggestion
 dotnet_naming_rule.method_public_should_be_public_methods.symbols = method_public
-dotnet_naming_rule.method_public_should_be_public_methods.style = public_methods
+dotnet_naming_rule.method_public_should_be_public_methods.style = pascal_case
 
 dotnet_naming_rule.method_private_should_be_private_methods.severity = suggestion
 dotnet_naming_rule.method_private_should_be_private_methods.symbols = method_private
@@ -241,11 +241,11 @@ dotnet_naming_rule.field_or_property_public_or_internal_static_should_be_field_o
 
 dotnet_naming_rule.field_or_property_public_or_internal_should_be_field_or_protected_public_or_internal.severity = suggestion
 dotnet_naming_rule.field_or_property_public_or_internal_should_be_field_or_protected_public_or_internal.symbols = field_or_property_public_or_internal
-dotnet_naming_rule.field_or_property_public_or_internal_should_be_field_or_protected_public_or_internal.style = field_or_protected_public_or_internal
+dotnet_naming_rule.field_or_property_public_or_internal_should_be_field_or_protected_public_or_internal.style = pascal_case
 
 dotnet_naming_rule.parameter_should_be_camel_case.severity = suggestion
 dotnet_naming_rule.parameter_should_be_camel_case.symbols = parameter
-dotnet_naming_rule.parameter_should_be_camel_case.style = camel_case
+dotnet_naming_rule.parameter_should_be_camel_case.style = private_methods
 
 # Symbol specifications
 
@@ -351,3 +351,14 @@ dotnet_naming_style.field_or_protected_public_or_internal.required_prefix =
 dotnet_naming_style.field_or_protected_public_or_internal.required_suffix = 
 dotnet_naming_style.field_or_protected_public_or_internal.word_separator = 
 dotnet_naming_style.field_or_protected_public_or_internal.capitalization = pascal_case
+csharp_prefer_system_threading_lock = true:suggestion
+
+[*.{cs,vb}]
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+tab_width = 4
+indent_size = 4
+end_of_line = crlf
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_prefer_auto_properties = true:silent
