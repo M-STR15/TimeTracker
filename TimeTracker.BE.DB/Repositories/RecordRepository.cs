@@ -7,6 +7,11 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class RecordRepository
 {
+	private readonly MainDatacontext _context;
+	public RecordRepository(MainDatacontext context)
+	{
+		_context = context;
+	}
 	/// <summary>
 	/// Odstraní záznam aktivity podle zadaného Guid.
 	/// </summary>
@@ -16,7 +21,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var selectRow = await context.RecordActivities.FirstOrDefaultAsync(x => x.GuidId == guidId);
 				if (selectRow != null)
@@ -46,7 +51,7 @@ public class RecordRepository
 		{
 			RecordActivity? recordActivity = null;
 
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (context.RecordActivities.Count() > 0)
 				{
@@ -78,7 +83,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var recordActivitiy = await context.RecordActivities
 				.Include(x => x.Project)
@@ -105,7 +110,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var recordActivities = await context.RecordActivities
 				.Include(x => x.Project)
@@ -134,7 +139,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
 				.Include(x => x.Project)
@@ -163,7 +168,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (recordActivity.GuidId != Guid.Empty)
 				{
@@ -197,7 +202,7 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
 

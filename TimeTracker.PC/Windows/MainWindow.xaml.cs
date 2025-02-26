@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
@@ -34,9 +35,11 @@ namespace TimeTracker.PC.Windows
 		private int _totalActivityTimeBeforeInSecond;
 
 		private List<TypeShift> _typeShifts = new();
+		private readonly MainDatacontext _context;
 
-		public MainWindow(MainStory mainStory)
+		public MainWindow(MainStory mainStory, MainDatacontext context)
 		{
+			_context = context;
 			_eventLogService = new EventLogService();
 			_mainStory = mainStory;
 			inicialization();
@@ -170,7 +173,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				var window = new ActivitiesOverDaysWindow();
+				var window = new ActivitiesOverDaysWindow(_context);
 				window.Show();
 			}
 			catch (Exception ex)
@@ -183,7 +186,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				var window = new PlanVsRealitaWorkHoursWindow();
+				var window = new PlanVsRealitaWorkHoursWindow(_context);
 				window.Show();
 			}
 			catch (Exception ex)
@@ -305,7 +308,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				var report = new RecordListWindow(_mainStory);
+				var report = new RecordListWindow(_mainStory, _context);
 				report.Show();
 			}
 			catch (Exception ex)

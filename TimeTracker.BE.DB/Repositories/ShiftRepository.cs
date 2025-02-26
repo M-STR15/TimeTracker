@@ -6,8 +6,11 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ShiftRepository
 {
-	public ShiftRepository()
-	{ }
+	private readonly MainDatacontext _context;
+	public ShiftRepository(MainDatacontext context)
+	{
+		_context = context;
+	}
 
 	/// <summary>
 	/// Získá všechny směny z databáze, seřazené podle data začátku.
@@ -16,7 +19,7 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var shifts = await context.Shifts.OrderBy(x => x.StartDate).AsNoTracking().ToListAsync();
 				return shifts;
@@ -38,7 +41,7 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var shifts = await context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToListAsync();
 				return shifts;
@@ -57,7 +60,7 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var typeShifts = await context.TypeShifts.AsNoTracking().ToListAsync();
 				return typeShifts;
@@ -76,7 +79,7 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var typeShifts = await context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToListAsync();
 				return typeShifts;
@@ -97,7 +100,7 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (shifts == null || !shifts.Any())
 					return true;
@@ -149,7 +152,7 @@ public class ShiftRepository
 	/// <returns></returns>
 	public double GetSumShiftHours(Guid shiftGuidId)
 	{
-		using (var context = new MainDatacontext())
+		using (var context = _context)
 		{
 		}
 

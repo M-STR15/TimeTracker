@@ -14,8 +14,6 @@ namespace TimeTracker.PC
 		private Point _startPoint;
 		private static Mutex s_mutex;
 
-		public App()
-		{ }
 
 		[STAThread]
 		protected override void OnStartup(StartupEventArgs e)

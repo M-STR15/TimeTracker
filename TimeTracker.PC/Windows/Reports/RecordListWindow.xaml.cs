@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
@@ -16,11 +17,12 @@ namespace TimeTracker.PC.Windows.Reports
 	{
 		private readonly EventLogService _eventLogService;
 		private readonly MainStory _mainStoru;
-
-		public RecordListWindow(MainStory mainStore)
+		private readonly MainDatacontext _context;
+		public RecordListWindow(MainStory mainStore, MainDatacontext context)
 		{
 			_eventLogService = new EventLogService();
 			_mainStoru = mainStore;
+			_context = context;
 			inicialization();
 		}
 
@@ -35,11 +37,11 @@ namespace TimeTracker.PC.Windows.Reports
 				Activities = await _activityProvider.GetActivitiesAsync();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
-				var projectProvider = new ProjectRepository();
+				var projectProvider = new ProjectRepository(_context);
 				var projects = await projectProvider.GetProjectsAsync();
 				Projects = convertCollection<Project>(projects).ToList();
 
-				var shiftProvider = new ShiftRepository();
+				var shiftProvider = new ShiftRepository(_context);
 				var shifts = await shiftProvider.GetShiftsAsync();
 				Shifts = convertCollection<Shift>(shifts).ToList();
 

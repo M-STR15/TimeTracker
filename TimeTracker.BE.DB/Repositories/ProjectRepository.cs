@@ -6,6 +6,11 @@ using TimeTracker.BE.DB.Models;
 
 public class ProjectRepository
 {
+	private readonly MainDatacontext _context;
+	public ProjectRepository(MainDatacontext context)
+	{
+		_context = context;
+	}
 	/// <summary>
 	/// Odstraní projekt z databáze.
 	/// </summary>
@@ -15,7 +20,7 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
 				if (item != null)
@@ -45,7 +50,7 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
 				if (item != null)
@@ -74,7 +79,7 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				return await context.Projects.OrderBy(x => x.Name)
 					.Include(x => x.SubModules).ToListAsync();
@@ -94,7 +99,7 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				return await context.SubModules.OrderBy(x => x.Name).ToListAsync();
 			}
@@ -114,7 +119,7 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (context.SubModules.Any(x => x.ProjectId == ptojectId))
 					return await context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToListAsync();
@@ -139,7 +144,7 @@ public class ProjectRepository
 		{
 			var item = new Project(project);
 
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (await context.Projects.AnyAsync(x => x.Name != project.Name))
 				{
@@ -175,7 +180,7 @@ public class ProjectRepository
 		{
 			var item = new SubModule(subModule);
 
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				if (item.Id == 0)
 					await context.SubModules.AddAsync(item);

@@ -8,6 +8,11 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ReportRepository
 {
+	private MainDatacontext _context;
+	public ReportRepository(MainDatacontext context)
+	{
+		_context = context;
+	}
 	/// <summary>
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
@@ -99,7 +104,7 @@ public class ReportRepository
 		var sumHours = 0.00;
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				foreach (var item in context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
 				{
@@ -119,7 +124,7 @@ public class ReportRepository
 		var sumHours = 0.00;
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				foreach (var item in context.RecordActivities.Where(x => x.ShiftGuidId == shiftGuidID && x.ActivityId == (int)eActivity.Pause))
 				{
@@ -137,7 +142,7 @@ public class ReportRepository
 	{
 		var shiftList = new List<Shift>();
 
-		using (var context = new MainDatacontext())
+		using (var context = _context)
 		{
 			shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => (int)y == x.TypeShiftId)).ToList();
 		}
@@ -175,7 +180,7 @@ public class ReportRepository
 
 	private async Task<List<RecordActivity>> getRecordSumListAsync(DateTime start, DateTime end)
 	{
-		using (var context = new MainDatacontext())
+		using (var context = _context)
 		{
 			var basicData = await context.RecordActivities
 					.Where(x => x.StartDateTime >= start && x.StartDateTime <= end).OrderBy(x => x.StartDateTime).ToListAsync();

@@ -3,6 +3,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.PC.Windows.Reports.Services;
@@ -21,7 +22,7 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private string[] _labels;
 
-		private ReportRepository _reportProvider = new ReportRepository();
+		private ReportRepository _reportProvider;
 
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
@@ -29,8 +30,11 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private Func<double, string> _yFormatter;
 
-		public PlanVsRealitaWorkHoursWindow()
+		private readonly MainDatacontext _context;
+		public PlanVsRealitaWorkHoursWindow(MainDatacontext context)
 		{
+			_context = context;
+			_reportProvider = new ReportRepository(_context);
 			InitializeComponent();
 			var reportParametersService = new ReportParameterService();
 			cmbMonth.ItemsSource = reportParametersService.Monts;

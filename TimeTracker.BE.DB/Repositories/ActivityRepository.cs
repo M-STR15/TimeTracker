@@ -6,6 +6,11 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ActivityRepository
 {
+	private readonly MainDatacontext _context;
+	public ActivityRepository(MainDatacontext context)
+	{
+		_context = context;
+	}
 	/// <summary>
 	/// Získá seznam všech aktivit z databáze.
 	/// </summary>
@@ -14,7 +19,7 @@ public class ActivityRepository
 	{
 		try
 		{
-			using (var context = new MainDatacontext())
+			using (var context = _context)
 			{
 				return await context.Activities.ToListAsync();
 			}

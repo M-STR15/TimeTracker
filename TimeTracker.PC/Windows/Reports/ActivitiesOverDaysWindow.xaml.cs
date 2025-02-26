@@ -3,6 +3,7 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.PC.Windows.Reports.Services;
@@ -24,9 +25,11 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
 
-		public ActivitiesOverDaysWindow()
+		private readonly MainDatacontext _context;
+		public ActivitiesOverDaysWindow(MainDatacontext context)
 		{
 			InitializeComponent();
+			_context = context;
 			var reportParametersService = new ReportParameterService();
 			cmbMonth.ItemsSource = reportParametersService.Monts;
 			cmbMonth.SelectedIndex = 0;
@@ -38,7 +41,7 @@ namespace TimeTracker.PC.Windows.Reports
 
 		private void createChartData()
 		{
-			var getProvider = new ReportRepository();
+			var getProvider = new ReportRepository(_context);
 
 			var selectItemCmb = cmbMonth.SelectedItem as string;
 
