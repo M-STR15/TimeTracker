@@ -6,10 +6,10 @@ using TimeTracker.BE.DB.Models;
 
 public class ProjectRepository
 {
-	private readonly MainDatacontext _context;
-	public ProjectRepository(MainDatacontext context)
+	private readonly Func<MainDatacontext> _contextFactory;
+	public ProjectRepository(Func<MainDatacontext> contextFactory)
 	{
-		_context = context;
+		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Odstraní projekt z databáze.
@@ -20,20 +20,18 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
+			if (item != null)
 			{
-				var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
-				if (item != null)
-				{
-					context.Projects.Remove(item);
-					await context.SaveChangesAsync();
-				}
-				else
-				{
-					return null;
-				}
-				return item;
+				context.Projects.Remove(item);
+				await context.SaveChangesAsync();
 			}
+			else
+			{
+				return null;
+			}
+			return item;
 		}
 		catch (Exception)
 		{
@@ -50,20 +48,18 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
+			if (item != null)
 			{
-				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
-				if (item != null)
-				{
-					context.SubModules.Remove(item);
-					await context.SaveChangesAsync();
-				}
-				else
-				{
-					return null;
-				}
-				return item;
+				context.SubModules.Remove(item);
+				await context.SaveChangesAsync();
 			}
+			else
+			{
+				return null;
+			}
+			return item;
 		}
 		catch (Exception)
 		{
@@ -79,11 +75,9 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				return await context.Projects.OrderBy(x => x.Name)
+			var context = _contextFactory();
+			return await context.Projects.OrderBy(x => x.Name)
 					.Include(x => x.SubModules).ToListAsync();
-			}
 		}
 		catch (Exception)
 		{
@@ -99,10 +93,8 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				return await context.SubModules.OrderBy(x => x.Name).ToListAsync();
-			}
+			var context = _contextFactory();
+			return await context.SubModules.OrderBy(x => x.Name).ToListAsync();
 		}
 		catch (Exception)
 		{
@@ -119,13 +111,11 @@ public class ProjectRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				if (context.SubModules.Any(x => x.ProjectId == ptojectId))
-					return await context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToListAsync();
-				else
-					return null;
-			}
+			var context = _contextFactory();
+			if (context.SubModules.Any(x => x.ProjectId == ptojectId))
+				return await context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToListAsync();
+			else
+				return null;
 		}
 		catch (Exception)
 		{
@@ -144,21 +134,19 @@ public class ProjectRepository
 		{
 			var item = new Project(project);
 
-			using (var context = _context)
+			var context = _contextFactory();
+			if (await context.Projects.AnyAsync(x => x.Name != project.Name))
 			{
-				if (await context.Projects.AnyAsync(x => x.Name != project.Name))
-				{
-					if (item.Id == 0)
-						await context.Projects.AddAsync(item);
-					else
-						context.Projects.Update(item);
-
-					await context.SaveChangesAsync();
-				}
+				if (item.Id == 0)
+					await context.Projects.AddAsync(item);
 				else
-				{
-					return null;
-				}
+					context.Projects.Update(item);
+
+				await context.SaveChangesAsync();
+			}
+			else
+			{
+				return null;
 			}
 
 			return item;
@@ -180,15 +168,13 @@ public class ProjectRepository
 		{
 			var item = new SubModule(subModule);
 
-			using (var context = _context)
-			{
-				if (item.Id == 0)
-					await context.SubModules.AddAsync(item);
-				else
-					context.SubModules.Update(item);
+			var context = _contextFactory();
+			if (item.Id == 0)
+				await context.SubModules.AddAsync(item);
+			else
+				context.SubModules.Update(item);
 
-				await context.SaveChangesAsync();
-			}
+			await context.SaveChangesAsync();
 
 			return item;
 		}

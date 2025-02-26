@@ -6,10 +6,10 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ActivityRepository
 {
-	private readonly MainDatacontext _context;
-	public ActivityRepository(MainDatacontext context)
+	private readonly Func<MainDatacontext> _contextFactory;
+	public ActivityRepository(Func<MainDatacontext> contextFactory)
 	{
-		_context = context;
+		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Získá seznam všech aktivit z databáze.
@@ -19,10 +19,8 @@ public class ActivityRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				return await context.Activities.ToListAsync();
-			}
+			var context = _contextFactory();
+			return await context.Activities.ToListAsync();
 		}
 		catch (Exception)
 		{

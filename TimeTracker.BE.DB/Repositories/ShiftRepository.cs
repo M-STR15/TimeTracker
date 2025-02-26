@@ -6,10 +6,10 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ShiftRepository
 {
-	private readonly MainDatacontext _context;
-	public ShiftRepository(MainDatacontext context)
+	private readonly Func<MainDatacontext> _contextFactory;
+	public ShiftRepository(Func<MainDatacontext> contextFactory)
 	{
-		_context = context;
+		_contextFactory = contextFactory;
 	}
 
 	/// <summary>
@@ -19,11 +19,9 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var shifts = await context.Shifts.OrderBy(x => x.StartDate).AsNoTracking().ToListAsync();
-				return shifts;
-			}
+			var context = _contextFactory();
+			var shifts = await context.Shifts.OrderBy(x => x.StartDate).AsNoTracking().ToListAsync();
+			return shifts;
 		}
 		catch (Exception)
 		{
@@ -41,11 +39,9 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var shifts = await context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToListAsync();
-				return shifts;
-			}
+			var context = _contextFactory();
+			var shifts = await context.Shifts.Where(x => x.StartDate >= dateFrom && x.StartDate.Date <= dateTo).AsNoTracking().ToListAsync();
+			return shifts;
 		}
 		catch (Exception)
 		{
@@ -60,11 +56,9 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var typeShifts = await context.TypeShifts.AsNoTracking().ToListAsync();
-				return typeShifts;
-			}
+			var context = _contextFactory();
+			var typeShifts = await context.TypeShifts.AsNoTracking().ToListAsync();
+			return typeShifts;
 		}
 		catch (Exception)
 		{
@@ -79,11 +73,9 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var typeShifts = await context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToListAsync();
-				return typeShifts;
-			}
+			var context = _contextFactory();
+			var typeShifts = await context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToListAsync();
+			return typeShifts;
 		}
 		catch (Exception)
 		{
@@ -100,42 +92,40 @@ public class ShiftRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				if (shifts == null || !shifts.Any())
-					return true;
-
-				var firstDate = shifts.First().StartDate;
-				var year = firstDate.Year;
-				var month = firstDate.Month;
-				var from = new DateTime(year, month, 1);
-				var to = from.AddMonths(1);
-				var actualDataInDB = context.Shifts
-				.Where(x => x.StartDate >= from && x.StartDate < to)
-				.AsNoTracking()
-				.ToList();
-
-				var updateList = shifts.Where(x => x.GuidId != Guid.Empty).ToList();
-				var addList = shifts.Where(x => x.GuidId == Guid.Empty).ToList();
-				var dellList = actualDataInDB
-				.ExceptBy(shifts.Select(e => e.GuidId), x => x.GuidId)
-				.ToList();
-
-				if (dellList != null && dellList.Count > 0)
-				{
-					context.Shifts.RemoveRange(dellList);
-					context.SaveChanges();
-				}
-
-				if (updateList != null && updateList.Count > 0)
-					context.Shifts.UpdateRange(updateList);
-
-				if (addList != null && addList.Count > 0)
-					context.Shifts.AddRange(addList);
-
-				context.SaveChanges();
+			var context = _contextFactory();
+			if (shifts == null || !shifts.Any())
 				return true;
+
+			var firstDate = shifts.First().StartDate;
+			var year = firstDate.Year;
+			var month = firstDate.Month;
+			var from = new DateTime(year, month, 1);
+			var to = from.AddMonths(1);
+			var actualDataInDB = context.Shifts
+			.Where(x => x.StartDate >= from && x.StartDate < to)
+			.AsNoTracking()
+			.ToList();
+
+			var updateList = shifts.Where(x => x.GuidId != Guid.Empty).ToList();
+			var addList = shifts.Where(x => x.GuidId == Guid.Empty).ToList();
+			var dellList = actualDataInDB
+			.ExceptBy(shifts.Select(e => e.GuidId), x => x.GuidId)
+			.ToList();
+
+			if (dellList != null && dellList.Count > 0)
+			{
+				context.Shifts.RemoveRange(dellList);
+				context.SaveChanges();
 			}
+
+			if (updateList != null && updateList.Count > 0)
+				context.Shifts.UpdateRange(updateList);
+
+			if (addList != null && addList.Count > 0)
+				context.Shifts.AddRange(addList);
+
+			context.SaveChanges();
+			return true;
 		}
 		catch (Exception ex)
 		{
@@ -152,9 +142,7 @@ public class ShiftRepository
 	/// <returns></returns>
 	public double GetSumShiftHours(Guid shiftGuidId)
 	{
-		using (var context = _context)
-		{
-		}
+		var context = _contextFactory();
 
 		return 0;
 	}

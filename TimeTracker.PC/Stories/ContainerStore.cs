@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ninject;
+using System.Configuration;
 using System.IO;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
@@ -22,23 +23,32 @@ namespace TimeTracker.PC.Stories
 
 		private void configureContainer()
 		{
+			var folder = Environment.SpecialFolder.LocalApplicationData;
+			var path = Environment.GetFolderPath(folder);
+			var DbPath = Path.Join(path, "TimeTracker.db");
+
 			//_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
 			// Načtení konfigurace
 			var configuration = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-				.Build();
+			.Build();
 
+			//var DbPath = configuration.GetSection("ConnectionString")["Database"];
 			// Vytvoření DbContextOptions
 			var options = new DbContextOptionsBuilder<MainDatacontext>()
-				.UseSqlServer(configuration.GetConnectionString("ConnectionString"))
+				.UseSqlite($"Data Source={DbPath}")
 				.Options;
 
 
-			IServiceCollection services = new ServiceCollection();
-			services.AddTimeTrackerBeDdService(configuration, options);
+			_container.Bind<IConfiguration>().ToConstant(configuration);
+			_container.Bind<DbContextOptions<MainDatacontext>>().ToConstant(options);
+
+			var services = new ServiceCollection();
+			services.AddTimeTrackerBeDdService();
 			services.AddToNinject(_container);
 
+			_container.Bind<Func<MainDatacontext>>().ToMethod(ctx => new Func<MainDatacontext>(() => ctx.Kernel.Get<MainDatacontext>()));
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 

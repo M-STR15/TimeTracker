@@ -30,8 +30,8 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private Func<double, string> _yFormatter;
 
-		private readonly MainDatacontext _context;
-		public PlanVsRealitaWorkHoursWindow(MainDatacontext context)
+		private readonly Func<MainDatacontext> _context;
+		public PlanVsRealitaWorkHoursWindow(Func<MainDatacontext> context)
 		{
 			_context = context;
 			_reportProvider = new ReportRepository(_context);

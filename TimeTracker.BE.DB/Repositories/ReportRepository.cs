@@ -8,10 +8,10 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class ReportRepository
 {
-	private MainDatacontext _context;
-	public ReportRepository(MainDatacontext context)
+	private readonly Func<MainDatacontext> _contextFactory;
+	public ReportRepository(Func<MainDatacontext> contextFactory)
 	{
-		_context = context;
+		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
@@ -104,12 +104,10 @@ public class ReportRepository
 		var sumHours = 0.00;
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			foreach (var item in context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
 			{
-				foreach (var item in context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
-				{
-					sumHours += item.DurationSec;
-				}
+				sumHours += item.DurationSec;
 			}
 		}
 		catch (Exception)
@@ -124,12 +122,10 @@ public class ReportRepository
 		var sumHours = 0.00;
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			foreach (var item in context.RecordActivities.Where(x => x.ShiftGuidId == shiftGuidID && x.ActivityId == (int)eActivity.Pause))
 			{
-				foreach (var item in context.RecordActivities.Where(x => x.ShiftGuidId == shiftGuidID && x.ActivityId == (int)eActivity.Pause))
-				{
-					sumHours += item.DurationSec;
-				}
+				sumHours += item.DurationSec;
 			}
 		}
 		catch (Exception)
@@ -142,10 +138,8 @@ public class ReportRepository
 	{
 		var shiftList = new List<Shift>();
 
-		using (var context = _context)
-		{
-			shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => (int)y == x.TypeShiftId)).ToList();
-		}
+		var context = _contextFactory();
+		shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => (int)y == x.TypeShiftId)).ToList();
 
 		var cumHours = 0.00;
 		var planList = new List<DayHours>();
@@ -180,13 +174,11 @@ public class ReportRepository
 
 	private async Task<List<RecordActivity>> getRecordSumListAsync(DateTime start, DateTime end)
 	{
-		using (var context = _context)
-		{
-			var basicData = await context.RecordActivities
+		var context = _contextFactory();
+		var basicData = await context.RecordActivities
 					.Where(x => x.StartDateTime >= start && x.StartDateTime <= end).OrderBy(x => x.StartDateTime).ToListAsync();
 
-			return basicData;
-		}
+		return basicData;
 	}
 
 	private double getSumHours(List<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)

@@ -35,9 +35,9 @@ namespace TimeTracker.PC.Windows
 		private int _totalActivityTimeBeforeInSecond;
 
 		private List<TypeShift> _typeShifts = new();
-		private readonly MainDatacontext _context;
+		private readonly Func<MainDatacontext> _context;
 
-		public MainWindow(MainStory mainStory, MainDatacontext context)
+		public MainWindow(MainStory mainStory, Func<MainDatacontext> context)
 		{
 			_context = context;
 			_eventLogService = new EventLogService();

@@ -25,8 +25,8 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
 
-		private readonly MainDatacontext _context;
-		public ActivitiesOverDaysWindow(MainDatacontext context)
+		private readonly Func<MainDatacontext> _context;
+		public ActivitiesOverDaysWindow(Func<MainDatacontext> context)
 		{
 			InitializeComponent();
 			_context = context;

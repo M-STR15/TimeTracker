@@ -7,10 +7,10 @@ namespace TimeTracker.BE.DB.Repositories;
 
 public class RecordRepository
 {
-	private readonly MainDatacontext _context;
-	public RecordRepository(MainDatacontext context)
+	private readonly Func<MainDatacontext> _contextFactory;
+	public RecordRepository(Func<MainDatacontext> contextFactory)
 	{
-		_context = context;
+		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Odstraní záznam aktivity podle zadaného Guid.
@@ -21,14 +21,12 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			var selectRow = await context.RecordActivities.FirstOrDefaultAsync(x => x.GuidId == guidId);
+			if (selectRow != null)
 			{
-				var selectRow = await context.RecordActivities.FirstOrDefaultAsync(x => x.GuidId == guidId);
-				if (selectRow != null)
-				{
-					context.RecordActivities.Remove(selectRow);
-					await context.SaveChangesAsync();
-				}
+				context.RecordActivities.Remove(selectRow);
+				await context.SaveChangesAsync();
 			}
 
 			await UpdateRefreshEndTimeAsync();
@@ -51,19 +49,17 @@ public class RecordRepository
 		{
 			RecordActivity? recordActivity = null;
 
-			using (var context = _context)
+			var context = _contextFactory();
+			if (context.RecordActivities.Count() > 0)
 			{
-				if (context.RecordActivities.Count() > 0)
-				{
-					recordActivity = await context.RecordActivities.OrderBy(x => x.StartDateTime)
-						.Include(x => x.Project)
-							.ThenInclude(x => x.SubModules)
-						.Include(x => x.Activity)
-						.Include(x => x.Shift)
-						.Include(x => x.SubModule)
-						.Include(x => x.TypeShift)
-						.LastAsync();
-				}
+				recordActivity = await context.RecordActivities.OrderBy(x => x.StartDateTime)
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.Shift)
+					.Include(x => x.SubModule)
+					.Include(x => x.TypeShift)
+					.LastAsync();
 			}
 
 			return recordActivity;
@@ -83,9 +79,8 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var recordActivitiy = await context.RecordActivities
+			var context = _contextFactory();
+			var recordActivitiy = await context.RecordActivities
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
@@ -93,8 +88,7 @@ public class RecordRepository
 				.Include(x => x.Shift)
 				.OrderBy(x => x.StartDateTime).FirstOrDefaultAsync(x => x.GuidId == guidId);
 
-				return recordActivitiy;
-			}
+			return recordActivitiy;
 		}
 		catch (Exception)
 		{
@@ -110,9 +104,8 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var recordActivities = await context.RecordActivities
+			var context = _contextFactory();
+			var recordActivities = await context.RecordActivities
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
@@ -120,8 +113,7 @@ public class RecordRepository
 				.Include(x => x.Shift)
 				.OrderBy(x => x.StartDateTime).ToListAsync();
 
-				return recordActivities;
-			}
+			return recordActivities;
 		}
 		catch (Exception)
 		{
@@ -139,9 +131,8 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
-			{
-				var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
+			var context = _contextFactory();
+			var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
 				.Include(x => x.Project)
 					.ThenInclude(x => x.SubModules)
 				.Include(x => x.Activity)
@@ -149,8 +140,7 @@ public class RecordRepository
 				.Include(x => x.Shift)
 				.OrderBy(x => x.StartDateTime).ToListAsync();
 
-				return recordActivities;
-			}
+			return recordActivities;
 		}
 		catch (Exception)
 		{
@@ -168,19 +158,17 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			if (recordActivity.GuidId != Guid.Empty)
 			{
-				if (recordActivity.GuidId != Guid.Empty)
-				{
-					context.RecordActivities.Update(recordActivity);
-				}
-				else
-				{
-					await context.RecordActivities.AddAsync(recordActivity);
-				}
-
-				await context.SaveChangesAsync();
+				context.RecordActivities.Update(recordActivity);
 			}
+			else
+			{
+				await context.RecordActivities.AddAsync(recordActivity);
+			}
+
+			await context.SaveChangesAsync();
 
 			await UpdateRefreshEndTimeAsync();
 
@@ -202,30 +190,28 @@ public class RecordRepository
 	{
 		try
 		{
-			using (var context = _context)
+			var context = _contextFactory();
+			var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
+
+			var allowedActivities = new List<int>();
+			allowedActivities.Add((int)eActivity.Start);
+			allowedActivities.Add((int)eActivity.Pause);
+
+			for (int i = 0; i <= recordActivities.Count - 1; i++)
 			{
-				var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
-
-				var allowedActivities = new List<int>();
-				allowedActivities.Add((int)eActivity.Start);
-				allowedActivities.Add((int)eActivity.Pause);
-
-				for (int i = 0; i <= recordActivities.Count - 1; i++)
+				var currentItem = recordActivities[i];
+				if (i == recordActivities.Count - 1)
 				{
-					var currentItem = recordActivities[i];
-					if (i == recordActivities.Count - 1)
-					{
-						currentItem.EndDateTime = null;
-					}
-					else if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
-					{
-						var nextItem = recordActivities[i + 1];
-						currentItem.EndDateTime = nextItem.StartDateTime;
-					}
+					currentItem.EndDateTime = null;
 				}
-
-				await context.SaveChangesAsync();
+				else if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
+				{
+					var nextItem = recordActivities[i + 1];
+					currentItem.EndDateTime = nextItem.StartDateTime;
+				}
 			}
+
+			await context.SaveChangesAsync();
 		}
 		catch (Exception)
 		{

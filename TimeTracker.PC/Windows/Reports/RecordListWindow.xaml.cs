@@ -17,8 +17,8 @@ namespace TimeTracker.PC.Windows.Reports
 	{
 		private readonly EventLogService _eventLogService;
 		private readonly MainStory _mainStoru;
-		private readonly MainDatacontext _context;
-		public RecordListWindow(MainStory mainStore, MainDatacontext context)
+		private readonly Func<MainDatacontext> _context;
+		public RecordListWindow(MainStory mainStore, Func<MainDatacontext> context)
 		{
 			_eventLogService = new EventLogService();
 			_mainStoru = mainStore;

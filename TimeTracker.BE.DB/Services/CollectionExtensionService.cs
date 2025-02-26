@@ -2,14 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ninject;
-using System.Configuration;
 using TimeTracker.BE.DB.DataAccess;
 
 namespace TimeTracker.BE.DB.Services
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeDdService(this IServiceCollection services, IConfiguration configuration, DbContextOptions<MainDatacontext> options)
+		public static IServiceCollection AddTimeTrackerBeDdService(this IServiceCollection services)
 		{
 			//_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
 			//services.AddCbDataBeDbServices();
@@ -17,10 +16,10 @@ namespace TimeTracker.BE.DB.Services
 			////services.AddMemoryCache();
 			//services.AddAutoMapper(typeof(MappingProfile));
 
-			services.AddSingleton<IConfiguration>(configuration);
-			services.AddSingleton<DbContextOptions<MainDatacontext>>(options);
+			//services.AddSingleton<IConfiguration>(configuration);
+			//services.AddDbContext<DbContextOptions>(options);
 			services.AddSingleton<MainDatacontext>();
-
+			//services.AddScoped<Func<MainDatacontext>>(provider => () => provider.GetRequiredService<MainDatacontext>());
 			return services;
 		}
 

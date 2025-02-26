@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using System;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 
@@ -32,11 +30,11 @@ namespace TimeTracker.BE.DB.DataAccess
 		// special "local" folder for your platform.
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			if (!optionsBuilder.IsConfigured && _configuration != null)
-			{
-				DbPath = _configuration["Database:ConnectionString"];
-				optionsBuilder.UseSqlite($"Data Source={DbPath}");
-			}
+			//if (_configuration != null)
+			//{
+			//	//DbPath = _configuration.GetSection("ConnectionString")["Database"];
+			//	optionsBuilder.UseSqlite($"Data Source={DbPath}");
+			//}
 			//#if TIMETRACKER_WEB
 			//			var folder = Environment.SpecialFolder.LocalApplicationData;
 			//			var path = Environment.GetFolderPath(folder);
