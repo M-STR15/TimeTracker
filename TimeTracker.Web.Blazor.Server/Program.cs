@@ -1,4 +1,4 @@
-using TimeTracker.Web.Components;
+using TimeTracker.Web.Blazor.Server.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
