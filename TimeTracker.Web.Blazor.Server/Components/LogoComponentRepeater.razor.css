@@ -1,0 +1,52 @@
+﻿@keyframes draw {
+	0% {
+		stroke-dasharray: 0, 100%; /* Čára není viditelná */
+	}
+
+	70% {
+		stroke-dasharray: 100%, 0; /* Čára je kompletně vykreslená */
+	}
+
+	100% {
+		stroke-dasharray: 100%, 0; /* Pauza, čára zůstane vykreslená */
+	}
+}
+
+svg path {
+	/*stroke: #130f42;*/ /* Barva čáry */
+	stroke-width: 10; /* Tloušťka čáry */
+	fill: none; /* Bez výplně */
+	stroke-dasharray: 100%; /* Délka čáry */
+	stroke-dashoffset: 0; /* Počáteční pozice */
+	animation: draw 10s linear infinite; /* 10s kreslení + 3s pauza */
+}
+
+	svg path:nth-child(1) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #ee7d18;*/ /* Barva čáry */
+	}
+
+	svg path:nth-child(2) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #ee7d18;*/ /* Barva čáry */
+	}
+
+	svg path:nth-child(3) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #130f42;*/ /* Barva čáry */
+	}
+
+	svg path:nth-child(4) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #130f42;*/ /* Barva čáry */
+	}
+
+	svg path:nth-child(5) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #130f42;*/ /* Barva čáry */
+	}
+
+	svg path:nth-child(6) {
+		stroke-width: 10; /* Tloušťka čáry */
+		/*stroke: #130f42;*/ /* Barva čáry */
+	}

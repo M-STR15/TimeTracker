@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerTracker.BE.Web.Busines
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Web.Blazor.Server", "TimeTracker.Web.Blazor.Server\TimeTracker.Web.Blazor.Server.csproj", "{95361E4E-CCDE-4CE5-A714-D85ED0937FC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.BE.Web.Shared", "TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj", "{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{95361E4E-CCDE-4CE5-A714-D85ED0937FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95361E4E-CCDE-4CE5-A714-D85ED0937FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95361E4E-CCDE-4CE5-A714-D85ED0937FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +56,7 @@ Global
 		{27EC6AC3-EBAD-4630-9207-D65D96D94138} = {6C3DA257-6962-4EAA-9552-DDEA2495EDC6}
 		{7779448F-3A66-4D20-AF00-E92EFD5A8B01} = {6C3DA257-6962-4EAA-9552-DDEA2495EDC6}
 		{D3C0889F-3162-4ED0-85C7-A31CDFFF866D} = {7779448F-3A66-4D20-AF00-E92EFD5A8B01}
+		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5} = {7779448F-3A66-4D20-AF00-E92EFD5A8B01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B973CB15-9F5A-4D35-A12E-6A398AEDD263}

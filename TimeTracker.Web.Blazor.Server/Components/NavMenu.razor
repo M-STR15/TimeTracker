@@ -1,0 +1,81 @@
+﻿@using TimeTracker.BE.Web.Shared.Models
+
+@inject NavigationManager NavigationManager
+
+<style>
+    .btn {
+        width: 300px;
+    }
+
+
+    .center-container {
+        display: flex;
+        flex-direction: column; /* Tlačítka pod sebe */
+        justify-content: center; /* Vertikální zarovnání */
+        align-items: center; /* Horizontální zarovnání */
+        /* height: 100vh; /* Výška celé stránky */ */ margin: 0;
+    }
+
+        /* Mezery mezi tlačítky */
+        .center-container .btn {
+            margin: 10px 0;
+        }
+
+    .horizontal-center {
+        display: flex;
+        justify-content: center;
+    }
+
+    .version {
+        color: white;
+    }
+</style>
+
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <LogoComponentRepeater Heigh="44" Width="44" ColorHex="#ffffff"></LogoComponentRepeater>
+        <a class="navbar-brand" href="">TimeTracker</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="onOpenDocumentPageClick" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Dokumentace(Swagger)
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="onOpenEventLogsPageClick">
+                <span class="oi oi-plus" aria-hidden="true"></span> EventLogs
+            </NavLink>
+        </div>
+        <div class="horizontal-center">
+            <label class="version">@_buildInfo.VersionStr</label>
+        </div>
+    </nav>
+</div>
+
+@code {
+    BuildInfo _buildInfo = new BuildInfo();
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void onOpenDocumentPageClick() => NavigationManager.NavigateTo("/swagger/index.html", true);
+
+    private void onOpenJsonDataPageClick() => NavigationManager.NavigateTo("/json-data");
+
+    private void onOpenBufferDataPageClick() => NavigationManager.NavigateTo("/buffer-data");
+
+    private void onOpenEventLogsPageClick() => NavigationManager.NavigateTo("/eventlogs");
+}
