@@ -82,10 +82,10 @@ namespace TimeTracker.PC.Windows
 				if (selected != null)
 				{
 					var list = await _projectProvider.GetSubModulesAsync(selected.Id);
+					SubModuleListBox.Clear();
 
-					if (list != null)
+					if (list != null && list.Any())
 					{
-						SubModuleListBox.Clear();
 						foreach (var item in list.Select(x => new SubModuleListBox(x)).ToList())
 						{
 							SubModuleListBox.Add(item);
