@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace TimeTracker.PC.Helpers.Validations
 {
-	public class TimeFormatValidationRule : ValidationRule
+	internal class TimeFormatValidationRule : ValidationRule
 	{
 		/// <summary>
 		/// Ověřuje, zda je zadaná hodnota platným časovým formátem HH:mm:ss.

@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace TimeTracker.PC.Helpers.Convertors
 {
-	public class DateTimeToDateConvert : IValueConverter
+	internal class DateTimeToDateConvert : IValueConverter
 	{
 		/// <summary>
 		/// Metoda převádí objekt typu DateTime na řetězec ve formátu "dd.MM.yyyy".

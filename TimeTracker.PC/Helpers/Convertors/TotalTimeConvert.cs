@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace TimeTracker.PC.Helpers.Convertors
 {
-	public class TotalTimeConvert : IValueConverter
+	internal class TotalTimeConvert : IValueConverter
 	{
 		/// <summary>
 		/// Převádí hodnotu TimeSpan na formátovaný řetězec.

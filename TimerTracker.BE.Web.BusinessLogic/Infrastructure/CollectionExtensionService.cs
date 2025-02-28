@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TimerTracker.BE.Web.BusinessLogic.Helpers;
+using TimerTracker.BE.Web.BusinessLogic.MappingProfiles;
 
 namespace TimeTracker.BE.Web.Shared.Infrastructure
 {

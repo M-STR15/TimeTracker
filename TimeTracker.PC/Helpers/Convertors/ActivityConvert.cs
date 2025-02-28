@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace TimeTracker.PC.Helpers.Convertors
 {
-	public class ActivityConvert : IValueConverter
+	internal class ActivityConvert : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{

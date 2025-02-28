@@ -2,7 +2,7 @@
 
 namespace TimeTracker.PC.Helpers
 {
-	public class RelayCommand : ICommand
+	internal class RelayCommand : ICommand
 	{
 		private readonly Action<object> _execute;
 		private readonly Func<object, bool>? _canExecute;

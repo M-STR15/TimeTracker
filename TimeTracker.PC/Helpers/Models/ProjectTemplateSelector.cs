@@ -4,7 +4,7 @@ using TimeTracker.PC.Models;
 
 namespace TimeTracker.PC.Helpers.Models
 {
-	public class ProjectTemplateSelector : DataTemplateSelector
+	internal class ProjectTemplateSelector : DataTemplateSelector
 	{
 		public required DataTemplate EditableTemplate { get; set; }
 		public required DataTemplate ReadOnlyTemplate { get; set; }

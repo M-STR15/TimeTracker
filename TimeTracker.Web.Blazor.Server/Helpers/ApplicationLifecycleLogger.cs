@@ -2,7 +2,7 @@
 
 namespace TimeTracker.Web.Blazor.Server.Helpers
 {
-	public class ApplicationLifecycleLogger : IHostedService
+	internal class ApplicationLifecycleLogger : IHostedService
 	{
 		private readonly IEventLogService _logger;
 
