@@ -2,11 +2,11 @@
 {
 	public class MainStory
 	{
-		public ContainerStore ContainerStore { get; private set; }
+		public DIContainerStore ContainerStore { get; private set; }
 
 		public MainStory()
 		{
-			ContainerStore = new ContainerStore();
+			ContainerStore = new DIContainerStore();
 		}
 	}
 }

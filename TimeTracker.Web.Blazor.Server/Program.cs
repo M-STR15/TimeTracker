@@ -11,13 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-var connectionString = builder.Configuration.GetConnectionString("TimeTracker");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-//builder.Services.AddDbContextFactory<ToDoDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
 
 builder.Services.AddControllers();
 builder.Services.AddTimeTrackerBeWebSharedService();
-builder.Services.AddTimerTrackerBeWebSharedBusinessLogicService();
+builder.Services.AddTimerTrackerBeWebSharedBusinessLogic(connectionString);
 
 
 builder.Services.AddHostedService<ApplicationLifecycleLogger>();

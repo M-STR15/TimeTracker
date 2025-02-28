@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ninject;
-using System.Configuration;
 using System.IO;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
@@ -12,11 +11,11 @@ using TimeTracker.PC.Windows.Reports;
 
 namespace TimeTracker.PC.Stories
 {
-	public class ContainerStore
+	public class DIContainerStore
 	{
 		private IKernel _container = new StandardKernel();
 
-		public ContainerStore()
+		public DIContainerStore()
 		{
 			configureContainer();
 		}
