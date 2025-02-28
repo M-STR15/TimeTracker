@@ -30,7 +30,7 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				InitializeComponent();
-				_shiftProvider = _mainStory.ContainerStore.GetShiftProvider();
+				_shiftProvider = _mainStory.DIContainerStore.GetShiftProvider();
 
 				_typeShifts = (await _shiftProvider.GetTypeShiftsAsync()).Select(x => new TypeShiftRadioButton(x)).ToList();
 				if (_typeShifts.Count > 0)

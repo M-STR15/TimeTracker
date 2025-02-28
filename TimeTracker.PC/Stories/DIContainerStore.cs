@@ -22,6 +22,23 @@ namespace TimeTracker.PC.Stories
 
 		private void configureContainer()
 		{
+			crateDB();
+
+			var services = new ServiceCollection();
+			services.AddTimeTrackerBeDdService();
+			services.AddToNinject(_container);
+
+			_container.Bind<Func<MainDatacontext>>().ToMethod(ctx => new Func<MainDatacontext>(() => ctx.Kernel.Get<MainDatacontext>()));
+			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
+			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
+
+			_container.Bind<RecordRepository>().To<RecordRepository>().InSingletonScope();
+			_container.Bind<ShiftRepository>().To<ShiftRepository>().InSingletonScope();
+
+		}
+
+		private void crateDB()
+		{
 			var folder = Environment.SpecialFolder.LocalApplicationData;
 			var path = Environment.GetFolderPath(folder);
 			var DbPath = Path.Join(path, "TimeTracker.db");
@@ -39,21 +56,15 @@ namespace TimeTracker.PC.Stories
 				.UseSqlite($"Data Source={DbPath}")
 				.Options;
 
+			// Vytvoření a inicializace databáze, pokud neexistuje
+			using (var context = new MainDatacontext(options))
+			{
+				context.Database.EnsureCreated();
+				//context.Database.Migrate();
+			}
 
 			_container.Bind<IConfiguration>().ToConstant(configuration);
 			_container.Bind<DbContextOptions<MainDatacontext>>().ToConstant(options);
-
-			var services = new ServiceCollection();
-			services.AddTimeTrackerBeDdService();
-			services.AddToNinject(_container);
-
-			_container.Bind<Func<MainDatacontext>>().ToMethod(ctx => new Func<MainDatacontext>(() => ctx.Kernel.Get<MainDatacontext>()));
-			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
-			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
-
-			_container.Bind<RecordRepository>().To<RecordRepository>().InSingletonScope();
-			_container.Bind<ShiftRepository>().To<ShiftRepository>().InSingletonScope();
-
 		}
 
 		public MainWindow GetMainWindow() => _container.Get<MainWindow>();

@@ -13,18 +13,19 @@ namespace TimeTracker.PC
 		private MainStory _mainStory;
 		private Point _startPoint;
 		private static Mutex s_mutex;
-
+		private DIContainerStore _diContainerStore;
 
 		[STAThread]
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			bool createdNew;
 			s_mutex = new Mutex(true, "TimeTracker", out createdNew);
-			_mainStory = new MainStory();
+			_diContainerStore = new DIContainerStore();
+			_mainStory = new MainStory(_diContainerStore);
 
 			if (createdNew)
 			{
-				Current.MainWindow = _mainStory.ContainerStore.GetMainWindow();
+				Current.MainWindow = _mainStory.DIContainerStore.GetMainWindow();
 				Current.MainWindow.Show();
 			}
 			else

@@ -31,8 +31,8 @@ namespace TimeTracker.PC.Windows.Reports
 			try
 			{
 				InitializeComponent();
-				_recordProvider = _mainStoru.ContainerStore.GetRecordProvider();
-				_activityProvider = _mainStoru.ContainerStore.GetActivityProvider();
+				_recordProvider = _mainStoru.DIContainerStore.GetRecordProvider();
+				_activityProvider = _mainStoru.DIContainerStore.GetActivityProvider();
 
 				Activities = await _activityProvider.GetActivitiesAsync();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());

@@ -51,7 +51,7 @@ namespace TimeTracker.PC.Windows
 			{
 				this.DataContext = new BaseViewModel("Timer tracker");
 				InitializeComponent();
-				var containerStore = _mainStory.ContainerStore;
+				var containerStore = _mainStory.DIContainerStore;
 				_shiftProvider = containerStore.GetShiftProvider();
 				_projectProvider = containerStore.GetProjectProvider();
 				_recordProvider = containerStore.GetRecordProvider();

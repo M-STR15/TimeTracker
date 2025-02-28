@@ -29,7 +29,7 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				_mainStory = mainStory;
-				_projectProvider = _mainStory.ContainerStore.GetProjectProvider();
+				_projectProvider = _mainStory.DIContainerStore.GetProjectProvider();
 
 				InitializeComponent();
 
