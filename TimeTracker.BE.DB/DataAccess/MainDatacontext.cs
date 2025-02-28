@@ -54,7 +54,7 @@ namespace TimeTracker.BE.DB.DataAccess
 
 			setSubModuleTable();
 
-			createTestData();
+			//createTestData();
 		}
 
 		private void createTestData()
@@ -62,7 +62,7 @@ namespace TimeTracker.BE.DB.DataAccess
 			createTestDataProjects();
 			createTestDataSubModules();
 			createTestDataShifts();
-			//createTestDataRecordActivities();
+			createTestDataRecordActivities();
 		}
 
 		private void createTestDataRecordActivities()
