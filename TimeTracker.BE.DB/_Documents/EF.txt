@@ -1,3 +1,6 @@
 ﻿Add-Migration InicializeCreate -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
 
 Update-Database -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
+
+
+dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.PC

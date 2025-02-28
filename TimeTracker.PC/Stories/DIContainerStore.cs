@@ -31,7 +31,7 @@ namespace TimeTracker.PC.Stories
 			var configuration = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-			.Build();
+				.Build();
 
 			//var DbPath = configuration.GetSection("ConnectionString")["Database"];
 			// Vytvoření DbContextOptions

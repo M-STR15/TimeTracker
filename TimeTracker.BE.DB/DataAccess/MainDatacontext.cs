@@ -17,11 +17,9 @@ namespace TimeTracker.BE.DB.DataAccess
 		public DbSet<TypeShift> TypeShifts { get; set; }
 		public string DbPath { get; set; } = string.Empty;
 
-		private readonly IConfiguration _configuration;
-		public MainDatacontext(DbContextOptions<MainDatacontext> options, IConfiguration configuration)
+		public MainDatacontext(DbContextOptions<MainDatacontext> options)
 		: base(options)
 		{
-			_configuration = configuration;
 			// Načti hodnotu z konfigurace
 			//DbPath = _configuration["Database:ConnectionString"];
 		}
