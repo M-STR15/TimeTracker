@@ -18,11 +18,7 @@ var connectionString = builder.Configuration.GetConnectionString("TimeTracker");
 builder.Services.AddControllers();
 builder.Services.AddTimeTrackerBeWebSharedService();
 builder.Services.AddTimerTrackerBeWebSharedBusinessLogicService();
-//builder.Services.AddToDoListBeBusinessLogicService();
 
-//builder.Services.AddScoped<ToDoRepository>();
-
-//builder.Services.AddScoped<ToDoController>();
 
 builder.Services.AddHostedService<ApplicationLifecycleLogger>();
 
