@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
@@ -15,7 +16,7 @@ namespace TimeTracker.PC.Windows
 		private List<InfoOfDate> _dailyList = new();
 		private List<TypeShiftRadioButton> _typeShifts = new();
 		private readonly MainStory _mainStory;
-		private ShiftRepository _shiftProvider;
+		private ShiftRepository<SqliteDbContext> _shiftProvider;
 		private EventLogService _eventLogService;
 
 		public ShiftsPlanWindow(MainStory mainStory)

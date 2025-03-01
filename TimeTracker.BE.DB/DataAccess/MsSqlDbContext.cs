@@ -13,5 +13,16 @@ namespace TimeTracker.BE.DB.DataAccess
 				optionsBuilder.UseSqlServer("server=DESKTOP-JS0N1LD\\SQLEXPRESS; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;");
 			}
 		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			_modelBuilder = modelBuilder;
+			insertDefaultValues_Activities();
+			insertDefaultValues_TypeShifts();
+
+			setSubModuleTable();
+		}
 	}
 }

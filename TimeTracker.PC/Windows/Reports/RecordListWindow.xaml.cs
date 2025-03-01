@@ -17,8 +17,8 @@ namespace TimeTracker.PC.Windows.Reports
 	{
 		private readonly EventLogService _eventLogService;
 		private readonly MainStory _mainStoru;
-		private readonly Func<MainDatacontext> _context;
-		public RecordListWindow(MainStory mainStore, Func<MainDatacontext> context)
+		private readonly Func<SqliteDbContext> _context;
+		public RecordListWindow(MainStory mainStore, Func<SqliteDbContext> context)
 		{
 			_eventLogService = new EventLogService();
 			_mainStoru = mainStore;
@@ -37,11 +37,11 @@ namespace TimeTracker.PC.Windows.Reports
 				Activities = await _activityProvider.GetActivitiesAsync();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
-				var projectProvider = new ProjectRepository(_context);
+				var projectProvider = new ProjectRepository<SqliteDbContext>(_context);
 				var projects = await projectProvider.GetProjectsAsync();
 				Projects = convertCollection<Project>(projects).ToList();
 
-				var shiftProvider = new ShiftRepository(_context);
+				var shiftProvider = new ShiftRepository<SqliteDbContext>(_context);
 				var shifts = await shiftProvider.GetShiftsAsync();
 				Shifts = convertCollection<Shift>(shifts).ToList();
 
@@ -70,8 +70,8 @@ namespace TimeTracker.PC.Windows.Reports
 		public ObservableCollection<RecordActivityReport> RecordActivityReportList { get; set; }
 		public List<Shift> Shifts { get; set; }
 		public List<TypeShift> TypeShifts { get; set; }
-		private ActivityRepository _activityProvider { get; set; }
-		private RecordRepository _recordProvider { get; set; }
+		private ActivityRepository<SqliteDbContext> _activityProvider { get; set; }
+		private RecordRepository<SqliteDbContext> _recordProvider { get; set; }
 
 		private async void btnDelete_Click(object sender, RoutedEventArgs e)
 		{

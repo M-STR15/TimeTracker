@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TimeTracker.BE.DB.Migrations.SQLite
 {
     /// <inheritdoc />
@@ -174,6 +176,29 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         principalSchema: "dbo",
                         principalTable: "TypeShifts",
                         principalColumn: "TypeShift_ID");
+                });
+
+            migrationBuilder.InsertData(
+                schema: "dbo",
+                table: "Activities",
+                columns: new[] { "Activity_ID", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Start" },
+                    { 2, "Pause" },
+                    { 3, "Stop" }
+                });
+
+            migrationBuilder.InsertData(
+                schema: "dbo",
+                table: "TypeShifts",
+                columns: new[] { "TypeShift_ID", "Color", "IsVisibleInMainWindow", "Name", "TypeShiftId" },
+                values: new object[,]
+                {
+                    { 1, "Orange", true, "Office", null },
+                    { 2, "SkyBlue", true, "HomeOffice", null },
+                    { 3, "Magenta", true, "Others", null },
+                    { 4, "LawnGreen", false, "Holiday", null }
                 });
 
             migrationBuilder.CreateIndex(

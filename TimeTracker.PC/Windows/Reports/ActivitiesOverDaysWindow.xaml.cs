@@ -25,8 +25,8 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
 
-		private readonly Func<MainDatacontext> _context;
-		public ActivitiesOverDaysWindow(Func<MainDatacontext> context)
+		private readonly Func<SqliteDbContext> _context;
+		public ActivitiesOverDaysWindow(Func<SqliteDbContext> context)
 		{
 			InitializeComponent();
 			_context = context;
@@ -41,7 +41,7 @@ namespace TimeTracker.PC.Windows.Reports
 
 		private void createChartData()
 		{
-			var getProvider = new ReportRepository(_context);
+			var getProvider = new ReportRepository<SqliteDbContext>(_context);
 
 			var selectItemCmb = cmbMonth.SelectedItem as string;
 

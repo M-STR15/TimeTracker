@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 
-public class ProjectRepository
+public class ProjectRepository<T> where T : MainDatacontext
 {
-	private readonly Func<MainDatacontext> _contextFactory;
-	public ProjectRepository(Func<MainDatacontext> contextFactory)
+	private readonly Func<T> _contextFactory;
+	public ProjectRepository(Func<T> contextFactory)
 	{
 		_contextFactory = contextFactory;
 	}

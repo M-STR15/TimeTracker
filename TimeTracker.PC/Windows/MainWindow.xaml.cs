@@ -22,22 +22,22 @@ namespace TimeTracker.PC.Windows
 		private EventLogService _eventLogService;
 		private EventHandler _lastRecordActivityHangler;
 		private RecordActivity? _lra;
-		private ProjectRepository _projectProvider;
+		private ProjectRepository<SqliteDbContext> _projectProvider;
 
-		private RecordRepository _recordProvider;
+		private RecordRepository<SqliteDbContext> _recordProvider;
 
-		private ReportRepository _reportProvider;
+		private ReportRepository<SqliteDbContext> _reportProvider;
 
 		private List<ShiftCmb> _shiftCmbs = new();
 
-		private ShiftRepository _shiftProvider;
+		private ShiftRepository<SqliteDbContext> _shiftProvider;
 
 		private int _totalActivityTimeBeforeInSecond;
 
 		private List<TypeShift> _typeShifts = new();
-		private readonly Func<MainDatacontext> _context;
+		private readonly Func<SqliteDbContext> _context;
 
-		public MainWindow(MainStory mainStory, Func<MainDatacontext> context)
+		public MainWindow(MainStory mainStory, Func<SqliteDbContext> context)
 		{
 			_context = context;
 			_eventLogService = new EventLogService();

@@ -23,7 +23,7 @@ namespace TimeTracker.PC.Factories
 
 			//var DbPath = configuration.GetSection("ConnectionString")["Database"];
 			// Vytvoření DbContextOptions
-			var options = new DbContextOptionsBuilder<MainDatacontext>()
+			var options = new DbContextOptionsBuilder<SqliteDbContext>()
 				.UseSqlite($"Data Source={DbPath}")
 				.Options;
 

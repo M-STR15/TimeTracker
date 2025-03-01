@@ -1,10 +1,8 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using TimeTracker.BE.Web.Shared.Infrastructure;
 using TimeTracker.Web.Blazor.Server.Components;
 using TimeTracker.Web.Blazor.Server.Helpers;
-using TimeTracker.BE.Web.Shared.Infrastructure;
-using TimeTracker.BE.DB.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -22,7 +22,7 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private string[] _labels;
 
-		private ReportRepository _reportProvider;
+		private ReportRepository<SqliteDbContext> _reportProvider;
 
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
@@ -30,11 +30,11 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private Func<double, string> _yFormatter;
 
-		private readonly Func<MainDatacontext> _context;
-		public PlanVsRealitaWorkHoursWindow(Func<MainDatacontext> context)
+		private readonly Func<SqliteDbContext> _context;
+		public PlanVsRealitaWorkHoursWindow(Func<SqliteDbContext> context)
 		{
 			_context = context;
-			_reportProvider = new ReportRepository(_context);
+			_reportProvider = new ReportRepository<SqliteDbContext>(_context);
 			InitializeComponent();
 			var reportParametersService = new ReportParameterService();
 			cmbMonth.ItemsSource = reportParametersService.Monts;

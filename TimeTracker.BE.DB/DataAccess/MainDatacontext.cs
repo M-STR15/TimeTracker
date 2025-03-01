@@ -6,7 +6,7 @@ namespace TimeTracker.BE.DB.DataAccess
 {
 	public abstract class MainDatacontext : DbContext
 	{
-		private ModelBuilder _modelBuilder { get; set; }
+		protected ModelBuilder _modelBuilder { get; set; }
 
 		public DbSet<Activity> Activities { get; set; }
 		public DbSet<Project> Projects { get; set; }
@@ -16,27 +16,16 @@ namespace TimeTracker.BE.DB.DataAccess
 		public DbSet<TypeShift> TypeShifts { get; set; }
 		public string DbPath { get; set; } = string.Empty;
 
-		public MainDatacontext(DbContextOptions<MainDatacontext> options) : base(options)
+		public MainDatacontext(DbContextOptions options) : base(options)
 		{
 			// Načti hodnotu z konfigurace
 			//DbPath = _configuration["Database:ConnectionString"];
 		}
 
 
-		protected new virtual void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
+		//protected override abstract void OnModelCreating(ModelBuilder modelBuilder);
 
-			_modelBuilder = modelBuilder;
-			insertDefaultValues_Activities();
-			insertDefaultValues_TypeShifts();
-
-			setSubModuleTable();
-
-			//createTestData();
-		}
-
-		private void createTestData()
+		protected void createTestData()
 		{
 			createTestDataProjects();
 			createTestDataSubModules();
@@ -44,7 +33,7 @@ namespace TimeTracker.BE.DB.DataAccess
 			createTestDataRecordActivities();
 		}
 
-		private void createTestDataRecordActivities()
+		protected void createTestDataRecordActivities()
 		{
 			var year = DateTime.Now.Year;
 			var month = DateTime.Now.Month;
@@ -81,7 +70,7 @@ namespace TimeTracker.BE.DB.DataAccess
 			);
 		}
 
-		private void createTestDataShifts()
+		protected void createTestDataShifts()
 		{
 			var year = DateTime.Now.Year;
 			var month = DateTime.Now.Month;
@@ -100,7 +89,7 @@ namespace TimeTracker.BE.DB.DataAccess
 			);
 		}
 
-		private void setSubModuleTable()
+		protected void setSubModuleTable()
 		{
 			_modelBuilder.Entity<SubModule>()
 				.HasOne(p => p.Project)
@@ -109,7 +98,7 @@ namespace TimeTracker.BE.DB.DataAccess
 				.OnDelete(DeleteBehavior.Cascade);
 		}
 
-		private void insertDefaultValues_Activities()
+		protected void insertDefaultValues_Activities()
 		{
 			_modelBuilder.Entity<Activity>()
 				.HasData(
@@ -119,7 +108,7 @@ namespace TimeTracker.BE.DB.DataAccess
 				);
 		}
 
-		private void insertDefaultValues_TypeShifts()
+		protected void insertDefaultValues_TypeShifts()
 		{
 			_modelBuilder.Entity<TypeShift>()
 				.HasData(
@@ -130,7 +119,7 @@ namespace TimeTracker.BE.DB.DataAccess
 				);
 		}
 
-		private void createTestDataProjects()
+		protected void createTestDataProjects()
 		{
 			_modelBuilder.Entity<Project>()
 				.HasData(
@@ -139,7 +128,7 @@ namespace TimeTracker.BE.DB.DataAccess
 				);
 		}
 
-		private void createTestDataSubModules()
+		protected void createTestDataSubModules()
 		{
 			_modelBuilder.Entity<SubModule>()
 				.HasData(

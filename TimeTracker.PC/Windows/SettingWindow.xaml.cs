@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.PC.Helpers;
 using TimeTracker.PC.Models;
@@ -17,7 +18,7 @@ namespace TimeTracker.PC.Windows
 	public partial class SettingWindow : Window
 	{
 		private readonly MainStory _mainStory;
-		private readonly ProjectRepository _projectProvider;
+		private readonly ProjectRepository<SqliteDbContext> _projectProvider;
 
 		private EventLogService _eventLogService;
 		private ProjectListBox _selectProjectListBox;

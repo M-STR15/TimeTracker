@@ -12,7 +12,7 @@ namespace TimeTracker.BE.DB.Factories
 			var path = Environment.GetFolderPath(folder);
 			var DbPath = Path.Join(path, "TimeTracker.db");
 
-			var optionsBuilder = new DbContextOptionsBuilder<MainDatacontext>();
+			var optionsBuilder = new DbContextOptionsBuilder<SqliteDbContext>();
 			if (!optionsBuilder.IsConfigured)
 			{
 				optionsBuilder.UseSqlite($"Data Source={DbPath}");
@@ -20,5 +20,7 @@ namespace TimeTracker.BE.DB.Factories
 
 			return new SqliteDbContext(optionsBuilder.Options);
 		}
+
+
 	}
 }

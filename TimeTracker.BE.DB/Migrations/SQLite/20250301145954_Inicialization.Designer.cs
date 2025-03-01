@@ -11,7 +11,7 @@ using TimeTracker.BE.DB.DataAccess;
 namespace TimeTracker.BE.DB.Migrations.SQLite
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20250301011032_Inicialization")]
+    [Migration("20250301145954_Inicialization")]
     partial class Inicialization
     {
         /// <inheritdoc />
@@ -42,6 +42,23 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.ToTable("Activities", "dbo", t =>
                         {
                             t.HasComment("Primární klíč aktivity.");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Start"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Pause"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Stop"
                         });
                 });
 
@@ -242,6 +259,36 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.ToTable("TypeShifts", "dbo", t =>
                         {
                             t.HasComment("Tabulka všech možných směn.");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 2,
+                            Color = "SkyBlue",
+                            IsVisibleInMainWindow = true,
+                            Name = "HomeOffice"
+                        },
+                        new
+                        {
+                            Id = 1,
+                            Color = "Orange",
+                            IsVisibleInMainWindow = true,
+                            Name = "Office"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Color = "Magenta",
+                            IsVisibleInMainWindow = true,
+                            Name = "Others"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Color = "LawnGreen",
+                            IsVisibleInMainWindow = false,
+                            Name = "Holiday"
                         });
                 });
 

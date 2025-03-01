@@ -4,10 +4,10 @@ using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ActivityRepository
+public class ActivityRepository<T> where T : MainDatacontext
 {
-	private readonly Func<MainDatacontext> _contextFactory;
-	public ActivityRepository(Func<MainDatacontext> contextFactory)
+	private readonly Func<T> _contextFactory;
+	public ActivityRepository(Func<T> contextFactory)
 	{
 		_contextFactory = contextFactory;
 	}

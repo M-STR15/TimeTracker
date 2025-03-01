@@ -5,10 +5,10 @@ using TimeTracker.BE.DB.Models.Enums;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class RecordRepository
+public class RecordRepository<T> where T : MainDatacontext
 {
-	private readonly Func<MainDatacontext> _contextFactory;
-	public RecordRepository(Func<MainDatacontext> contextFactory)
+	private readonly Func<T> _contextFactory;
+	public RecordRepository(Func<T> contextFactory)
 	{
 		_contextFactory = contextFactory;
 	}

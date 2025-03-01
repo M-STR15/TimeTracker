@@ -6,10 +6,10 @@ using TimeTracker.BE.DB.Repositories.Models.Reports;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ReportRepository
+public class ReportRepository<T> where T : MainDatacontext
 {
-	private readonly Func<MainDatacontext> _contextFactory;
-	public ReportRepository(Func<MainDatacontext> contextFactory)
+	private readonly Func<T> _contextFactory;
+	public ReportRepository(Func<T> contextFactory)
 	{
 		_contextFactory = contextFactory;
 	}
