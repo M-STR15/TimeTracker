@@ -15,7 +15,7 @@ var connectionString = "server=(localdb)\\MSSQLLocalDB; database=TimeTracker;Tru
 
 
 builder.Services.AddControllers();
-builder.Services.AddTimeTrackerBeWebSharedService();
+builder.Services.AddTimeTrackerBeWebShared();
 
 //builder.Services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
 //			.EnableSensitiveDataLogging()

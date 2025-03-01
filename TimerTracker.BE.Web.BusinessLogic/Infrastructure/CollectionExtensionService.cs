@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TimerTracker.BE.Web.BusinessLogic.Controllers;
 using TimerTracker.BE.Web.BusinessLogic.MappingProfiles;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Infrastructure;
 
 namespace TimeTracker.BE.Web.Shared.Infrastructure
 {
@@ -9,15 +11,20 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 	{
 		public static IServiceCollection AddTimerTrackerBeWebSharedBusinessLogic(this IServiceCollection services, string connectionString)
 		{
-			// Načtení connection stringu z appsettings.json
-			//services.AddDbContextFactory<MainDatacontext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
-			//services.AddDbContext<MainDatacontext>(options => options.UseSqlServer(connectionString));
+			services.AddDbContext<MsSqlDbContext>(options =>
+				options.UseSqlServer(connectionString)
+					.EnableSensitiveDataLogging()
+					.LogTo(Console.WriteLine), ServiceLifetime.Scoped);
 
-			services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
-				.EnableSensitiveDataLogging()
-				.LogTo(Console.WriteLine), ServiceLifetime.Scoped);
 
+			services.AddScoped<Func<MsSqlDbContext>>(provider => () => provider.GetRequiredService<MsSqlDbContext>());
+
+			services.AddTimeTrackerBeDd<MsSqlDbContext>();
+
+			services.AddScoped<ProjectController>();
+			// AutoMapper pro mapování
 			services.AddAutoMapper(typeof(MappingProfile));
+
 			return services;
 		}
 	}

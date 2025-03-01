@@ -5,7 +5,7 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeWebSharedService(this IServiceCollection services)
+		public static IServiceCollection AddTimeTrackerBeWebShared(this IServiceCollection services)
 		{
 			services.AddSingleton<IEventLogService, EventLogService>();
 			return services;
