@@ -8,16 +8,8 @@ namespace TimeTracker.BE.DB.Infrastructure
 	{
 		public static IServiceCollection AddTimeTrackerBeDd(this IServiceCollection services)
 		{
-			//_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
-			//services.AddCbDataBeDbServices();
-
-			////services.AddMemoryCache();
-			//services.AddAutoMapper(typeof(MappingProfile));
-
-			//services.AddSingleton<IConfiguration>(configuration);
-			//services.AddDbContext<DbContextOptions>(options);
 			services.AddSingleton<MainDatacontext>();
-			//services.AddScoped<Func<MainDatacontext>>(provider => () => provider.GetRequiredService<MainDatacontext>());
+
 			return services;
 		}
 
