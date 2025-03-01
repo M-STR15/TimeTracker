@@ -24,20 +24,18 @@ namespace TimeTracker.PC.Stories
 		{
 			createDb();
 
+			_container.Bind<SqliteDbContext>().To<SqliteDbContext>().InScope(ctx => ctx.Kernel);
+			_container.Bind<Func<SqliteDbContext>>()
+				.ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
+
+			var dbContext = _container.Get<SqliteDbContext>();
+			var fceDbContext = _container.Get<Func<SqliteDbContext>>();
 			var services = new ServiceCollection();
-			services.AddTimeTrackerBeDd();
+			services.AddTimeTrackerBeDd<SqliteDbContext>(dbContext, fceDbContext);
 			services.AddToNinject(_container);
 
-			_container.Bind<Func<SqliteDbContext>>().ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
-
-			_container.Bind<RecordRepository<SqliteDbContext>>().To<RecordRepository<SqliteDbContext>>().InSingletonScope();
-			_container.Bind<ShiftRepository<SqliteDbContext>>().To<ShiftRepository<SqliteDbContext>>().InSingletonScope();
-
-			_container.Bind<ActivityRepository<SqliteDbContext>>().To<ActivityRepository<SqliteDbContext>>().InThreadScope();
-			_container.Bind<ProjectRepository<SqliteDbContext>>().To<ProjectRepository<SqliteDbContext>>().InThreadScope();
-			_container.Bind<ReportRepository<SqliteDbContext>>().To<ReportRepository<SqliteDbContext>>().InThreadScope();
 		}
 
 

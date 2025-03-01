@@ -1,14 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Ninject;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.BE.DB.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeDd(this IServiceCollection services)
+		public static IServiceCollection AddTimeTrackerBeDd<T>(this IServiceCollection services, T dbContext, Func<T> functDbContext) where T : MainDatacontext
 		{
-			services.AddSingleton<MainDatacontext>();
+			services.AddSingleton<RecordRepository<T>>();
+			services.AddSingleton<ShiftRepository<T>>();
+
+			services.AddScoped<ActivityRepository<T>>();
+			services.AddScoped<ProjectRepository<T>>();
+			services.AddScoped<ReportRepository<T>>();
 
 			return services;
 		}
@@ -27,14 +33,36 @@ namespace TimeTracker.BE.DB.Infrastructure
 
 				if (service.ImplementationType == null)
 				{
-					// Pokud není implementace definovaná, použij ToSelf()
 					kernel.Bind(service.ServiceType).ToSelf().InSingletonScope();
 				}
 				else
 				{
-					kernel.Bind(service.ServiceType).To(service.ImplementationType).InSingletonScope();
+					switch (service.Lifetime)
+					{
+						case ServiceLifetime.Singleton:
+							kernel.Bind(service.ServiceType).To(service.ImplementationType).InSingletonScope();
+							break;
+
+						case ServiceLifetime.Scoped:
+							kernel.Bind(service.ServiceType).To(service.ImplementationType).InScope(ctx => ctx.Kernel);
+							break;
+
+						case ServiceLifetime.Transient:
+							kernel.Bind(service.ServiceType).To(service.ImplementationType).InTransientScope();
+							break;
+					}
+
+					// Přidání správné vazby pro Func<T>
+					if (service.ServiceType.IsGenericType && service.ServiceType.GetGenericTypeDefinition() == typeof(Func<>))
+					{
+						// Zajistíme, aby funkce správně vrátila instanci T
+						kernel.Bind(service.ServiceType)
+							  .ToMethod(ctx => new Func<object>(() => ctx.Kernel.Get(service.ServiceType.GenericTypeArguments[0])));
+					}
 				}
 			}
 		}
+
+
 	}
 }
