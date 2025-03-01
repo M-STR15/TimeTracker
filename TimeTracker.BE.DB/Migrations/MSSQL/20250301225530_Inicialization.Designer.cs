@@ -12,7 +12,7 @@ using TimeTracker.BE.DB.DataAccess;
 namespace TimeTracker.BE.DB.Migrations.MSSQL
 {
     [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20250301150030_Inicialization")]
+    [Migration("20250301225530_Inicialization")]
     partial class Inicialization
     {
         /// <inheritdoc />

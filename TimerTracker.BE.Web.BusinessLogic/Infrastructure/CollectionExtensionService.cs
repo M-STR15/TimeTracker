@@ -22,8 +22,27 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 			services.AddTimeTrackerBeDd<MsSqlDbContext>();
 
 			services.AddScoped<ProjectController>();
+			services.AddScoped<ShiftController>();
 			// AutoMapper pro mapování
 			services.AddAutoMapper(typeof(MappingProfile));
+
+			// Automatické vytvoření databáze (pokud neexistuje)
+			using (var serviceProvider = services.BuildServiceProvider())
+			{
+				using (var scope = serviceProvider.CreateScope())
+				{
+					var dbContext = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+					try
+					{
+						dbContext.Database.Migrate();  // Aplikuje všechny migrace a vytvoří databázi, pokud neexistuje
+						Console.WriteLine("Databáze byla úspěšně vytvořena nebo aktualizována.");
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine($"Chyba při migraci databáze: {ex.Message}");
+					}
+				}
+			}
 
 			return services;
 		}

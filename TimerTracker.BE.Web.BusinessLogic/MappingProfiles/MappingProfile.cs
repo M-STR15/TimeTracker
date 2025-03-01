@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.Models;
 
 namespace TimerTracker.BE.Web.BusinessLogic.MappingProfiles
@@ -8,6 +9,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.MappingProfiles
 		public MappingProfile()
 		{
 			CreateMap<Project, ProjectBaseDto>().ReverseMap();
+			CreateMap<TypeShift, TypeShiftBaseDto>().ReverseMap();
 		}
 	}
 }

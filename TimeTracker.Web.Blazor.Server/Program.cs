@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-var connectionString = "server=(localdb)\\MSSQLLocalDB; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;";
+var connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;";
 //builder.Configuration.GetConnectionString("DefaultConnection");
 
 

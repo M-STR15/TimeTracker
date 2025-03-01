@@ -5,10 +5,10 @@ dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-pr
 dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext --output-dir Migrations/MSSQL
 dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-project TimerTracker.BE.Web.BusinessLogic --context MsSqlDbContext --output-dir Migrations/MSSQL
 
-dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/WEB
+dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext
 
 
-
+dotnet ef database drop --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext -f
 
 
 

@@ -28,10 +28,10 @@ namespace TimeTracker.PC.Stories
 			_container.Bind<Func<SqliteDbContext>>()
 				.ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
 
-			var dbContext = _container.Get<SqliteDbContext>();
-			var fceDbContext = _container.Get<Func<SqliteDbContext>>();
+			//var dbContext = _container.Get<SqliteDbContext>();
+			//var fceDbContext = _container.Get<Func<SqliteDbContext>>();
 			var services = new ServiceCollection();
-			services.AddTimeTrackerBeDd<SqliteDbContext>(dbContext, fceDbContext);
+			services.AddTimeTrackerBeDd<SqliteDbContext>();
 			services.AddToNinject(_container);
 
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();

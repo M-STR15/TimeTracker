@@ -10,7 +10,7 @@ namespace TimeTracker.BE.DB.DataAccess
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlServer("server=(localdb)\\MSSQLLocalDB; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;");
+				optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=TimeTracker;Trusted_Connection=True;");
 			}
 		}
 
