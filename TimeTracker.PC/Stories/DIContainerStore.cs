@@ -4,8 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Ninject;
 using System.IO;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Infrastructure;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.BE.DB.Services;
 using TimeTracker.PC.Windows;
 using TimeTracker.PC.Windows.Reports;
 
@@ -25,7 +25,7 @@ namespace TimeTracker.PC.Stories
 			createDb();
 
 			var services = new ServiceCollection();
-			services.AddTimeTrackerBeDdService();
+			services.AddTimeTrackerBeDd();
 			services.AddToNinject(_container);
 
 			_container.Bind<Func<SqliteDbContext>>().ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
