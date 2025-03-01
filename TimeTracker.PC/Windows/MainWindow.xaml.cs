@@ -173,7 +173,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				var window = new ActivitiesOverDaysWindow(_context);
+				var window = new ActivitiesOverDaysWindow(_reportProvider);
 				window.Show();
 			}
 			catch (Exception ex)

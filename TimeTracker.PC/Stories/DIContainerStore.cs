@@ -35,38 +35,10 @@ namespace TimeTracker.PC.Stories
 			_container.Bind<RecordRepository<SqliteDbContext>>().To<RecordRepository<SqliteDbContext>>().InSingletonScope();
 			_container.Bind<ShiftRepository<SqliteDbContext>>().To<ShiftRepository<SqliteDbContext>>().InSingletonScope();
 
+			_container.Bind<ActivityRepository<SqliteDbContext>>().To<ActivityRepository<SqliteDbContext>>().InThreadScope();
+			_container.Bind<ProjectRepository<SqliteDbContext>>().To<ProjectRepository<SqliteDbContext>>().InThreadScope();
+			_container.Bind<ReportRepository<SqliteDbContext>>().To<ReportRepository<SqliteDbContext>>().InThreadScope();
 		}
-
-		//private void crateDB()
-		//{
-		//	var folder = Environment.SpecialFolder.LocalApplicationData;
-		//	var path = Environment.GetFolderPath(folder);
-		//	var DbPath = Path.Join(path, "TimeTracker.db");
-
-		//	//_container.Bind<MainDatacontext>().To<MainDatacontext>().InSingletonScope();
-		//	// Načtení konfigurace
-		//	var configuration = new ConfigurationBuilder()
-		//		.SetBasePath(Directory.GetCurrentDirectory())
-		//		.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-		//		.Build();
-
-		//	//var DbPath = configuration.GetSection("ConnectionString")["Database"];
-		//	// Vytvoření DbContextOptions
-		//	var options = new DbContextOptionsBuilder<MainDatacontext>()
-		//		.UseSqlite($"Data Source={DbPath}")
-		//		.Options;
-
-		//	// Vytvoření a inicializace databáze, pokud neexistuje
-		//	using (var context = new SqliteDbContext(options))
-		//	{
-		//		//context.Database.EnsureCreated();
-		//		context.Database.Migrate();
-		//	}
-
-		//	_container.Bind<IConfiguration>().ToConstant(configuration);
-		//	_container.Bind<DbContextOptions<MainDatacontext>>().ToConstant(options);
-		//}
-
 
 
 

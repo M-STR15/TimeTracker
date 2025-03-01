@@ -25,11 +25,11 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
 
-		private readonly Func<SqliteDbContext> _context;
-		public ActivitiesOverDaysWindow(Func<SqliteDbContext> context)
+		private readonly ReportRepository<SqliteDbContext> _reportRepository;
+		public ActivitiesOverDaysWindow(ReportRepository<SqliteDbContext> reportRepository)
 		{
 			InitializeComponent();
-			_context = context;
+			_reportRepository = reportRepository;
 			var reportParametersService = new ReportParameterService();
 			cmbMonth.ItemsSource = reportParametersService.Monts;
 			cmbMonth.SelectedIndex = 0;
@@ -41,13 +41,11 @@ namespace TimeTracker.PC.Windows.Reports
 
 		private void createChartData()
 		{
-			var getProvider = new ReportRepository<SqliteDbContext>(_context);
-
 			var selectItemCmb = cmbMonth.SelectedItem as string;
 
 			var dateFrom = Convert.ToDateTime("1." + selectItemCmb);
 			var dateTo = dateFrom.AddMonths(1);
-			var list = getProvider.GetActivityOverDays(dateFrom, dateTo);
+			var list = _reportRepository.GetActivityOverDays(dateFrom, dateTo);
 
 			SeriesCollection = new SeriesCollection
 			{
