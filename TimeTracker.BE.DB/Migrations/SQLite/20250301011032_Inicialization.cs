@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
-namespace TimeTracker.BE.DB.Migrations.WEB
+namespace TimeTracker.BE.DB.Migrations.SQLite
 {
     /// <inheritdoc />
-    public partial class inicialization : Migration
+    public partial class Inicialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,9 +19,9 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    Activity_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč aktivity.")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false, comment: "Název aktivity.")
+                    Activity_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "Primární klíč aktivity.")
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false, comment: "Název aktivity.")
                 },
                 constraints: table =>
                 {
@@ -36,10 +34,10 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    Project_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč projektu.")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true, comment: "Popis projektu."),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "Název projektu.")
+                    Project_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "Primární klíč projektu.")
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true, comment: "Popis projektu."),
+                    Name = table.Column<string>(type: "TEXT", nullable: false, comment: "Název projektu.")
                 },
                 constraints: table =>
                 {
@@ -52,12 +50,12 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    TypeShift_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč typu směny.")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "Barva směny."),
-                    IsVisibleInMainWindow = table.Column<bool>(type: "bit", nullable: false, comment: "Viditelnost směny v hlavním okně."),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false, comment: "Název typu směny."),
-                    TypeShiftId = table.Column<int>(type: "int", nullable: true)
+                    TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "Primární klíč typu směny.")
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Color = table.Column<string>(type: "TEXT", nullable: false, comment: "Barva směny."),
+                    IsVisibleInMainWindow = table.Column<bool>(type: "INTEGER", nullable: false, comment: "Viditelnost směny v hlavním okně."),
+                    Name = table.Column<string>(type: "TEXT", nullable: false, comment: "Název typu směny."),
+                    TypeShiftId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,11 +74,11 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    SubModule_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč podmodulu.")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true, comment: "Popis podmodulu."),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false, comment: "Název podmodulu."),
-                    Project_ID = table.Column<int>(type: "int", nullable: false, comment: "ID projektu, ke kterému podmodul patří.")
+                    SubModule_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "Primární klíč podmodulu.")
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true, comment: "Popis podmodulu."),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false, comment: "Název podmodulu."),
+                    Project_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "ID projektu, ke kterému podmodul patří.")
                 },
                 constraints: table =>
                 {
@@ -100,12 +98,12 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    Guid_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Start_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TypeShift_ID = table.Column<int>(type: "int", nullable: false),
-                    ShiftGuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Stamp_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Guid_ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    Start_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    ShiftGuidId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Stamp_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -131,16 +129,16 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 schema: "dbo",
                 columns: table => new
                 {
-                    Guid_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Activity_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč aktivity."),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true, comment: "Popis aktivity."),
-                    End_DateTime = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Datum a čas ukončení aktivity."),
-                    Project_ID = table.Column<int>(type: "int", nullable: true),
-                    Shift_GuidID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Start_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Datum a čas zahájení aktivity."),
-                    SubModule_ID = table.Column<int>(type: "int", nullable: true),
-                    TypeShift_ID = table.Column<int>(type: "int", nullable: true),
-                    Stamp_DateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Guid_ID = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Activity_ID = table.Column<int>(type: "INTEGER", nullable: false, comment: "Primární klíč aktivity."),
+                    Description = table.Column<string>(type: "TEXT", nullable: true, comment: "Popis aktivity."),
+                    End_DateTime = table.Column<DateTime>(type: "TEXT", nullable: true, comment: "Datum a čas ukončení aktivity."),
+                    Project_ID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Shift_GuidID = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Start_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false, comment: "Datum a čas zahájení aktivity."),
+                    SubModule_ID = table.Column<int>(type: "INTEGER", nullable: true),
+                    TypeShift_ID = table.Column<int>(type: "INTEGER", nullable: true),
+                    Stamp_DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -176,29 +174,6 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                         principalSchema: "dbo",
                         principalTable: "TypeShifts",
                         principalColumn: "TypeShift_ID");
-                });
-
-            migrationBuilder.InsertData(
-                schema: "dbo",
-                table: "Activities",
-                columns: new[] { "Activity_ID", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Start" },
-                    { 2, "Pause" },
-                    { 3, "Stop" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "dbo",
-                table: "TypeShifts",
-                columns: new[] { "TypeShift_ID", "Color", "IsVisibleInMainWindow", "Name", "TypeShiftId" },
-                values: new object[,]
-                {
-                    { 1, "Orange", true, "Office", null },
-                    { 2, "SkyBlue", true, "HomeOffice", null },
-                    { 3, "Magenta", true, "Others", null },
-                    { 4, "LawnGreen", false, "Holiday", null }
                 });
 
             migrationBuilder.CreateIndex(

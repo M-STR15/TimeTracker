@@ -1,4 +1,22 @@
-﻿Add-Migration InicializeCreate -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
+﻿
+
+
+dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.PC --context SqliteDbContext --output-dir Migrations/SQLite
+dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext --output-dir Migrations/MSSQL
+dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-project TimerTracker.BE.Web.BusinessLogic --context MsSqlDbContext --output-dir Migrations/MSSQL
+
+dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/WEB
+
+
+
+
+
+
+
+
+
+
+Add-Migration InicializeCreate -Project TimeTracker.BE.DB -StartupProject TimeTracker.BE.DB
 
 Update-Database -Project TimeTracker.BE.DB -StartupProject TimeTracker.Web.Blazor.Server
 
@@ -9,5 +27,3 @@ dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-pr
 
 dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server
 dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/WEB
-
-dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/WEB

@@ -14,9 +14,9 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 			//services.AddDbContextFactory<MainDatacontext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Singleton);
 			//services.AddDbContext<MainDatacontext>(options => options.UseSqlServer(connectionString));
 
-			services.AddDbContextFactory<MainDatacontext>(options => options.UseSqlServer(connectionString)
-			.EnableSensitiveDataLogging()
-		   .LogTo(Console.WriteLine), ServiceLifetime.Singleton);
+			services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
+				.EnableSensitiveDataLogging()
+				.LogTo(Console.WriteLine), ServiceLifetime.Singleton);
 
 			services.AddAutoMapper(typeof(MappingProfile));
 			return services;

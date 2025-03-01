@@ -28,7 +28,7 @@ namespace TimeTracker.PC.Stories
 			services.AddTimeTrackerBeDdService();
 			services.AddToNinject(_container);
 
-			_container.Bind<Func<MainDatacontext>>().ToMethod(ctx => new Func<MainDatacontext>(() => ctx.Kernel.Get<MainDatacontext>()));
+			_container.Bind<Func<SqliteDbContext>>().ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
 
@@ -57,10 +57,10 @@ namespace TimeTracker.PC.Stories
 				.Options;
 
 			// Vytvoření a inicializace databáze, pokud neexistuje
-			using (var context = new MainDatacontext(options))
+			using (var context = new SqliteDbContext(options))
 			{
-				context.Database.EnsureCreated();
-				//context.Database.Migrate();
+				//context.Database.EnsureCreated();
+				context.Database.Migrate();
 			}
 
 			_container.Bind<IConfiguration>().ToConstant(configuration);

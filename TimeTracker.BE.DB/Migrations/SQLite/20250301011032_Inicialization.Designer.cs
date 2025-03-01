@@ -2,43 +2,36 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeTracker.BE.DB.DataAccess;
 
 #nullable disable
 
-namespace TimeTracker.BE.DB.Migrations.WEB
+namespace TimeTracker.BE.DB.Migrations.SQLite
 {
-    [DbContext(typeof(MainDatacontext))]
-    [Migration("20250228214032_inicialization")]
-    partial class inicialization
+    [DbContext(typeof(SqliteDbContext))]
+    [Migration("20250301011032_Inicialization")]
+    partial class Inicialization
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
             modelBuilder.Entity("TimeTracker.BE.DB.Models.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("Activity_ID")
                         .HasComment("Primární klíč aktivity.");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
+                        .HasColumnType("TEXT")
                         .HasComment("Název aktivity.");
 
                     b.HasKey("Id");
@@ -50,42 +43,23 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                         {
                             t.HasComment("Primární klíč aktivity.");
                         });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Start"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Pause"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Stop"
-                        });
                 });
 
             modelBuilder.Entity("TimeTracker.BE.DB.Models.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID")
                         .HasComment("Primární klíč projektu.");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasComment("Popis projektu.");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("TEXT")
                         .HasComment("Název projektu.");
 
                     b.HasKey("Id");
@@ -103,46 +77,46 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Guid_ID");
 
                     b.Property<int>("ActivityId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("Activity_ID")
                         .HasComment("Primární klíč aktivity.");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasComment("Popis aktivity.");
 
                     b.Property<DateTime?>("EndDateTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("TEXT")
                         .HasColumnName("End_DateTime")
                         .HasComment("Datum a čas ukončení aktivity.");
 
                     b.Property<int?>("ProjectId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID");
 
                     b.Property<Guid?>("ShiftGuidId")
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Shift_GuidID");
 
                     b.Property<DateTime>("StampDateTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Stamp_DateTime");
 
                     b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Start_DateTime")
                         .HasComment("Datum a čas zahájení aktivity.");
 
                     b.Property<int?>("SubModuleId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("SubModule_ID");
 
                     b.Property<int?>("TypeShiftId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("TypeShift_ID");
 
                     b.HasKey("GuidId");
@@ -164,25 +138,25 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Guid_ID");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid?>("ShiftGuidId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("StampDateTime")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Stamp_DateTime");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Start_date");
 
                     b.Property<int>("TypeShiftId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("TypeShift_ID");
 
                     b.HasKey("GuidId");
@@ -204,24 +178,22 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("SubModule_ID")
                         .HasComment("Primární klíč podmodulu.");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasComment("Popis podmodulu.");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)")
+                        .HasColumnType("TEXT")
                         .HasComment("Název podmodulu.");
 
                     b.Property<int>("ProjectId")
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("Project_ID")
                         .HasComment("ID projektu, ke kterému podmodul patří.");
 
@@ -240,30 +212,28 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("TypeShift_ID")
                         .HasComment("Primární klíč typu směny.");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Color")
                         .HasComment("Barva směny.");
 
                     b.Property<bool>("IsVisibleInMainWindow")
-                        .HasColumnType("bit")
+                        .HasColumnType("INTEGER")
                         .HasComment("Viditelnost směny v hlavním okně.");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Name")
                         .HasComment("Název typu směny.");
 
                     b.Property<int?>("TypeShiftId")
-                        .HasColumnType("int");
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -272,36 +242,6 @@ namespace TimeTracker.BE.DB.Migrations.WEB
                     b.ToTable("TypeShifts", "dbo", t =>
                         {
                             t.HasComment("Tabulka všech možných směn.");
-                        });
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 2,
-                            Color = "SkyBlue",
-                            IsVisibleInMainWindow = true,
-                            Name = "HomeOffice"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Color = "Orange",
-                            IsVisibleInMainWindow = true,
-                            Name = "Office"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Color = "Magenta",
-                            IsVisibleInMainWindow = true,
-                            Name = "Others"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Color = "LawnGreen",
-                            IsVisibleInMainWindow = false,
-                            Name = "Holiday"
                         });
                 });
 

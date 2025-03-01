@@ -4,6 +4,7 @@ using System.Reflection;
 using TimeTracker.Web.Blazor.Server.Components;
 using TimeTracker.Web.Blazor.Server.Helpers;
 using TimeTracker.BE.Web.Shared.Infrastructure;
+using TimeTracker.BE.DB.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = "server=DESKTOP-JS0N1LD\\\\SQLEXPRESS; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;";
+//builder.Configuration.GetConnectionString("DefaultConnection");
 
 
 builder.Services.AddControllers();
 builder.Services.AddTimeTrackerBeWebSharedService();
-builder.Services.AddTimerTrackerBeWebSharedBusinessLogic(connectionString);
+
+//builder.Services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
+//			.EnableSensitiveDataLogging()
+//			.LogTo(Console.WriteLine), ServiceLifetime.Singleton);
+if (connectionString != null)
+	builder.Services.AddTimerTrackerBeWebSharedBusinessLogic(connectionString);
 
 
 builder.Services.AddHostedService<ApplicationLifecycleLogger>();

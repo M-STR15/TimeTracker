@@ -4,7 +4,7 @@ using TimeTracker.BE.DB.Models.Enums;
 
 namespace TimeTracker.BE.DB.DataAccess
 {
-	public class MainDatacontext : DbContext
+	public abstract class MainDatacontext : DbContext
 	{
 		private ModelBuilder _modelBuilder { get; set; }
 
@@ -16,37 +16,17 @@ namespace TimeTracker.BE.DB.DataAccess
 		public DbSet<TypeShift> TypeShifts { get; set; }
 		public string DbPath { get; set; } = string.Empty;
 
-		public MainDatacontext(DbContextOptions<MainDatacontext> options)
-		: base(options)
+		public MainDatacontext(DbContextOptions<MainDatacontext> options) : base(options)
 		{
 			// Načti hodnotu z konfigurace
 			//DbPath = _configuration["Database:ConnectionString"];
 		}
 
-		// The following configures EF to create a Sqlite database file in the
-		// special "local" folder for your platform.
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			//if (_configuration != null)
-			//{
-			//	//DbPath = _configuration.GetSection("ConnectionString")["Database"];
-			//	optionsBuilder.UseSqlite($"Data Source={DbPath}");
-			//}
-			//#if TIMETRACKER_WEB
-			//			var folder = Environment.SpecialFolder.LocalApplicationData;
-			//			var path = Environment.GetFolderPath(folder);
-			//			DbPath = Path.Join(path, "TimeTracker.db");
-			//			options.UseSqlite($"Data Source={DbPath}");
-			//#elif TIMETRACKER_PC
-			//			var folder = Environment.SpecialFolder.LocalApplicationData;
-			//			var path = Environment.GetFolderPath(folder);
-			//			DbPath = Path.Join(path, "TimeTracker.db");
-			//			options.UseSqlite($"Data Source={DbPath}");
-			//#endif
-		}
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected new virtual void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+
 			_modelBuilder = modelBuilder;
 			insertDefaultValues_Activities();
 			insertDefaultValues_TypeShifts();
