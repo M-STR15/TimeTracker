@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using TimerTracker.BE.Web.BusinessLogic.MappingProfiles;
 using TimeTracker.BE.DB.DataAccess;
 
@@ -16,7 +15,7 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 
 			services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
 				.EnableSensitiveDataLogging()
-				.LogTo(Console.WriteLine), ServiceLifetime.Singleton);
+				.LogTo(Console.WriteLine), ServiceLifetime.Scoped);
 
 			services.AddAutoMapper(typeof(MappingProfile));
 			return services;

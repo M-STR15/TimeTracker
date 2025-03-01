@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
-var connectionString = "server=DESKTOP-JS0N1LD\\\\SQLEXPRESS; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;";
+var connectionString = "server=(localdb)\\MSSQLLocalDB; database=TimeTracker;Trusted_Connection=True;TrustServerCertificate=True;";
 //builder.Configuration.GetConnectionString("DefaultConnection");
 
 
@@ -20,7 +20,7 @@ builder.Services.AddTimeTrackerBeWebSharedService();
 //builder.Services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
 //			.EnableSensitiveDataLogging()
 //			.LogTo(Console.WriteLine), ServiceLifetime.Singleton);
-if (connectionString != null)
+if (!string.IsNullOrEmpty(connectionString))
 	builder.Services.AddTimerTrackerBeWebSharedBusinessLogic(connectionString);
 
 

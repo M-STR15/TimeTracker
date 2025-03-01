@@ -8,8 +8,8 @@ namespace TimeTracker.BE.DB.Factories
 	{
 		public MsSqlDbContext CreateDbContext(string[] args)
 		{
-			var optionsBuilder = new DbContextOptionsBuilder<MainDatacontext>();
-			optionsBuilder.UseSqlServer("Server=localhost;Database=TimeTracker;Trusted_Connection=True;");
+			var optionsBuilder = new DbContextOptionsBuilder<MsSqlDbContext>();
+			optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=TimeTracker;Trusted_Connection=True;");
 
 			return new MsSqlDbContext(optionsBuilder.Options);
 		}
