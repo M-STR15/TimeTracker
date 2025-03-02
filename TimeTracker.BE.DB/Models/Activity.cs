@@ -8,7 +8,7 @@ namespace TimeTracker.BE.DB.Models
 	[Index(nameof(Name), IsUnique = true)]
 	[Table("Activities", Schema = "dbo")]
 	[Comment("Primární klíč aktivity.")]
-	public class Activity : IIdentifiable, IActivity
+	public class Activity : IIdentifiable, IActivity, IActivityBase
 	{
 		/// <inheritdoc />
 		public ICollection<RecordActivity>? Activities { get; set; }
@@ -25,7 +25,7 @@ namespace TimeTracker.BE.DB.Models
 		public string Name { get; set; } = string.Empty;
 
 		public Activity()
-		{}
+		{ }
 
 		public Activity(int id, string name)
 		{

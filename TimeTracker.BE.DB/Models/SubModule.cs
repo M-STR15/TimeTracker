@@ -8,7 +8,7 @@ namespace TimeTracker.BE.DB.Models
 	[Index(nameof(ProjectId), nameof(Name), IsUnique = true)]
 	[Table("SubModule", Schema = "dbo")]
 	[Comment("Tabulka podmodulů.")]
-	public class SubModule : IIdentifiable, ISubModule
+	public class SubModule : IIdentifiable, ISubModule, ISubModuleBase
 	{
 		/// <inheritdoc />
 		[Comment("Aktivity spojené s podmodulem.")]

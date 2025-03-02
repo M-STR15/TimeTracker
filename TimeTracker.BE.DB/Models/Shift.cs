@@ -8,7 +8,7 @@ namespace TimeTracker.BE.DB.Models
 	[Index(nameof(StartDate), IsUnique = true)]
 	[Table("Shifts", Schema = "dbo")]
 	[Comment("Tabulka slouží k naplánování směny.")]
-	public class Shift : Stamp, IIdentifiableGuid, IShift
+	public class Shift : Stamp, IIdentifiableGuid, IShift, IShiftBase
 	{
 		/// <inheritdoc />
 		public string? Description { get; set; }

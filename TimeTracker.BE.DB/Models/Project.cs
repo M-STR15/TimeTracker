@@ -8,7 +8,7 @@ namespace TimeTracker.BE.DB.Models
 	[Index(nameof(Name), IsUnique = true)]
 	[Table("Project", Schema = "dbo")]
 	[Comment("Tabulka projektů.")]
-	public class Project : IIdentifiable, IProject
+	public class Project : IIdentifiable, IProject, IProjectBase
 	{
 		/// <inheritdoc />
 		[Comment("Aktivity spojené s projektem.")]
@@ -31,7 +31,7 @@ namespace TimeTracker.BE.DB.Models
 		public ICollection<SubModule>? SubModules { get; set; }
 
 		public Project()
-		{}
+		{ }
 
 		public Project(IProjectBase project) : this()
 		{

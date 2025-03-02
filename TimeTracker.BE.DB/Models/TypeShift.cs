@@ -7,7 +7,7 @@ namespace TimeTracker.BE.DB.Models
 {
 	[Table("TypeShifts", Schema = "dbo")]
 	[Comment("Tabulka všech možných směn.")]
-	public class TypeShift : IIdentifiable, ITypeShift
+	public class TypeShift : IIdentifiable, ITypeShift, ITypeShiftBase
 	{
 		/// <inheritdoc />
 		[Column("Color")]

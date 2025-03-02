@@ -133,10 +133,11 @@ public class ProjectRepository<T> where T : MainDatacontext
 	{
 		try
 		{
+			//var item = project is Project p ? p : throw new InvalidCastException("Nepodařilo se převést na Project");
 			var item = new Project(project);
-
 			var context = _contextFactory();
-			if (await context.Projects.AnyAsync(x => x.Name != project.Name))
+			var existRecord = await context.Projects.AnyAsync(x => x.Name == item.Name);
+			if (!existRecord)
 			{
 				if (item.Id == 0)
 					await context.Projects.AddAsync(item);
@@ -152,9 +153,9 @@ public class ProjectRepository<T> where T : MainDatacontext
 
 			return item;
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
-			throw;
+			throw ex;
 		}
 	}
 

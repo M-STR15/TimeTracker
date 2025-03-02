@@ -234,6 +234,10 @@ namespace TimeTracker.PC.Windows
 						ProjectItemsView.Refresh();
 					}
 				}
+				else
+				{
+					_eventLogService.WriteWarning(new Guid("eb563bcd-4ca0-4055-9be2-1b9cd5110d3b"), null, "Projekt nešlo uložit.");
+				}
 			}
 			catch (Exception ex)
 			{
