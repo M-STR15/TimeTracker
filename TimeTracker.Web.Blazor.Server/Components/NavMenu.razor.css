@@ -50,6 +50,55 @@
 			color: white;
 		}
 
+
+.btn {
+	width: 300px;
+}
+
+
+.center-container {
+	display: flex;
+	flex-direction: column; /* Tlačítka pod sebe */
+	justify-content: center; /* Vertikální zarovnání */
+	align-items: center; /* Horizontální zarovnání */
+	/* height: 100vh; /* Výška celé stránky */ */ margin: 0;
+}
+
+	/* Mezery mezi tlačítky */
+	.center-container .btn {
+		margin: 10px 0;
+	}
+
+.horizontal-center {
+	display: flex;
+	justify-content: center;
+}
+
+.version {
+	color: white;
+}
+
+.btn-style {
+	background: none;
+	border: 0;
+	color: white;
+	text-decoration: none;
+}
+
+	.btn-style:hover {
+		color: deeppink;
+	}
+
+.nav-group {
+	padding: 3px 0;
+}
+
+.nav-divider {
+	border: none;
+	border-top: 1px solid rgba(255, 255, 255, 0.2); /* Lehce průhledná čára */
+	margin: 3px 0;
+}
+
 @media (min-width: 641px) {
 	.navbar-toggler {
 		display: none;
