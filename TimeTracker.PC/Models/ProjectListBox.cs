@@ -5,7 +5,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 namespace TimeTracker.PC.Models
 {
 	[ObservableObject]
-	public partial class ProjectListBox : IProjectWithoutColl, IListBox
+	public partial class ProjectListBox : IProjectBase, IListBox
 	{
 		public Guid GuidId { get; private set; }
 

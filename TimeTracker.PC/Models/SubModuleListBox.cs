@@ -7,7 +7,7 @@ namespace TimeTracker.PC.Models
 	/// Třída slouží pro manipulaci v Listboxu, je to mezi vrstva mezi DB a editování dat.
 	/// </summary>
 	[ObservableObject]
-	public partial class SubModuleListBox : ISubModuleWithoutColl, IListBox
+	public partial class SubModuleListBox : ISubModuleBase, IListBox
 	{
 		public Guid GuidId { get; private set; }
 
@@ -39,7 +39,7 @@ namespace TimeTracker.PC.Models
 			ProjectId = projectId;
 		}
 
-		public SubModuleListBox(ISubModuleWithoutColl subModule) : this(subModule.Id, subModule.Name, subModule.Description, subModule.ProjectId)
+		public SubModuleListBox(ISubModuleBase subModule) : this(subModule.Id, subModule.Name, subModule.Description, subModule.ProjectId)
 		{ }
 	}
 }

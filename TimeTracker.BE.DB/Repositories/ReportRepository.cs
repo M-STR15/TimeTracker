@@ -134,25 +134,30 @@ public class ReportRepository<T> where T : MainDatacontext
 		return sumHours;
 	}
 
-	private List<DayHours> getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
+	private List<DayHours>? getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
 	{
-		var shiftList = new List<Shift>();
-
-		var context = _contextFactory();
-		shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => (int)y == x.TypeShiftId)).ToList();
-
-		var cumHours = 0.00;
-		var planList = new List<DayHours>();
-		for (int i = 0; i < basicList.Count; i++)
+		try
 		{
-			var current = basicList[i];
-			var houtInDay = shiftList.Any(x => x.StartDate == current.Date) ? 7.5 : 0;
-			var newRecord = new DayHours(current, houtInDay, cumHours);
-			planList.Add(newRecord);
-			cumHours = newRecord.CumHours;
-		}
+			var context = _contextFactory();
+			var shiftList = context.Shifts.Where(x => x.StartDate >= start && x.StartDate <= end && typeShifts.Any(y => y == (eTypeShift)x.TypeShiftId)).ToList();
 
-		return planList;
+			var cumHours = 0.00;
+			var planList = new List<DayHours>();
+			for (int i = 0; i < basicList.Count; i++)
+			{
+				var current = basicList[i];
+				var houtInDay = shiftList.Any(x => x.StartDate == current.Date) ? 7.5 : 0;
+				var newRecord = new DayHours(current, houtInDay, cumHours);
+				planList.Add(newRecord);
+				cumHours = newRecord.CumHours;
+			}
+
+			return planList;
+		}
+		catch (Exception ex)
+		{
+			return null;
+		}
 	}
 
 	private List<DayHours> getRealList_DayHours(List<DayHours> basicList, List<SumInDay> sumInDayList, eTypeShift[] typeShifts)
