@@ -1,9 +1,9 @@
 ﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	/// <summary>
-	/// Rozhraní pro projekt bez kolekce.
+	/// Rozhraní pro základní vlastnosti projektu.
 	/// </summary>
-	public interface IProjectWithoutColl
+	public interface IProjectBase
 	{
 		/// <summary>
 		/// Popis projektu.

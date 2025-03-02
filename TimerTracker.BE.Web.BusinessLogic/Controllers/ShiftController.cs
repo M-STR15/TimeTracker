@@ -30,6 +30,10 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			_mapper = mapper;
 		}
 
+		/// <summary>
+		/// Vrátí všechny typy směn
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet("api/v1/shift/types")]
 		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetShiftTypesAsync()
 		{

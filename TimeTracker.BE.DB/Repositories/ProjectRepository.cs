@@ -17,7 +17,7 @@ public class ProjectRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="project">Projekt k odstranění.</param>
 	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public async Task<IProjectWithoutColl?> DeleteProjectAsync(IProjectWithoutColl project)
+	public async Task<IProjectBase?> DeleteProjectAsync(IProjectBase project)
 	{
 		try
 		{
@@ -129,7 +129,7 @@ public class ProjectRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="project">Projekt k uložení.</param>
 	/// <returns>Uložený projekt nebo null, pokud projekt s daným názvem již existuje.</returns>
-	public async Task<IProjectWithoutColl?> SaveProjectAsync(IProjectWithoutColl project)
+	public async Task<IProjectBase?> SaveProjectAsync(IProjectBase project)
 	{
 		try
 		{

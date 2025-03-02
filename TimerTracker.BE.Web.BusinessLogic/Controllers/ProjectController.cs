@@ -22,6 +22,10 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			_projectRepository = projectRepository;
 			_mapper = mapper;
 		}
+		/// <summary>
+		/// Vrátí všechny projekty
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet("api/v1/projects")]
 		public async Task<ActionResult<List<ProjectBaseDto>>> GetProjectsAsync()
 		{
