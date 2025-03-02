@@ -217,14 +217,14 @@ namespace TimeTracker.PC.Windows
 
 		private void onProjectItemsViewChangeHandler(object sender, EventArgs args) => setLblProjectInfo();
 
-		private void onSaveProject_Click(object parameter)
+		private async void onSaveProject_Click(object parameter)
 		{
 			try
 			{
 				var item = (ProjectListBox)parameter;
 				item.IsEditable = false;
 
-				var result = _projectProvider.SaveProjectAsync(item);
+				var result = await _projectProvider.SaveProjectAsync(item);
 				if (result != null)
 				{
 					var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
@@ -280,8 +280,6 @@ namespace TimeTracker.PC.Windows
 		private void setProjectItemsView()
 		{
 			ProjectItemsView = CollectionViewSource.GetDefaultView(ProjectListBox);
-			//ProjectItemsView.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
-			//ProjectItemsView.CustomSort = new IdSorter();
 			ProjectItemsView.Refresh();
 
 			ProjectItemsView.CollectionChanged += onProjectItemsViewChangeHandler;
@@ -292,7 +290,6 @@ namespace TimeTracker.PC.Windows
 		private void setSubModulesItemsView()
 		{
 			SubModuleItemsView = CollectionViewSource.GetDefaultView(SubModuleListBox);
-			//SubModuleItemsView.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
 			SubModuleItemsView.Refresh();
 
 			SubModuleItemsView.CollectionChanged += onSubModuleItemsViewChangeHandler;
