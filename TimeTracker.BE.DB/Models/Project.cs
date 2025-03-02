@@ -25,15 +25,13 @@ namespace TimeTracker.BE.DB.Models
 		/// <inheritdoc />
 		[Required]
 		[Comment("Název projektu.")]
-		public virtual string Name { get; set; }
+		public virtual string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Comment("Podmoduly spojené s projektem.")]
 		public ICollection<SubModule>? SubModules { get; set; }
 
 		public Project()
-		{
-			Name = "";
-		}
+		{}
 
 		public Project(IProjectBase project) : this()
 		{

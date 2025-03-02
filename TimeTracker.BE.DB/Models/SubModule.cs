@@ -25,7 +25,7 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
 		[Comment("Název podmodulu.")]
-		public virtual string Name { get; set; }
+		public virtual string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[ForeignKey("ProjectId")]
 		[Comment("Projekt, ke kterému podmodul patří.")]
@@ -36,9 +36,7 @@ namespace TimeTracker.BE.DB.Models
 		public virtual int ProjectId { get; set; }
 
 		public SubModule()
-		{
-			Name = "";
-		}
+		{}
 
 		public SubModule(int id, string name, int projectId, string? description = null)
 		{

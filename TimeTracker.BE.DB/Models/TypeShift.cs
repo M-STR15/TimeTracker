@@ -12,7 +12,7 @@ namespace TimeTracker.BE.DB.Models
 		/// <inheritdoc />
 		[Column("Color")]
 		[Comment("Barva směny.")]
-		public string Color { get; set; } = "";
+		public string Color { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Key]
 		[Column("TypeShift_ID")]
@@ -25,7 +25,7 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[Column("Name")]
 		[Comment("Název typu směny.")]
-		public string Name { get; set; } = "";
+		public string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Comment("Kolekce aktivit záznamů.")]
 		public ICollection<RecordActivity>? RecordActivity { get; set; }
