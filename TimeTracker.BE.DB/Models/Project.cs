@@ -15,6 +15,7 @@ namespace TimeTracker.BE.DB.Models
 		[Comment("Popis projektu.")]
 		public virtual string? Description { get; set; }
 
+		/// <inheritdoc />
 		[Key]
 		[Column("Project_ID")]
 		[Comment("Primární klíč projektu.")]

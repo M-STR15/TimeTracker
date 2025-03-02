@@ -11,15 +11,15 @@ namespace TimeTracker.BE.DB.Models
 	{
 		[Comment("Aktivity spojené s podmodulem.")]
 		public virtual ICollection<RecordActivity>? Activities { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Popis podmodulu.")]
 		public virtual string? Description { get; set; }
-
+		/// <inheritdoc />
 		[Key]
 		[Column("SubModule_ID")]
 		[Comment("Primární klíč podmodulu.")]
 		public virtual int Id { get; set; }
-
+		/// <inheritdoc />
 		[Required]
 		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
 		[Comment("Název podmodulu.")]
@@ -28,7 +28,7 @@ namespace TimeTracker.BE.DB.Models
 		[ForeignKey("ProjectId")]
 		[Comment("Projekt, ke kterému podmodul patří.")]
 		public virtual Project? Project { get; set; }
-
+		/// <inheritdoc />
 		[Column("Project_ID")]
 		[Comment("ID projektu, ke kterému podmodul patří.")]
 		public virtual int ProjectId { get; set; }

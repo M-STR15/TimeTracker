@@ -11,6 +11,7 @@ namespace TimeTracker.BE.DB.Models
 	{
 		public ICollection<RecordActivity>? Activities { get; set; }
 
+		/// <inheritdoc />
 		[Key]
 		[Column("Activity_ID")]
 		[Comment("Primární klíč aktivity.")]

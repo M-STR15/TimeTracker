@@ -7,23 +7,24 @@ namespace TimeTracker.BE.DB.Models
 	[Table("Record_activities", Schema = "dbo")]
 	public class RecordActivity : Stamp, IRecordActivity
 	{
+		/// <inheritdoc />
 		private DateTime? _endDateTime;
 		private DateTime _startDateTime;
-
+		/// <inheritdoc />
 		[ForeignKey("ActivityId")]
 		public virtual Activity? Activity { get; set; }
-
+		/// <inheritdoc />
 		[Required]
 		[Column("Activity_ID")]
 		[Comment("Primární klíč aktivity.")]
 		public virtual int ActivityId { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Popis aktivity.")]
 		public virtual string? Description { get; set; }
 
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public virtual double DurationSec => EndDateTime != null ? ((DateTime)EndDateTime - StartDateTime).TotalSeconds : 0;
-
+		/// <inheritdoc />
 		[Column("End_DateTime")]
 		[Comment("Datum a čas ukončení aktivity.")]
 		public virtual DateTime? EndDateTime
@@ -35,20 +36,20 @@ namespace TimeTracker.BE.DB.Models
 					_endDateTime = value;
 			}
 		}
-
+		/// <inheritdoc />
 		[Key]
 		[Column("Guid_ID")]
 		public virtual Guid GuidId { get; set; }
-
+		/// <inheritdoc />
 		[ForeignKey("ProjectId")]
 		public virtual Project? Project { get; set; }
-
+		/// <inheritdoc />
 		[Column("Project_ID")]
 		public virtual int? ProjectId { get; set; }
-
+		/// <inheritdoc />
 		[ForeignKey("ShiftGuidId")]
 		public virtual Shift? Shift { get; set; }
-
+		/// <inheritdoc />
 		[Column("Shift_GuidID")]
 		public virtual Guid? ShiftGuidId { get; set; }
 
@@ -57,7 +58,7 @@ namespace TimeTracker.BE.DB.Models
 		{
 			get => StartDateTime.ToString("dd.MM.yyyy");
 		}
-
+		/// <inheritdoc />
 		[Required]
 		[Column("Start_DateTime")]
 		[Comment("Datum a čas zahájení aktivity.")]
@@ -70,16 +71,16 @@ namespace TimeTracker.BE.DB.Models
 					_startDateTime = value;
 			}
 		}
-
+		/// <inheritdoc />
 		[ForeignKey("SubModuleId")]
 		public virtual SubModule? SubModule { get; set; }
-
+		/// <inheritdoc />
 		[Column("SubModule_ID")]
 		public virtual int? SubModuleId { get; set; }
-
+		/// <inheritdoc />
 		[ForeignKey("TypeShiftId")]
 		public virtual TypeShift? TypeShift { get; set; }
-
+		/// <inheritdoc />
 		[Column("TypeShift_ID")]
 		public virtual int? TypeShiftId { get; set; }
 

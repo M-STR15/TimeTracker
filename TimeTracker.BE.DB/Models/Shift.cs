@@ -10,7 +10,7 @@ namespace TimeTracker.BE.DB.Models
 	public class Shift : Stamp, IIdentifiableGuid
 	{
 		public string? Description { get; set; }
-
+		/// <inheritdoc />
 		[Key]
 		[Column("Guid_ID")]
 		public Guid GuidId { get; set; }

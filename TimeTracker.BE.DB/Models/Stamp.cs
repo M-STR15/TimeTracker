@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TimeTracker.BE.DB.Models
 {
-	public abstract class Stamp
+	public abstract class Stamp : IStamp
 	{
 		private DateTime _stampDateTime;
-
+		/// <inheritdoc />
 		[Required]
 		[Column("Stamp_DateTime")]
 		public virtual DateTime StampDateTime

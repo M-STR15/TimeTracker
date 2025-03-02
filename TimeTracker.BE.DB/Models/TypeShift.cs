@@ -11,7 +11,7 @@ namespace TimeTracker.BE.DB.Models
 		[Column("Color")]
 		[Comment("Barva směny.")]
 		public string Color { get; set; } = "";
-
+		/// <inheritdoc />
 		[Key]
 		[Column("TypeShift_ID")]
 		[Comment("Primární klíč typu směny.")]
