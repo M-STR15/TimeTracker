@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	/// <summary>
 	/// Rozhraní pro projekt bez kolekce.

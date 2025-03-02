@@ -1,24 +1,27 @@
-﻿namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	/// <summary>
-	/// Rozhraní pro podmodul bez kolekce
+	/// Rozhraní pro základní podmodul.
 	/// </summary>
-	public interface ISubModuleWithoutColl
+	public interface ISubModuleBase
 	{
 		/// <summary>
-		/// Popis
+		/// Popis podmodulu.
 		/// </summary>
 		string? Description { get; set; }
+
 		/// <summary>
-		/// Identifikátor
+		/// Identifikátor podmodulu.
 		/// </summary>
 		int Id { get; set; }
+
 		/// <summary>
-		/// Název
+		/// Název podmodulu.
 		/// </summary>
 		string Name { get; set; }
+
 		/// <summary>
-		/// Identifikátor projektu
+		/// Identifikátor projektu, ke kterému podmodul patří.
 		/// </summary>
 		int ProjectId { get; set; }
 	}

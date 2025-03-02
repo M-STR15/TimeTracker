@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models
 {
 	[Index(nameof(ProjectId), nameof(Name), IsUnique = true)]
 	[Table("SubModule", Schema = "dbo")]
 	[Comment("Tabulka podmodulů.")]
-	public class SubModule : ISubModuleWithoutColl, IIdentifiable
+	public class SubModule : IIdentifiable, ISubModule
 	{
+		/// <inheritdoc />
 		[Comment("Aktivity spojené s podmodulem.")]
 		public virtual ICollection<RecordActivity>? Activities { get; set; }
 		/// <inheritdoc />
@@ -24,7 +26,7 @@ namespace TimeTracker.BE.DB.Models
 		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]
 		[Comment("Název podmodulu.")]
 		public virtual string Name { get; set; }
-
+		/// <inheritdoc />
 		[ForeignKey("ProjectId")]
 		[Comment("Projekt, ke kterému podmodul patří.")]
 		public virtual Project? Project { get; set; }
@@ -46,7 +48,7 @@ namespace TimeTracker.BE.DB.Models
 			ProjectId = projectId;
 		}
 
-		public SubModule(ISubModuleWithoutColl subModule) : this()
+		public SubModule(ISubModuleBase subModule) : this()
 		{
 			Id = subModule.Id;
 			Name = subModule.Name;

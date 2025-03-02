@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.PC.Models
 {

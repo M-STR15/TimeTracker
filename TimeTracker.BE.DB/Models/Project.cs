@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models
 {
@@ -9,9 +10,10 @@ namespace TimeTracker.BE.DB.Models
 	[Comment("Tabulka projektů.")]
 	public class Project : IProjectWithoutColl, IIdentifiable
 	{
+		/// <inheritdoc />
 		[Comment("Aktivity spojené s projektem.")]
 		public ICollection<RecordActivity>? Activities { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Popis projektu.")]
 		public virtual string? Description { get; set; }
 
@@ -20,11 +22,11 @@ namespace TimeTracker.BE.DB.Models
 		[Column("Project_ID")]
 		[Comment("Primární klíč projektu.")]
 		public virtual int Id { get; set; }
-
+		/// <inheritdoc />
 		[Required]
 		[Comment("Název projektu.")]
 		public virtual string Name { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Podmoduly spojené s projektem.")]
 		public ICollection<SubModule>? SubModules { get; set; }
 

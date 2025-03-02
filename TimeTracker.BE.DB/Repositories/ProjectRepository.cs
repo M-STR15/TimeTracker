@@ -3,6 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 public class ProjectRepository<T> where T : MainDatacontext
 {
@@ -44,7 +45,7 @@ public class ProjectRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="subModule">Podmodul k odstranění.</param>
 	/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
-	public async Task<ISubModuleWithoutColl?> DeleteSubModuleAsync(ISubModuleWithoutColl subModule)
+	public async Task<ISubModuleBase?> DeleteSubModuleAsync(ISubModuleBase subModule)
 	{
 		try
 		{
@@ -162,7 +163,7 @@ public class ProjectRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="subModule">Podmodul k uložení.</param>
 	/// <returns>Uložený podmodul nebo null, pokud došlo k chybě.</returns>
-	public async Task<ISubModuleWithoutColl?> SaveSubModuleAsync(ISubModuleWithoutColl subModule)
+	public async Task<ISubModuleBase?> SaveSubModuleAsync(ISubModuleBase subModule)
 	{
 		try
 		{

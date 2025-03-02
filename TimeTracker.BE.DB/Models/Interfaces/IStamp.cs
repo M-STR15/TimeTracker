@@ -1,5 +1,4 @@
-﻿
-namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	/// <summary>
 	/// Rozhraní pro razítko s datem a časem.

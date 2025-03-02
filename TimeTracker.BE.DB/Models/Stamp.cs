@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models
 {

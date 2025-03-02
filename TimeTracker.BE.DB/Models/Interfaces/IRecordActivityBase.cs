@@ -1,12 +1,7 @@
-﻿namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
-	public interface IRecordActivity
+	public interface IRecordActivityBase
 	{
-		/// <summary>
-		/// Aktivita spojená se záznamem.
-		/// </summary>
-		Activity? Activity { get; set; }
-
 		/// <summary>
 		/// Primární klíč aktivity.
 		/// </summary>
@@ -33,19 +28,9 @@
 		Guid GuidId { get; set; }
 
 		/// <summary>
-		/// Projekt spojený se záznamem.
-		/// </summary>
-		Project? Project { get; set; }
-
-		/// <summary>
 		/// Primární klíč projektu.
 		/// </summary>
 		int? ProjectId { get; set; }
-
-		/// <summary>
-		/// Směna spojená se záznamem.
-		/// </summary>
-		Shift? Shift { get; set; }
 
 		/// <summary>
 		/// Globálně unikátní identifikátor směny.
@@ -58,19 +43,9 @@
 		DateTime StartDateTime { get; set; }
 
 		/// <summary>
-		/// Podmodul spojený se záznamem.
-		/// </summary>
-		SubModule? SubModule { get; set; }
-
-		/// <summary>
 		/// Primární klíč podmodulu.
 		/// </summary>
 		int? SubModuleId { get; set; }
-
-		/// <summary>
-		/// Typ směny spojený se záznamem.
-		/// </summary>
-		TypeShift? TypeShift { get; set; }
 
 		/// <summary>
 		/// Primární klíč typu směny.

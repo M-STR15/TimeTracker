@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models
 {
 	[Table("TypeShifts", Schema = "dbo")]
 	[Comment("Tabulka všech možných směn.")]
-	public class TypeShift : IIdentifiable
+	public class TypeShift : IIdentifiable, ITypeShift
 	{
+		/// <inheritdoc />
 		[Column("Color")]
 		[Comment("Barva směny.")]
 		public string Color { get; set; } = "";
@@ -16,18 +18,18 @@ namespace TimeTracker.BE.DB.Models
 		[Column("TypeShift_ID")]
 		[Comment("Primární klíč typu směny.")]
 		public int Id { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Viditelnost směny v hlavním okně.")]
 		public bool IsVisibleInMainWindow { get; set; }
-
+		/// <inheritdoc />
 		[Required]
 		[Column("Name")]
 		[Comment("Název typu směny.")]
 		public string Name { get; set; } = "";
-
+		/// <inheritdoc />
 		[Comment("Kolekce aktivit záznamů.")]
 		public ICollection<RecordActivity>? RecordActivity { get; set; }
-
+		/// <inheritdoc />
 		[Comment("Kolekce typů směn.")]
 		public ICollection<TypeShift>? TypeShifts { get; set; }
 

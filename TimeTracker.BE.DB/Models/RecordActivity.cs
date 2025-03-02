@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models
 {
 	[Table("Record_activities", Schema = "dbo")]
 	public class RecordActivity : Stamp, IRecordActivity
 	{
-		/// <inheritdoc />
 		private DateTime? _endDateTime;
 		private DateTime _startDateTime;
 		/// <inheritdoc />
