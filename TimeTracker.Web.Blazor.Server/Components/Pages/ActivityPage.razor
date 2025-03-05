@@ -1,10 +1,76 @@
 ﻿@page "/activity"
+@using TimeTracker.Web.Blazor.Server.Helpers
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 
+<style>
+    div .main {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+        width: 300px;
+    }
+
+    div .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+</style>
+
 <h3>Activity</h3>
+<div class="main">
+    <div class="row">
+        <div class="col-6">
+            <h6>Type shift</h6>
+            <MCombobox Items="myItems" ItemText="item => item.Name" />       
+        </div>
+        <div class="col-6">
+            <h6>Shifts</h6>
+           <MCombobox Items="myItems" ItemText="item => item.Name" />       
+        </div>
+    </div>
+    <div class="row">
+        <h6>Project</h6>
+       <MCombobox Items="myItems" ItemText="item => item.Name" />       
+    </div>
+    <div class="row">
+        <h6>Sub module</h6>
+        <MCombobox Items="myItems" ItemText="item => item.Name" />       
+    </div>
+    <div class="row">
+        <h6>Description</h6>
+       <MTextArea Value="@textValue"  />
 
+    </div>
+    <button>Set</button>
+</div>
 
-<MCombobox></MCombobox>
 @code {
+    private string textValue;
 
+    private Task OnValueChanged(string newValue)
+    {
+        textValue = newValue;
+        StateHasChanged();  // Aktualizuje komponentu
+        return Task.CompletedTask;
+    }
+
+
+    private List<MyItem> myItems = new List<MyItem>
+    {
+        new MyItem { Name = "Item 1" },
+        new MyItem { Name = "Item 2" },
+        new MyItem { Name = "Item 3" }
+    };
+
+    private void HandleSelected(MyItem selectedItem)
+    {
+        // Zpracování vybrané položky
+        Console.WriteLine($"Vybraná položka: {selectedItem.Name}");
+    }
+
+    public class MyItem
+    {
+        public string Name { get; set; }
+    }
 }

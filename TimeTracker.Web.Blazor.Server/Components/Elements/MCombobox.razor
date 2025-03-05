@@ -1,34 +1,71 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@typeparam TItem
 
-<div class="cont_heg_50"></div>
+<div class="custom-combobox">
+    <input type="text" class="form-control" @bind="SearchText" @onfocus="OnFocus" @onblur="OnBlur" @oninput="OnInput" placeholder="Vyberte možnost..." />
 
-<div class="cont_select_center">
-
-    <!-- Custom select structure -->
-    <div class="select_mate" data-mate-select="active">
-        <select name="" onchange="" onclick="return false;" id="">
-            <option value="">Seleciona una Opcion </option>
-            <option value="1">Select option 1</option>
-            <option value="2">Select option 2</option>
-            <option value="3">Select option 3</option>
-        </select>
-        <p class="selecionado_opcion" onclick="open_select(this)"></p><span onclick="open_select(this)" class="icon_select_mate">
-           
-        </span>
-        <div class="cont_list_select_mate">
-            <ul class="cont_select_int">  </ul>
-        </div>
-    </div>
-    <!-- Custom select structure -->
-
-
-</div> <!-- End div center   -->
-@code {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    @if (IsDropdownVisible && FilteredItems.Any())
     {
-        if (firstRender)
+        <ul class="dropdown-list">
+            @foreach (var item in FilteredItems)
+            {
+                <li @onclick="(() => SelectItem(item))" class="dropdown-item">
+                    @ItemText(item)
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    private bool IsDropdownVisible { get; set; } = false;
+    private string SearchText { get; set; } = string.Empty;
+    private List<TItem> FilteredItems { get; set; } = new List<TItem>();
+
+    [Parameter] public List<TItem> Items { get; set; } = new List<TItem>();
+    [Parameter] public Func<TItem, string> ItemText { get; set; }
+    [Parameter] public EventCallback<TItem> OnSelected { get; set; }
+    [Parameter] public EventCallback<string> OnSearchTextChanged { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Přednastavení záznamů pro filtrování, pokud je to nutné
+        FilteredItems = Items;
+    }
+
+    private void OnInput(ChangeEventArgs e)
+    {
+        SearchText = e.Value.ToString();
+        FilterItems();
+        OnSearchTextChanged.InvokeAsync(SearchText);
+    }
+
+    private void OnFocus()
+    {
+        IsDropdownVisible = true;
+    }
+
+    private void OnBlur()
+    {
+        // Po ztrátě zaměření skrytí dropdownu s malým zpožděním pro umožnění výběru
+        Task.Delay(150).ContinueWith(t => IsDropdownVisible = false);
+    }
+
+    private void FilterItems()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
         {
-            await JSRuntime.InvokeVoidAsync("initializeCombobox", "combobox");
+            FilteredItems = Items;
         }
+        else
+        {
+            FilteredItems = Items.Where(item => ItemText(item).ToLower().Contains(SearchText.ToLower())).ToList();
+        }
+    }
+
+    private void SelectItem(TItem item)
+    {
+        OnSelected.InvokeAsync(item);
+        SearchText = ItemText(item); // Nastavit text vybraného prvku
+        IsDropdownVisible = false;
     }
 }

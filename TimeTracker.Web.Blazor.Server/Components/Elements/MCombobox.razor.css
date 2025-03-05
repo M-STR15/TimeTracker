@@ -1,1 +1,33 @@
-﻿
+﻿.custom-combobox {
+	position: relative;
+	width: 100%;
+}
+
+	.custom-combobox .form-control {
+		width: 100%;
+		padding: 8px;
+	}
+
+	.custom-combobox .dropdown-list {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		width: 100%;
+		background-color: white;
+		border: 1px solid #ccc;
+		max-height: 200px;
+		overflow-y: auto;
+		z-index: 1000;
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+	}
+
+	.custom-combobox .dropdown-item {
+		padding: 8px;
+		cursor: pointer;
+	}
+
+		.custom-combobox .dropdown-item:hover {
+			background-color: #f1f1f1;
+		}

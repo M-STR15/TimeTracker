@@ -1,0 +1,22 @@
+﻿@typeparam T
+<style>
+    .custom-textarea {
+        width: 100%;
+        height: 150px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
+
+<textarea @bind="@Value" @oninput="HandleInput" class="form-control"></textarea>
+
+@code {
+    [Parameter] public T Value { get; set; }
+    [Parameter] public EventCallback<T> ValueChanged { get; set; }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Value = (T)e.Value;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
