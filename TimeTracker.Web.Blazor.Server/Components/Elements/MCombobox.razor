@@ -1,0 +1,34 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div class="cont_heg_50"></div>
+
+<div class="cont_select_center">
+
+    <!-- Custom select structure -->
+    <div class="select_mate" data-mate-select="active">
+        <select name="" onchange="" onclick="return false;" id="">
+            <option value="">Seleciona una Opcion </option>
+            <option value="1">Select option 1</option>
+            <option value="2">Select option 2</option>
+            <option value="3">Select option 3</option>
+        </select>
+        <p class="selecionado_opcion" onclick="open_select(this)"></p><span onclick="open_select(this)" class="icon_select_mate">
+           
+        </span>
+        <div class="cont_list_select_mate">
+            <ul class="cont_select_int">  </ul>
+        </div>
+    </div>
+    <!-- Custom select structure -->
+
+
+</div> <!-- End div center   -->
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeCombobox", "combobox");
+        }
+    }
+}
