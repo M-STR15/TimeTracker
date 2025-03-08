@@ -40,10 +40,16 @@ builder.Services.AddSwaggerGen(options =>
 	options.EnableAnnotations();
 	options.SwaggerDoc("v1", new OpenApiInfo
 	{
-		Title = "TimerTracker",
+		Title = "TimeTrackerAPI",
 		Version = "v1",
 		Description = ""
 	});
+});
+
+var apiBaseUrl = builder.Configuration["ProjectUrl"] ?? "https://localhost:5001";
+builder.Services.AddHttpClient("TimeTrackerAPI", client =>
+{
+	client.BaseAddress = new Uri(apiBaseUrl);
 });
 
 var app = builder.Build();

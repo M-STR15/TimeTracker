@@ -1,6 +1,9 @@
 ﻿@page "/activity"
 @using TimeTracker.Web.Blazor.Server.Helpers
 @using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+
+@inject IHttpClientFactory HttpClientFactory
 
 <style>
     div .main {
@@ -22,20 +25,20 @@
     <div class="row">
         <div class="col-6">
             <h6>Type shift</h6>
-            <MCombobox Items="myItems" ItemText="item => item.Name" @bind-SelectedItem="@select1"/>
+            <MCombobox Items="typeShifts" ItemText="item => item.Name" @bind-SelectedItem="@select1" />
         </div>
         <div class="col-6">
             <h6>Shifts</h6>
-            <MCombobox Items="myItems" ItemText="item => item.Name" />
+            <MCombobox Items="typeShifts" ItemText="item => item.Name" />
         </div>
     </div>
     <div class="row">
         <h6>Project</h6>
-        <MCombobox Items="myItems" ItemText="item => item.Name" />
+        <MCombobox Items="typeShifts" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Sub module</h6>
-        <MCombobox Items="myItems" ItemText="item => item.Name" />
+        <MCombobox Items="typeShifts" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Description</h6>
@@ -55,23 +58,36 @@
         return Task.CompletedTask;
     }
 
-    private MyItem select1 { get; set; } = new MyItem();
+    private TypeShiftBaseDto select1 { get; set; }
 
-    private List<MyItem> myItems = new List<MyItem>
+    private List<TypeShiftBaseDto> typeShifts = new List<TypeShiftBaseDto>
     {
-        new MyItem { Name = "Item 1" },
-        new MyItem { Name = "Item 2" },
-        new MyItem { Name = "Item 3" }
+        new TypeShiftBaseDto() { Id = 1, Name = "Item 1" },
+        new TypeShiftBaseDto() { Id = 2, Name = "Item 2" },
+        new TypeShiftBaseDto() { Id = 3, Name = "Item 3" },
     };
 
-    private void HandleSelected(MyItem selectedItem)
-    {
-        // Zpracování vybrané položky
-        Console.WriteLine($"Vybraná položka: {selectedItem.Name}");
-    }
 
-    public class MyItem
+    // protected async override void OnInitialized()
+    // {
+    //     descriptionText = "Description";
+    //     // typeShifts = await Http.GetFromJsonAsync<List<Activity>>("https://api.example.com/activities");
+    // }
+
+    protected async override Task OnInitializedAsync()
     {
-        public string Name { get; set; } = "";
+        try
+        {
+            var client = HttpClientFactory.CreateClient("TimeTrackerAPI");
+            var typeShiftsReq = await client.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shift/types");
+            if (typeShifts != null)
+            {
+                typeShifts = typeShiftsReq;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }
