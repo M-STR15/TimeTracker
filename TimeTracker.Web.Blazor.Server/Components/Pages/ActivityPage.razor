@@ -30,16 +30,16 @@
         </div>
         <div class="col-6">
             <h6>Shifts</h6>
-            <MCombobox Items="typeShifts" ItemText="item => item.Name" />
+            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" />
         </div>
     </div>
     <div class="row">
         <h6>Project</h6>
-        <MCombobox Items="typeShifts" ItemText="item => item.Name" />
+        <MCombobox Items="_projects" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Sub module</h6>
-        <MCombobox Items="typeShifts" ItemText="item => item.Name" />
+        <MCombobox Items="_subModules" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Description</h6>
@@ -62,8 +62,12 @@
     private TypeShiftBaseDto? select1 { get; set; }
 
     private List<TypeShiftBaseDto>? typeShifts;
+    private List<ShiftBaseDto> _shifts;
+    private List<ProjectBaseDto> _projects;
+    private List<SubModuleBaseDto> _subModules;
 
- 
+
+
     protected async override Task OnInitializedAsync()
     {
         try
@@ -72,6 +76,18 @@
             var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
             if (typeShiftsReq != null)
                 typeShifts = typeShiftsReq;
+
+            var shiftsReq = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
+            if (shiftsReq != null)
+                _shifts = shiftsReq;
+
+            var projectsReq = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
+            if (projectsReq != null)
+                _projects = projectsReq;
+
+            var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
+            if (subModulesReq != null)
+                _subModules = subModulesReq;
         }
         catch (Exception ex)
         {

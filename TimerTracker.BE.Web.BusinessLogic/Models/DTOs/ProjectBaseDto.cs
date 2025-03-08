@@ -2,13 +2,13 @@
 using System.ComponentModel.DataAnnotations;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
 	public class ProjectBaseDto : IProjectBase
 	{
 		/// <inheritdoc />
-		[SwaggerSchema(Description = "Popis projektu.",Nullable =true,Title ="Test")]
+		[SwaggerSchema(Description = "Popis projektu.", Nullable = true, Title = "Test")]
 		public virtual string? Description { get; set; }
 		/// <inheritdoc />
 		[SwaggerSchema(Description = "Identifikátor projektu.")]

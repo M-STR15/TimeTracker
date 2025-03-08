@@ -54,7 +54,7 @@
                readonly />
         <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
     </div>
-    @if (IsDropdownVisible && Items.Any())
+    @if (IsDropdownVisible && Items != null && Items.Any())
     {
         <ul class="dropdown-list" @onmousedown:preventDefault>
             @foreach (var item in Items)
@@ -82,13 +82,13 @@
         }
     }
 
-    [Parameter] 
+    [Parameter]
     public List<TItem> Items { get; set; } = new List<TItem>();
-    [Parameter] 
+    [Parameter]
     public Func<TItem, string> ItemText { get; set; }
     [Parameter]
     public EventCallback<TItem> SelectedItemChanged { get; set; }
-    [Parameter] 
+    [Parameter]
     public EventCallback<string> OnSearchTextChanged { get; set; }
 
     [JSInvokable]

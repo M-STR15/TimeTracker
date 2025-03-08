@@ -57,7 +57,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 		}
 
 		[HttpGet("api/v1/shifts")]
-		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetShiftsAsync()
+		public async Task<ActionResult<List<ShiftBaseDto>>> GetShiftsAsync()
 		{
 			try
 			{

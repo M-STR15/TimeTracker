@@ -3,7 +3,7 @@
 namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
-	internal class RecordActivityBaseDto : IRecordActivityBase
+	public class RecordActivityBaseDto : IRecordActivityBase
 	{
 		/// <inheritdoc />
 		public int ActivityId { get; set; }

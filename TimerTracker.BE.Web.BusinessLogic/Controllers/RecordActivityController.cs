@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Controllers
@@ -14,29 +13,28 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 	[SwaggerResponse(200, "Úspěšné získání položky/položek [Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)")]
 	[SwaggerResponse(404, "Položka/Položky nenalezeny.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404)")]
 	[SwaggerResponse(500, "Chyba serveru.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)")]
-	public class ProjectController : ControllerBase
+	public class RecordActivityController : ControllerBase
 	{
-		private readonly ProjectRepository<MsSqlDbContext> _projectRepository;
+		private readonly ActivityRepository<MsSqlDbContext> _activityRepository;
 		private readonly IMapper _mapper;
-		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, IMapper mapper)
+		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
+		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper)
 		{
-			_projectRepository = projectRepository;
+			_activityRepository = activityRepository;
+			_recordRepository = recordRepository;
 			_mapper = mapper;
 		}
-		/// <summary>
-		/// Vrátí všechny projekty
-		/// </summary>
-		/// <returns></returns>
-		[HttpGet("api/v1/projects")]
-		public async Task<ActionResult<List<ProjectBaseDto>>> GetProjectsAsync()
+
+		[HttpGet("api/v1/activities")]
+		public async Task<ActionResult<List<ActivityBaseDto>>> GetActivitiesAsync()
 		{
 			try
 			{
-				var projects = await _projectRepository.GetProjectsAsync();
-				if (projects != null)
+				var activities = await _activityRepository.GetActivitiesAsync();
+				if (activities != null)
 				{
-					var projectsDto = _mapper.Map<List<ProjectBaseDto>>(projects);
-					return projects != null ? Ok(projectsDto) : Problem();
+					var activitiesDto = _mapper.Map<List<ActivityBaseDto>>(activities);
+					return activitiesDto != null ? Ok(activitiesDto) : Problem();
 				}
 				else
 				{
@@ -49,16 +47,16 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
-		[HttpGet("api/v1/projects/submodules")]
-		public async Task<ActionResult<List<SubModule>>> GetSubModulesAsync()
+		[HttpGet("api/v1/record-activities")]
+		public async Task<ActionResult<List<RecordActivityBaseDto>>> GetRecordActivitiesAsync()
 		{
 			try
 			{
-				var subModules = await _projectRepository.GetSubModulesAsync();
-				if (subModules != null)
+				var recordActivities = await _recordRepository.GetRecordsAsync();
+				if (recordActivities != null)
 				{
-					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
-					return subModulesDto != null ? Ok(subModulesDto) : Problem();
+					var recordActivitiesDto = _mapper.Map<List<RecordActivityBaseDto>>(recordActivities);
+					return recordActivitiesDto != null ? Ok(recordActivitiesDto) : Problem();
 				}
 				else
 				{

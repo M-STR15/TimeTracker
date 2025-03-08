@@ -9,7 +9,13 @@ namespace TimerTracker.BE.Web.BusinessLogic.MappingProfiles
 		public MappingProfile()
 		{
 			CreateMap<Project, ProjectBaseDto>().ReverseMap();
+			CreateMap<SubModule, SubModuleBaseDto>().ReverseMap();
+
 			CreateMap<TypeShift, TypeShiftBaseDto>().ReverseMap();
+			CreateMap<Shift, ShiftBaseDto>().ReverseMap();
+
+			CreateMap<RecordActivity, RecordActivityBaseDto>().ReverseMap();
+			CreateMap<Activity, ActivityBaseDto>().ReverseMap();
 		}
 	}
 }
