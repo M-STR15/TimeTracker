@@ -6,6 +6,10 @@
 	public interface IShift : IShiftBase
 	{
 		/// <summary>
+		/// Dlouhý řetězec s datem a časem začátku směny.
+		/// </summary>
+		string StartDateLongStr { get; }
+		/// <summary>
 		/// Kolekce směn.
 		/// </summary>
 		ICollection<Shift>? Shifts { get; set; }

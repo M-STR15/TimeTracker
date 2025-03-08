@@ -18,10 +18,6 @@
 		/// </summary>
 		DateTime StartDate { get; set; }
 		/// <summary>
-		/// Dlouhý řetězec s datem a časem začátku směny.
-		/// </summary>
-		string StartDateLongStr { get; }
-		/// <summary>
 		/// Identifikátor typu směny.
 		/// </summary>
 		int TypeShiftId { get; set; }

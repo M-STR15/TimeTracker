@@ -69,7 +69,7 @@
         try
         {
             // var client = HttpClientFactory.CreateClient("TimeTrackerAPI");
-            var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shift/types");
+            var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
             if (typeShiftsReq != null)
                 typeShifts = typeShiftsReq;
         }

@@ -1,5 +1,4 @@
-﻿
-namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	public interface IActivityBase
 	{

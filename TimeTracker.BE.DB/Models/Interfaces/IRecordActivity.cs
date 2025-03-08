@@ -3,6 +3,10 @@
 	public interface IRecordActivity : IRecordActivityBase
 	{
 		/// <summary>
+		/// Doba trvání aktivity v sekundách.
+		/// </summary>
+		double DurationSec { get; }
+		/// <summary>
 		/// Aktivita spojená se záznamem.
 		/// </summary>
 		Activity? Activity { get; set; }

@@ -12,10 +12,6 @@
 		/// </summary>
 		string? Description { get; set; }
 
-		/// <summary>
-		/// Doba trvání aktivity v sekundách.
-		/// </summary>
-		double DurationSec { get; }
 
 		/// <summary>
 		/// Datum a čas ukončení aktivity.

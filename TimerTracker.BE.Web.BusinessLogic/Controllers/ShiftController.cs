@@ -34,7 +34,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 		/// Vrátí všechny typy směn
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("api/v1/shift/types")]
+		[HttpGet("api/v1/shifts/types")]
 		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetShiftTypesAsync()
 		{
 			try
@@ -43,7 +43,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 				if (shiftTypes != null)
 				{
 					var shiftTypesDto = _mapper.Map<List<TypeShiftBaseDto>>(shiftTypes);
-					return shiftTypes != null ? Ok(shiftTypesDto) : Problem();
+					return shiftTypesDto != null ? Ok(shiftTypesDto) : Problem();
 				}
 				else
 				{
@@ -52,8 +52,28 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
-				//_eventLogService.WriteError(Guid.Parse("88512c81-4994-46c6-95c7-a3accbcafe20"), ex.Message);
-				//Debug.WriteLine(ex.ToString());
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpGet("api/v1/shifts")]
+		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetShiftsAsync()
+		{
+			try
+			{
+				var shifts = await _shiftRepository.GetShiftsAsync();
+				if (shifts != null)
+				{
+					var shiftsDto = _mapper.Map<List<ShiftBaseDto>>(shifts);
+					return shiftsDto != null ? Ok(shiftsDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
