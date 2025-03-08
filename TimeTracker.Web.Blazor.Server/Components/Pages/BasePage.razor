@@ -1,0 +1,17 @@
+﻿@inject IHttpClientFactory HttpClientFactory
+
+@code {
+    protected HttpClient _httpClient;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}

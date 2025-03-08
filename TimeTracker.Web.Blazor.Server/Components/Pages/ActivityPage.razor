@@ -3,7 +3,8 @@
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 
-@inject IHttpClientFactory HttpClientFactory
+@* @inject IHttpClientFactory HttpClientFactory *@
+@inherits BasePage
 
 <style>
     div .main {
@@ -58,32 +59,19 @@
         return Task.CompletedTask;
     }
 
-    private TypeShiftBaseDto select1 { get; set; }
+    private TypeShiftBaseDto? select1 { get; set; }
 
-    private List<TypeShiftBaseDto> typeShifts = new List<TypeShiftBaseDto>
-    {
-        new TypeShiftBaseDto() { Id = 1, Name = "Item 1" },
-        new TypeShiftBaseDto() { Id = 2, Name = "Item 2" },
-        new TypeShiftBaseDto() { Id = 3, Name = "Item 3" },
-    };
+    private List<TypeShiftBaseDto>? typeShifts;
 
-
-    // protected async override void OnInitialized()
-    // {
-    //     descriptionText = "Description";
-    //     // typeShifts = await Http.GetFromJsonAsync<List<Activity>>("https://api.example.com/activities");
-    // }
-
+ 
     protected async override Task OnInitializedAsync()
     {
         try
         {
-            var client = HttpClientFactory.CreateClient("TimeTrackerAPI");
-            var typeShiftsReq = await client.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shift/types");
-            if (typeShifts != null)
-            {
+            // var client = HttpClientFactory.CreateClient("TimeTrackerAPI");
+            var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shift/types");
+            if (typeShiftsReq != null)
                 typeShifts = typeShiftsReq;
-            }
         }
         catch (Exception ex)
         {
