@@ -22,39 +22,40 @@
     <div class="row">
         <div class="col-6">
             <h6>Type shift</h6>
-            <MCombobox Items="myItems" ItemText="item => item.Name" />       
+            <MCombobox Items="myItems" ItemText="item => item.Name" @bind-SelectedItem="@select1"/>
         </div>
         <div class="col-6">
             <h6>Shifts</h6>
-           <MCombobox Items="myItems" ItemText="item => item.Name" />       
+            <MCombobox Items="myItems" ItemText="item => item.Name" />
         </div>
     </div>
     <div class="row">
         <h6>Project</h6>
-       <MCombobox Items="myItems" ItemText="item => item.Name" />       
+        <MCombobox Items="myItems" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Sub module</h6>
-        <MCombobox Items="myItems" ItemText="item => item.Name" />       
+        <MCombobox Items="myItems" ItemText="item => item.Name" />
     </div>
     <div class="row">
         <h6>Description</h6>
-       <MTextArea Value="@textValue"  />
+        <MTextArea Value="@descriptionText" />
 
     </div>
     <button>Set</button>
 </div>
 
 @code {
-    private string textValue;
+    private string descriptionText;
 
     private Task OnValueChanged(string newValue)
     {
-        textValue = newValue;
+        descriptionText = newValue;
         StateHasChanged();  // Aktualizuje komponentu
         return Task.CompletedTask;
     }
 
+    private MyItem select1 { get; set; } = new MyItem();
 
     private List<MyItem> myItems = new List<MyItem>
     {
@@ -71,6 +72,6 @@
 
     public class MyItem
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
     }
 }

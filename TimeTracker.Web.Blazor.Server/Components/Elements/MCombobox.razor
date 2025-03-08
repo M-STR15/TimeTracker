@@ -1,14 +1,65 @@
 ﻿@typeparam TItem
+@inject IJSRuntime JS
+
+<style>
+    .input-container {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .dropdown-button {
+        background: #f0f0f0;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        .dropdown-button:hover {
+            background: #ddd;
+        }
+
+    .dropdown-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dropdown-item {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-item.selected {
+            background-color: #007bff;
+            color: white;
+        }
+</style>
 
 <div class="custom-combobox">
-    <input type="text" class="form-control" @bind="SearchText" @onfocus="OnFocus" @onblur="OnBlur" @oninput="OnInput" placeholder="Vyberte možnost..." />
-
-    @if (IsDropdownVisible && FilteredItems.Any())
+    <div class="input-container">
+        <input type="text" class="form-control"
+               @bind="SearchText"
+               @onfocus="OnFocus"
+               @onblur="@(() => JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this)))"
+               @oninput="OnInput"
+               placeholder="Vyberte možnost..."
+               readonly />
+        <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
+    </div>
+    @if (IsDropdownVisible && Items.Any())
     {
-        <ul class="dropdown-list">
-            @foreach (var item in FilteredItems)
+        <ul class="dropdown-list" @onmousedown:preventDefault>
+            @foreach (var item in Items)
             {
-                <li @onclick="(() => SelectItem(item))" class="dropdown-item">
+                <li @onmousedown="(() => SelectItem(item))" class="dropdown-item @GetSelectedClass(item)">
                     @ItemText(item)
                 </li>
             }
@@ -19,23 +70,37 @@
 @code {
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
-    private List<TItem> FilteredItems { get; set; } = new List<TItem>();
-
-    [Parameter] public List<TItem> Items { get; set; } = new List<TItem>();
-    [Parameter] public Func<TItem, string> ItemText { get; set; }
-    [Parameter] public EventCallback<TItem> OnSelected { get; set; }
-    [Parameter] public EventCallback<string> OnSearchTextChanged { get; set; }
-
-    protected override void OnInitialized()
+    private TItem _selectedItem;
+    [Parameter]
+    public TItem SelectedItem
     {
-        // Přednastavení záznamů pro filtrování, pokud je to nutné
-        FilteredItems = Items;
+        get => _selectedItem;
+        set
+        {
+            if (!EqualityComparer<TItem>.Default.Equals(_selectedItem, value))
+                SelectedItemChanged.InvokeAsync(_selectedItem); // Vyvolání události ValueChanged
+        }
+    }
+
+    [Parameter] 
+    public List<TItem> Items { get; set; } = new List<TItem>();
+    [Parameter] 
+    public Func<TItem, string> ItemText { get; set; }
+    [Parameter]
+    public EventCallback<TItem> SelectedItemChanged { get; set; }
+    [Parameter] 
+    public EventCallback<string> OnSearchTextChanged { get; set; }
+
+    [JSInvokable]
+    public void HandleBlur()
+    {
+        IsDropdownVisible = false;
+        StateHasChanged();
     }
 
     private void OnInput(ChangeEventArgs e)
     {
         SearchText = e.Value.ToString();
-        FilterItems();
         OnSearchTextChanged.InvokeAsync(SearchText);
     }
 
@@ -47,25 +112,25 @@
     private void OnBlur()
     {
         // Po ztrátě zaměření skrytí dropdownu s malým zpožděním pro umožnění výběru
-        Task.Delay(150).ContinueWith(t => IsDropdownVisible = false);
+        Task.Delay(150);
+        IsDropdownVisible = false;
+        StateHasChanged();
     }
-
-    private void FilterItems()
+    private void ToggleDropdown()
     {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            FilteredItems = Items;
-        }
-        else
-        {
-            FilteredItems = Items.Where(item => ItemText(item).ToLower().Contains(SearchText.ToLower())).ToList();
-        }
+        IsDropdownVisible = !IsDropdownVisible;
     }
 
     private void SelectItem(TItem item)
     {
-        OnSelected.InvokeAsync(item);
-        SearchText = ItemText(item); // Nastavit text vybraného prvku
+        SelectedItem = item;
+        SelectedItemChanged.InvokeAsync(item);
         IsDropdownVisible = false;
+        SearchText = ItemText(item); // Nastavit text vybraného prvku
+    }
+
+    private string GetSelectedClass(TItem item)
+    {
+        return Equals(item, SelectedItem) ? "selected" : string.Empty;
     }
 }
