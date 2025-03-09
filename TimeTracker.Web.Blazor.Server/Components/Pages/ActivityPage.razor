@@ -43,18 +43,18 @@
     </div>
     <div class="row">
         <h6>Description</h6>
-        <MTextArea @bind-Value="@descriptionText" />
+        <MTextArea @bind-Value="@_descriptionText" />
 
     </div>
     <button @onclick="save">Set</button>
 </div>
 
 @code {
-    private string descriptionText = string.Empty;
+    private string _descriptionText = string.Empty;
 
     private Task OnValueChanged(string newValue)
     {
-        descriptionText = newValue;
+        _descriptionText = newValue;
         StateHasChanged();  // Aktualizuje komponentu
         return Task.CompletedTask;
     }
@@ -102,7 +102,7 @@
     {
         var redcortActivity = new RecordActivityInsertDto
             {
-                Description = descriptionText,
+                Description = _descriptionText,
                 ProjectId = _selectProject?.Id ?? 0,
                 SubModuleId = _selectSubModule?.Id ?? 0,
                 ShiftGuidId = _selectShift?.GuidId ?? Guid.Empty,
