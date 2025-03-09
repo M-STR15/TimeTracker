@@ -1,0 +1,42 @@
+﻿<CascadingValue Value="this">
+    <div class="btn-group" role="group">
+
+        @foreach (MTabItem tabPage in Pages)
+        {
+            <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@(() => ActivatePage(tabPage))>
+                @tabPage.Title
+            </button>
+        }
+
+    </div>
+    @ChildContent
+
+</CascadingValue>
+
+@code {
+    // Next line is needed so we are able to add <TabPage> components inside
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public MTabItem ActivePage { get; set; }
+    List<MTabItem> Pages = new List<MTabItem>();
+
+    internal void AddPage(MTabItem tabPage)
+    {
+        Pages.Add(tabPage);
+        if (Pages.Count == 1)
+            ActivePage = tabPage;
+        StateHasChanged();
+    }
+
+    string GetButtonClass(MTabItem page)
+    {
+        return page == ActivePage ? "btn-primary" : "btn-secondary";
+    }
+
+    void ActivatePage(MTabItem page)
+    {
+        ActivePage = page;
+        StateHasChanged();
+    }
+}
