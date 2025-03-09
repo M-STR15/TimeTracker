@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Controllers
@@ -57,6 +58,29 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityBaseDto>>(recordActivities);
 					return recordActivitiesDto != null ? Ok(recordActivitiesDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpPost("api/v1/record-activities")]
+		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync(RecordActivityInsertDto recordActivityInsertDto)
+		{
+			try
+			{
+				var recordActivity = _mapper.Map<RecordActivity>(recordActivityInsertDto);
+				recordActivity = await _recordRepository.SaveRecordAsync(recordActivity);
+				if (recordActivity != null)
+				{
+					var recordActivityDto = _mapper.Map<RecordActivityBaseDto>(recordActivity);
+					return recordActivityDto != null ? Ok(recordActivityDto) : Problem();
 				}
 				else
 				{

@@ -26,31 +26,31 @@
     <div class="row">
         <div class="col-6">
             <h6>Type shift</h6>
-            <MCombobox Items="typeShifts" ItemText="item => item.Name" @bind-SelectedItem="@select1" />
+            <MCombobox Items="_typeShifts" ItemText="item => item.Name" @bind-SelectedItem="@_selectTypeShift" />
         </div>
         <div class="col-6">
             <h6>Shifts</h6>
-            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" />
+            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" @bind-SelectedItem="@_selectShift" />
         </div>
     </div>
     <div class="row">
         <h6>Project</h6>
-        <MCombobox Items="_projects" ItemText="item => item.Name" />
+        <MCombobox Items="_projects" ItemText="item => item.Name" @bind-SelectedItem="@_selectProject" />
     </div>
     <div class="row">
         <h6>Sub module</h6>
-        <MCombobox Items="_subModules" ItemText="item => item.Name" />
+        <MCombobox Items="_subModules" ItemText="item => item.Name" @bind-SelectedItem="@_selectSubModule" />
     </div>
     <div class="row">
         <h6>Description</h6>
-        <MTextArea Value="@descriptionText" />
+        <MTextArea @bind-Value="@descriptionText" />
 
     </div>
-    <button>Set</button>
+    <button @onclick="save">Set</button>
 </div>
 
 @code {
-    private string descriptionText;
+    private string descriptionText = string.Empty;
 
     private Task OnValueChanged(string newValue)
     {
@@ -59,12 +59,15 @@
         return Task.CompletedTask;
     }
 
-    private TypeShiftBaseDto? select1 { get; set; }
+    private TypeShiftBaseDto? _selectTypeShift { get; set; }
+    private ShiftBaseDto? _selectShift { get; set; }
+    private ProjectBaseDto? _selectProject { get; set; }
+    private SubModuleBaseDto? _selectSubModule { get; set; }
 
-    private List<TypeShiftBaseDto>? typeShifts;
-    private List<ShiftBaseDto> _shifts;
-    private List<ProjectBaseDto> _projects;
-    private List<SubModuleBaseDto> _subModules;
+    private List<TypeShiftBaseDto>? _typeShifts;
+    private List<ShiftBaseDto>? _shifts;
+    private List<ProjectBaseDto>? _projects;
+    private List<SubModuleBaseDto>? _subModules;
 
 
 
@@ -75,7 +78,7 @@
             // var client = HttpClientFactory.CreateClient("TimeTrackerAPI");
             var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
             if (typeShiftsReq != null)
-                typeShifts = typeShiftsReq;
+                _typeShifts = typeShiftsReq;
 
             var shiftsReq = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
             if (shiftsReq != null)
@@ -90,6 +93,28 @@
                 _subModules = subModulesReq;
         }
         catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void save()
+    {
+        var redcortActivity = new RecordActivityInsertDto
+            {
+                Description = descriptionText,
+                ProjectId = _selectProject?.Id ?? 0,
+                SubModuleId = _selectSubModule?.Id ?? 0,
+                ShiftGuidId = _selectShift?.GuidId ?? Guid.Empty,
+                TypeShiftId = _selectTypeShift?.Id ?? 0
+            };
+        var result = await _httpClient.PostAsJsonAsync<RecordActivityInsertDto>("/api/v1/record-activities", redcortActivity);
+
+        if (result.IsSuccessStatusCode)
+        {
+
+        }
+        else
         {
 
         }
