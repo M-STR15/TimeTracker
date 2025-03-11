@@ -2,15 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
-using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Controllers
