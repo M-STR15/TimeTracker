@@ -23,6 +23,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			_projectRepository = projectRepository;
 			_mapper = mapper;
 		}
+		#region GET
 		/// <summary>
 		/// Vrátí všechny projekty
 		/// </summary>
@@ -50,7 +51,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 		}
 
 		[HttpGet("api/v1/projects/submodules")]
-		public async Task<ActionResult<List<SubModule>>> GetSubModulesAsync()
+		public async Task<ActionResult<List<SubModuleBaseDto>>> GetSubModulesAsync()
 		{
 			try
 			{
@@ -70,5 +71,102 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
+		#endregion GET
+		#region POST
+		[HttpPost("api/v1/project")]
+		public async Task<ActionResult<ProjectBaseDto>> AddProjectsAsync([FromBody] ProjectInsertDto projectBaseDto)
+		{
+			try
+			{
+				var project = _mapper.Map<Project>(projectBaseDto);
+				var result = (await _projectRepository.SaveProjectAsync(project));
+				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
+				return result != null ? Ok(projectBaseDto) : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpPost("api/v1/projects/submodule")]
+		public async Task<ActionResult<SubModuleBaseDto>> AddSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
+		{
+			try
+			{
+				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
+				var result = await _projectRepository.SaveSubModuleAsync(subModule);
+				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
+				return result != null ? Ok(subModule) : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+		#endregion POST
+		#region PUT
+		[HttpPut("api/v1/project")]
+		public async Task<ActionResult<ProjectBaseDto>> UpdateProjectsAsync([FromBody] ProjectBaseDto projectBaseDto)
+		{
+			try
+			{
+				var project = _mapper.Map<Project>(projectBaseDto);
+				var result = (await _projectRepository.SaveProjectAsync(project));
+				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
+				return result != null ? Ok(projectBaseDto) : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpPut("api/v1/projects/submodule")]
+		public async Task<ActionResult<SubModuleBaseDto>> PutSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
+		{
+			try
+			{
+				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
+				var result = await _projectRepository.SaveSubModuleAsync(subModule);
+				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
+				return result != null ? Ok(subModule) : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+		#endregion PUT
+		#region DELETE
+		[HttpDelete("api/v1/project/{projectId}")]
+		public async Task<IActionResult> DeleteProjectsAsync(int projectId)
+		{
+			try
+			{
+				var result = (await _projectRepository.DeleteProjectAsync(projectId));
+				return result ? Ok() : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpDelete("api/v1/projects/submodule/{submoduleId}")]
+		public async Task<IActionResult> DeleteSubModulesAsync(int submoduleId)
+		{
+			try
+			{
+				var result = await _projectRepository.DeleteSubModuleAsync(submoduleId);
+				return result ? Ok() : Problem();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+		#endregion DELETE
 	}
 }

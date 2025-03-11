@@ -1,0 +1,59 @@
+﻿@using TimeTracker.Web.Blazor.Server.Models
+
+@typeparam TRow
+
+@if (Columns != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (var column in Columns.ToList().FindAll(x => x.Header.Contains(DisplayView)))
+                {
+                    <th style="@column?.GetWidth()" class="@column.HeaderCss">@column?.Header</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Rows != null && Rows.Count > 0)
+                {
+                    for (int rorI = 0; rorI < Rows.Count; rorI++)
+                    {
+                        int rowIndex = rorI;
+
+                        <tr>
+                            @if (Rows[rowIndex] != null)
+                            {
+                                @foreach (var property in Rows[rowIndex]
+                                   .GetType()
+                                   .GetProperties()
+                                   .Where(x => Columns.Any(y => y.Key == x.Name))
+                                   .OrderBy(x => ((List<TableColumnDefinition<TRow>>)Columns).FindIndex(y => y.Key == x.Name))
+                                   .ToList())
+                                {
+                                    var column = Columns.FirstOrDefault(x => x.Key == property.Name);
+                                    var columnType = column?.eTypeColumn ?? eTypeColumn.Text;
+
+                                    string name = property.Name;
+                                    object? value = property.GetValue(Rows[rowIndex]);
+
+                                    <td style="@column?.GetWidth()" class="@column?.ValueCss">
+
+                                        @switch (columnType)
+                                        {
+                                            case eTypeColumn.Text:
+                                            default:
+                                                <label>@(value?.ToString() ?? "")</label>
+                                                break;
+
+                                        }
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}

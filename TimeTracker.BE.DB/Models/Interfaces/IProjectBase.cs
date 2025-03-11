@@ -3,21 +3,11 @@
 	/// <summary>
 	/// Rozhraní pro základní vlastnosti projektu.
 	/// </summary>
-	public interface IProjectBase
+	public interface IProjectBase: IProjectInsert
 	{
-		/// <summary>
-		/// Popis projektu.
-		/// </summary>
-		string? Description { get; set; }
-
 		/// <summary>
 		/// Identifikátor projektu.
 		/// </summary>
 		int Id { get; set; }
-
-		/// <summary>
-		/// Název projektu.
-		/// </summary>
-		string Name { get; set; }
 	}
 }

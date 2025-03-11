@@ -18,5 +18,6 @@ namespace TimeTracker.Web.Blazor.Server.Components
 
 		private void onOpenEventLogsPageClick() => NavigationManager.NavigateTo("/event-logs");
 		private void onOpenActivityPageClick() => NavigationManager.NavigateTo("/activity");
+		private void onOpenSettingsClick() => NavigationManager.NavigateTo("/settings");
 	}
 }

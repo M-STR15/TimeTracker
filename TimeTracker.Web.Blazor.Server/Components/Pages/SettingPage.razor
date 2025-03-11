@@ -1,0 +1,82 @@
+﻿@page "/settings"
+
+@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Models
+@using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+
+@inherits BasePage
+
+<h3>Settings</h3>
+@* <MTabs>
+    <MTabItem Title="Projekty"> *@
+<div id="project">
+    <div id="menuButtonsProject">
+    </div>
+    <div>
+        <MTable Rows="_projects" Columns="_projectColumns">
+
+        </MTable>
+    </div>
+</div>
+<div id="submodule">
+    <div id="submoduleButtonsProject">
+    </div>
+    <div>
+    </div>
+</div>
+<h3>První záložka</h3>
+<p>Toto je obsah první záložky.</p>
+@*     </MTabItem>
+</MTabs> *@
+
+@code {
+    private List<ProjectBaseDto> _projects;
+    private List<TableColumnDefinition<ProjectBaseDto>>? _projectColumns;
+
+    private List<SubModuleBaseDto> _subModules;
+    private List<TableColumnDefinition<SubModuleBaseDto>>? _subModuleColumns;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        _projectColumns = CreateTableColumnDefinition_Project();
+        _subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
+
+        var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
+        if (projects != null)
+            _projects = projects;
+
+        var subModules = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
+        if (subModules != null)
+            _subModules = subModules;
+    }
+
+    public static List<TableColumnDefinition<ProjectBaseDto>> CreateTableColumnDefinition_Project()
+    {
+        return new List<TableColumnDefinition<ProjectBaseDto>>
+                {
+                    new TableColumnDefinition<ProjectBaseDto>
+                    {
+                        Header = "Name",
+                        Key = nameof(ProjectBaseDto.Name),
+                        Width=150,
+                        eTypeColumn=eTypeColumn.Text
+                    },
+                };
+    }
+
+    public static List<TableColumnDefinition<SubModuleBaseDto>> CreateTableColumnDefinition_SubModuleBaseDto()
+    {
+        return new List<TableColumnDefinition<SubModuleBaseDto>>
+                {
+                    new TableColumnDefinition<SubModuleBaseDto>
+                    {
+                        Header = "Name",
+                        Key = nameof(ProjectBaseDto.Name),
+                        Width=150,
+                        eTypeColumn=eTypeColumn.Text
+                    },
+                };
+    }
+}

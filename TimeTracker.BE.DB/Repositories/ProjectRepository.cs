@@ -40,6 +40,29 @@ public class ProjectRepository<T> where T : MainDatacontext
 		}
 	}
 
+	public async Task<bool> DeleteProjectAsync(int projectId)
+	{
+		try
+		{
+			var context = _contextFactory();
+			var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == projectId);
+			if (item != null)
+			{
+				context.Projects.Remove(item);
+				await context.SaveChangesAsync();
+			}
+			else
+			{
+				return false;
+			}
+			return true;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
 	/// <summary>
 	/// Odstraní podmodul z databáze.
 	/// </summary>
@@ -61,6 +84,29 @@ public class ProjectRepository<T> where T : MainDatacontext
 				return null;
 			}
 			return item;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	public async Task<bool> DeleteSubModuleAsync(int subModuleId)
+	{
+		try
+		{
+			var context = _contextFactory();
+			var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModuleId);
+			if (item != null)
+			{
+				context.SubModules.Remove(item);
+				await context.SaveChangesAsync();
+			}
+			else
+			{
+				return false;
+			}
+			return true;
 		}
 		catch (Exception)
 		{

@@ -1,0 +1,53 @@
+﻿.shopping-cart {
+	margin: 20px auto;
+	max-width: 100%; /* Šířka rodiče */
+	padding: 0 20px; /* Malý odsazení od okrajů */
+	border: 1px solid #dee2e6;
+	border-radius: 5px;
+	background-color: #ffffff;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+table {
+	width: 100%; /* Zajistí roztáhnutí tabulky přes celou šířku rodiče */
+	border-collapse: collapse;
+}
+
+thead {
+	background-color: #343a40;
+	color: #ffffff;
+}
+
+	thead th {
+		padding: 10px;
+		text-align: left;
+	}
+
+tbody td {
+	padding: 10px;
+	border-bottom: 1px solid #dee2e6;
+	text-align: left;
+}
+
+tbody tr:nth-child(even) {
+	background-color: #f1f1f1;
+}
+
+img {
+	max-width: 100%; /* Obrázek se přizpůsobí sloupci */
+	max-height: 50px; /* Maximální výška obrázku */
+	display: block;
+}
+
+tbody tr:hover {
+	background-color: #e9ecef;
+}
+
+td, th {
+	text-align: center; /* Text bude centrován ve sloupcích */
+}
+
+	td:last-child, th:last-child {
+		text-align: right; /* Poslední sloupec je zarovnán doprava */
+	}
