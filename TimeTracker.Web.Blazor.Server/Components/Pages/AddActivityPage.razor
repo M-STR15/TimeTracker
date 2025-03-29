@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-6">
             <h6>Type shift</h6>
-            <MCombobox Items="_typeShifts" ItemText="item => item.Name" @bind-SelectedItem="@_selectTypeShift" />
+            <MCombobox Items="_typeShifts" ItemText="item => item.Name" OnChange="OnTypeShiftChanged" />
             @if (_errorMessages.Contains("TypeShift"))
             {
                 <div class="error-message">Please select a valid type shift.</div>
@@ -34,16 +34,16 @@
         </div>
         <div class="col-6">
             <h6>Shifts</h6>
-            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" @bind-SelectedItem="@_selectShift" />
+            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" OnChange="OnShiftChanged" />
         </div>
     </div>
     <div class="row">
         <h6>Project</h6>
-        <MCombobox Items="_projects" ItemText="item => item.Name" @bind-SelectedItem="@_selectProject" />
+        <MCombobox Items="_projects" ItemText="item => item.Name" OnChange="OnProjectChanged" />
     </div>
     <div class="row">
         <h6>Sub module</h6>
-        <MCombobox Items="_subModules" ItemText="item => item.Name" @bind-SelectedItem="@_selectSubModule" />
+        <MCombobox Items="_subModules" ItemText="item => item.Name" OnChange="OnSubModuleChanged" />
     </div>
     <div class="row">
         <h6>Description</h6>
@@ -57,6 +57,30 @@
 
     private string _descriptionText = string.Empty;
 
+    private void OnTypeShiftChanged(ChangeEventArgs e)
+    {
+        if (e.Value is TypeShiftBaseDto item)
+            _recordActivityInsertDto.TypeShiftId = item?.Id;
+    }
+
+    private void OnShiftChanged(ChangeEventArgs e)
+    {
+        if (e.Value is ShiftBaseDto item)
+            _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
+    }
+
+    private void OnProjectChanged(ChangeEventArgs e)
+    {
+        if (e.Value is ProjectBaseDto item)
+            _recordActivityInsertDto.ProjectId = item?.Id;
+    }
+
+    private void OnSubModuleChanged(ChangeEventArgs e)
+    {
+        if (e.Value is SubModuleBaseDto item)
+            _recordActivityInsertDto.SubModuleId = item?.Id;
+    }
+
     private Task OnValueChanged(string newValue)
     {
         _descriptionText = newValue;
@@ -64,17 +88,12 @@
         return Task.CompletedTask;
     }
 
-    private TypeShiftBaseDto? _selectTypeShift { get; set; }
-    private ShiftBaseDto? _selectShift { get; set; }
-    private ProjectBaseDto? _selectProject { get; set; }
-    private SubModuleBaseDto? _selectSubModule { get; set; }
-
     private List<TypeShiftBaseDto>? _typeShifts;
     private List<ShiftBaseDto>? _shifts;
     private List<ProjectBaseDto>? _projects;
     private List<SubModuleBaseDto>? _subModules;
 
-    private RecordActivityInsertDto _recordActivityInsertDto;
+    private RecordActivityInsertDto _recordActivityInsertDto = new();
 
     protected async override Task OnInitializedAsync()
     {
@@ -105,15 +124,7 @@
 
     private async void save_Click()
     {
-        var redcortActivity = new RecordActivityInsertDto
-            {
-                Description = _descriptionText,
-                ProjectId = _selectProject?.Id ?? 0,
-                SubModuleId = _selectSubModule?.Id ?? 0,
-                ShiftGuidId = _selectShift?.GuidId ?? Guid.Empty,
-                TypeShiftId = _selectTypeShift?.Id ?? 0
-            };
-        var result = await _httpClient.PostAsJsonAsync<RecordActivityInsertDto>("api/v1/record-activities", redcortActivity);
+        var result = await _httpClient.PostAsJsonAsync<RecordActivityInsertDto>("api/v1/record-activities", _recordActivityInsertDto);
 
         if (result.IsSuccessStatusCode)
         {

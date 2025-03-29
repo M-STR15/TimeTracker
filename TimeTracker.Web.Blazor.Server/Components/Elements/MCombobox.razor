@@ -87,10 +87,15 @@
     [Parameter]
     public Func<TItem, string> ItemText { get; set; }
     [Parameter]
+    public Func<TItem, int> ItemId { get; set; }
+    [Parameter]
     public EventCallback<TItem> SelectedItemChanged { get; set; }
     [Parameter]
+    public EventCallback<int> SelectedItemId { get; set; }
+    [Parameter]
     public EventCallback<string> OnSearchTextChanged { get; set; }
-
+    [Parameter]
+    public EventCallback<ChangeEventArgs> OnChange { get; set; }
     [JSInvokable]
     public void HandleBlur()
     {
@@ -98,10 +103,11 @@
         StateHasChanged();
     }
 
-    private void OnInput(ChangeEventArgs e)
+    private async void OnInput(ChangeEventArgs e)
     {
         SearchText = e.Value.ToString();
-        OnSearchTextChanged.InvokeAsync(SearchText);
+        await OnSearchTextChanged.InvokeAsync(SearchText);
+        await OnChange.InvokeAsync(e);
     }
 
     private void OnFocus()
@@ -121,12 +127,19 @@
         IsDropdownVisible = !IsDropdownVisible;
     }
 
-    private void SelectItem(TItem item)
+    private async void SelectItem(TItem item)
     {
         SelectedItem = item;
-        SelectedItemChanged.InvokeAsync(item);
+        await SelectedItemChanged.InvokeAsync(item);
+        // OnChange.InvokeAsync(item);
         IsDropdownVisible = false;
         SearchText = ItemText(item); // Nastavit text vybraného prvku
+
+        var eventArgs = new ChangeEventArgs
+            {
+                Value = item 
+            };
+        await OnChange.InvokeAsync(eventArgs);
     }
 
     private string GetSelectedClass(TItem item)
