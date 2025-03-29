@@ -1,0 +1,29 @@
+﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals.Models
+@using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+
+@inherits BaseViewModal
+
+<BaseModal @bind-Visible=Visible Title=@Title>
+    <BodyContent>
+        <h6>Name</h6>
+        <MTextBox Value="@Project.Name"></MTextBox>
+        <MButton Text="Save" OnClick="save_Click" />
+    </BodyContent>
+</BaseModal>
+
+@code {
+
+    [Parameter]
+    public ProjectInsertDto Project { get; set; } = new();
+
+    protected async override void save_Click()
+    {
+        if (_httpClient != null)
+        {
+            var urlApi = "api/v1/project";
+            var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, Project);
+            Visible = false;
+        }
+    }
+}

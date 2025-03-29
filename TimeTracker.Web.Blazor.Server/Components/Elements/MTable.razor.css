@@ -49,5 +49,5 @@ td, th {
 }
 
 	td:last-child, th:last-child {
-		text-align: right; /* Poslední sloupec je zarovnán doprava */
+		text-align: left; /* Poslední sloupec je zarovnán doprava */
 	}

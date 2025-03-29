@@ -3,6 +3,7 @@ using System.Reflection;
 using TimeTracker.BE.Web.Shared.Infrastructure;
 using TimeTracker.Web.Blazor.Server.Components;
 using TimeTracker.Web.Blazor.Server.Helpers;
+using TimeTracker.Web.Blazor.Server.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ var connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;
 
 
 builder.Services.AddControllers();
-builder.Services.AddTimeTrackerBeWebShared();
+builder.Services.AddTimeTrackerWebBlazorServer();
 
 //builder.Services.AddDbContext<MsSqlDbContext>(options => options.UseSqlServer(connectionString)
 //			.EnableSensitiveDataLogging()

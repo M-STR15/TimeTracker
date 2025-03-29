@@ -1,0 +1,30 @@
+﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals.Models
+@using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+
+@inherits BaseViewModal
+
+<BaseModal @bind-Visible=Visible Title=@Title>
+    <BodyContent>
+        <h6>Name</h6>
+        <MTextBox Value="@SubModule.Name"></MTextBox>
+        <h6>Description</h6>
+        <MTextArea @bind-Value="@SubModule.Description" />
+        <MButton Text="Save" OnClick="save_Click" />
+    </BodyContent>
+</BaseModal>
+
+@code {
+    [Parameter]
+    public SubModuleInsertDto SubModule { get; set; } = new();
+
+    protected async override void save_Click()
+    {
+        if (_httpClient != null)
+        {
+            var urlApi = "api/v1/projects/submodule";
+            var result = await _httpClient.PostAsJsonAsync<SubModuleInsertDto>(urlApi, SubModule);
+            Visible = false;
+        }
+    }
+}

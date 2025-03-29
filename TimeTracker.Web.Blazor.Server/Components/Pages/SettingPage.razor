@@ -1,33 +1,55 @@
 ﻿@page "/settings"
 
 @using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals
 @using TimeTracker.Web.Blazor.Server.Models
 @using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 
 @inherits BasePage
 
-<h3>Settings</h3>
-@* <MTabs>
-    <MTabItem Title="Projekty"> *@
-<div id="project">
-    <div id="menuButtonsProject">
-    </div>
-    <div>
-        <MTable Rows="_projects" Columns="_projectColumns">
+<style>
+    container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Vzdálenost mezi sekcemi */
+    }
+</style>
 
-        </MTable>
+<h3>Settings</h3>
+
+<div class="container">
+    <div id="project">
+        <h4>Projects</h4>
+        <div id="menuButtonsProject">
+            <button class="btn btn-primary" @onclick="() => ShowModalAddProject()">Add</button>
+            <button class="btn btn-primary" @onclick="() => ShowModalEditProject()">Edit</button>
+            <button class="btn btn-primary" @onclick="() => ShowModalDeleteProject()">Delete</button>
+        </div>
+        <div>
+            <MTable Rows="_projects" Columns="_projectColumns" />
+        </div>
+    </div>
+    <div id="submodule">
+        <h4>SubModules</h4>
+        <div id="submoduleButtonsProject">
+            <button class="btn btn-primary" @onclick="() => ShowModalAddSubmodule()">Add</button>
+            <button class="btn btn-primary" @onclick="() => ShowModalEditSubmodule()">Edit</button>
+            <button class="btn btn-primary" @onclick="() => ShowModalDeleteSubmodule()">Delete</button>
+        </div>
+        <div>
+            <MTable Rows="_subModules" Columns="_subModuleColumns" />
+        </div>
     </div>
 </div>
-<div id="submodule">
-    <div id="submoduleButtonsProject">
-    </div>
-    <div>
-    </div>
-</div>
-<h3>První záložka</h3>
-<p>Toto je obsah první záložky.</p>
-@*     </MTabItem>
-</MTabs> *@
+
+<AddOrEditProjectModal Title="Add project"
+                 @bind-Visible="IsOpenAddProjectModal">
+</AddOrEditProjectModal>
+
+<AddOrEditSubModuletModal Title="Add submodule"   
+                    @bind-Visible="IsOpenAddSubModuleModal">
+</AddOrEditSubModuletModal>
+
 
 @code {
     private List<ProjectBaseDto> _projects;
@@ -36,9 +58,11 @@
     private List<SubModuleBaseDto> _subModules;
     private List<TableColumnDefinition<SubModuleBaseDto>>? _subModuleColumns;
 
+    public bool IsOpenAddProjectModal { get; set; } = false;
+    public bool IsOpenAddSubModuleModal { get; set; } = false;
+
     protected async override Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
 
         _projectColumns = CreateTableColumnDefinition_Project();
         _subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
@@ -50,6 +74,37 @@
         var subModules = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
         if (subModules != null)
             _subModules = subModules;
+        await base.OnInitializedAsync();
+    }
+
+    private void ShowModalAddProject()
+    {
+        IsOpenAddProjectModal = true;
+    }
+
+    private void ShowModalEditProject()
+    {
+        // _modalService.ShowModal<EditProjectModal>("Edit Project", 400, 200);
+    }
+
+    private void ShowModalDeleteProject()
+    {
+        // _modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
+    }
+
+    private void ShowModalAddSubmodule()
+    {
+        IsOpenAddSubModuleModal = true;
+    }
+
+    private void ShowModalEditSubmodule()
+    {
+        // _modalService.ShowModal<EditProjectModal>("Edit Project", 400, 200);
+    }
+
+    private void ShowModalDeleteSubmodule()
+    {
+        // _modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
     }
 
     public static List<TableColumnDefinition<ProjectBaseDto>> CreateTableColumnDefinition_Project()

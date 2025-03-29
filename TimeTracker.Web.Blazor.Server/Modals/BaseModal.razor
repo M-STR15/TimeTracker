@@ -1,0 +1,45 @@
+﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+@if (Visible)
+{
+    <div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">@Title</h4>
+                    <MButton OnClick="Close_Click" Text="X" />
+                </div>
+                <div class="modal-body">
+                    @BodyContent
+                </div>
+                <div class="modal-footer">
+                    @FooterContent
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+    [Parameter]
+    public EventCallback<bool> VisibleChanged { get; set; }
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? BodyContent { get; set; }
+
+    [Parameter]
+    public RenderFragment? FooterContent { get; set; }
+
+
+    private void Close_Click()
+    {
+        Visible = false;
+        if (VisibleChanged.HasDelegate)
+        {
+            VisibleChanged.InvokeAsync(Visible).Wait();
+        }
+    }
+}

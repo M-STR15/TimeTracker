@@ -1,0 +1,8 @@
+﻿@* <label @onclick="getOnClickCallback()" style="@($"{Style}; {_disabledStyle}")" class="@Class @(IsDisabled ? "disabled" : "")">
+    <p class="btn-icon">
+        <img height="20" src="@Src" />
+    </p>
+    <span>@Text</span>
+</label> *@
+
+<button @onclick="OnClick">@Text</button>

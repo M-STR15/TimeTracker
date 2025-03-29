@@ -1,0 +1,22 @@
+﻿
+<style>
+    .custom-textarea {
+        width: 100%;
+        height: 150px;
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
+
+<InputText @bind-Value="Value" @oninput="HandleInput" class="form-control"/>
+
+@code {
+    [Parameter] public string Value { get; set; }
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+
+    private async Task HandleInput(ChangeEventArgs e)
+    {
+        Value = (string)e.Value;
+        await ValueChanged.InvokeAsync(Value);
+    }
+}
