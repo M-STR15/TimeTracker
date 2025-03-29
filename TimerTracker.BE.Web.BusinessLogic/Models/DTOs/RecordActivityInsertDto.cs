@@ -1,4 +1,5 @@
-﻿using TimeTracker.BE.DB.Models.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
@@ -6,14 +7,17 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 	public class RecordActivityInsertDto : IRecordActivityInsert
 	{
 		/// <inheritdoc />
+		[Required(ErrorMessage = "Hodnota je vyžadována.")]
 		public int ActivityId { get; set; }
 		/// <inheritdoc />
 		public string? Description { get; set; }
 		/// <inheritdoc />
+		[Required(ErrorMessage = "Hodnota je vyžadována.")]
 		public int? ProjectId { get; set; }
 		/// <inheritdoc />
 		public Guid? ShiftGuidId { get; set; }
 		/// <inheritdoc />
+		[Required(ErrorMessage = "Hodnota je vyžadována.")]
 		public DateTime StartDateTime { get; set; }
 		/// <inheritdoc />
 		public int? SubModuleId { get; set; }
