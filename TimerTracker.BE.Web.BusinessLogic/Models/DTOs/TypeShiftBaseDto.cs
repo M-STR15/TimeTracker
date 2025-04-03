@@ -15,6 +15,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 		public bool IsVisibleInMainWindow { get; set; }
 		/// <inheritdoc />
 		[Required]
+		[StringLength(30, ErrorMessage = "Byla překročena dovolená délka textu.")]
 		public string Name { get; set; } = string.Empty;
 	}
 }

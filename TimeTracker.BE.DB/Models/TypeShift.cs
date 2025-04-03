@@ -25,6 +25,7 @@ namespace TimeTracker.BE.DB.Models
 		[Required]
 		[Column("Name")]
 		[Comment("Název typu směny.")]
+		[StringLength(30)]
 		public string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Comment("Kolekce aktivit záznamů.")]

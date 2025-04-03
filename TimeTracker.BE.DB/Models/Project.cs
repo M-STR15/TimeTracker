@@ -25,6 +25,7 @@ namespace TimeTracker.BE.DB.Models
 		/// <inheritdoc />
 		[Required]
 		[Comment("Název projektu.")]
+		[StringLength(30)]
 		public virtual string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Comment("Podmoduly spojené s projektem.")]

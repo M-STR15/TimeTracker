@@ -17,6 +17,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 		public string? Description { get; set; }
 		/// <inheritdoc />
 		[Required(ErrorMessage = "Hodnota je vyžadována.")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public int? ProjectId { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)]
