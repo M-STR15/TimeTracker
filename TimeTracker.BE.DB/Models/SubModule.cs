@@ -33,6 +33,7 @@ namespace TimeTracker.BE.DB.Models
 		/// <inheritdoc />
 		[Column("Project_ID")]
 		[Comment("ID projektu, ke kterému podmodul patří.")]
+		[Required]
 		public virtual int ProjectId { get; set; }
 
 		public SubModule()

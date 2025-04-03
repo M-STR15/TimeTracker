@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TimerTracker.BE.Web.BusinessLogic.Helpers;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
+	[CopyAttributesFrom(typeof(TypeShift))]
 	public class TypeShiftBaseDto : ITypeShiftBase
 	{
 		/// <inheritdoc />
@@ -14,8 +17,6 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 		/// <inheritdoc />
 		public bool IsVisibleInMainWindow { get; set; }
 		/// <inheritdoc />
-		[Required]
-		[StringLength(30, ErrorMessage = "Byla překročena dovolená délka textu.")]
 		public string Name { get; set; } = string.Empty;
 	}
 }
