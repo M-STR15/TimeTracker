@@ -21,9 +21,10 @@
     <div id="project">
         <h4>Projects</h4>
         <div id="menuButtonsProject">
-            <button class="btn btn-primary" @onclick="() => ShowModalAddProject()">Add</button>
-            <button class="btn btn-primary" @onclick="() => ShowModalEditProject()">Edit</button>
-            <button class="btn btn-primary" @onclick="() => ShowModalDeleteProject()">Delete</button>
+            <MButton OnClick="ShowModalAddProject">Add</MButton>
+            <MButton OnClick="ShowModalEditProject">Edit</MButton>
+            <MButton OnClick="ShowModalDeleteProject">Delete</MButton>
+
         </div>
         <div>
             <MTable Rows="_projects" Columns="_projectColumns" />
@@ -32,9 +33,9 @@
     <div id="submodule">
         <h4>SubModules</h4>
         <div id="submoduleButtonsProject">
-            <button class="btn btn-primary" @onclick="() => ShowModalAddSubmodule()">Add</button>
-            <button class="btn btn-primary" @onclick="() => ShowModalEditSubmodule()">Edit</button>
-            <button class="btn btn-primary" @onclick="() => ShowModalDeleteSubmodule()">Delete</button>
+            <MButton OnClick="ShowModalAddSubmodule">Add</MButton>
+            <MButton OnClick="ShowModalEditSubmodule">Edit</MButton>
+            <MButton OnClick="ShowModalDeleteSubmodule">Delete</MButton>
         </div>
         <div>
             <MTable Rows="_subModules" Columns="_subModuleColumns" />
@@ -43,11 +44,11 @@
 </div>
 
 <AddOrEditProjectModal Title="Add project"
-                 @bind-Visible="IsOpenAddProjectModal">
+                       @bind-Visible="IsOpenAddProjectModal">
 </AddOrEditProjectModal>
 
-<AddOrEditSubModuletModal Title="Add submodule"   
-                    @bind-Visible="IsOpenAddSubModuleModal">
+<AddOrEditSubModuletModal Title="Add submodule"
+                          @bind-Visible="IsOpenAddSubModuleModal">
 </AddOrEditSubModuletModal>
 
 

@@ -1,30 +1,27 @@
-﻿img {
-	padding: 0px;
-}
-
-p {
-	padding: 0px;
-}
-
-label {
+﻿.btn {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	font-weight: bold;
 	text-align: center;
-	display: block;
-	float: left;
-	color: #ff8100;
-	padding: 0px;
+	color: white;
+	background-color: #6a0dad; /* Fialová */
+	border: 2px solid #6a0dad;
+	border-radius: 4px; /* Hranaté */
+	cursor: pointer;
+	user-select: none;
+	transition: background-color 0.2s, border-color 0.2s;
 }
 
-	label:hover {
-		cursor: pointer;
-		color: #ff8100;
+	.btn:hover {
+		background-color: #590b9b; /* Tmavší fialová při hover */
+		border-color: #590b9b;
 	}
 
-span {
-	display: block;
-	padding: 5px;
-	color: #ff8100;
-	padding: 0px;
-}
+	.btn:active {
+		background-color: #4d097e; /* Ještě tmavší při kliknutí */
+		border-color: #4d097e;
+	}
 
 .disabled {
 	pointer-events: none;
@@ -32,45 +29,6 @@ span {
 	cursor: not-allowed;
 }
 
-.btn-icon {
-	font-size: 20px;
-	border: solid 2px orange;
-	background-color: white;
-	text-align: center;
-	width: 50px;
-	height: 50px;
+.btn-text {
 	display: block;
-	color: #ff8100;
-	margin: 0 auto;
-	left: 50%;
-	top: 50%;
-	line-height: normal;
-	border-radius: 50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-	.btn-icon:hover {
-		background-color: gray;
-		opacity: 1;
-	}
-
-.btn-icon-min {
-	font-size: 15px;
-	background-color: orange;
-	text-align: center;
-	width: 25px;
-	height: 25px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: white;
-	margin: 0 auto;
-	padding: 2px;
-	line-height: normal;
-	border-radius: 50%;
-	position: relative;
-	top: -45px;
-	right: -20px;
 }
