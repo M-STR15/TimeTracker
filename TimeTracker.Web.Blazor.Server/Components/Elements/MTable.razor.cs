@@ -14,15 +14,15 @@ namespace TimeTracker.Web.Blazor.Server.Components.Elements
 		[Parameter]
 		public EventCallback<IList<TRow>> OnRowsUpdated { get; set; }
 
-		[Parameter]
-		public EventCallback<TRow> OnRowUpdated { get; set; }
-
 		[Parameter, EditorRequired]
 		public IList<TRow>? Rows { get; set; }
 		[Parameter]
-		public EventCallback<TRow> OnRowSelected { get; set; }
+		public TRow? Selected { get; set; }
+		[Parameter]
+		public EventCallback<TRow?> SelectedChanged { get; set; }
+		[Parameter]
+		public EventCallback<TRow?> OnRowSelected { get; set; }
 
-		private TRow _selected;
 		protected override Task OnInitializedAsync()
 		{
 			return base.OnInitializedAsync();
@@ -40,18 +40,14 @@ namespace TimeTracker.Web.Blazor.Server.Components.Elements
 
 		private void OnRowClicked(TRow row)
 		{
-			_selected = row;
+			Selected = row;
 			OnRowSelected.InvokeAsync(row);
+			SelectedChanged.InvokeAsync(row);
 		}
 
 		private string GetRowClass(TRow row)
 		{
-			// Ověří, zda je řádek vybraný, a přidá CSS třídu
-			if (row != null && row.Equals(_selected))
-			{
-				return "selected-row";  // Vybraný řádek
-			}
-			return string.Empty;  // Nevybraný řádek
+			return row.Equals(Selected) ? "selected-row" : string.Empty;
 		}
 		private void setIntValue(ref object value, ref string propertyName, ref int newValue, int rowIndex)
 		{
@@ -66,7 +62,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Elements
 				}
 
 				OnRowsUpdated.InvokeAsync(Rows);
-				OnRowUpdated.InvokeAsync(item);
 
 				StateHasChanged();
 			}

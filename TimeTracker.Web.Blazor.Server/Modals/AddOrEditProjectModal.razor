@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Components.Forms
+﻿@using AutoMapper
+@using Microsoft.AspNetCore.Components.Forms
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Modals.Models
 @using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
@@ -10,7 +11,7 @@
     <BodyContent>
         <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
             <DataAnnotationsValidator />
-      @*       <ValidationSummary />
+            @*       <ValidationSummary />
  *@
             <h6>Name</h6>
 
@@ -24,11 +25,14 @@
 
 @code {
 
-    [Parameter]
-    public ProjectInsertDto Project { get; set; } = new();
+    [Parameter, EditorRequired]
+    public ProjectBaseDto Project { get; set; }
 
     [Parameter]
     public EventCallback OnModalClosed { get; set; }  // Událost, kterou spustíme při zavření modálu
+    [Inject]
+    private IMapper _mapper { get; set; }
+
     private bool isFormValid = false;
     private EditContext editContext;
 
@@ -56,8 +60,6 @@
     private async Task PerformActionOnOpenAsync()
     {
         isFormValid = false;
-        Project = new();
-
         editContext = new EditContext(Project);
         editContext.OnFieldChanged += onFieldChanged;
 
@@ -81,7 +83,15 @@
         if (_httpClient != null)
         {
             var urlApi = "/api/v1/project";
-            var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, Project);
+            if (Project.Id != 0)
+            {
+                var result = await _httpClient.PutAsJsonAsync<ProjectBaseDto>(urlApi, Project);
+            }
+            else
+            {
+                var projectConvert = _mapper.Map<ProjectInsertDto>(Project);
+                var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, projectConvert);
+            }
             await CloseModalAsync();
             Visible = false;
         }

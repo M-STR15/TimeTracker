@@ -1,14 +1,4 @@
-﻿.shopping-cart {
-	margin: 20px auto;
-	max-width: 100%; /* Šířka rodiče */
-	padding: 0 20px; /* Malý odsazení od okrajů */
-	border: 1px solid #dee2e6;
-	border-radius: 5px;
-	background-color: #ffffff;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
-}
-
+﻿
 table {
 	width: 100%; /* Zajistí roztáhnutí tabulky přes celou šířku rodiče */
 	border-collapse: collapse;
