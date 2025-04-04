@@ -96,20 +96,6 @@
             Visible = false;
         }
     }
-    // private async void HandleValidSubmit()
-    // {
-    //     if (_httpClient != null)
-    //     {
-    //         var urlApi = "/api/v1/project";
-    //         var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, Project);
-    //         await CloseModalAsync();
-    //         Visible = false;
-    //     }
-    // }
 
-
-    public async Task CloseModalAsync()
-    {
-        await OnModalClosed.InvokeAsync(null);  // Spustíme událost
-    }
+    public async Task CloseModalAsync() => await OnModalClosed.InvokeAsync(null); 
 }
