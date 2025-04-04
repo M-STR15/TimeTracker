@@ -6,11 +6,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 	public partial class SettingPage
 	{
 		private List<TableColumnDefinition<ProjectBaseDto>>? _projectColumns;
-		private List<ProjectBaseDto> _projects;
-		private ProjectBaseDto _selectedProject;
-		private SubModuleBaseDto _selectedSubModule;
+		private List<ProjectBaseDto>? _projects;
+		private ProjectBaseDto? _selectedProject;
+		private SubModuleBaseDto? _selectedSubModule;
 		private List<TableColumnDefinition<SubModuleBaseDto>>? _subModuleColumns;
-		private List<SubModuleBaseDto> _subModules;
+		private List<SubModuleBaseDto>? _subModules;
 		public bool IsOpenAddOrEditSubModuleModal { get; set; } = false;
 		public bool IsOpenAddOrEdtiProjectModal { get; set; } = false;
 		public bool IsOpenProductDeleteQueryModal { get; set; } = false;

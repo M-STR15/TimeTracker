@@ -48,12 +48,15 @@
 <AddOrEditProjectModal Title="Add project"
                        @bind-Visible="IsOpenAddOrEdtiProjectModal"
                        Project="_selectedProject"
-                       OnModalClosed="onCloseModalAddPrjectChanged"/>
+                       OnModalClosed="onCloseModalAddPrjectChanged" />
 
 <AddOrEditSubModuletModal Title="Add submodule"
                           SubModule="_selectedSubModule"
-                          @bind-Visible="IsOpenAddOrEditSubModuleModal"/>
+                          @bind-Visible="IsOpenAddOrEditSubModuleModal" />
 
-<QueryYesNoModal Title="Query" QueryText="Chcete smazat projekt?" ResultQueryChanged="handleDeleteConfirmationResult" @bind-Visible="IsOpenProductDeleteQueryModal" />
+<QueryYesNoModal Title="Query"
+                 QueryText="Chcete smazat projekt?"
+                 ResultQueryChanged="handleDeleteConfirmationResult"
+                 @bind-Visible="IsOpenProductDeleteQueryModal" />
 
 
