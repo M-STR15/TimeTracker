@@ -2,6 +2,7 @@
 
 @typeparam TRow
 
+
 @if (Columns != null)
 {
     <table class="table">
@@ -17,14 +18,12 @@
             @{
                 if (Rows != null && Rows.Count > 0)
                 {
-                    for (int rorI = 0; rorI < Rows.Count; rorI++)
+                    @foreach (var row in Rows)
                     {
-                        int rowIndex = rorI;
-
-                        <tr>
-                            @if (Rows[rowIndex] != null)
+                        <tr @onclick="() => OnRowClicked(row)" class="@GetRowClass(row)">
+                            @if (row != null)
                             {
-                                @foreach (var property in Rows[rowIndex]
+                                @foreach (var property in row
                                    .GetType()
                                    .GetProperties()
                                    .Where(x => Columns.Any(y => y.Key == x.Name))
@@ -35,9 +34,9 @@
                                     var columnType = column?.eTypeColumn ?? eTypeColumn.Text;
 
                                     string name = property.Name;
-                                    object? value = property.GetValue(Rows[rowIndex]);
+                                    object? value = property.GetValue(row);
 
-                                    <td style="@column?.GetWidth()" class="@column?.ValueCss">
+                                    <td style="@column?.GetWidth()" class="@GetRowClass(row)">
 
                                         @switch (columnType)
                                         {

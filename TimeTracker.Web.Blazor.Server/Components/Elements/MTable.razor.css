@@ -30,8 +30,12 @@ tbody td {
 	text-align: left;
 }
 
-tbody tr:nth-child(even) {
+/*tbody tr:nth-child(even) {
 	background-color: #f1f1f1;
+}
+*/
+.selected-row {
+	background-color: mediumpurple; /* Světle modrá barva pro vybraný řádek */`
 }
 
 img {

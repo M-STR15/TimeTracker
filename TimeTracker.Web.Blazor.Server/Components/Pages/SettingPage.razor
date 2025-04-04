@@ -8,29 +8,31 @@
 @inherits BasePage
 
 <style>
-    container {
+    .container {
         display: flex;
-        flex-direction: column;
-        gap: 20px; /* Vzdálenost mezi sekcemi */
+        justify-content: space-between;
+    }
+
+    .column {
+        width: 48%; /* Nastaví šířku sloupců na 48%, aby zůstalo trochu místa mezi nimi */
     }
 </style>
 
 <h3>Settings</h3>
 
 <div class="container">
-    <div id="project">
+    <div id="project" class="column">
         <h4>Projects</h4>
         <div id="menuButtonsProject">
             <MButton OnClick="showModalAddProject">Add</MButton>
             <MButton OnClick="showModalEditProject">Edit</MButton>
             <MButton OnClick="showModalDeleteProject">Delete</MButton>
-
         </div>
         <div>
-            <MTable Rows="_projects" Columns="_projectColumns" />
+            <MTable TRow="ProjectBaseDto" Rows="_projects" Columns="_projectColumns" OnRowSelected="OnProjectRowSelected" />
         </div>
     </div>
-    <div id="submodule">
+    <div id="submodule" class="column">
         <h4>SubModules</h4>
         <div id="submoduleButtonsProject">
             <MButton OnClick="showModalAddSubmodule">Add</MButton>
@@ -38,7 +40,7 @@
             <MButton OnClick="showModalDeleteSubmodule">Delete</MButton>
         </div>
         <div>
-            <MTable Rows="_subModules" Columns="_subModuleColumns" />
+            <MTable TRow="SubModuleBaseDto" Rows="_subModules" Columns="_subModuleColumns" OnRowSelected="OnSubModuleRowSelected" />
         </div>
     </div>
 </div>
@@ -154,5 +156,20 @@
                         eTypeColumn=eTypeColumn.Text
                     },
                 };
+    }
+
+    private ProjectBaseDto? selectedProject = null;
+    private SubModuleBaseDto? selectedSubModule = null;
+        
+    // Handle row selection for projects
+    private void OnProjectRowSelected(ProjectBaseDto selectedRow)
+    {
+        selectedProject = selectedRow;
+    }
+
+    // Handle row selection for submodules
+    private void OnSubModuleRowSelected(SubModuleBaseDto selectedRow)
+    {
+        selectedSubModule = selectedRow;
     }
 }
