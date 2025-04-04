@@ -57,7 +57,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private async Task processingDeleteProjectResult(bool confirmed)
 		{
-			if (confirmed)
+			if (confirmed && _selectedProject != null)
 			{
 				var urlApi = $"/api/v1/project/{_selectedProject.Id}";
 				await _httpClient.DeleteAsync(urlApi);
@@ -68,7 +68,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private async Task processingDeleteSubModuleResult(bool confirmed)
 		{
-			if (confirmed)
+			if (confirmed && _selectedSubModule != null)
 			{
 				var urlApi = $"/api/v1/projects/submodule/{_selectedSubModule.Id}";
 				await _httpClient.DeleteAsync(urlApi);
