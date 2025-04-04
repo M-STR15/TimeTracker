@@ -61,6 +61,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			{
 				var urlApi = $"/api/v1/project/{_selectedProject.Id}";
 				await _httpClient.DeleteAsync(urlApi);
+				_selectedProject = null;
 				loadProjectList();
 			}
 		}
@@ -71,6 +72,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			{
 				var urlApi = $"/api/v1/projects/submodule/{_selectedSubModule.Id}";
 				await _httpClient.DeleteAsync(urlApi);
+				_selectedSubModule = null;
 				loadSubModuleList();
 			}
 		}
