@@ -152,15 +152,15 @@ public class ProjectRepository<T> where T : MainDatacontext
 	/// <summary>
 	/// Získá všechny podmoduly z databáze podle ID projektu, seřazené podle názvu.
 	/// </summary>
-	/// <param name="ptojectId">ID projektu</param>
+	/// <param name="projectId">ID projektu</param>
 	/// <returns>Kolekce podmodulů.</returns>
-	public async Task<ICollection<SubModule>?> GetSubModulesAsync(int ptojectId)
+	public async Task<ICollection<SubModule>?> GetSubModulesAsync(int projectId)
 	{
 		try
 		{
 			var context = _contextFactory();
-			if (context.SubModules.Any(x => x.ProjectId == ptojectId))
-				return await context.SubModules.Where(x => x.ProjectId == ptojectId).OrderBy(x => x.Name).ToListAsync();
+			if (context.SubModules.Any(x => x.ProjectId == projectId))
+				return await context.SubModules.Where(x => x.ProjectId == projectId).OrderBy(x => x.Name).ToListAsync();
 			else
 				return null;
 		}

@@ -29,10 +29,10 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 			if (Visible)
 			{
 				isFormValid = false;
-				await performActionOnOpenAsync();
+				performActionOnOpen();
 			}
 			else
-			{ 
+			{
 				performActionOnClose();
 			}
 		}
@@ -51,7 +51,7 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 
 			}
 		}
-		protected abstract Task performActionOnOpenAsync();
+		protected abstract void performActionOnOpen();
 		protected abstract void performActionOnClose();
 	}
 }

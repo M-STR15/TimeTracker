@@ -7,7 +7,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 	public class SubModuleBaseDto : SubModuleInsertDto, ISubModuleBase
 	{
 		/// <inheritdoc />
-		[Required(ErrorMessage = "Hodnota je vyžadována")]
+		[Required(ErrorMessage = "Hodnota 'ID' je vyžadována")]
 		public int Id { get; set; }
 	}
 }

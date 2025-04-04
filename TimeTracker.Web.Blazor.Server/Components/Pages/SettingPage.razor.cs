@@ -11,9 +11,10 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 		private SubModuleBaseDto? _selectedSubModule;
 		private List<TableColumnDefinition<SubModuleBaseDto>>? _subModuleColumns;
 		private List<SubModuleBaseDto>? _subModules;
-		public bool IsOpenAddOrEditSubModuleModal { get; set; } = false;
-		public bool IsOpenAddOrEdtiProjectModal { get; set; } = false;
-		public bool IsOpenProductDeleteQueryModal { get; set; } = false;
+		private bool IsOpenAddOrEditSubModuleModal { get; set; } = false;
+		private bool IsOpenAddOrEdtiProjectModal { get; set; } = false;
+		private bool IsOpenProductDeleteQueryModal { get; set; } = false;
+		private bool IsOpenSubModuleDeleteQueryModal { get; set; } = false;
 
 		public static List<TableColumnDefinition<ProjectBaseDto>> CreateTableColumnDefinition_Project()
 		{
@@ -50,12 +51,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			_subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
 
 			loadProjectList();
-			loadSubModuleList();
 
 			await base.OnInitializedAsync();
 		}
 
-		private async Task handleDeleteConfirmationResult(bool confirmed)
+		private async Task processingDeleteProjectResult(bool confirmed)
 		{
 			if (confirmed)
 			{
@@ -65,38 +65,88 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			}
 		}
 
+		private async Task processingDeleteSubModuleResult(bool confirmed)
+		{
+			if (confirmed)
+			{
+				var urlApi = $"/api/v1/projects/submodule/{_selectedSubModule.Id}";
+				await _httpClient.DeleteAsync(urlApi);
+				loadSubModuleList();
+			}
+		}
+
 		private async void loadProjectList()
 		{
-			var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
+			var urlApi = $"/api/v1/projects";
+			var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>(urlApi);
 			if (projects != null)
 				_projects = projects;
 
 			base.StateHasChanged();
 		}
 
-		private async void loadSubModuleList()
+		private async Task loadSubModuleList()
 		{
-			var subModules = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
-			if (subModules != null)
-				_subModules = subModules;
+			if (_selectedProject != null)
+			{
+				var urlApi = $"/api/v1/projects/submodules/{_selectedProject.Id}";
+				Console.WriteLine($"Načítám z URL: {urlApi}");
 
-			base.StateHasChanged();
+				try
+				{
+					var response = await _httpClient.GetAsync(urlApi);
+
+					if (response.IsSuccessStatusCode)
+					{
+						var subModules = await response.Content.ReadFromJsonAsync<List<SubModuleBaseDto>>();
+						if (subModules != null)
+							_subModules = subModules;
+					}
+					else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+					{
+						Console.WriteLine("Submoduly nenalezeny (404).");
+						_subModules = new(); // nebo ponechat null
+					}
+					else
+					{
+						Console.WriteLine($"Chyba při načítání: {response.StatusCode}");
+					}
+				}
+				catch (HttpRequestException ex)
+				{
+					Console.WriteLine($"Chyba HTTP: {ex.Message}");
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Obecná chyba: {ex.Message}");
+				}
+
+				base.StateHasChanged();
+			}
 		}
 
-		private void onCloseModalAddPrjectChanged() => loadProjectList();
+		private void onCloseModalAddOrEditProjectChanged() => loadProjectList();
+		private void onCloseModalAddOrEditSubModuleChanged() => loadSubModuleList();
 
 		// Handle row selection for projects
 		private void onProjectRowSelected(ProjectBaseDto selectedRow)
 		{
-			if (selectedRow.Equals(_selectedProject))
+			if (!selectedRow.Equals(_selectedProject))
+			{
 				_selectedProject = selectedRow;
+				loadSubModuleList();
+				base.StateHasChanged();
+			}
 		}
 
 		// Handle row selection for submodules
 		private void onSubModuleRowSelected(SubModuleBaseDto selectedRow)
 		{
-			if (selectedRow.Equals(_selectedSubModule))
+			if (!selectedRow.Equals(_selectedSubModule))
+			{
 				_selectedSubModule = selectedRow;
+				base.StateHasChanged();
+			}
 		}
 
 		private void showModalAddProject()
@@ -106,20 +156,24 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 		}
 		private void showModalAddSubmodule()
 		{
-			_selectedSubModule = new();
-			IsOpenAddOrEditSubModuleModal = true;
-
+			if (_selectedProject != null)
+			{
+				_selectedSubModule = new();
+				_selectedSubModule.ProjectId = _selectedProject.Id;
+				IsOpenAddOrEditSubModuleModal = true;
+			}
 		}
 
 		private void showModalDeleteProject() => IsOpenProductDeleteQueryModal = true;
 
-		private void showModalDeleteSubmodule()
-		{
-
-		}
+		private void showModalDeleteSubmodule() => IsOpenSubModuleDeleteQueryModal = true;
 
 		private void showModalEditProject() => IsOpenAddOrEdtiProjectModal = true;
 
-		private void showModalEditSubmodule() => IsOpenAddOrEditSubModuleModal = true;
+		private void showModalEditSubmodule()
+		{
+
+			IsOpenAddOrEditSubModuleModal = true;
+		}
 	}
 }

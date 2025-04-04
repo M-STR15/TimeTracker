@@ -72,6 +72,28 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		[HttpGet("api/v1/projects/submodules/{projectId}")]
+		public async Task<ActionResult<List<SubModuleBaseDto>>> GetSubModulesAsync(int projectId)
+		{
+			try
+			{
+				var subModules = await _projectRepository.GetSubModulesAsync(projectId);
+				if (subModules != null)
+				{
+					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
+					return subModulesDto != null ? Ok(subModulesDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
 		#endregion GET
 		#region POST
 		[HttpPost("api/v1/project")]

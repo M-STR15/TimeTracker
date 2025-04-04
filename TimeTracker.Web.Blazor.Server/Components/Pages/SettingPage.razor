@@ -25,8 +25,8 @@
         <h4>Projects</h4>
         <div id="menuButtonsProject">
             <MButton OnClick="showModalAddProject">Add</MButton>
-            <MButton OnClick="showModalEditProject">Edit</MButton>
-            <MButton OnClick="showModalDeleteProject">Delete</MButton>
+            <MButton OnClick="showModalEditProject" IsDisabled="@(_selectedProject==null)">Edit</MButton>
+            <MButton OnClick="showModalDeleteProject" IsDisabled="@(_selectedProject==null)">Delete</MButton>
         </div>
         <div>
             <MTable TRow="ProjectBaseDto" Rows="_projects" Columns="_projectColumns" OnRowSelected="onProjectRowSelected" @bind-Selected="_selectedProject" />
@@ -35,9 +35,9 @@
     <div id="submodule" class="column">
         <h4>SubModules</h4>
         <div id="submoduleButtonsProject">
-            <MButton OnClick="showModalAddSubmodule">Add</MButton>
-            <MButton OnClick="showModalEditSubmodule">Edit</MButton>
-            <MButton OnClick="showModalDeleteSubmodule">Delete</MButton>
+            <MButton OnClick="showModalAddSubmodule" IsDisabled="@(_selectedProject==null)">Add</MButton>
+            <MButton OnClick="showModalEditSubmodule" IsDisabled="@(_selectedSubModule==null)">Edit</MButton>
+            <MButton OnClick="showModalDeleteSubmodule" IsDisabled="@(_selectedSubModule==null)">Delete</MButton>
         </div>
         <div>
             <MTable TRow="SubModuleBaseDto" Rows="_subModules" Columns="_subModuleColumns" OnRowSelected="onSubModuleRowSelected" />
@@ -46,17 +46,23 @@
 </div>
 
 <AddOrEditProjectModal Title="Add project"
-                       @bind-Visible="IsOpenAddOrEdtiProjectModal"
                        Project="_selectedProject"
-                       OnModalClosed="onCloseModalAddPrjectChanged" />
+                       @bind-Visible="IsOpenAddOrEdtiProjectModal"
+                       OnModalClosed="onCloseModalAddOrEditProjectChanged" />
 
 <AddOrEditSubModuletModal Title="Add submodule"
                           SubModule="_selectedSubModule"
-                          @bind-Visible="IsOpenAddOrEditSubModuleModal" />
+                          @bind-Visible="IsOpenAddOrEditSubModuleModal"
+                          OnModalClosed="onCloseModalAddOrEditSubModuleChanged" />
 
 <QueryYesNoModal Title="Query"
                  QueryText="Chcete smazat projekt?"
-                 ResultQueryChanged="handleDeleteConfirmationResult"
+                 ResultQueryChanged="processingDeleteProjectResult"
                  @bind-Visible="IsOpenProductDeleteQueryModal" />
+
+<QueryYesNoModal Title="Query"
+                 QueryText="Chcete smazat subModule?"
+                 ResultQueryChanged="processingDeleteSubModuleResult"
+                 @bind-Visible="IsOpenSubModuleDeleteQueryModal" />
 
 

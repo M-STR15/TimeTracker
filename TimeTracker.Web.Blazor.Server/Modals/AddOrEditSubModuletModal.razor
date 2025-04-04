@@ -8,21 +8,25 @@
 
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
-        <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
+        <EditForm EditContext="@editContext">
             <DataAnnotationsValidator />
 
             <h6>Name</h6>
-            <MTextBox Value="@SubModule.Name"></MTextBox>
+            <MTextBox @bind-Value="@SubModule.Name"></MTextBox>
+            <ValidationMessage For="@(() => SubModule.Name)" />
+
             <h6>Description</h6>
             <MTextArea @bind-Value="@SubModule.Description" />
-            <MButton Text="Save" OnClick="save_Click" />
+            <ValidationMessage For="@(() => SubModule.Description)" />
+
+            <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
         </EditForm>
     </BodyContent>
 </BaseModal>
 
 @code {
     [Parameter, EditorRequired]
-    public SubModuleInsertDto SubModule { get; set; } = new();
+    public SubModuleBaseDto SubModule { get; set; } = new();
 
     protected override void OnInitialized()
     {
@@ -42,13 +46,22 @@
     {
         if (_httpClient != null)
         {
-            var urlApi = "api/v1/projects/submodule";
-            var result = await _httpClient.PostAsJsonAsync<SubModuleInsertDto>(urlApi, SubModule);
-            Visible = false;
+            var urlApi = "/api/v1/projects/submodule";
+            if (SubModule.Id == 0)
+            {
+                var subModuleMod = _mapper.Map<SubModuleInsertDto>(SubModule);
+                await _httpClient.PostAsJsonAsync<SubModuleInsertDto>(urlApi, subModuleMod);
+            }
+            else
+            {
+                await _httpClient.PutAsJsonAsync<SubModuleBaseDto>(urlApi, SubModule);
+            }
+
+            await closeModalAsync();
         }
     }
 
-    protected override async Task performActionOnOpenAsync()
+    protected override void performActionOnOpen()
     {
         editContext = new EditContext(SubModule);
         editContext.OnFieldChanged += onFieldChanged;

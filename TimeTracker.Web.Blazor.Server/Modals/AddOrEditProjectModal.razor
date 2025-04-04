@@ -9,14 +9,14 @@
 
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
-        <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
+        <EditForm EditContext="@editContext">
             <DataAnnotationsValidator />
 
             <h6>Name</h6>
             <MTextBox @bind-Value="@Project.Name"></MTextBox>
             <ValidationMessage For="@(() => Project.Name)" />
 
-            <MButton Text="Save" OnClick="save_Click" IsDisabled="@(!isFormValid)" />
+            <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
         </EditForm>
     </BodyContent>
 </BaseModal>
@@ -27,7 +27,7 @@
     public ProjectBaseDto Project { get; set; }
 
 
-    protected override async Task performActionOnOpenAsync()
+    protected override void performActionOnOpen()
     {
         editContext = new EditContext(Project);
         editContext.OnFieldChanged += onFieldChanged;
