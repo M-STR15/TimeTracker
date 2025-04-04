@@ -50,7 +50,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			_projectColumns = CreateTableColumnDefinition_Project();
 			_subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
 
-			loadProjectList();
+			await loadProjectListAsync();
 
 			await base.OnInitializedAsync();
 		}
@@ -62,7 +62,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				var urlApi = $"/api/v1/project/{_selectedProject.Id}";
 				await _httpClient.DeleteAsync(urlApi);
 				_selectedProject = null;
-				loadProjectList();
+				await loadProjectListAsync();
 			}
 		}
 
@@ -73,11 +73,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				var urlApi = $"/api/v1/projects/submodule/{_selectedSubModule.Id}";
 				await _httpClient.DeleteAsync(urlApi);
 				_selectedSubModule = null;
-				loadSubModuleList();
+				await loadSubModuleListAsync();
 			}
 		}
 
-		private async void loadProjectList()
+		private async Task loadProjectListAsync()
 		{
 			var urlApi = $"/api/v1/projects";
 			var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>(urlApi);
@@ -87,7 +87,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			base.StateHasChanged();
 		}
 
-		private async Task loadSubModuleList()
+		private async Task loadSubModuleListAsync()
 		{
 			if (_selectedProject != null)
 			{
@@ -127,16 +127,16 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			}
 		}
 
-		private void onCloseModalAddOrEditProjectChanged() => loadProjectList();
-		private void onCloseModalAddOrEditSubModuleChanged() => loadSubModuleList();
+		private async void onCloseModalAddOrEditProjectChanged() => await loadProjectListAsync();
+		private async void onCloseModalAddOrEditSubModuleChanged() => await loadSubModuleListAsync();
 
 		// Handle row selection for projects
-		private void onProjectRowSelected(ProjectBaseDto selectedRow)
+		private async void onProjectRowSelected(ProjectBaseDto selectedRow)
 		{
 			if (!selectedRow.Equals(_selectedProject))
 			{
 				_selectedProject = selectedRow;
-				loadSubModuleList();
+				await loadSubModuleListAsync();
 				base.StateHasChanged();
 			}
 		}
