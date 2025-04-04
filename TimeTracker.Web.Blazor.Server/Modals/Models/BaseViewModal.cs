@@ -26,9 +26,6 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 		[Parameter, EditorRequired]
 		public virtual string Title { get; set; } = string.Empty;
 
-		public BaseViewModal()
-		{ }
-
 		protected abstract void save_Click();
 	}
 }

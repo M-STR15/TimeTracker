@@ -23,9 +23,10 @@ namespace TimeTracker.BE.DB.Models
 		[Comment("Primární klíč projektu.")]
 		public virtual int Id { get; set; }
 		/// <inheritdoc />
-		[Required]
 		[Comment("Název projektu.")]
-		[StringLength(30)]
+		[Required(ErrorMessage = "Hodnota je vyžadována")]
+		[MaxLength(30, ErrorMessage = "Překročená maximální délka textu.")]
+		[MinLength(5, ErrorMessage = "Nebylo dosaženo minimální déky textu.")]
 		public virtual string Name { get; set; } = string.Empty;
 		/// <inheritdoc />
 		[Comment("Podmoduly spojené s projektem.")]

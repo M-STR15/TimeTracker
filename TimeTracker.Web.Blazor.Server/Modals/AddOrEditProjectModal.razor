@@ -1,14 +1,24 @@
-﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Modals.Models
 @using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 
 @inherits BaseViewModal
+@inject IHttpClientFactory HttpClientFactory
 
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
-        <h6>Name</h6>
-        <MTextBox Value="@Project.Name"></MTextBox>
-        <MButton Text="Save" OnClick="save_Click" />
+        <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
+            <DataAnnotationsValidator />
+      @*       <ValidationSummary />
+ *@
+            <h6>Name</h6>
+
+            <MTextBox @bind-Value="@Project.Name"></MTextBox>
+            <ValidationMessage For="@(() => Project.Name)" />
+
+            <MButton Text="Save" OnClick="save_Click" IsDisabled="@(!isFormValid)" />
+        </EditForm>
     </BodyContent>
 </BaseModal>
 
@@ -17,13 +27,79 @@
     [Parameter]
     public ProjectInsertDto Project { get; set; } = new();
 
+    [Parameter]
+    public EventCallback OnModalClosed { get; set; }  // Událost, kterou spustíme při zavření modálu
+    private bool isFormValid = false;
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        try
+        {
+            _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Visible)
+            await PerformActionOnOpenAsync();
+        else
+            await PerformActionOnCloseAsync();
+    }
+
+    private async Task PerformActionOnOpenAsync()
+    {
+        isFormValid = false;
+        Project = new();
+
+        editContext = new EditContext(Project);
+        editContext.OnFieldChanged += onFieldChanged;
+
+    }
+
+    private async Task PerformActionOnCloseAsync()
+    {
+        if (editContext != null)
+            editContext.OnFieldChanged -= onFieldChanged;
+    }
+
+    private void onFieldChanged(object? sender, FieldChangedEventArgs e)
+    {
+        isFormValid = editContext.Validate();
+        StateHasChanged(); // přepočítá stav komponenty
+    }
+
+
     protected async override void save_Click()
     {
         if (_httpClient != null)
         {
-            var urlApi = "api/v1/project";
+            var urlApi = "/api/v1/project";
             var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, Project);
+            await CloseModalAsync();
             Visible = false;
         }
+    }
+    // private async void HandleValidSubmit()
+    // {
+    //     if (_httpClient != null)
+    //     {
+    //         var urlApi = "/api/v1/project";
+    //         var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, Project);
+    //         await CloseModalAsync();
+    //         Visible = false;
+    //     }
+    // }
+
+
+    public async Task CloseModalAsync()
+    {
+        await OnModalClosed.InvokeAsync(null);  // Spustíme událost
     }
 }

@@ -1,13 +1,11 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using TimerTracker.BE.Web.BusinessLogic.Helpers;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
-	[CopyAttributesFrom(typeof(Project))]
 	public class ProjectInsertDto : IProjectInsert
 	{
 		/// <inheritdoc />
@@ -16,6 +14,9 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 		public virtual string? Description { get; set; }
 		/// <inheritdoc />
 		[SwaggerSchema(Description = "Název projektu.")]
+		[Required(ErrorMessage = "Hodnota je vyžadována")]
+		[MaxLength(30, ErrorMessage = "Překročená maximální délka textu.")]
+		[MinLength(5, ErrorMessage = "Nebylo dosaženo minimální déky textu.")]
 		public virtual string Name { get; set; } = string.Empty;
 	}
 }

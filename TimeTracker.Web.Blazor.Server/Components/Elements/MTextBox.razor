@@ -1,4 +1,5 @@
-﻿
+﻿@using System.Linq.Expressions
+@typeparam T
 <style>
     .custom-textarea {
         width: 100%;
@@ -8,15 +9,33 @@
     }
 </style>
 
-<InputText @bind-Value="Value" @oninput="HandleInput" class="form-control"/>
+<input @bind="@Value" @oninput="HandleInput" class="form-control"></input>
 
 @code {
-    [Parameter] public string Value { get; set; }
-    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [CascadingParameter] private EditContext? EditContext { get; set; }
+
+    [Parameter] public T Value { get; set; } = default!;
+    [Parameter] public EventCallback<T> ValueChanged { get; set; }
+
+    [Parameter] public Expression<Func<T>>? ValueExpression { get; set; }
 
     private async Task HandleInput(ChangeEventArgs e)
     {
-        Value = (string)e.Value;
+        if (e.Value is not null && typeof(T) == typeof(string))
+        {
+            Value = (T)(object)e.Value.ToString()!;
+        }
+        else
+        {
+            Value = (T)e.Value!;
+        }
+
         await ValueChanged.InvokeAsync(Value);
+
+        if (EditContext != null && ValueExpression != null)
+        {
+            var fieldIdentifier = FieldIdentifier.Create(ValueExpression);
+            EditContext.NotifyFieldChanged(fieldIdentifier);
+        }
     }
 }

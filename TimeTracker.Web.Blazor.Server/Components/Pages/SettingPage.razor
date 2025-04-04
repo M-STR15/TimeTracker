@@ -21,9 +21,9 @@
     <div id="project">
         <h4>Projects</h4>
         <div id="menuButtonsProject">
-            <MButton OnClick="ShowModalAddProject">Add</MButton>
-            <MButton OnClick="ShowModalEditProject">Edit</MButton>
-            <MButton OnClick="ShowModalDeleteProject">Delete</MButton>
+            <MButton OnClick="showModalAddProject">Add</MButton>
+            <MButton OnClick="showModalEditProject">Edit</MButton>
+            <MButton OnClick="showModalDeleteProject">Delete</MButton>
 
         </div>
         <div>
@@ -33,9 +33,9 @@
     <div id="submodule">
         <h4>SubModules</h4>
         <div id="submoduleButtonsProject">
-            <MButton OnClick="ShowModalAddSubmodule">Add</MButton>
-            <MButton OnClick="ShowModalEditSubmodule">Edit</MButton>
-            <MButton OnClick="ShowModalDeleteSubmodule">Delete</MButton>
+            <MButton OnClick="showModalAddSubmodule">Add</MButton>
+            <MButton OnClick="showModalEditSubmodule">Edit</MButton>
+            <MButton OnClick="showModalDeleteSubmodule">Delete</MButton>
         </div>
         <div>
             <MTable Rows="_subModules" Columns="_subModuleColumns" />
@@ -44,7 +44,8 @@
 </div>
 
 <AddOrEditProjectModal Title="Add project"
-                       @bind-Visible="IsOpenAddProjectModal">
+                       @bind-Visible="IsOpenAddProjectModal"
+                       OnModalClosed="onCloseModalAddPrjectChanged">
 </AddOrEditProjectModal>
 
 <AddOrEditSubModuletModal Title="Add submodule"
@@ -68,42 +69,61 @@
         _projectColumns = CreateTableColumnDefinition_Project();
         _subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
 
+        loadProjectList();
+        loadSubModuleList();
+
+        await base.OnInitializedAsync();
+    }
+
+    private async void loadProjectList()
+    {
         var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
         if (projects != null)
             _projects = projects;
 
+        base.StateHasChanged();
+    }
+
+    private async void loadSubModuleList()
+    {
         var subModules = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
         if (subModules != null)
             _subModules = subModules;
-        await base.OnInitializedAsync();
+
+        base.StateHasChanged();
     }
 
-    private void ShowModalAddProject()
+    private void showModalAddProject()
     {
         IsOpenAddProjectModal = true;
     }
 
-    private void ShowModalEditProject()
+    private void onCloseModalAddPrjectChanged()
+    {
+        loadProjectList();
+    }
+
+    private void showModalEditProject()
     {
         // _modalService.ShowModal<EditProjectModal>("Edit Project", 400, 200);
     }
 
-    private void ShowModalDeleteProject()
+    private void showModalDeleteProject()
     {
         // _modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
     }
 
-    private void ShowModalAddSubmodule()
+    private void showModalAddSubmodule()
     {
         IsOpenAddSubModuleModal = true;
     }
 
-    private void ShowModalEditSubmodule()
+    private void showModalEditSubmodule()
     {
         // _modalService.ShowModal<EditProjectModal>("Edit Project", 400, 200);
     }
 
-    private void ShowModalDeleteSubmodule()
+    private void showModalDeleteSubmodule()
     {
         // _modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
     }
