@@ -52,12 +52,12 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Visible)
-            await PerformActionOnOpenAsync();
+            await performActionOnOpenAsync();
         else
-            await PerformActionOnCloseAsync();
+            await performActionOnCloseAsync();
     }
 
-    private async Task PerformActionOnOpenAsync()
+    private async Task performActionOnOpenAsync()
     {
         isFormValid = false;
         editContext = new EditContext(Project);
@@ -65,7 +65,7 @@
 
     }
 
-    private async Task PerformActionOnCloseAsync()
+    private async Task performActionOnCloseAsync()
     {
         if (editContext != null)
             editContext.OnFieldChanged -= onFieldChanged;
