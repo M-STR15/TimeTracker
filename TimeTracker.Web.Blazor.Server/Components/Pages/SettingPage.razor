@@ -29,7 +29,7 @@
             <MButton OnClick="showModalDeleteProject">Delete</MButton>
         </div>
         <div>
-            <MTable TRow="ProjectBaseDto" Rows="_projects" Columns="_projectColumns" OnRowSelected="OnProjectRowSelected" @bind-Selected="selectedProject" />
+            <MTable TRow="ProjectBaseDto" Rows="_projects" Columns="_projectColumns" OnRowSelected="onProjectRowSelected" @bind-Selected="_selectedProject" />
         </div>
     </div>
     <div id="submodule" class="column">
@@ -40,19 +40,20 @@
             <MButton OnClick="showModalDeleteSubmodule">Delete</MButton>
         </div>
         <div>
-            <MTable TRow="SubModuleBaseDto" Rows="_subModules" Columns="_subModuleColumns" OnRowSelected="OnSubModuleRowSelected" />
+            <MTable TRow="SubModuleBaseDto" Rows="_subModules" Columns="_subModuleColumns" OnRowSelected="onSubModuleRowSelected" />
         </div>
     </div>
 </div>
 
 <AddOrEditProjectModal Title="Add project"
                        @bind-Visible="IsOpenAddOrEdtiProjectModal"
-                       Project="selectedProject"
-                       OnModalClosed="onCloseModalAddPrjectChanged">
-</AddOrEditProjectModal>
+                       Project="_selectedProject"
+                       OnModalClosed="onCloseModalAddPrjectChanged"/>
 
 <AddOrEditSubModuletModal Title="Add submodule"
-                          SubModule="selectedSubModule"
-                          @bind-Visible="IsOpenAddSubModuleModal">
-</AddOrEditSubModuletModal>
+                          SubModule="_selectedSubModule"
+                          @bind-Visible="IsOpenAddSubModuleModal"/>
+
+<QueryYesNoModal Title="Query" QueryText="Chcete smazat projekt?" ResultQueryChanged="handleDeleteConfirmationResult" @bind-Visible="IsOpenProductDeleteQueryModal" />
+
 

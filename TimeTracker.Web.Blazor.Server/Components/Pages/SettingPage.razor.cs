@@ -12,6 +12,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 		private List<TableColumnDefinition<SubModuleBaseDto>>? _subModuleColumns;
 		public bool IsOpenAddOrEdtiProjectModal { get; set; } = false;
 		public bool IsOpenAddSubModuleModal { get; set; } = false;
+		public bool IsOpenProductDeleteQueryModal { get; set; } = false;
 
 		protected async override Task OnInitializedAsync()
 		{
@@ -45,7 +46,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private void showModalAddProject()
 		{
-			selectedProject = new();
+			_selectedProject = new();
 			IsOpenAddOrEdtiProjectModal = true;
 		}
 
@@ -56,13 +57,13 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private void showModalEditProject()
 		{
-			selectedProject = selectedProject;
+			;
 			IsOpenAddOrEdtiProjectModal = true;
 		}
 
 		private void showModalDeleteProject()
 		{
-			//_modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
+			IsOpenProductDeleteQueryModal = true;
 		}
 
 		private void showModalAddSubmodule()
@@ -73,12 +74,12 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private void showModalEditSubmodule()
 		{
-			// _modalService.ShowModal<EditProjectModal>("Edit Project", 400, 200);
+
 		}
 
 		private void showModalDeleteSubmodule()
 		{
-			// _modalService.ShowModal<DeleteProjectModal>("Delete Project", 400, 200);
+
 		}
 
 		public static List<TableColumnDefinition<ProjectBaseDto>> CreateTableColumnDefinition_Project()
@@ -109,21 +110,31 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				};
 		}
 
-		private ProjectBaseDto selectedProject;
-		private SubModuleBaseDto selectedSubModule;
+		private ProjectBaseDto _selectedProject;
+		private SubModuleBaseDto _selectedSubModule;
 
 		// Handle row selection for projects
-		private void OnProjectRowSelected(ProjectBaseDto selectedRow)
+		private void onProjectRowSelected(ProjectBaseDto selectedRow)
 		{
-			if (selectedRow.Equals(selectedProject))
-				selectedProject = selectedRow;
+			if (selectedRow.Equals(_selectedProject))
+				_selectedProject = selectedRow;
 		}
 
 		// Handle row selection for submodules
-		private void OnSubModuleRowSelected(SubModuleBaseDto selectedRow)
+		private void onSubModuleRowSelected(SubModuleBaseDto selectedRow)
 		{
-			if (selectedRow.Equals(selectedSubModule))
-				selectedSubModule = selectedRow;
+			if (selectedRow.Equals(_selectedSubModule))
+				_selectedSubModule = selectedRow;
+		}
+
+		private async Task handleDeleteConfirmationResult(bool confirmed)
+		{
+			if (confirmed)
+			{
+				var urlApi = $"/api/v1/project/{_selectedProject.Id}";
+				await _httpClient.DeleteAsync(urlApi);
+				loadProjectList();
+			}
 		}
 	}
 }

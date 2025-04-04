@@ -1,0 +1,50 @@
+﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals.Models
+
+@inherits BaseViewModal
+
+<style>
+    .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    }
+</style>
+
+<BaseModal @bind-Visible=Visible Title=@Title>
+    <BodyContent>
+        <div>
+            <h7>@QueryText</h7>
+        </div>
+        <div class="button-container">
+            <MButton Text="Ano" OnClick="onResponseYesClick" />
+            <MButton Text="Ne" OnClick="onResponseNoClick" />
+        </div>
+    </BodyContent>
+</BaseModal>
+@code {
+    [Parameter, EditorRequired]
+    public string QueryText { get; set; }
+
+    [Parameter]
+    public bool ResultQuery { get; set; }
+    [Parameter]
+    public EventCallback<bool> ResultQueryChanged { get; set; }
+
+    public void onResponseYesClick()
+    {
+        ResultQuery = true;
+        Visible = false;
+
+        ResultQueryChanged.InvokeAsync(ResultQuery);
+    }
+
+    public void onResponseNoClick()
+    {
+        ResultQuery = false;
+        Visible = false;
+
+        ResultQueryChanged.InvokeAsync(ResultQuery);
+    }
+}

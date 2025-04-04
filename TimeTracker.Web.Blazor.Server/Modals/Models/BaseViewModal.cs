@@ -25,7 +25,5 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 		public virtual EventCallback<bool> VisibleChanged { get; set; }
 		[Parameter, EditorRequired]
 		public virtual string Title { get; set; } = string.Empty;
-
-		protected abstract void save_Click();
 	}
 }
