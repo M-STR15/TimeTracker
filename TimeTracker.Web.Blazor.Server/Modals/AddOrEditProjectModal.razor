@@ -11,10 +11,8 @@
     <BodyContent>
         <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
             <DataAnnotationsValidator />
-            @*       <ValidationSummary />
- *@
-            <h6>Name</h6>
 
+            <h6>Name</h6>
             <MTextBox @bind-Value="@Project.Name"></MTextBox>
             <ValidationMessage For="@(() => Project.Name)" />
 
@@ -28,55 +26,18 @@
     [Parameter, EditorRequired]
     public ProjectBaseDto Project { get; set; }
 
-    [Parameter]
-    public EventCallback OnModalClosed { get; set; }  // Událost, kterou spustíme při zavření modálu
-    [Inject]
-    private IMapper _mapper { get; set; }
 
-    private bool isFormValid = false;
-    private EditContext editContext;
-
-    protected override void OnInitialized()
+    protected override async Task performActionOnOpenAsync()
     {
-        base.OnInitialized();
-
-        try
-        {
-            _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
-        }
-        catch (Exception ex)
-        {
-
-        }
-    }
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Visible)
-            await performActionOnOpenAsync();
-        else
-            await performActionOnCloseAsync();
-    }
-
-    private async Task performActionOnOpenAsync()
-    {
-        isFormValid = false;
         editContext = new EditContext(Project);
         editContext.OnFieldChanged += onFieldChanged;
-
     }
 
-    private async Task performActionOnCloseAsync()
+    protected override void performActionOnClose()
     {
         if (editContext != null)
             editContext.OnFieldChanged -= onFieldChanged;
     }
-
-    private void onFieldChanged(object? sender, FieldChangedEventArgs e)
-    {
-        isFormValid = editContext.Validate();
-        StateHasChanged(); // přepočítá stav komponenty
-    }
-
 
     protected async override void save_Click()
     {
@@ -92,10 +53,7 @@
                 var projectConvert = _mapper.Map<ProjectInsertDto>(Project);
                 var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, projectConvert);
             }
-            await CloseModalAsync();
-            Visible = false;
+            await closeModalAsync();
         }
     }
-
-    public async Task CloseModalAsync() => await OnModalClosed.InvokeAsync(null); 
 }

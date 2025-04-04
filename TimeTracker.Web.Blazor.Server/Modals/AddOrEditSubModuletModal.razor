@@ -1,22 +1,42 @@
-﻿@using TimeTracker.Web.Blazor.Server.Components.Elements
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Modals.Models
 @using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 
 @inherits BaseSaveViewModal
+@inject IHttpClientFactory HttpClientFactory
 
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
-        <h6>Name</h6>
-        <MTextBox Value="@SubModule.Name"></MTextBox>
-        <h6>Description</h6>
-        <MTextArea @bind-Value="@SubModule.Description" />
-        <MButton Text="Save" OnClick="save_Click" />
+        <EditForm EditContext="@editContext" OnValidSubmit="@save_Click">
+            <DataAnnotationsValidator />
+
+            <h6>Name</h6>
+            <MTextBox Value="@SubModule.Name"></MTextBox>
+            <h6>Description</h6>
+            <MTextArea @bind-Value="@SubModule.Description" />
+            <MButton Text="Save" OnClick="save_Click" />
+        </EditForm>
     </BodyContent>
 </BaseModal>
 
 @code {
-    [Parameter]
+    [Parameter, EditorRequired]
     public SubModuleInsertDto SubModule { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        try
+        {
+            _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
 
     protected async override void save_Click()
     {
@@ -27,4 +47,18 @@
             Visible = false;
         }
     }
+
+    protected override async Task performActionOnOpenAsync()
+    {
+        editContext = new EditContext(SubModule);
+        editContext.OnFieldChanged += onFieldChanged;
+
+    }
+
+    protected override void performActionOnClose()
+    {
+        if (editContext != null)
+            editContext.OnFieldChanged -= onFieldChanged;
+    }
+
 }
