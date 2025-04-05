@@ -71,9 +71,9 @@
 </div>
 <MButton Text="Save" OnClick="onSave_Click" Style="width: 100%;"></MButton>
 @code {
-    private List<MonthAndYearItem> _monthAndYears = new();
-    private MonthAndYearItem _selectMonthAndYear;
-    public MonthAndYearItem SelectMonthAndYear
+    private List<MonthAndYearItemViewModel> _monthAndYears = new();
+    private MonthAndYearItemViewModel _selectMonthAndYear;
+    public MonthAndYearItemViewModel SelectMonthAndYear
     {
         get => _selectMonthAndYear;
         set
@@ -109,7 +109,7 @@
 
         while (startDate <= endDate)
         {
-            _monthAndYears.Add(new MonthAndYearItem(startDate));
+            _monthAndYears.Add(new MonthAndYearItemViewModel(startDate));
             startDate = startDate.AddMonths(1);
         }
     }
@@ -123,7 +123,7 @@
     //     }
     // }
 
-    private async void generateDays(MonthAndYearItem item)
+    private async void generateDays(MonthAndYearItemViewModel item)
     {
         // "api/v1/shifts"
         var planShiftsInDB = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");

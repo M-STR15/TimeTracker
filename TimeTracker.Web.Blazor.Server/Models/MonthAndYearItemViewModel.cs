@@ -1,6 +1,6 @@
 ﻿namespace TimeTracker.Web.Blazor.Server.Models
 {
-	public class MonthAndYearItem
+	public class MonthAndYearItemViewModel
 	{
 		public int Month { get; set; }
 		public int Year { get; set; }
@@ -18,7 +18,7 @@
 			}
 		}
 
-		public MonthAndYearItem(DateTime date)
+		public MonthAndYearItemViewModel(DateTime date)
 		{
 			Month = int.Parse(date.ToString("MM"));
 			Year = int.Parse(date.ToString("yyyy"));
