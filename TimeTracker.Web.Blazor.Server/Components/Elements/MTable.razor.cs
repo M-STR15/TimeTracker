@@ -5,21 +5,38 @@ namespace TimeTracker.Web.Blazor.Server.Components.Elements
 {
 	public partial class MTable<TRow> : ComponentBase
 	{
+		/// <summary>
+		///  Název zobrazení nebo kontext, který slouží k filtrování sloupců.
+		/// </summary>
 		[Parameter, EditorRequired]
 		public IList<TableColumnDefinition<TRow>>? Columns { get; set; }
 
+		/// <summary>
+		/// Filtr pro zobrazení jenom konkrétních sloupců.
+		/// </summary>
 		[Parameter]
 		public string DisplayView { get; set; } = "";
 
-		[Parameter]
-		public EventCallback<IList<TRow>> OnRowsUpdated { get; set; }
-
+		//[Parameter]
+		//public EventCallback<IList<TRow>> OnRowsUpdated { get; set; }
+		/// <summary>
+		/// Data zobrazovaná v jednotlivých řádcích tabulky.
+		/// </summary>
 		[Parameter, EditorRequired]
 		public IList<TRow>? Rows { get; set; }
+		/// <summary>
+		/// Aktuálně vybraný řádek.
+		/// </summary>
 		[Parameter]
 		public TRow? Selected { get; set; }
+		/// <summary>
+		/// Callback, který se vyvolá při změně vybraného řádku.
+		/// </summary>
 		[Parameter]
 		public EventCallback<TRow?> SelectedChanged { get; set; }
+		/// <summary>
+		/// Callback, který se vyvolá při výběru řádku.
+		/// </summary>
 		[Parameter]
 		public EventCallback<TRow?> OnRowSelected { get; set; }
 
@@ -61,7 +78,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Elements
 					property.SetValue(item, newValue); // Nastavíte novou hodnotu
 				}
 
-				OnRowsUpdated.InvokeAsync(Rows);
+				//OnRowsUpdated.InvokeAsync(Rows);
 
 				StateHasChanged();
 			}
