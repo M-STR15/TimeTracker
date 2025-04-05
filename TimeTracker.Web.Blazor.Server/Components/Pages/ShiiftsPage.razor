@@ -10,7 +10,7 @@
 <div>
     <div>
         <label>Month:</label>
-        <MCombobox Items="_monthAndYears" ItemText="item => item.ToString()" OnChange="OnChangItemDateChanged" />
+        <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
     </div>
     <div>
         <label>Set type:</label>
@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var week in GetWeeks(_days))
+                @foreach (var week in getWeeks(_days))
                 {
                     <tr>
                         @foreach (var day in week)
@@ -63,7 +63,19 @@
 </div>
 @code {
     private List<MonthAndYearItem> _monthAndYears = new();
-    private MonthAndYearItem? _selectMonthAndYear;
+    private MonthAndYearItem _selectMonthAndYear;
+    public MonthAndYearItem SelectMonthAndYear
+    {
+        get => _selectMonthAndYear;
+        set
+        {
+            if (value != null && _selectMonthAndYear != value)
+            {
+                _selectMonthAndYear = value;
+                generateDays(_selectMonthAndYear);
+            }
+        }
+    }
     private List<DayItem> _days = new();
     private string[] _daysName = new[] { "Po", "Út", "St", "Čt", "Pá", "So", "Ne" };
     private List<TypeShiftBaseDto> _typeShifts = new();
@@ -71,6 +83,17 @@
 
 
     protected async override Task OnInitializedAsync()
+    {
+        createMontData();
+
+        _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+        _selectTypeShift = _typeShifts.FirstOrDefault();
+        SelectMonthAndYear = _monthAndYears.FirstOrDefault();
+
+        this.StateHasChanged();
+    }
+
+    private void createMontData()
     {
         var startDate = new DateTime(2025, 1, 1);
         var endDate = DateTime.Today;
@@ -80,28 +103,30 @@
             _monthAndYears.Add(new MonthAndYearItem(startDate));
             startDate = startDate.AddMonths(1);
         }
-
-        _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
-        _selectTypeShift = _typeShifts.FirstOrDefault();
-        _selectMonthAndYear = _monthAndYears.FirstOrDefault();
     }
+    // private void onChangItemDateChanged(ChangeEventArgs e)
+    // {
+    //     var item = e.Value as MonthAndYearItem;
+    //     if (item != null && !EqualityComparer<MonthAndYearItem>.Default.Equals(_selectMonthAndYear, item))
+    //     {
+    //         _selectMonthAndYear = item;
+    //         generateDays(item);
+    //     }
+    // }
 
-    private void OnChangItemDateChanged(ChangeEventArgs e)
+    private void generateDays(MonthAndYearItem item)
     {
         _days.Clear();
-
-        if (e.Value is MonthAndYearItem item)
+        var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
+        for (int i = 0; i < daysInMonth; i++)
         {
-            _selectMonthAndYear = item;
-            var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
-            for (int i = 0; i < daysInMonth; i++)
-            {
-                _days.Add(new DayItem(new DateTime(item.Year, item.Month, i + 1)));
-            }
+            _days.Add(new DayItem(new DateTime(item.Year, item.Month, i + 1)));
         }
+
+        this.StateHasChanged();
     }
 
-    private List<List<DayItem?>> GetWeeks(List<DayItem> days)
+    private List<List<DayItem?>> getWeeks(List<DayItem> days)
     {
         var weeks = new List<List<DayItem?>>();
         if (days.Count == 0)

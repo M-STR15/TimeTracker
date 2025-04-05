@@ -59,7 +59,7 @@
         <ul class="dropdown-list" @onmousedown:preventDefault>
             @foreach (var item in Items)
             {
-                <li @onmousedown="(() => SelectItem(item))" class="dropdown-item @GetSelectedClass(item)">
+                <li @onmousedown="(() => selectItem(item))" class="dropdown-item @getSelectedClass(item)">
                     @ItemText(item)
                 </li>
             }
@@ -83,23 +83,28 @@
                 SelectedItemChanged.InvokeAsync(_selectedItem); // Vyvolání události ValueChanged
             }
 
-            if (_selectedItem != null)
+            if (_selectedItem != null && !EqualityComparer<TItem>.Default.Equals(_selectedItem, value))
             {
                 SearchText = _selectedItem.ToString();
+                selectItem(_selectedItem);
             }
         }
     }
 
-    [Parameter]
+    [Parameter, EditorRequired]
     public List<TItem> Items { get; set; } = new List<TItem>();
+    [Parameter]
+    public EventCallback<TItem> SelectedItemChanged { get; set; }
+
     [Parameter]
     public Func<TItem, string> ItemText { get; set; }
     [Parameter]
+    public EventCallback<int> ItemTextChanged { get; set; }
+    [Parameter]
     public Func<TItem, int> ItemId { get; set; }
     [Parameter]
-    public EventCallback<TItem> SelectedItemChanged { get; set; }
-    [Parameter]
-    public EventCallback<int> SelectedItemId { get; set; }
+    public EventCallback<int> ItemIdChanged { get; set; }
+
     [Parameter]
     public EventCallback<string> OnSearchTextChanged { get; set; }
     [Parameter]
@@ -113,9 +118,12 @@
 
     private async void OnInput(ChangeEventArgs e)
     {
-        SearchText = e.Value.ToString();
-        await OnSearchTextChanged.InvokeAsync(SearchText);
-        await OnChange.InvokeAsync(e);
+        if (SearchText != e?.Value?.ToString())
+        {
+            SearchText = e.Value.ToString();
+            await OnSearchTextChanged.InvokeAsync(SearchText);
+            await OnChange.InvokeAsync(e);
+        }
     }
 
     private void OnFocus()
@@ -135,22 +143,24 @@
         IsDropdownVisible = !IsDropdownVisible;
     }
 
-    private async void SelectItem(TItem item)
+    private async void selectItem(TItem item)
     {
-        SelectedItem = item;
-        await SelectedItemChanged.InvokeAsync(item);
-        // OnChange.InvokeAsync(item);
-        IsDropdownVisible = false;
-        SearchText = ItemText(item); // Nastavit text vybraného prvku
+        if (!EqualityComparer<TItem>.Default.Equals(SelectedItem, item))
+        {
+            SelectedItem = item;
+            // OnChange.InvokeAsync(item);
+            IsDropdownVisible = false;
+            SearchText = ItemText(item); // Nastavit text vybraného prvku
 
-        var eventArgs = new ChangeEventArgs
-            {
-                Value = item
-            };
-        await OnChange.InvokeAsync(eventArgs);
+            var eventArgs = new ChangeEventArgs
+                {
+                    Value = item
+                };
+            await OnChange.InvokeAsync(eventArgs);
+        }
     }
 
-    private string GetSelectedClass(TItem item)
+    private string getSelectedClass(TItem item)
     {
         return Equals(item, SelectedItem) ? "selected" : string.Empty;
     }

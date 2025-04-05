@@ -5,8 +5,10 @@
 <InputRadioGroup @bind-Value="_selectId">
     @foreach (var item in ListItems)
     {
-        <InputRadio Value="@item.Id" @onclick="()=>OnRadioButtonClicked(item)" />
-        @item.Name
+        <div>
+            <InputRadio Value="@item.Id" @onclick="()=>OnRadioButtonClicked(item)" />
+            @item.Name
+        </div>
     }
 </InputRadioGroup>
 

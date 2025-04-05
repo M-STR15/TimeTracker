@@ -8,7 +8,14 @@
 
 		public override string ToString()
 		{
-			return Date.ToString("MM.yyyy");
+			try
+			{
+				return this?.Date.ToString("MM.yyyy") ?? "";
+			}
+			catch (Exception ex)
+			{
+				return "";
+			}
 		}
 
 		public MonthAndYearItem(DateTime date)
