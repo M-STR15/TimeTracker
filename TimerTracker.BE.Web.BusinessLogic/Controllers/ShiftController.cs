@@ -71,7 +71,12 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
-
+		/// <summary>
+		/// Kontrole slouží k přesnosu směn do DB, pokud nebude nějaký den na seznamu bude smazán z databáze.
+		/// Vždy je potřeba zadat celý měsíc jinak budou ostatní dny smazány.
+		/// </summary>
+		/// <param name="shiftsDto"></param>
+		/// <returns></returns>
 		[HttpPut("api/v1/shifts")]
 		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync(List<ShiftBaseDto> shiftsDto)
 		{

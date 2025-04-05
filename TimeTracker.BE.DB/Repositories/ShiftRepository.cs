@@ -85,6 +85,7 @@ public class ShiftRepository<T> where T : MainDatacontext
 
 	/// <summary>
 	/// Uloží seznam směn do databáze. Aktualizuje existující směny, přidá nové a odstraní ty, které již nejsou v seznamu.
+	/// Vždy je potřeba zaslat celý měsíc jinak budou dny smazány.
 	/// </summary>
 	/// <param name="shifts">Seznam směn k uložení.</param>
 	/// <returns>Vrací true, pokud operace proběhla úspěšně, jinak false.</returns>

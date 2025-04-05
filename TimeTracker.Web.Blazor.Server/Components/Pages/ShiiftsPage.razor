@@ -12,7 +12,6 @@
         justify-content: flex-start;
     }
 
-
 </style>
 
 <h3>ShiftsPage</h3>
@@ -199,12 +198,11 @@
     {
         var shiftsDto = new List<ShiftBaseDto>();
 
-        // foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
+        // foreach (var item in _days.Where(x => x.TypeShift != null).ToList())
         // {
-        //     var shift = new Shift(item.GuidId, item.Date, (int)item.ETypeShift);
-        //     shifts.Add(shift);
+        //     var shift = new ShiftBaseDto(item.GuidId, item.Date, (int)item.ETypeShift);
+        //     shiftsDto.Add(shift);
         // }
-        // var result = _shiftProvider.SaveShifts(shifts);
 
         var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
 
