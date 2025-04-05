@@ -17,12 +17,7 @@
         <div>
             @if (_typeShifts != null)
             {
-                <InputRadioGroup @bind-Value="_selectTypeShift">
-                    @foreach (var item in _typeShifts)
-                    {
-                        <InputRadio Value="@item.Id">@item.Name</InputRadio>
-                    }
-                </InputRadioGroup>
+                <MRadioGroup TItem="TypeShiftBaseDto" ListItems="_typeShifts" @bind-SelectItem="_selectTypeShift"></MRadioGroup>
             }
         </div>
     </div>
@@ -72,7 +67,7 @@
     private List<DayItem> _days = new();
     private string[] _daysName = new[] { "Po", "Út", "St", "Čt", "Pá", "So", "Ne" };
     private List<TypeShiftBaseDto> _typeShifts = new();
-    private int? _selectTypeShift { get; set; }
+    private TypeShiftBaseDto? _selectTypeShift { get; set; }
 
 
     protected async override Task OnInitializedAsync()
@@ -87,6 +82,8 @@
         }
 
         _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+        _selectTypeShift = _typeShifts.FirstOrDefault();
+        _selectMonthAndYear = _monthAndYears.FirstOrDefault();
     }
 
     private void OnChangItemDateChanged(ChangeEventArgs e)

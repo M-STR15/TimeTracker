@@ -1,0 +1,53 @@
+﻿@using TimeTracker.Web.Blazor.Server.Models.Interfaces
+
+@typeparam TItem where TItem : ITItem
+
+<InputRadioGroup @bind-Value="_selectId">
+    @foreach (var item in ListItems)
+    {
+        <InputRadio Value="@item.Id" @onclick="()=>OnRadioButtonClicked(item)" />
+        @item.Name
+    }
+</InputRadioGroup>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<TItem> ListItems { get; set; }
+
+    private TItem _selectItem;
+    [Parameter]
+    public TItem SelectItem
+    {
+        get => _selectItem;
+        set
+        {
+            if (!EqualityComparer<TItem>.Default.Equals(_selectItem, value))
+            {
+                _selectItem = value;
+                SelectItemChanged.InvokeAsync(_selectItem);
+            }
+
+            if (SelectItem != null && _selectId != SelectItem.Id)
+            {
+                _selectId = SelectItem.Id;
+            }
+        }
+    }
+    [Parameter]
+    public EventCallback<TItem> SelectItemChanged { get; set; }
+
+    private int _selectId;
+
+    // protected override void OnParametersSet()
+    // {
+    //     base.OnParametersSet();
+
+    //     if (ListItems != null && ListItems.Any())
+    //         SelectItem = ListItems.FirstOrDefault(x => x.Id == _selectId);
+    // }
+
+    private void OnRadioButtonClicked(TItem item)
+    {
+        SelectItem = item;
+    }
+}
