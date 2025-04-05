@@ -78,7 +78,15 @@
         set
         {
             if (!EqualityComparer<TItem>.Default.Equals(_selectedItem, value))
+            {
+                _selectedItem = value;
                 SelectedItemChanged.InvokeAsync(_selectedItem); // Vyvolání události ValueChanged
+            }
+
+            if (_selectedItem != null)
+            {
+                SearchText = _selectedItem.ToString();
+            }
         }
     }
 
@@ -137,7 +145,7 @@
 
         var eventArgs = new ChangeEventArgs
             {
-                Value = item 
+                Value = item
             };
         await OnChange.InvokeAsync(eventArgs);
     }
