@@ -1,48 +1,6 @@
 ﻿@typeparam TItem
 @inject IJSRuntime JS
 
-<style>
-    .input-container {
-        display: flex;
-        align-items: center;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        overflow: hidden;
-        width: 100%;
-    }
-
-    .dropdown-button {
-        background: #f0f0f0;
-        border: none;
-        padding: 8px 12px;
-        cursor: pointer;
-    }
-
-        .dropdown-button:hover {
-            background: #ddd;
-        }
-
-    .dropdown-list {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .dropdown-item {
-        padding: 8px 12px;
-        cursor: pointer;
-    }
-
-        .dropdown-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        .dropdown-item.selected {
-            background-color: #007bff;
-            color: white;
-        }
-</style>
-
 <div class="custom-combobox">
     <div class="input-container">
         <input @ref="inputRef"
@@ -74,10 +32,8 @@
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
-    private async Task RemoveFocus()
-    {
-        await JS.InvokeVoidAsync("removeFocus", inputRef);
-    }
+    private async Task RemoveFocus() => await JS.InvokeVoidAsync("removeFocus", inputRef);
+
     [Parameter]
     public TItem SelectedItem
     {
@@ -90,7 +46,7 @@
                 SelectedItemChanged.InvokeAsync(_selectedItem); // Vyvolání události ValueChanged
             }
 
-            if (_selectedItem != null && !EqualityComparer<TItem>.Default.Equals(_selectedItem, value))
+            if (_selectedItem != null)
             {
                 SearchText = _selectedItem.ToString();
                 selectItem(_selectedItem);

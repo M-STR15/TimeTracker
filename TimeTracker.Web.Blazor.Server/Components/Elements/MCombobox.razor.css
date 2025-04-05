@@ -31,3 +31,43 @@
 		.custom-combobox .dropdown-item:hover {
 			background-color: #f1f1f1;
 		}
+
+.input-container {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	overflow: hidden;
+	width: 100%;
+}
+
+.dropdown-button {
+	background: #f0f0f0;
+	border: none;
+	padding: 8px 12px;
+	cursor: pointer;
+}
+
+	.dropdown-button:hover {
+		background: #ddd;
+	}
+
+.dropdown-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.dropdown-item {
+	padding: 8px 12px;
+	cursor: pointer;
+}
+
+	.dropdown-item:hover {
+		background-color: #f0f0f0;
+	}
+
+	.dropdown-item.selected {
+		background-color: mediumpurple;
+		color: white;
+	}
