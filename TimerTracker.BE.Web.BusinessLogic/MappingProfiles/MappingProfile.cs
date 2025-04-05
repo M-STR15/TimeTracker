@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
-namespace TimerTracker.BE.Web.BusinessLogic.MappingProfiles
+namespace TimeTracker.BE.Web.BusinessLogic.MappingProfiles
 {
 	internal class MappingProfile : Profile
 	{

@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
-namespace TimerTracker.BE.Web.BusinessLogic.Controllers
+namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
 	[ApiController]
 	[ApiExplorerSettings(GroupName = "v1")]
@@ -102,7 +103,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var project = _mapper.Map<Project>(projectBaseDto);
-				var result = (await _projectRepository.SaveProjectAsync(project));
+				var result = await _projectRepository.SaveProjectAsync(project);
 				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
 				return result != null ? Ok(projectBaseDto) : Problem();
 			}
@@ -135,7 +136,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var project = _mapper.Map<Project>(projectBaseDto);
-				var result = (await _projectRepository.SaveProjectAsync(project));
+				var result = await _projectRepository.SaveProjectAsync(project);
 				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
 				return result != null ? Ok(projectBaseDto) : Problem();
 			}
@@ -167,7 +168,7 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var result = (await _projectRepository.DeleteProjectAsync(projectId));
+				var result = await _projectRepository.DeleteProjectAsync(projectId);
 				return result ? Ok() : Problem();
 			}
 			catch (Exception ex)

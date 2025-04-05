@@ -22,7 +22,7 @@ builder.Services.AddTimeTrackerWebBlazorServer();
 //			.EnableSensitiveDataLogging()
 //			.LogTo(Console.WriteLine), ServiceLifetime.Singleton);
 if (!string.IsNullOrEmpty(connectionString))
-	builder.Services.AddTimerTrackerBeWebSharedBusinessLogic(connectionString);
+	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic(connectionString);
 
 
 builder.Services.AddHostedService<ApplicationLifecycleLogger>();

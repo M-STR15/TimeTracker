@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BE", "BE", "{6C3DA257-6962-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{7779448F-3A66-4D20-AF00-E92EFD5A8B01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerTracker.BE.Web.BusinessLogic", "TimerTracker.BE.Web.BusinessLogic\TimerTracker.BE.Web.BusinessLogic.csproj", "{D3C0889F-3162-4ED0-85C7-A31CDFFF866D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.BE.Web.BusinessLogic", "TimerTracker.BE.Web.BusinessLogic\TimeTracker.BE.Web.BusinessLogic.csproj", "{D3C0889F-3162-4ED0-85C7-A31CDFFF866D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Web.Blazor.Server", "TimeTracker.Web.Blazor.Server\TimeTracker.Web.Blazor.Server.csproj", "{95361E4E-CCDE-4CE5-A714-D85ED0937FC2}"
 EndProject

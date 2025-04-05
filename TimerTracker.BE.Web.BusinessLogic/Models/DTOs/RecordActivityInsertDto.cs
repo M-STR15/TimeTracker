@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
 	public class RecordActivityInsertDto : IRecordActivityInsert

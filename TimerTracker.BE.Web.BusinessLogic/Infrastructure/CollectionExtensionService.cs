@@ -1,15 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using TimerTracker.BE.Web.BusinessLogic.Controllers;
-using TimerTracker.BE.Web.BusinessLogic.MappingProfiles;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Infrastructure;
+using TimeTracker.BE.Web.BusinessLogic.Controllers;
+using TimeTracker.BE.Web.BusinessLogic.MappingProfiles;
 
 namespace TimeTracker.BE.Web.Shared.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimerTrackerBeWebSharedBusinessLogic(this IServiceCollection services, string connectionString)
+		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic(this IServiceCollection services, string connectionString)
 		{
 			services.AddDbContext<MsSqlDbContext>(options =>
 				options.UseSqlServer(connectionString)

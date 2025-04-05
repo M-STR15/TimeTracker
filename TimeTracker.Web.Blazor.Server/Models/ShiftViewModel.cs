@@ -1,4 +1,4 @@
-﻿using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
+﻿using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
 namespace TimeTracker.Web.Blazor.Server.Models
 {

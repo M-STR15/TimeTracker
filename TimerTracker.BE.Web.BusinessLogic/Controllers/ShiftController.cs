@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 
-namespace TimerTracker.BE.Web.BusinessLogic.Controllers
+namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
 	[ApiController]
 	[ApiExplorerSettings(GroupName = "v1")]

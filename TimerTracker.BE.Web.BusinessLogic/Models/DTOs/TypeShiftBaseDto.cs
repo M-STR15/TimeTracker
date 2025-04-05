@@ -2,7 +2,7 @@
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.Web.Blazor.Server.Models.Interfaces;
 
-namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
 	public class TypeShiftBaseDto : ITypeShiftBase, ITItemWithColor

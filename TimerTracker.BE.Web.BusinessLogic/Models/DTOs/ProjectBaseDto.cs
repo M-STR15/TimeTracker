@@ -1,8 +1,9 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
 	public class ProjectBaseDto : ProjectInsertDto, IProjectBase
