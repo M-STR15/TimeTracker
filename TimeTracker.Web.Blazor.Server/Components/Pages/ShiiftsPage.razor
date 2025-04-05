@@ -6,6 +6,10 @@
 
 @inherits BasePage
 
+<style>
+
+</style>
+
 <h3>ShiftsPage</h3>
 <div>
     <div>
@@ -47,7 +51,7 @@
                             if (day != null)
                             {
                                 <td>
-                                    <MButton Text="@day.Date.ToString("dd")" Class="" />
+                                    <MButton Text="@day.Date.ToString("dd")" Style="@getColor(day)" OnClick="()=>setDayTypeShift(day)" />
                                 </td>
                             }
                             else
@@ -126,6 +130,12 @@
         this.StateHasChanged();
     }
 
+    private void setDayTypeShift(DayItem day)
+    {
+        day.TypeShift = _selectTypeShift;
+        this.StateHasChanged();
+    }
+
     private List<List<DayItem?>> getWeeks(List<DayItem> days)
     {
         var weeks = new List<List<DayItem?>>();
@@ -163,5 +173,11 @@
         }
 
         return weeks;
+    }
+
+    private string getColor(DayItem day)
+    {
+        var color = day?.TypeShift?.Color;
+        return color != null ? $"background-color:{color}" : "";
     }
 }
