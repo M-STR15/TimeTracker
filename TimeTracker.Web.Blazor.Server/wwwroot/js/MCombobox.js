@@ -4,6 +4,8 @@
     }, 200);
 }
 
-function removeFocus(element) {
-    element.blur();
-}
+window.removeFocus = function (element) {
+    if (element) {
+        element.blur();
+    }
+};

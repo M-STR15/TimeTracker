@@ -53,7 +53,6 @@
                @oninput="OnInput"
                @onblur="@(() => JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this)))"
                placeholder="Vyberte možnost..."
-               tabindex="-1"
                readonly />
         <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
     </div>
@@ -165,6 +164,7 @@
                     Value = item
                 };
             await OnChange.InvokeAsync(eventArgs);
+            await RemoveFocus();
         }
     }
 
