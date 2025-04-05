@@ -45,12 +45,15 @@
 
 <div class="custom-combobox">
     <div class="input-container">
-        <input type="text" class="form-control"
+        <input @ref="inputRef"
+               type="text"
+               class="form-control"
                @bind="SearchText"
                @onfocus="OnFocus"
-               @onblur="@(() => JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this)))"
                @oninput="OnInput"
+               @onblur="@(() => JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this)))"
                placeholder="Vyberte možnost..."
+               tabindex="-1"
                readonly />
         <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
     </div>
@@ -68,9 +71,14 @@
 </div>
 
 @code {
+    private ElementReference inputRef;
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
+    private async Task RemoveFocus()
+    {
+        await JS.InvokeVoidAsync("removeFocus", inputRef);
+    }
     [Parameter]
     public TItem SelectedItem
     {
