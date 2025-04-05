@@ -7,6 +7,11 @@
 @inherits BasePage
 
 <style>
+    .container2 {
+        display: flex;
+        justify-content: flex-start;
+    }
+
 
 </style>
 
@@ -16,7 +21,7 @@
         <label>Month:</label>
         <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
     </div>
-    <div>
+    <div class="container2">
         <label>Set type:</label>
         <div>
             @if (_typeShifts != null)
@@ -65,6 +70,7 @@
         </table>
     }
 </div>
+<MButton Text="Save" OnClick="onSave_Click" Style="width: 100%;"></MButton>
 @code {
     private List<MonthAndYearItem> _monthAndYears = new();
     private MonthAndYearItem _selectMonthAndYear;
@@ -118,8 +124,12 @@
     //     }
     // }
 
-    private void generateDays(MonthAndYearItem item)
+    private async void generateDays(MonthAndYearItem item)
     {
+        // "api/v1/shifts"
+        var planShiftsInDB = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
+        // await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
+
         _days.Clear();
         var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
         for (int i = 0; i < daysInMonth; i++)
@@ -132,7 +142,11 @@
 
     private void setDayTypeShift(DayItem day)
     {
-        day.TypeShift = _selectTypeShift;
+        if (day.TypeShift == null)
+            day.TypeShift = _selectTypeShift;
+        else
+            day.TypeShift = null;
+
         this.StateHasChanged();
     }
 
@@ -179,5 +193,21 @@
     {
         var color = day?.TypeShift?.Color;
         return color != null ? $"background-color:{color}" : "";
+    }
+
+    private async void onSave_Click()
+    {
+        var shiftsDto = new List<ShiftBaseDto>();
+
+        // foreach (var item in _dailyList.Where(x => x.IsPlanShiftInDay).ToList())
+        // {
+        //     var shift = new Shift(item.GuidId, item.Date, (int)item.ETypeShift);
+        //     shifts.Add(shift);
+        // }
+        // var result = _shiftProvider.SaveShifts(shifts);
+
+        var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
+
+
     }
 }

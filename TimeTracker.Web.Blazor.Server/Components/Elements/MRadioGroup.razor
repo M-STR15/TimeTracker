@@ -1,15 +1,28 @@
 ﻿@using TimeTracker.Web.Blazor.Server.Models.Interfaces
 
-@typeparam TItem where TItem : ITItem
+@typeparam TItem where TItem : ITItemWithColor
+
+<style>
+    .container {
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .column {
+        width: 120px; /* Nastaví šířku sloupců na 48%, aby zůstalo trochu místa mezi nimi */
+    }
+</style>
 
 <InputRadioGroup @bind-Value="_selectId">
-    @foreach (var item in ListItems)
-    {
-        <div>
-            <InputRadio Value="@item.Id" @onclick="()=>OnRadioButtonClicked(item)" />
-            @item.Name
-        </div>
-    }
+    <div class="container">
+        @foreach (var item in ListItems)
+        {
+            <div style="background-color:@getColor(item)" class="column">
+                <InputRadio Value="@item.Id" @onclick="()=>onRadioButtonClicked(item)" />
+                @item.Name
+            </div>
+        }
+    </div>
 </InputRadioGroup>
 
 @code {
@@ -38,6 +51,9 @@
     [Parameter]
     public EventCallback<TItem> SelectItemChanged { get; set; }
 
+    [Parameter]
+    public string StyleItem { get; set; }
+
     private int _selectId;
 
     // protected override void OnParametersSet()
@@ -48,8 +64,7 @@
     //         SelectItem = ListItems.FirstOrDefault(x => x.Id == _selectId);
     // }
 
-    private void OnRadioButtonClicked(TItem item)
-    {
-        SelectItem = item;
-    }
+    private void onRadioButtonClicked(TItem item) => SelectItem = item;
+
+    private string getColor(TItem item) => item.Color;
 }

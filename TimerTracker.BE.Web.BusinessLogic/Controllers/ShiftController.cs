@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TimerTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 
 namespace TimerTracker.BE.Web.BusinessLogic.Controllers
@@ -59,6 +60,28 @@ namespace TimerTracker.BE.Web.BusinessLogic.Controllers
 				{
 					var shiftsDto = _mapper.Map<List<ShiftBaseDto>>(shifts);
 					return shiftsDto != null ? Ok(shiftsDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		[HttpPut("api/v1/shifts")]
+		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync(List<ShiftBaseDto> shiftsDto)
+		{
+			try
+			{
+				if (shiftsDto != null)
+				{
+					var shifts = _mapper.Map<List<Shift>>(shiftsDto);
+					var result = _shiftRepository.SaveShifts(shifts);
+					return result ? Ok(shiftsDto) : Problem();
 				}
 				else
 				{

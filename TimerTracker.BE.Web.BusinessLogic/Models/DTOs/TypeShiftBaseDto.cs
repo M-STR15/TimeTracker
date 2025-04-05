@@ -5,7 +5,7 @@ using TimeTracker.Web.Blazor.Server.Models.Interfaces;
 namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 {
 	/// <inheritdoc />
-	public class TypeShiftBaseDto : ITypeShiftBase, ITItem
+	public class TypeShiftBaseDto : ITypeShiftBase, ITItemWithColor
 	{
 		/// <inheritdoc />
 		public string Color { get; set; } = string.Empty;
