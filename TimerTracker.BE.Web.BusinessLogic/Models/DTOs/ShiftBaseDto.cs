@@ -19,5 +19,16 @@ namespace TimerTracker.BE.Web.BusinessLogic.Models.DTOs
 		/// <inheritdoc />
 		[Required(ErrorMessage = "Hodnota je vyžadována")]
 		public int TypeShiftId { get; set; }
+
+		public ShiftBaseDto()
+		{ }
+
+		public ShiftBaseDto(Guid guidId, DateTime startDate, int typeShiftId, string? description = null)
+		{
+			Description = description;
+			GuidId = guidId;
+			StartDate = startDate;
+			TypeShiftId = typeShiftId;
+		}
 	}
 }

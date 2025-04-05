@@ -55,7 +55,7 @@
                             if (day != null)
                             {
                                 <td>
-                                    <MButton Text="@day.Date.ToString("dd")" Style="@getColor(day)" OnClick="()=>setDayTypeShift(day)" />
+                                    <MButton Text="@day.StartDate.ToString("dd")" Style="@getColor(day)" OnClick="()=>setDayTypeShift(day)" />
                                 </td>
                             }
                             else
@@ -85,7 +85,7 @@
             }
         }
     }
-    private List<DayItem> _days = new();
+    private List<ShiftViewModel> _days = new();
     private string[] _daysName = new[] { "Po", "Út", "St", "Čt", "Pá", "So", "Ne" };
     private List<TypeShiftBaseDto> _typeShifts = new();
     private TypeShiftBaseDto? _selectTypeShift { get; set; }
@@ -133,13 +133,21 @@
         var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
         for (int i = 0; i < daysInMonth; i++)
         {
-            _days.Add(new DayItem(new DateTime(item.Year, item.Month, i + 1)));
+            var startDate = new DateTime(item.Year, item.Month, i + 1);
+            var shiftInDb = planShiftsInDB.FirstOrDefault(x => x.StartDate == startDate);
+            var existShift = (shiftInDb != null);
+
+            Guid guidId = existShift ? shiftInDb.GuidId : Guid.Empty;
+            int typeShiftId = existShift ? shiftInDb.TypeShiftId : 0;
+            string? description = existShift ? shiftInDb?.Description : null;
+            var typeShift = _typeShifts.FirstOrDefault(x => x.Id == typeShiftId);
+            _days.Add(new ShiftViewModel(guidId, startDate, typeShiftId, typeShift, description));
         }
 
         this.StateHasChanged();
     }
 
-    private void setDayTypeShift(DayItem day)
+    private void setDayTypeShift(ShiftViewModel day)
     {
         if (day.TypeShift == null)
             day.TypeShift = _selectTypeShift;
@@ -149,16 +157,16 @@
         this.StateHasChanged();
     }
 
-    private List<List<DayItem?>> getWeeks(List<DayItem> days)
+    private List<List<ShiftViewModel?>> getWeeks(List<ShiftViewModel> days)
     {
-        var weeks = new List<List<DayItem?>>();
+        var weeks = new List<List<ShiftViewModel?>>();
         if (days.Count == 0)
             return weeks;
 
-        var firstDate = days.First().Date;
+        var firstDate = days.First().StartDate;
         int dayOfWeek = ((int)firstDate.DayOfWeek + 6) % 7; // 0 = Po, ..., 6 = Ne
 
-        var currentWeek = new List<DayItem?>();
+        var currentWeek = new List<ShiftViewModel?>();
         // Add empty cells for days before the first day
         for (int i = 0; i < dayOfWeek; i++)
         {
@@ -171,7 +179,7 @@
             if (currentWeek.Count == 7)
             {
                 weeks.Add(currentWeek);
-                currentWeek = new List<DayItem?>();
+                currentWeek = new List<ShiftViewModel?>();
             }
         }
 
@@ -188,7 +196,7 @@
         return weeks;
     }
 
-    private string getColor(DayItem day)
+    private string getColor(ShiftViewModel day)
     {
         var color = day?.TypeShift?.Color;
         return color != null ? $"background-color:{color}" : "";
@@ -198,11 +206,11 @@
     {
         var shiftsDto = new List<ShiftBaseDto>();
 
-        // foreach (var item in _days.Where(x => x.TypeShift != null).ToList())
-        // {
-        //     var shift = new ShiftBaseDto(item.GuidId, item.Date, (int)item.ETypeShift);
-        //     shiftsDto.Add(shift);
-        // }
+        foreach (var item in _days.Where(x => x.TypeShift != null).ToList())
+        {
+            var shift = new ShiftBaseDto(item.GuidId, item.StartDate, item.TypeShift.Id);
+            shiftsDto.Add(shift);
+        }
 
         var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
 
