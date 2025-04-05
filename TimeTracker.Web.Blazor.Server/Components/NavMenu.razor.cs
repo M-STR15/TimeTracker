@@ -15,9 +15,9 @@ namespace TimeTracker.Web.Blazor.Server.Components
 		}
 
 		private void onOpenDocumentPageClick() => NavigationManager.NavigateTo("/swagger/index.html", true);
-
 		private void onOpenEventLogsPageClick() => NavigationManager.NavigateTo("/event-logs");
 		private void onOpenActivityPageClick() => NavigationManager.NavigateTo("/activity");
 		private void onOpenSettingsClick() => NavigationManager.NavigateTo("/settings");
+		private void onOpenShiftsClick() => NavigationManager.NavigateTo("/shifts");
 	}
 }

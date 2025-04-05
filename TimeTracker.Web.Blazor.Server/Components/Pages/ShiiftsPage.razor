@@ -1,0 +1,145 @@
+﻿@page "/shifts"
+@using System.Globalization
+@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Models
+@using TimerTracker.BE.Web.BusinessLogic.Models.DTOs
+
+@inherits BasePage
+
+<h3>ShiftsPage</h3>
+<div>
+    <div>
+        <label>Month:</label>
+        <MCombobox Items="_monthAndYears" ItemText="item => item.ToString()" OnChange="OnChangItemDateChanged" />
+    </div>
+    <div>
+        <label>Set type:</label>
+        <div>
+            @if (_typeShifts != null)
+            {
+                <InputRadioGroup @bind-Value="_selectTypeShift">
+                    @foreach (var item in _typeShifts)
+                    {
+                        <InputRadio Value="@item.Id">@item.Name</InputRadio>
+                    }
+                </InputRadioGroup>
+            }
+        </div>
+    </div>
+</div>
+<div>
+
+    @if (_days != null && _days.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    @if (_daysName != null)
+                    {
+                        @foreach (var dayName in _daysName)
+                        {
+                            <th>@dayName</th>
+                        }
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var week in GetWeeks(_days))
+                {
+                    <tr>
+                        @foreach (var day in week)
+                        {
+                            if (day != null)
+                            {
+                                <td>
+                                    <MButton Text="@day.Date.ToString("dd")" Class="" />
+                                </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+@code {
+    private List<MonthAndYearItem> _monthAndYears = new();
+    private MonthAndYearItem? _selectMonthAndYear;
+    private List<DayItem> _days = new();
+    private string[] _daysName = new[] { "Po", "Út", "St", "Čt", "Pá", "So", "Ne" };
+    private List<TypeShiftBaseDto> _typeShifts = new();
+    private int? _selectTypeShift { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        var startDate = new DateTime(2025, 1, 1);
+        var endDate = DateTime.Today;
+
+        while (startDate <= endDate)
+        {
+            _monthAndYears.Add(new MonthAndYearItem(startDate));
+            startDate = startDate.AddMonths(1);
+        }
+
+        _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+    }
+
+    private void OnChangItemDateChanged(ChangeEventArgs e)
+    {
+        _days.Clear();
+
+        if (e.Value is MonthAndYearItem item)
+        {
+            _selectMonthAndYear = item;
+            var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
+            for (int i = 0; i < daysInMonth; i++)
+            {
+                _days.Add(new DayItem(new DateTime(item.Year, item.Month, i + 1)));
+            }
+        }
+    }
+
+    private List<List<DayItem?>> GetWeeks(List<DayItem> days)
+    {
+        var weeks = new List<List<DayItem?>>();
+        if (days.Count == 0)
+            return weeks;
+
+        var firstDate = days.First().Date;
+        int dayOfWeek = ((int)firstDate.DayOfWeek + 6) % 7; // 0 = Po, ..., 6 = Ne
+
+        var currentWeek = new List<DayItem?>();
+        // Add empty cells for days before the first day
+        for (int i = 0; i < dayOfWeek; i++)
+        {
+            currentWeek.Add(null);
+        }
+
+        foreach (var day in days)
+        {
+            currentWeek.Add(day);
+            if (currentWeek.Count == 7)
+            {
+                weeks.Add(currentWeek);
+                currentWeek = new List<DayItem?>();
+            }
+        }
+
+        // Add remaining days
+        if (currentWeek.Count > 0)
+        {
+            while (currentWeek.Count < 7)
+            {
+                currentWeek.Add(null);
+            }
+            weeks.Add(currentWeek);
+        }
+
+        return weeks;
+    }
+}
