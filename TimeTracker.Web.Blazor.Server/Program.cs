@@ -33,7 +33,7 @@ builder.Services.AddSwaggerGen(options =>
 	var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 	var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-	var beXmlPath = Path.Combine(AppContext.BaseDirectory, "TimerTracker.BE.Web.BusinessLogic.xml");
+	var beXmlPath = Path.Combine(AppContext.BaseDirectory, "TimeTracker.BE.Web.BusinessLogic.xml");
 
 	options.IncludeXmlComments(xmlPath);
 	options.IncludeXmlComments(beXmlPath);
