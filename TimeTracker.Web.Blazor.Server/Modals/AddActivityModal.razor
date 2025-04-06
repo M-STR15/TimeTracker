@@ -1,0 +1,169 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using TimeTracker.BE.DB.Models.Enums
+@using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
+@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals.Models
+@inherits BaseSaveViewModal
+@inject IHttpClientFactory HttpClientFactory
+
+<style>
+    div .main {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+        width: 450px;
+    }
+
+    div .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+</style>
+
+
+<BaseModal @bind-Visible=Visible Title=@Title>
+    <BodyContent>
+        @if (_recordActivityInsertDto != null)
+        {
+
+            <EditForm Model="@editContext">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+
+                <div class="main">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6>Type shift</h6>
+                            <MCombobox Items="_typeShifts" ItemText="item => item.Name" OnChange="OnTypeShiftChanged" />
+                            <ValidationMessage For="@(() => _recordActivityInsertDto.TypeShiftId)" />
+                        </div>
+                        <div class="col-6">
+                            <h6>Shifts</h6>
+                            <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" OnChange="OnShiftChanged" />
+                            <ValidationMessage For="@(() => _recordActivityInsertDto.ShiftGuidId)" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h6>Project</h6>
+                        <MCombobox Items="_projects" ItemText="item => item.Name" OnChange="OnProjectChanged" />
+                        <ValidationMessage For="@(() => _recordActivityInsertDto.ProjectId)" />
+                    </div>
+                    <div class="row">
+                        <h6>Sub module</h6>
+                        <MCombobox Items="_subModules" ItemText="item => item.Name" OnChange="OnSubModuleChanged" />
+                        <ValidationMessage For="@(() => _recordActivityInsertDto.SubModuleId)" />
+                    </div>
+                    <div class="row">
+                        <h6>Description</h6>
+                        <MTextArea @bind-Value="@_recordActivityInsertDto.Description" />
+                    </div>
+                    <MButton IsDisabled="@(!editContext.Validate())" OnClick="save_Click">Save</MButton>
+                </div>
+            </EditForm>
+        }
+
+    </BodyContent>
+</BaseModal>
+
+
+@code {
+    private List<TypeShiftBaseDto>? _typeShifts;
+    private List<ShiftBaseDto>? _shifts;
+    private List<ProjectBaseDto>? _projects;
+    private List<SubModuleBaseDto>? _subModules;
+
+    private bool _isDisable => editContext.Validate();
+
+    private RecordActivityInsertDto? _recordActivityInsertDto;
+
+    private bool _isFormValid => _recordActivityInsertDto?.TypeShiftId != null;
+
+    private void OnTypeShiftChanged(ChangeEventArgs e)
+    {
+        if (e.Value is TypeShiftBaseDto item)
+            _recordActivityInsertDto.TypeShiftId = item?.Id;
+    }
+
+    private void OnShiftChanged(ChangeEventArgs e)
+    {
+        if (e.Value is ShiftBaseDto item)
+            _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
+    }
+
+    private void OnProjectChanged(ChangeEventArgs e)
+    {
+        if (e.Value is ProjectBaseDto item)
+            _recordActivityInsertDto.ProjectId = item?.Id;
+    }
+
+    private void OnSubModuleChanged(ChangeEventArgs e)
+    {
+        if (e.Value is SubModuleBaseDto item)
+            _recordActivityInsertDto.SubModuleId = item?.Id;
+    }
+
+    private Task OnValueChanged(string newValue)
+    {
+        _recordActivityInsertDto.Description = newValue;
+        StateHasChanged();  // Aktualizuje komponentu
+        return Task.CompletedTask;
+    }
+
+
+    private void onFieldChange(object sender, EventArgs args)
+    {
+        StateHasChanged();
+    }
+
+    protected async override void performActionOnOpen()
+    {
+        var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+        if (typeShiftsReq != null)
+            _typeShifts = typeShiftsReq;
+
+        var shiftsReq = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
+        if (shiftsReq != null)
+            _shifts = shiftsReq;
+
+        var projectsReq = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
+        if (projectsReq != null)
+            _projects = projectsReq;
+
+        var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
+        if (subModulesReq != null)
+            _subModules = subModulesReq;
+
+        _recordActivityInsertDto = new();
+        editContext = new EditContext(_recordActivityInsertDto);
+        editContext.OnFieldChanged += onFieldChanged;
+
+        StateHasChanged();
+    }
+
+    protected override void performActionOnClose()
+    {
+        if (editContext != null)
+            editContext.OnFieldChanged -= onFieldChanged;
+    }
+
+    protected async override void save_Click()
+    {
+        if (_httpClient != null)
+        {
+            _recordActivityInsertDto.StartDateTime = DateTime.Now;
+            _recordActivityInsertDto.ActivityId = (int)eActivity.Start;
+            var result = await _httpClient.PostAsJsonAsync<RecordActivityInsertDto>("api/v1/record-activities", _recordActivityInsertDto);
+
+            if (result.IsSuccessStatusCode)
+            {
+
+            }
+            else
+            {
+
+            }
+            await closeModalAsync();
+        }
+    }
+}

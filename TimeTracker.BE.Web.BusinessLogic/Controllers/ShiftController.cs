@@ -9,19 +9,13 @@ using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
-	[ApiController]
 	[ApiExplorerSettings(GroupName = "v1")]
-	[SwaggerResponse(200, "Úspěšné získání položky/položek [Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)")]
-	[SwaggerResponse(404, "Položka/Položky nenalezeny.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404)")]
-	[SwaggerResponse(500, "Chyba serveru.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)")]
-	public class ShiftController : ControllerBase
+	public class ShiftController : aControllerBase
 	{
 		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
-		private readonly IMapper _mapper;
-		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, IMapper mapper)
+		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, IMapper mapper) : base(mapper)
 		{
 			_shiftRepository = shiftRepository;
-			_mapper = mapper;
 		}
 
 		/// <summary>
@@ -78,7 +72,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="shiftsDto"></param>
 		/// <returns></returns>
 		[HttpPut("api/v1/shifts")]
-		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync(List<ShiftBaseDto> shiftsDto)
+		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync([FromBody] List<ShiftBaseDto> shiftsDto)
 		{
 			try
 			{

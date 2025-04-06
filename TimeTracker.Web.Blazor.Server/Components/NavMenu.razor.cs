@@ -14,10 +14,12 @@ namespace TimeTracker.Web.Blazor.Server.Components
 			collapseNavMenu = !collapseNavMenu;
 		}
 
-		private void onOpenDocumentPageClick() => NavigationManager.NavigateTo("/swagger/index.html", true);
-		private void onOpenEventLogsPageClick() => NavigationManager.NavigateTo("/event-logs");
-		private void onOpenActivityPageClick() => NavigationManager.NavigateTo("/activity");
-		private void onOpenSettingsClick() => NavigationManager.NavigateTo("/settings");
-		private void onOpenShiftsClick() => NavigationManager.NavigateTo("/shifts");
+		private void onOpenDocumentPage_Click() => NavigationManager.NavigateTo("/swagger/index.html", true);
+		private void onOpenEventLogsPage_Click() => NavigationManager.NavigateTo("/event-logs");
+		private void onOpenCurrentActivityPage_Click() => NavigationManager.NavigateTo("/current-activity");
+		private void onOpenSettings_Click() => NavigationManager.NavigateTo("/settings");
+		private void onOpenShifts_Click() => NavigationManager.NavigateTo("/shifts");
+		private void onOpenReportRecordList_Click() => NavigationManager.NavigateTo("/reports/record-list");
+
 	}
 }

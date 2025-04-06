@@ -7,7 +7,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between align-items-center">
                     <h4 class="modal-title">@Title</h4>
-                    <MButton OnClick="Close_Click" Text="X" />
+                    <MButton OnClick="close_Click" Text="X" />
                 </div>
                 <div class="modal-body">
                     @BodyContent
@@ -35,7 +35,7 @@
     public RenderFragment? FooterContent { get; set; }
 
 
-    protected virtual void Close_Click()
+    protected virtual void close_Click()
     {
         Visible = false;
         if (VisibleChanged.HasDelegate)

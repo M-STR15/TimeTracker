@@ -17,18 +17,23 @@
         <label class="version">Main</label>
         <div class="nav-group">
             <div class="nav-item px-3">
-                <button class="btn-style" @onclick="onOpenActivityPageClick">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Add activity record
+                <button class="btn-style" @onclick="onOpenCurrentActivityPage_Click">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Current activity
                 </button>
             </div>
             <div class="nav-item px-3">
-                <button class="btn-style" @onclick="onOpenShiftsClick">
+                <button class="btn-style" @onclick="onOpenShifts_Click">
                     <span class="oi oi-plus" aria-hidden="true"></span> Shifts plan
                 </button>
             </div>
         </div>
         <label class="version">Reporting</label>
         <div class="nav-group">
+            <div class="nav-item px-3">
+                <button class="btn-style" @onclick="onOpenReportRecordList_Click">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Record list
+                </button>
+            </div>
             <div class="nav-item px-3">
                 <button class="btn-style">
                     <span class="oi oi-plus" aria-hidden="true"></span> Activities
@@ -39,27 +44,22 @@
                     <span class="oi oi-plus" aria-hidden="true"></span> Plan vs realita
                 </button>
             </div>
-            <div class="nav-item px-3">
-                <button class="btn-style">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Record list
-                </button>
-            </div>
         </div>
 
         <label class="version">Others</label>
         <div class="nav-group">
             <div class="nav-item px-3">
-                <button class="btn-style" @onclick="onOpenSettingsClick">
+                <button class="btn-style" @onclick="onOpenSettings_Click">
                     <span class="oi oi-plus" aria-hidden="true"></span> Settings
                 </button>
             </div>
             <div class="nav-item px-3">
-                <button class="btn-style" @onclick="onOpenEventLogsPageClick">
+                <button class="btn-style" @onclick="onOpenEventLogsPage_Click">
                     <span class="oi oi-plus" aria-hidden="true"></span> Event logs
                 </button>
             </div>
             <div class="nav-item px-3">
-                <button class="btn-style" @onclick="onOpenDocumentPageClick" Match="NavLinkMatch.All">
+                <button class="btn-style" @onclick="onOpenDocumentPage_Click" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Documents(Swagger)
                 </button>
             </div>

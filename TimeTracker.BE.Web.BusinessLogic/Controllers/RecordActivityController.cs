@@ -1,29 +1,23 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
-	[ApiController]
+
 	[ApiExplorerSettings(GroupName = "v1")]
-	[SwaggerResponse(200, "Úspěšné získání položky/položek [Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)")]
-	[SwaggerResponse(404, "Položka/Položky nenalezeny.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404)")]
-	[SwaggerResponse(500, "Chyba serveru.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)")]
-	public class RecordActivityController : ControllerBase
+	public class RecordActivityController : aControllerBase
 	{
 		private readonly ActivityRepository<MsSqlDbContext> _activityRepository;
-		private readonly IMapper _mapper;
 		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
-		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper)
+		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper) : base(mapper)
 		{
 			_activityRepository = activityRepository;
 			_recordRepository = recordRepository;
-			_mapper = mapper;
 		}
 
 		[HttpGet("api/v1/activities")]
@@ -71,7 +65,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		}
 
 		[HttpPost("api/v1/record-activities")]
-		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync(RecordActivityInsertDto recordActivityInsertDto)
+		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync([FromBody] RecordActivityInsertDto recordActivityInsertDto)
 		{
 			try
 			{

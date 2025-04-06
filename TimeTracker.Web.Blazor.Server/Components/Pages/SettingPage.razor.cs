@@ -128,8 +128,8 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			}
 		}
 
-		private async void onCloseModalAddOrEditProjectChanged() => await loadProjectListAsync();
-		private async void onCloseModalAddOrEditSubModuleChanged() => await loadSubModuleListAsync();
+		private async void onAfterCloseModalAddOrEditProjectChanged() => await loadProjectListAsync();
+		private async void onAfterCloseModalAddOrEditSubModuleChanged() => await loadSubModuleListAsync();
 
 		// Handle row selection for projects
 		private async void onProjectRowSelected(ProjectBaseDto selectedRow)

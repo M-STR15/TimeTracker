@@ -1,0 +1,30 @@
+﻿@page "/current-activity"
+@using TimeTracker.BE.DB.Models.Enums
+@using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
+@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Helpers
+@using TimeTracker.Web.Blazor.Server.Modals
+
+@inherits BasePage
+
+<MButton Text="Change" OnClick="onOpenAddActvityModal"></MButton>
+
+
+<AddActivityModal Title="Change activity"
+                  @bind-Visible="_isOpenAddActivityModal"
+                  OnModalClosed="onAfterCloseModalAddActivity_Changed" />
+
+@code {
+    private bool _isOpenAddActivityModal;
+    private void onOpenAddActvityModal()
+    {
+        _isOpenAddActivityModal = true;
+
+    }
+
+    private void onAfterCloseModalAddActivity_Changed()
+    {
+
+
+    }
+}

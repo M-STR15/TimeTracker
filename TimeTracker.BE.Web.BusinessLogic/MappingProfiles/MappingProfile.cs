@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
@@ -20,6 +19,8 @@ namespace TimeTracker.BE.Web.BusinessLogic.MappingProfiles
 
 			CreateMap<RecordActivity, RecordActivityBaseDto>().ReverseMap();
 			CreateMap<RecordActivity, RecordActivityInsertDto>().ReverseMap();
+			CreateMap<RecordActivity, RecordActivityDetailDto>().ReverseMap();
+
 			CreateMap<Activity, ActivityBaseDto>().ReverseMap();
 		}
 	}

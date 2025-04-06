@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
@@ -10,20 +9,15 @@ using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
-	[ApiController]
 	[ApiExplorerSettings(GroupName = "v1")]
-	[SwaggerResponse(200, "Úspěšné získání položky/položek [Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200)")]
-	[SwaggerResponse(404, "Položka/Položky nenalezeny.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404)")]
-	[SwaggerResponse(500, "Chyba serveru.[Další informace](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500)")]
-	public class ProjectController : ControllerBase
+	public class ProjectController : aControllerBase
 	{
-		private readonly ProjectRepository<MsSqlDbContext> _projectRepository;
-		private readonly IMapper _mapper;
-		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, IMapper mapper)
+		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
+		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, IMapper mapper) : base(mapper)
 		{
 			_projectRepository = projectRepository;
-			_mapper = mapper;
 		}
+
 		#region GET
 		/// <summary>
 		/// Vrátí všechny projekty

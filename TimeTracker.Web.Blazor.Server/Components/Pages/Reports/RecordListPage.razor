@@ -1,0 +1,54 @@
+﻿@page "/reports/record-list"
+@using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
+@using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Models
+
+@inherits BasePage
+
+<h3>Report-Record list</h3>
+
+
+<MTable TRow="RecordActivityDetailDto" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
+@code {
+
+    private List<TableColumnDefinition<RecordActivityDetailDto>>? _recordActivityColumns;
+    private List<RecordActivityDetailDto>? _recordActivity;
+    private RecordActivityDetailDto? _selectedRecordActivity;
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            _recordActivityColumns = new List<TableColumnDefinition<RecordActivityDetailDto>>
+                {
+                    new TableColumnDefinition<RecordActivityDetailDto>
+                    {
+                        Header = "Start date",
+                        Key = nameof(RecordActivityDetailDto.StartDateTime),
+                        Width=150,
+                        eTypeColumn=eTypeColumn.Text
+                    },
+                };
+
+
+            var urlApi = "/api/v1/reports/record-activiries";
+            _recordActivity = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
+
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+
+    private async void onRecordActivityRowSelected(RecordActivityDetailDto selectedRow)
+    {
+        // if (!selectedRow.Equals(_selectedProject))
+        // {
+        // 	_selectedProject = selectedRow;
+
+        // 	base.StateHasChanged();
+        // }
+    }
+}
