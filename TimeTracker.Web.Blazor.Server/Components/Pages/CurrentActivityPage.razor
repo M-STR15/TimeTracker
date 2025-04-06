@@ -7,7 +7,72 @@
 
 @inherits BasePage
 
-<MButton Text="Change" OnClick="onOpenAddActvityModal"></MButton>
+<style>
+    table {
+        border-collapse: collapse;
+        width: auto;
+    }
+
+    td, th {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: center;
+    }
+</style>
+
+<div>
+    <MButton Text="Change" OnClick="onOpenAddActvityModal" Style="width:150px"></MButton>
+    <MButton Text="Pause" Style="width:150px"></MButton>
+    <MButton Text="End of shift" Style="width:150px"></MButton>
+</div>
+
+<h6>Last setting</h6>
+<table>
+    <tr>
+        <th>Date shift</th>
+        <th>Activity</th>
+        <th>Time</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td>@(_lastRecordActivity?.Activity?.Name ?? "")</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Project</td>
+        <td>Submodule</td>
+        <td>Act. time</td>
+    </tr>
+    <tr>
+        <td>@(_lastRecordActivity?.Project?.Name ?? "")</td>
+        <td>@(_lastRecordActivity?.SubModule?.Name ?? "")</td>
+        <td>>@(_lastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
+    </tr>
+</table>
+
+<h6>Total time</h6>
+<table>
+    <tr>
+        <th></th>
+        <th>Today</th>
+        <th>In shift</th>
+    </tr>
+    <tr>
+        <td>Work</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Pause</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
 
 
 <AddActivityModal Title="Change activity"
@@ -16,11 +81,24 @@
 
 @code {
     private bool _isOpenAddActivityModal;
-    private void onOpenAddActvityModal()
-    {
-        _isOpenAddActivityModal = true;
+    private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
+    private RecordActivityDetailDto? _lastRecordActivity;
 
+    protected async override Task OnInitializedAsync()
+    {
+        var urlApi = "/api/v1/last-record-activity";
+        _lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
+        await base.OnInitializedAsync();
     }
+
+    //   private RecordActivity? _lastRecordActivity
+    // {
+    // 	get => _lra;
+    // 	set
+    // 	{
+    // 		_lra = value;
+    // 	}
+    // }
 
     private void onAfterCloseModalAddActivity_Changed()
     {

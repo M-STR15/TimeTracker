@@ -64,6 +64,27 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+		[HttpGet("api/v1/last-record-activity")]
+		public async Task<ActionResult<RecordActivityDetailDto>> GetLastRecordActivityAsync()
+		{
+			try
+			{
+				var recordActivity = await _recordRepository.GetLastRecordActivityAsync();
+				if (recordActivity != null)
+				{
+					var recordActivityDto = _mapper.Map<RecordActivityDetailDto>(recordActivity);
+					return recordActivityDto != null ? Ok(recordActivityDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
 		#endregion GET
 
 		#region ADD

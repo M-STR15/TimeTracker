@@ -66,7 +66,7 @@ public class ReportRepository<T> where T : MainDatacontext
 	/// <summary>
 	/// Metoda získává plánované pracovní hodiny pro zadaný rozsah dat a typy směn.
 	/// </summary>
-	public List<DayHours> GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+	public List<DayHours>? GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
 	{
 		var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
 		return getPlanList_DayHours(start, end, dateList, typeShifts);
