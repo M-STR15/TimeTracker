@@ -1,39 +1,31 @@
 ﻿@page "/reports/record-list"
+@using AutoMapper
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Models
+@using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 
 @inherits BasePage
-
+@inject IMapper _mapper;
 <h3>Report-Record list</h3>
 
 
-<MTable TRow="RecordActivityDetailDto" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
+<MTable TRow="RecordListViewModel" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
 @code {
 
-    private List<TableColumnDefinition<RecordActivityDetailDto>>? _recordActivityColumns;
-    private List<RecordActivityDetailDto>? _recordActivity;
-    private RecordActivityDetailDto? _selectedRecordActivity;
+    private List<TableColumnDefinition<RecordListViewModel>>? _recordActivityColumns;
+    private List<RecordListViewModel>? _recordActivity;
+    private RecordListViewModel? _selectedRecordActivity;
 
     protected async override Task OnInitializedAsync()
     {
         try
         {
-            _recordActivityColumns = new List<TableColumnDefinition<RecordActivityDetailDto>>
-                {
-                    new TableColumnDefinition<RecordActivityDetailDto>
-                    {
-                        Header = "Start date",
-                        Key = nameof(RecordActivityDetailDto.StartDateTime),
-                        Width=150,
-                        eTypeColumn=eTypeColumn.Text
-                    },
-                };
-
+            _recordActivityColumns = createColumnDefinitions();
 
             var urlApi = "/api/v1/reports/record-activiries";
-            _recordActivity = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
-
+            var recordActivityDto = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
+            _recordActivity = _mapper.Map<List<RecordListViewModel>>(recordActivityDto);
             this.StateHasChanged();
         }
         catch (Exception ex)
@@ -42,7 +34,44 @@
         }
     }
 
-    private async void onRecordActivityRowSelected(RecordActivityDetailDto selectedRow)
+    private List<TableColumnDefinition<RecordListViewModel>> createColumnDefinitions()
+    {
+        return new List<TableColumnDefinition<RecordListViewModel>>
+                {
+                    new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Start",
+                        Key = nameof(RecordListViewModel.StartDateTime),
+                    },
+                       new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "End",
+                        Key = nameof(RecordListViewModel.EndDateTime),
+                    },
+                     new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Activity",
+                        Key = nameof(RecordListViewModel.ActivityName),
+                    },
+                     new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Project",
+                        Key = nameof(RecordListViewModel.ProjectName),
+                    },
+                          new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Submodule",
+                        Key = nameof(RecordListViewModel.SubModuleName),
+                    },
+                          new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Type shift",
+                        Key = nameof(RecordListViewModel.TypeShiftName),
+                    },
+                };
+    }
+
+    private async void onRecordActivityRowSelected(RecordListViewModel selectedRow)
     {
         // if (!selectedRow.Equals(_selectedProject))
         // {

@@ -1,4 +1,5 @@
 ﻿using TimeTracker.BE.Web.Shared.Infrastructure;
+using TimeTracker.Web.Blazor.Server.MappingProfiles;
 
 namespace TimeTracker.Web.Blazor.Server.Infrastructure
 {
@@ -6,6 +7,7 @@ namespace TimeTracker.Web.Blazor.Server.Infrastructure
 	{
 		public static IServiceCollection AddTimeTrackerWebBlazorServer(this IServiceCollection services)
 		{
+			services.AddAutoMapper(typeof(MappingProfile));
 			services.AddTimeTrackerBeWebShared();
 			return services;
 		}
