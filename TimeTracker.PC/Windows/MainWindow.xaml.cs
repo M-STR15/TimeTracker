@@ -405,8 +405,8 @@ namespace TimeTracker.PC.Windows
 				var selShift = _lastRecordActivity.Shift;
 				var activity = (eActivity)_lastRecordActivity.ActivityId;
 
-				var workHours_actual = (activity == eActivity.Start) ? actualActivityInSeconds : 0;
-				var pauseHours_actual = (activity == eActivity.Pause) ? actualActivityInSeconds : 0;
+				var workHours_actual = ((activity == eActivity.Start) ? actualActivityInSeconds : 0);
+				var pauseHours_actual = ((activity == eActivity.Pause) ? actualActivityInSeconds : 0);
 
 				var filterToday = DateTime.Now;
 				var workHours_fromDB = _reportProvider.GetWorkHours(filterToday);
@@ -415,16 +415,18 @@ namespace TimeTracker.PC.Windows
 				var workShiftHours_actual = getTimeShift(selShift, eActivity.Start, actualActivityInSeconds);
 				var pauseShifteHours_actual = getTimeShift(selShift, eActivity.Pause, actualActivityInSeconds);
 
-				var workShiftHours_fromDB = selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0;
-				var pauseShiftHours_fromDB = selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0;
+				var workShiftHours_fromDB = (selShift != null ? _reportProvider.GetWorkHoursShift(selShift.GuidId) : 0);
+				var pauseShiftHours_fromDB = (selShift != null ? _reportProvider.GetPauseHoursShift(selShift.GuidId) : 0);
 
-				lblWorkerTime.Content = TimeSpan.FromSeconds(workHours_fromDB + workHours_actual).ToString(@"hh\:mm\:ss");
-				lblPauseTime.Content = TimeSpan.FromSeconds(pauseHours_fromDB + pauseHours_actual).ToString(@"hh\:mm\:ss");
-				lblTotalTime.Content = TimeSpan.FromSeconds(workHours_fromDB + pauseHours_fromDB + workHours_actual + pauseHours_actual).ToString(@"hh\:mm\:ss");
+				var formTime = @"hh\:mm\:ss";
 
-				lblWorkShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual).ToString(@"hh\:mm\:ss");
-				lblPauseShiftTime.Content = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
-				lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(@"hh\:mm\:ss");
+				lblWorkerTime.Content = TimeSpan.FromSeconds(workHours_fromDB + workHours_actual).ToString(formTime);
+				lblPauseTime.Content = TimeSpan.FromSeconds(pauseHours_fromDB + pauseHours_actual).ToString(formTime);
+				lblTotalTime.Content = TimeSpan.FromSeconds(workHours_fromDB + pauseHours_fromDB + workHours_actual + pauseHours_actual).ToString(formTime);
+
+				lblWorkShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual).ToString(formTime);
+				lblPauseShiftTime.Content = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual).ToString(formTime);
+				lblTotalShiftTime.Content = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual).ToString(formTime);
 			}
 		}
 
