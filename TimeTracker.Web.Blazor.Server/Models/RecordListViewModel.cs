@@ -20,5 +20,15 @@
 
 		public string TypeShiftName { get; set; }
 
+		public string Time
+		{
+			get
+			{
+				var time = (DateTime.Now - StartDateTime);
+				var actualActivityInSeconds = time.TotalSeconds;
+				return time.ToString(@"hh\:mm\:ss");
+			}
+		}
+
 	}
 }

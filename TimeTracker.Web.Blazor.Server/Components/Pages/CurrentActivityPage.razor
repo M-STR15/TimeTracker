@@ -1,11 +1,14 @@
 ﻿@page "/current-activity"
+@using AutoMapper
 @using TimeTracker.BE.DB.Models.Enums
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Helpers
 @using TimeTracker.Web.Blazor.Server.Modals
+@using TimeTracker.Web.Blazor.Server.Models
 
 @inherits BasePage
+@inject IMapper _mapper
 
 <style>
     table {
@@ -18,6 +21,23 @@
         padding: 8px;
         text-align: center;
     }
+
+    .col-1 {
+        width: 30%;
+    }
+
+    .col-2 {
+        width: 40%;
+    }
+
+    .col-3 {
+        width: 30%;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 450px;
+    }
 </style>
 
 <div>
@@ -26,69 +46,97 @@
     <MButton Text="End of shift" Style="width:150px"></MButton>
 </div>
 
-<h6>Last setting</h6>
-<table>
-    <tr>
-        <th>Date shift</th>
-        <th>Activity</th>
-        <th>Time</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td>@(_lastRecordActivity?.Activity?.Name ?? "")</td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Project</td>
-        <td>Submodule</td>
-        <td>Act. time</td>
-    </tr>
-    <tr>
-        <td>@(_lastRecordActivity?.Project?.Name ?? "")</td>
-        <td>@(_lastRecordActivity?.SubModule?.Name ?? "")</td>
-        <td>>@(_lastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
-    </tr>
-</table>
+@if (_lastRecordActivity != null)
+{
+    <table>
+        <tr>
+            <th colspan="3">Last setting</th>
+        </tr>
+        <tr>
+            <th class="col-1">Date shift</th>
+            <th class="col-2">Activity</th>
+            <th class="col-3">Time</th>
+        </tr>
+        <tr>
+            <td class="col-1"></td>
+            <td class="col-2">@(_lastRecordActivity?.ActivityName ?? "")</td>
+            <td class="col-3">@(_lastRecordActivity?.Time ?? "")</td>
+        </tr>
+        <tr>
+            <th class="col-1">Project</th>
+            <th class="col-2">Submodule</th>
+            <th class="col-3">Act. time</th>
+        </tr>
+        <tr>
+            <td class="col-1">@(_lastRecordActivity?.ProjectName ?? "")</td>
+            <td class="col-2">@(_lastRecordActivity?.SubModuleName ?? "")</td>
+            <td class="col-3">@(_lastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
+        </tr>
+    </table>
 
-<h6>Total time</h6>
-<table>
-    <tr>
-        <th></th>
-        <th>Today</th>
-        <th>In shift</th>
-    </tr>
-    <tr>
-        <td>Work</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Pause</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Total</td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
-
+    <table>
+        <tr>
+            <th colspan="3">Total time</th>
+        </tr>
+        <tr>
+            <th class="col-1"></th>
+            <th class="col-2">Today</th>
+            <th class="col-3">In shift</th>
+        </tr>
+        <tr>
+            <th class="col-1">Work</th>
+            <td class="col-2"></td>
+            <td class="col-3"></td>
+        </tr>
+        <tr>
+            <th class="col-1">Pause</th>
+            <td class="col-2"></td>
+            <td class="col-3"></td>
+        </tr>
+        <tr>
+            <th class="col-1">Total</th>
+            <td class="col-2"></td>
+            <td class="col-3"></td>
+        </tr>
+    </table>
+}
 
 <AddActivityModal Title="Change activity"
                   @bind-Visible="_isOpenAddActivityModal"
                   OnModalClosed="onAfterCloseModalAddActivity_Changed" />
-
 @code {
     private bool _isOpenAddActivityModal;
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
-    private RecordActivityDetailDto? _lastRecordActivity;
+    private RecordListViewModel? _lastRecordActivity;
+    private bool isRunning = true;
 
     protected async override Task OnInitializedAsync()
     {
-        var urlApi = "/api/v1/last-record-activity";
-        _lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
-        await base.OnInitializedAsync();
+        try
+        {
+            var urlApi = "/api/v1/last-record-activity";
+            var lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
+            _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
+            await base.OnInitializedAsync();
+        }
+        catch (Exception)
+        {
+
+        }
+        try
+        {
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(1)); // každé 2 sekundy
+            while (await timer.WaitForNextTickAsync() && isRunning)
+            {
+
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+
     }
 
     //   private RecordActivity? _lastRecordActivity
@@ -105,4 +153,10 @@
 
 
     }
+
+    public void Dispose()
+    {
+        isRunning = false;
+    }
+
 }
