@@ -2,6 +2,7 @@
 @using AutoMapper
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Modals
 @using TimeTracker.Web.Blazor.Server.Models
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 
@@ -9,30 +10,74 @@
 @inject IMapper _mapper;
 <h3>Report-Record list</h3>
 
-
+<div>
+    <MButton Text="Add" OnClick="onOpenAddActvityModal"></MButton>
+    <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)"></MButton>
+</div>
 <MTable TRow="RecordListViewModel" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
-@code {
 
+<AddActivityModal Title="Change activity"
+                  @bind-Visible="_isOpenAddActivityModal"
+                  OnModalClosed="onAfterCloseModalAddActivity_Changed" />
+
+<QueryYesNoModal Title="Query"
+                 QueryText="Chcete smazat záznam?"
+                 ResultQueryChanged="onAfterCloseDeleteQueryResult"
+                 @bind-Visible="_isOpenDeleteQueryModal" />
+
+@code {
+    private bool _isOpenDeleteQueryModal = false;
     private List<TableColumnDefinition<RecordListViewModel>>? _recordActivityColumns;
     private List<RecordListViewModel>? _recordActivity;
     private RecordListViewModel? _selectedRecordActivity;
 
-    protected async override Task OnInitializedAsync()
+    private bool _isOpenAddActivityModal = false;
+    private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
+    private void onOpenQueryDeleteActvityModal() => _isOpenDeleteQueryModal = true;
+
+
+    private void onAfterCloseModalAddActivity_Changed()
+    {
+
+        loadData();
+    }
+
+    private async Task onAfterCloseDeleteQueryResult(bool confirmed)
+    {
+        if (confirmed && _selectedRecordActivity != null)
+        {
+            var urlApi = $"/api/v1/record-activities/{_selectedRecordActivity.GuidId}";
+            await _httpClient.DeleteAsync(urlApi);
+            _selectedRecordActivity = null;
+            loadData();
+        }
+    }
+
+
+    protected override void OnInitialized()
     {
         try
         {
+            base.OnInitialized();
             _recordActivityColumns = createColumnDefinitions();
-
-            var urlApi = "/api/v1/reports/record-activiries";
-            var recordActivityDto = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
-            _recordActivity = _mapper.Map<List<RecordListViewModel>>(recordActivityDto);
-            this.StateHasChanged();
+            loadData();
         }
         catch (Exception ex)
         {
 
         }
+
     }
+
+    private async void loadData()
+    {
+        var urlApi = "/api/v1/reports/record-activiries";
+        var recordActivityDto = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
+        _recordActivity = _mapper.Map<List<RecordListViewModel>>(recordActivityDto);
+        this.StateHasChanged();
+
+    }
+
 
     private List<TableColumnDefinition<RecordListViewModel>> createColumnDefinitions()
     {
@@ -43,17 +88,17 @@
                         Header = "Start",
                         Key = nameof(RecordListViewModel.StartDateTime),
                     },
-                       new TableColumnDefinition<RecordListViewModel>
+                    new TableColumnDefinition<RecordListViewModel>
                     {
                         Header = "End",
                         Key = nameof(RecordListViewModel.EndDateTime),
                     },
-                     new TableColumnDefinition<RecordListViewModel>
+                    new TableColumnDefinition<RecordListViewModel>
                     {
                         Header = "Activity",
                         Key = nameof(RecordListViewModel.ActivityName),
                     },
-                     new TableColumnDefinition<RecordListViewModel>
+                    new TableColumnDefinition<RecordListViewModel>
                     {
                         Header = "Project",
                         Key = nameof(RecordListViewModel.ProjectName),
@@ -63,10 +108,20 @@
                         Header = "Submodule",
                         Key = nameof(RecordListViewModel.SubModuleName),
                     },
-                          new TableColumnDefinition<RecordListViewModel>
+                    new TableColumnDefinition<RecordListViewModel>
                     {
                         Header = "Type shift",
                         Key = nameof(RecordListViewModel.TypeShiftName),
+                    },
+                      new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Shift",
+                        Key = nameof(RecordListViewModel.TypeShiftName),
+                    },
+                     new TableColumnDefinition<RecordListViewModel>
+                    {
+                        Header = "Description",
+                        Key = nameof(RecordListViewModel.Description),
                     },
                 };
     }

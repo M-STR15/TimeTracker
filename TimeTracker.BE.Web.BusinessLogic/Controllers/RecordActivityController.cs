@@ -20,6 +20,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			_recordRepository = recordRepository;
 		}
 
+		#region GET
 		[HttpGet("api/v1/activities")]
 		public async Task<ActionResult<List<ActivityBaseDto>>> GetActivitiesAsync()
 		{
@@ -63,6 +64,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+		#endregion GET
+
+		#region ADD
 
 		[HttpPost("api/v1/record-activities")]
 		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync([FromBody] RecordActivityInsertDto recordActivityInsertDto)
@@ -86,5 +90,31 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
+		#endregion ADD
+
+		#region DELETE
+		[HttpDelete("api/v1/record-activities/{recordActivityGuidId}")]
+		public async Task<ActionResult<List<RecordActivityInsertDto>>> DeleteRecordActivitiesAsync(Guid recordActivityGuidId)
+		{
+			try
+			{
+
+				var result = await _recordRepository.DeleteRecordAsync(recordActivityGuidId);
+				if (result != null)
+				{
+					return result == true ? Ok() : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+		#endregion DELETE
 	}
 }
