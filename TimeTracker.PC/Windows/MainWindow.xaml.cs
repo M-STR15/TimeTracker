@@ -17,6 +17,8 @@ namespace TimeTracker.PC.Windows
 {
 	public partial class MainWindow : Window, IDisposable
 	{
+		private const string _formTime = @"hh\:mm\:ss";
+		private readonly Func<SqliteDbContext> _context;
 		private readonly MainStory _mainStory;
 		private DispatcherTimer _dispatcherTimer;
 		private EventLogService _eventLogService;
@@ -35,7 +37,15 @@ namespace TimeTracker.PC.Windows
 		//private int _totalActivityTimeBeforeInSecond;
 
 		private List<TypeShift> _typeShifts = new();
-		private readonly Func<SqliteDbContext> _context;
+		private RecordActivity? _lastRecordActivity
+		{
+			get => _lra;
+			set
+			{
+				_lra = value;
+				onLasRecordActivityChange();
+			}
+		}
 
 		public MainWindow(MainStory mainStory, Func<SqliteDbContext> context)
 		{
@@ -43,6 +53,66 @@ namespace TimeTracker.PC.Windows
 			_eventLogService = new EventLogService();
 			_mainStory = mainStory;
 			inicialization();
+		}
+
+		public void Dispose()
+		{
+			_lastRecordActivityHangler -= onSetLabelsHandler;
+		}
+
+		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
+		{
+			setTotalTimesLabels();
+		}
+
+		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
+		{
+			return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+		}
+
+		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+		{
+			try
+			{
+				var startTimeActivity = DateTime.Now;
+
+				var record = new RecordActivity();
+				if (shift != null && shift.GuidId != Guid.Empty)
+					record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
+				else
+					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
+
+				var result = await _recordProvider.SaveRecordAsync(record);
+				if (result != null)
+				{
+					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
+				}
+
+				return result != null;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		private string getShiftDateText()
+		{
+			var shift = _lastRecordActivity?.Shift;
+			var shiftDate = "";
+
+			if (shift != null)
+			{
+				var cmdShift = new ShiftCmb(shift);
+				shiftDate = cmdShift?.StartDateStr ?? "";
+			}
+			return shiftDate;
+		}
+
+		private string getTextFromRichTextBox(RichTextBox richTextBox)
+		{
+			var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+			return textRange.Text;
 		}
 
 		private async void inicialization()
@@ -82,69 +152,6 @@ namespace TimeTracker.PC.Windows
 				_eventLogService.WriteError(new Guid("def4de22-6fc4-4ab4-9f7e-0aba95e5337c"), ex, "Problém při otevírání hlavního okna.");
 			}
 		}
-
-		private RecordActivity? _lastRecordActivity
-		{
-			get => _lra;
-			set
-			{
-				_lra = value;
-				onLasRecordActivityChange();
-			}
-		}
-
-		public void Dispose()
-		{
-			_lastRecordActivityHangler -= onSetLabelsHandler;
-		}
-
-		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
-		{
-			setlblTime();
-		}
-
-		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
-		{
-			return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
-		}
-
-		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
-		{
-			try
-			{
-				var startTimeActivity = DateTime.Now;
-
-				var record = new RecordActivity();
-				if (shift != null && shift.GuidId != Guid.Empty)
-					record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
-				else
-					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
-
-				var result = await _recordProvider.SaveRecordAsync(record);
-				if (result != null)
-				{
-					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
-				}
-
-				return result != null;
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
-
-		private string getTextFromRichTextBox(RichTextBox richTextBox)
-		{
-			var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-			return textRange.Text;
-		}
-
-		private double getTimeShift(Shift? shift, eActivity activity, double actualActivityInSeconds)
-		{
-			return (shift != null && shift.GuidId != Guid.Empty && activity == eActivity.Start) ? actualActivityInSeconds : 0;
-		}
-
 		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
@@ -218,7 +225,8 @@ namespace TimeTracker.PC.Windows
 				if (result)
 				{
 					rtbDescription.Document.Blocks.Clear();
-					setLabels();
+					setLastSettingLabels();
+					setTotalTimesLabels();
 					startTimer();
 				}
 			}
@@ -244,7 +252,8 @@ namespace TimeTracker.PC.Windows
 				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
-					setLabels();
+					setLastSettingLabels();
+					setTotalTimesLabels();
 					_dispatcherTimer.Stop();
 				}
 			}
@@ -270,7 +279,8 @@ namespace TimeTracker.PC.Windows
 				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
-					setLabels();
+					setLastSettingLabels();
+					setTotalTimesLabels();
 					startTimer();
 				}
 			}
@@ -353,14 +363,10 @@ namespace TimeTracker.PC.Windows
 			}
 		}
 
-		private void onSetLabelsHandler(object sender, EventArgs eventArgs)
-		{
-			setLabels();
-		}
+		private void onSetLabelsHandler(object sender, EventArgs eventArgs) => setLastSettingLabels();
 
-		private void setLabels()
+		private void setLastSettingLabels()
 		{
-			setlblTime();
 			if (_lastRecordActivity != null)
 			{
 				lblActivity.Text = _lastRecordActivity?.Activity?.Name ?? "";
@@ -368,24 +374,10 @@ namespace TimeTracker.PC.Windows
 				lblSubModule.Text = _lastRecordActivity?.SubModule?.Name ?? "";
 				lblStartTime_time.Text = _lastRecordActivity?.StartDateTime.ToString("HH:mm:ss");
 				lblStartTime_date.Text = _lastRecordActivity?.StartDateTime.ToString("dd.MM.yy");
-
-				var shift = _lastRecordActivity?.Shift;
-
-				if (shift != null)
-				{
-					var cmdShift = new ShiftCmb(shift);
-					lblShift_date.Text = cmdShift?.StartDateStr ?? "";
-				}
-				else
-				{
-					lblShift_date.Text = "";
-				}
+				lblShift_date.Text = getShiftDateText();
 			}
 		}
-
-		private const string _formTime = @"hh\:mm\:ss";
-
-		private void setlblTime()
+		private void setTotalTimesLabels()
 		{
 			var shiftGuidId = _lastRecordActivity?.Shift?.GuidId ?? Guid.Empty;
 
