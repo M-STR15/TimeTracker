@@ -44,6 +44,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				};
 		}
 
+		/// <inheritdoc/>
 		protected async override Task OnInitializedAsync()
 		{
 

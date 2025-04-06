@@ -52,14 +52,14 @@ public class RecordRepository<T> where T : MainDatacontext
 			var context = _contextFactory();
 			if (context.RecordActivities.Count() > 0)
 			{
-				recordActivity = await context.RecordActivities.OrderBy(x => x.StartDateTime)
+				recordActivity = await context.RecordActivities.OrderByDescending(x => x.StartDateTime)
 					.Include(x => x.Project)
 						.ThenInclude(x => x.SubModules)
 					.Include(x => x.Activity)
 					.Include(x => x.Shift)
 					.Include(x => x.SubModule)
 					.Include(x => x.TypeShift)
-					.LastAsync();
+					.FirstOrDefaultAsync();
 			}
 
 			return recordActivity;

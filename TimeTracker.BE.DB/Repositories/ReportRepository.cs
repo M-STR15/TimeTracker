@@ -73,7 +73,35 @@ public class ReportRepository<T> where T : MainDatacontext
 	}
 
 	/// <summary>
-	/// Metoda získává počet hodin práce pro zadané datum.
+	/// Methoda získává celokový počet jak odpracovaných hodin, tak i hodin na přestávce.
+	/// </summary>
+	/// <param name="date"></param>
+	/// <returns></returns>
+	public CalcHours GetActualSumaryHours()
+	{
+		var date = DateTime.Now;
+		return new CalcHours()
+		{
+			WorkHours = GetWorkHours(date),
+			PauseHours = GetPauseHours(date),
+		};
+	}
+
+	public CalcHours GetSumaryHoursShift(Guid shiftGuidID)
+	{
+		if (shiftGuidID != Guid.Empty)
+		{
+			return new CalcHours()
+			{
+				WorkHours = GetWorkHoursShift(shiftGuidID),
+				PauseHours = GetPauseHoursShift(shiftGuidID),
+			};
+		}
+
+		return new CalcHours();
+	}
+	/// <summary>
+	/// Metoda získává celkový počet pracovních hodin pro konkrétní datum.
 	/// </summary>
 	public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
 
