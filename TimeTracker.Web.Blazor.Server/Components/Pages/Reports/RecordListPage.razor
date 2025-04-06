@@ -2,6 +2,7 @@
 @using AutoMapper
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Helpers
 @using TimeTracker.Web.Blazor.Server.Modals
 @using TimeTracker.Web.Blazor.Server.Models
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
@@ -11,6 +12,7 @@
 <h3>Report-Record list</h3>
 
 <div>
+    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
     <MButton Text="Add" OnClick="onOpenAddActvityModal"></MButton>
     <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)"></MButton>
 </div>
@@ -35,6 +37,20 @@
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
     private void onOpenQueryDeleteActvityModal() => _isOpenDeleteQueryModal = true;
 
+    private List<MonthAndYearItemViewModel> _monthAndYears = new();
+    private MonthAndYearItemViewModel _selectMonthAndYear;
+    public MonthAndYearItemViewModel SelectMonthAndYear
+    {
+        get => _selectMonthAndYear;
+        set
+        {
+            if (value != null && _selectMonthAndYear != value)
+            {
+                _selectMonthAndYear = value;
+                loadData();
+            }
+        }
+    }
 
     private void onAfterCloseModalAddActivity_Changed()
     {
@@ -59,6 +75,8 @@
         try
         {
             base.OnInitialized();
+            _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
+            SelectMonthAndYear = _monthAndYears.FirstOrDefault();
             _recordActivityColumns = createColumnDefinitions();
             loadData();
         }
@@ -71,9 +89,17 @@
 
     private async void loadData()
     {
-        var urlApi = "/api/v1/reports/record-activiries";
+        var dateStart = SelectMonthAndYear.Date;
+        var dateEnd = SelectMonthAndYear.Date.AddMonths(1);
+
+        var formattedDateStart = dateStart.ToString("yyyy-MM-dd");
+        var formattedDateEnd = dateEnd.ToString("yyyy-MM-dd");
+
+
+        var urlApi = $"/api/v1/reports/record-activiries/{formattedDateStart}/{formattedDateEnd}";
         var recordActivityDto = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
         _recordActivity = _mapper.Map<List<RecordListViewModel>>(recordActivityDto);
+
         this.StateHasChanged();
 
     }

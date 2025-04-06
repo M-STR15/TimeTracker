@@ -2,6 +2,7 @@
 @using System.Globalization
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
+@using TimeTracker.Web.Blazor.Server.Helpers
 @using TimeTracker.Web.Blazor.Server.Models
 
 @inherits BasePage
@@ -93,8 +94,7 @@
 
     protected async override Task OnInitializedAsync()
     {
-        createMontData();
-
+        _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
         _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
         _selectTypeShift = _typeShifts.FirstOrDefault();
         SelectMonthAndYear = _monthAndYears.FirstOrDefault();
@@ -102,17 +102,6 @@
         this.StateHasChanged();
     }
 
-    private void createMontData()
-    {
-        var startDate = new DateTime(2025, 1, 1);
-        var endDate = DateTime.Today;
-
-        while (startDate <= endDate)
-        {
-            _monthAndYears.Add(new MonthAndYearItemViewModel(startDate));
-            startDate = startDate.AddMonths(1);
-        }
-    }
     // private void onChangItemDateChanged(ChangeEventArgs e)
     // {
     //     var item = e.Value as MonthAndYearItem;
@@ -130,19 +119,8 @@
         // await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
 
         _days.Clear();
-        var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);
-        for (int i = 0; i < daysInMonth; i++)
-        {
-            var startDate = new DateTime(item.Year, item.Month, i + 1);
-            var shiftInDb = planShiftsInDB.FirstOrDefault(x => x.StartDate == startDate);
-            var existShift = (shiftInDb != null);
+        _days = GeneratorDatesHelper.GetDaysInMonth(item, planShiftsInDB, _typeShifts).ToList();
 
-            Guid guidId = existShift ? shiftInDb.GuidId : Guid.Empty;
-            int typeShiftId = existShift ? shiftInDb.TypeShiftId : 0;
-            string? description = existShift ? shiftInDb?.Description : null;
-            var typeShift = _typeShifts.FirstOrDefault(x => x.Id == typeShiftId);
-            _days.Add(new ShiftViewModel(guidId, startDate, typeShiftId, typeShift, description));
-        }
 
         this.StateHasChanged();
     }
