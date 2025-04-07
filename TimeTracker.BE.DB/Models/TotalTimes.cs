@@ -2,6 +2,8 @@
 {
 	public class TotalTimes
 	{
+		public int ActivityId { get; set; }
+		public Guid? ShiftGuidId { get; set; }
 		public TimeSpan ActualTime { get; set; }
 
 		public TimeSpan WorkTime { get; set; }

@@ -1,6 +1,5 @@
 ﻿@page "/current-activity"
 @using AutoMapper
-@using TimeTracker.BE.DB.Models.Enums
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Web.Blazor.Server.Components.Elements
 @using TimeTracker.Web.Blazor.Server.Helpers
@@ -58,7 +57,7 @@
             <th class="col-3">Time</th>
         </tr>
         <tr>
-            <td class="col-1"></td>
+            <td class="col-1">@(_lastRecordActivity.ShiftDateStr)</td>
             <td class="col-2">@(_lastRecordActivity?.ActivityName ?? "")</td>
             <td class="col-3">@(_lastRecordActivity?.Time ?? "")</td>
         </tr>
@@ -85,20 +84,24 @@
         </tr>
         <tr>
             <th class="col-1">Work</th>
-            <td class="col-2"></td>
-            <td class="col-3"></td>
+            <td class="col-2">@_totalTime.WorkTimeStr</td>
+            <td class="col-3">@_totalTime.WorkShiftTimeStr</td>
         </tr>
         <tr>
             <th class="col-1">Pause</th>
-            <td class="col-2"></td>
-            <td class="col-3"></td>
+            <td class="col-2">@_totalTime.PauseTimeStr</td>
+            <td class="col-3">@_totalTime.PauseShiftTimeStr</td>
         </tr>
         <tr>
             <th class="col-1">Total</th>
-            <td class="col-2"></td>
-            <td class="col-3"></td>
+            <td class="col-2">@_totalTime.TotalTimeStr</td>
+            <td class="col-3">@_totalTime.TotalShiftTimeStr</td>
         </tr>
     </table>
+}
+else
+{
+    <MLoader />
 }
 
 <AddActivityModal Title="Change activity"
@@ -109,6 +112,7 @@
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
     private RecordListViewModel? _lastRecordActivity;
     private bool isRunning = true;
+    private TotalTimesViewModel? _totalTime;
 
     protected async override Task OnInitializedAsync()
     {
@@ -116,6 +120,9 @@
         {
             var urlApi = "/api/v1/last-record-activity";
             var lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
+            var urlApiTotalTime = "/api/v1/reports/total-times";
+            var totalTime = await _httpClient.GetFromJsonAsync<TotalTimesDto>(urlApiTotalTime);
+            _totalTime = _mapper.Map<TotalTimesViewModel>(totalTime);
             _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
             await base.OnInitializedAsync();
         }
@@ -128,7 +135,7 @@
             var timer = new PeriodicTimer(TimeSpan.FromSeconds(1)); // každé 2 sekundy
             while (await timer.WaitForNextTickAsync() && isRunning)
             {
-
+                _totalTime.Update();
                 await InvokeAsync(StateHasChanged);
             }
         }

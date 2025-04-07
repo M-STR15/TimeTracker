@@ -1,6 +1,5 @@
 ﻿using TimeTracker.BE.DB.Models;
-using TimeTracker.BE.DB.Models.Enums;
-using TimeTracker.BE.DB.Models.Interfaces;
+using TimeTracker.Enums;
 using TimeTracker.PC.Models;
 
 namespace TimeTracker.PC.Services
@@ -32,6 +31,8 @@ namespace TimeTracker.PC.Services
 			var pauseShiftHours_fromDB = calcHoursShift.PauseHours;
 
 			var totalTimes = new TotalTimes();
+			totalTimes.ActivityId = _lastRecordActivity.ActivityId;
+			totalTimes.ShiftGuidId = _lastRecordActivity.ShiftGuidId;
 			totalTimes.ActualTime = GetActualTime(filterToday, _lastRecordActivity);
 
 			totalTimes.WorkTime = TimeSpan.FromSeconds(calcHours.WorkHours + workHours_actual);

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Models.Interfaces;
+using TimeTracker.Enums;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {

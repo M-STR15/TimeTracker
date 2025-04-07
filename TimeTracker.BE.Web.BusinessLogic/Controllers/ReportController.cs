@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.PC.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
@@ -57,6 +59,34 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityDetailDto>>(recordActivities);
 					return recordActivitiesDto != null ? Ok(recordActivitiesDto) : Problem();
+				}
+				else
+				{
+					return NotFound();
+				}
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+	
+		[HttpGet("api/v1/reports/total-times")]
+		public async Task<ActionResult<TotalTimesDto>> GetTotalTimesDtoAsync()
+		{
+			try
+			{
+				var _lastRecordActivity = await _recordRepository.GetLastRecordActivityAsync();
+				var shiftGuidId = _lastRecordActivity?.Shift?.GuidId ?? Guid.Empty;
+
+				var calcHours_forToday_fromDb = _reportRepository.GetActualSumaryHours();
+				var calcHours_forShift_fromDb = _reportRepository.GetSumaryHoursShift(shiftGuidId);
+
+				var totalTime = TotalTimesService.Get(calcHours_forToday_fromDb, calcHours_forShift_fromDb, _lastRecordActivity);
+
+				if (totalTime != null)
+				{
+					return totalTime != null ? Ok(totalTime) : Problem();
 				}
 				else
 				{

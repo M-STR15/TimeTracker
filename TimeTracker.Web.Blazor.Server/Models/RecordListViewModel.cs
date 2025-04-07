@@ -11,6 +11,7 @@
 		//public int? TypeShiftId { get; set; }
 		public DateTime? EndDateTime { get; set; }
 		public Guid GuidId { get; set; }
+		public string ShiftDateStr { get; set; }
 
 		public string ActivityName { get; set; }
 
