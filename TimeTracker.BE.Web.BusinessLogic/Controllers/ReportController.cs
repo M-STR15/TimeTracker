@@ -50,7 +50,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="dateEnd">datum musí být ve formátu ISO 8601 např. 2025-04-06</param>
 		/// <returns></returns>
 		[HttpGet("api/v1/reports/record-activiries/{dateStart}/{dateEnd}")]
-		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateStart, [FromRoute] DateTime dateEnd)
+		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateStart, [FromRoute] DateTime dateEnd)
 		{
 			try
 			{

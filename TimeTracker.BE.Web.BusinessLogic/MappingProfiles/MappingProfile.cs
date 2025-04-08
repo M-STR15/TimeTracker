@@ -17,6 +17,8 @@ namespace TimeTracker.BE.Web.BusinessLogic.MappingProfiles
 
 			CreateMap<TypeShift, TypeShiftBaseDto>().ReverseMap();
 			CreateMap<Shift, ShiftBaseDto>().ReverseMap();
+			CreateMap<Shift, ShiftInsertDto>().ReverseMap();
+
 
 			CreateMap<RecordActivity, RecordActivityBaseDto>().ReverseMap();
 			CreateMap<RecordActivity, RecordActivityInsertDto>().ReverseMap();

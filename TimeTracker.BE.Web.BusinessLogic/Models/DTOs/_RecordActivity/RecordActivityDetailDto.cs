@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {
@@ -13,7 +12,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 		public virtual ProjectBaseDto? Project { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public virtual Shift? Shift { get; set; }
+		public virtual ShiftBaseDto? Shift { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public virtual SubModuleBaseDto? SubModule { get; set; }
