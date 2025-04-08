@@ -18,16 +18,23 @@
         <MButton Text="Add" OnClick="onOpenAddActvityModal"></MButton>
         <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)"></MButton>
     </div>
-    <MTable TRow="RecordListViewModel" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
+    if (_recordActivity == null)
+    {
+        <MLoader />
+    }
+    else
+    {
+        <MTable TRow="RecordListViewModel" Rows="_recordActivity" Columns="_recordActivityColumns" OnRowSelected="onRecordActivityRowSelected" @bind-Selected="_selectedRecordActivity"></MTable>
 
-    <AddActivityModal Title="Change activity"
-                      @bind-Visible="_isOpenAddActivityModal"
-                      OnModalClosed="onAfterCloseModalAddActivity_Changed" />
+        <AddActivityModal Title="Change activity"
+                          @bind-Visible="_isOpenAddActivityModal"
+                          OnModalClosed="onAfterCloseModalAddActivity_Changed" />
 
-    <QueryYesNoModal Title="Query"
-                     QueryText="Chcete smazat záznam?"
-                     ResultQueryChanged="onAfterCloseDeleteQueryResult"
-                     @bind-Visible="_isOpenDeleteQueryModal" />
+        <QueryYesNoModal Title="Query"
+                         QueryText="Chcete smazat záznam?"
+                         ResultQueryChanged="onAfterCloseDeleteQueryResult"
+                         @bind-Visible="_isOpenDeleteQueryModal" />
+    }
 }
 
 
@@ -41,7 +48,7 @@
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
     private void onOpenQueryDeleteActvityModal() => _isOpenDeleteQueryModal = true;
 
-    private List<MonthAndYearItemViewModel>? _monthAndYears = new();
+    private List<MonthAndYearItemViewModel>? _monthAndYears;
     private MonthAndYearItemViewModel? _selectMonthAndYear;
     public MonthAndYearItemViewModel? SelectMonthAndYear
     {
@@ -103,6 +110,7 @@
     {
         try
         {
+            _recordActivity = null;
             var dateStart = SelectMonthAndYear.Date;
             var dateEnd = SelectMonthAndYear.Date.AddMonths(1);
 
