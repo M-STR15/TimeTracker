@@ -15,7 +15,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
 	/// </summary>
-	public List<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
+	public IEnumerable<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
 	{
 		return GetActivityOverDaysAsync(start, end).Result;
 	}
@@ -24,7 +24,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
 	/// </summary>
-	public async Task<List<SumInDay>> GetActivityOverDaysAsync(DateTime start, DateTime end)
+	public async Task<IEnumerable<SumInDay>> GetActivityOverDaysAsync(DateTime start, DateTime end)
 	{
 		var activities = new List<RecordActivity>();
 
@@ -47,7 +47,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 		catch (Exception)
 		{
-			return new List<SumInDay>();
+			return default;
 		}
 	}
 
@@ -64,7 +64,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <summary>
 	/// Metoda získává plánované pracovní hodiny pro zadaný rozsah dat a typy směn.
 	/// </summary>
-	public List<DayHours>? GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+	public IEnumerable<DayHours>? GetPlanWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
 	{
 		var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
 		return getPlanList_DayHours(start, end, dateList, typeShifts);
@@ -106,7 +106,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <summary>
 	/// Metoda získává pracovní hodiny pro zadaný rozsah dat a typy směn.
 	/// </summary>
-	public List<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
+	public IEnumerable<DayHours> GetWorkHours(DateTime start, DateTime end, eTypeShift[] typeShifts)
 	{
 		var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
 		var realData = GetActivityOverDays(start, end);
@@ -160,7 +160,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		return sumHours;
 	}
 
-	private List<DayHours>? getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
+	private IEnumerable<DayHours>? getPlanList_DayHours(DateTime start, DateTime end, List<DayHours> basicList, eTypeShift[] typeShifts)
 	{
 		try
 		{
@@ -186,7 +186,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 	}
 
-	private List<DayHours> getRealList_DayHours(List<DayHours> basicList, List<SumInDay> sumInDayList, eTypeShift[] typeShifts)
+	private IEnumerable<DayHours> getRealList_DayHours(IList<DayHours> basicList, IEnumerable<SumInDay> sumInDayList, eTypeShift[] typeShifts)
 	{
 		var cumHours = 0.00;
 		var planList = new List<DayHours>();
@@ -203,7 +203,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		return planList;
 	}
 
-	private async Task<List<RecordActivity>> getRecordSumListAsync(DateTime start, DateTime end)
+	private async Task<IEnumerable<RecordActivity>> getRecordSumListAsync(DateTime start, DateTime end)
 	{
 		var context = _contextFactory();
 		var basicData = await context.RecordActivities
@@ -212,7 +212,7 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		return basicData;
 	}
 
-	private double getSumHours(List<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
+	private double getSumHours(IEnumerable<RecordActivity> list, DateTime date, eTypeShift typeShiftFilter, eActivity activityFilter)
 	{
 		return Math.Round(list.Where(x => x.StartDateTime.Date == date && x.TypeShiftId == (int)typeShiftFilter && x.ActivityId == (int)activityFilter).Sum(x => x.DurationSec) / 3600, 2);
 	}

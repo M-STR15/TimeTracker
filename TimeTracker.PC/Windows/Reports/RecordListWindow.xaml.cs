@@ -38,7 +38,7 @@ namespace TimeTracker.PC.Windows.Reports
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
 				var projectProvider = new ProjectRepository<SqliteDbContext>(_context);
-				var projects = await projectProvider.GetProjectsAsync();
+				var projects = await projectProvider.GetAllAsync();
 				Projects = convertCollection<Project>(projects).ToList();
 
 				var shiftProvider = new ShiftRepository<SqliteDbContext>(_context);
@@ -80,7 +80,7 @@ namespace TimeTracker.PC.Windows.Reports
 				if (sender is Button btn)
 				{
 					var guidDeleteRow = Guid.Parse(btn.Tag?.ToString());
-					var result = await _recordProvider.DeleteRecordAsync(guidDeleteRow);
+					var result = await _recordProvider.DeleteAsync(guidDeleteRow);
 
 					var findRow = RecordActivityReportList.FirstOrDefault(x => x.GuidId == guidDeleteRow);
 					if (findRow != null)
@@ -150,7 +150,7 @@ namespace TimeTracker.PC.Windows.Reports
 					var startDateTimeConv = (DateTime)startDateTime;
 					var recordActivity = new RecordActivity(editedRow.GuidId, startDateTimeConv, activityId, typeShiftId, projectId, subModuleId, shiftGuidId, endDateTime, editedRow?.Description);
 
-					var updateRecordAct = await _recordProvider.SaveRecordAsync(recordActivity);
+					var updateRecordAct = await _recordProvider.SaveAsync(recordActivity);
 					if (updateRecordAct != null)
 					{
 						var newRecordActivityReport = new RecordActivityReport(updateRecordAct);
@@ -283,7 +283,7 @@ namespace TimeTracker.PC.Windows.Reports
 			var countDayInMont = DateTime.DaysInMonth(datefilter.Year, datefilter.Month);
 			var date = new DateTime(datefilter.Year, datefilter.Month, countDayInMont, 23, 59, 59);
 			var newRecord = new RecordActivity(date, (int)eActivity.Start);
-			await _recordProvider.SaveRecordAsync(newRecord);
+			await _recordProvider.SaveAsync(newRecord);
 
 			setRecordActivityReportList();
 			setRecordActivityReportListcollectionView();

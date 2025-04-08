@@ -7,12 +7,12 @@ namespace TimeTracker.BE.DB.Repositories;
 public class ActivityRepository<T> : aRepository<T> where T : MainDatacontext
 {
 	public ActivityRepository(Func<T> contextFactory) : base(contextFactory)
-	{}
+	{ }
 	/// <summary>
 	/// Získá seznam všech aktivit z databáze.
 	/// </summary>
 	/// <returns>Seznam aktivit.</returns>
-	public async Task<List<Activity>> GetActivitiesAsync()
+	public async Task<IEnumerable<Activity>> GetActivitiesAsync()
 	{
 		try
 		{

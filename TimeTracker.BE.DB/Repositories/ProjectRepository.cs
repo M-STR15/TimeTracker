@@ -16,7 +16,7 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="project">Projekt k odstranění.</param>
 	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public async Task<IProjectBase?> DeleteProjectAsync(IProjectBase project)
+	public async Task<IProjectBase?> DeletAsync(IProjectBase project)
 	{
 		try
 		{
@@ -39,7 +39,7 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 	}
 
-	public async Task<bool> DeleteProjectAsync(int projectId)
+	public async Task<bool> DeleteAsync(int projectId)
 	{
 		try
 		{
@@ -67,7 +67,7 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 	/// Získá všechny projekty z databáze, seřazené podle názvu a včetně jejich podmodulů.
 	/// </summary>
 	/// <returns>Kolekce projektů.</returns>
-	public async Task<ICollection<Project>> GetProjectsAsync()
+	public async Task<ICollection<Project>> GetAllAsync()
 	{
 		try
 		{
@@ -86,7 +86,7 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="project">Projekt k uložení.</param>
 	/// <returns>Uložený projekt nebo null, pokud projekt s daným názvem již existuje.</returns>
-	public async Task<IProjectBase?> SaveProjectAsync(IProjectBase project)
+	public async Task<IProjectBase?> SaveAsync(IProjectBase project)
 	{
 		try
 		{

@@ -70,7 +70,7 @@ namespace TimeTracker.PC.Windows
 
 		private async void loadProjects()
 		{
-			var list = await _projectProvider.GetProjectsAsync();
+			var list = await _projectProvider.GetAllAsync();
 			ProjectListBox = new ObservableCollection<ProjectListBox>(list.Select(x => new ProjectListBox(x)).ToList());
 		}
 
@@ -142,7 +142,7 @@ namespace TimeTracker.PC.Windows
 				var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _projectProvider.DeleteProjectAsync(selected);
+					var result = _projectProvider.DeletAsync(selected);
 
 					if (result != null)
 					{
@@ -224,7 +224,7 @@ namespace TimeTracker.PC.Windows
 				var item = (ProjectListBox)parameter;
 				item.IsEditable = false;
 
-				var result = await _projectProvider.SaveProjectAsync(item);
+				var result = await _projectProvider.SaveAsync(item);
 				if (result != null)
 				{
 					var updateItem = ProjectListBox.FirstOrDefault(x => x.GuidId == item.GuidId);

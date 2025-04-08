@@ -81,7 +81,7 @@ namespace TimeTracker.PC.Windows
 				else
 					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
-				var result = await _recordProvider.SaveRecordAsync(record);
+				var result = await _recordProvider.SaveAsync(record);
 				if (result != null)
 				{
 					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
@@ -154,7 +154,7 @@ namespace TimeTracker.PC.Windows
 		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
-			cmbProjects.ItemsSource = await _projectProvider.GetProjectsAsync();
+			cmbProjects.ItemsSource = await _projectProvider.GetAllAsync();
 			cmbProjects.SelectedIndex = 0;
 		}
 

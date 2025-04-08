@@ -17,7 +17,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="guidId">Guid záznamu aktivity.</param>
 	/// <returns>Vrací true, pokud byl záznam úspěšně odstraněn.</returns>
-	public async Task<bool?> DeleteRecordAsync(Guid guidId)
+	public async Task<bool?> DeleteAsync(Guid guidId)
 	{
 		try
 		{
@@ -29,7 +29,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 				await context.SaveChangesAsync();
 			}
 
-			await UpdateRefreshEndTimeAsync();
+			await updateRefreshEndTimeAsync();
 
 			return true;
 		}
@@ -78,7 +78,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="guidId">Guid záznamu aktivity.</param>
 	/// <returns>Záznam aktivity.</returns>
-	public async Task<RecordActivity?> GetRecordAsync(Guid guidId)
+	public async Task<RecordActivity?> GetAsync(Guid guidId)
 	{
 		try
 		{
@@ -103,7 +103,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// Získá všechny záznamy aktivit z databáze.
 	/// </summary>
 	/// <returns>Seznam všech záznamů aktivit.</returns>
-	public async Task<List<RecordActivity>> GetRecordsAsync()
+	public async Task<IEnumerable<RecordActivity>> GetAllAsync()
 	{
 		try
 		{
@@ -130,7 +130,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <param name="startTime">Počáteční časový bod.</param>
 	/// <param name="endTime">Koncový časový bod.</param>
 	/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
-	public async Task<List<RecordActivity>> GetRecordsAsync(DateTime startTime, DateTime endTime)
+	public async Task<IEnumerable<RecordActivity>> GetRecordsAsync(DateTime startTime, DateTime endTime)
 	{
 		try
 		{
@@ -158,7 +158,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="recordActivity">Záznam aktivity k uložení.</param>
 	/// <returns>Uložený záznam aktivity.</returns>
-	public async Task<RecordActivity?> SaveRecordAsync(RecordActivity recordActivity)
+	public async Task<RecordActivity?> SaveAsync(RecordActivity recordActivity)
 	{
 		try
 		{
@@ -174,9 +174,9 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 
 			await context.SaveChangesAsync();
 
-			await UpdateRefreshEndTimeAsync();
+			await updateRefreshEndTimeAsync();
 
-			var getDat = await GetRecordAsync(recordActivity.GuidId);
+			var getDat = await GetAsync(recordActivity.GuidId);
 			return getDat;
 		}
 		catch (Exception)
@@ -191,7 +191,7 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
 	/// pokud se nejedná o poslední záznam nebo aktivitu typu Stop.
 	/// </summary>
-	public async Task UpdateRefreshEndTimeAsync()
+	private async Task updateRefreshEndTimeAsync()
 	{
 		try
 		{

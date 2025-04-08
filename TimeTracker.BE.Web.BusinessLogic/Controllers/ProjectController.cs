@@ -13,9 +13,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	public class ProjectController : aControllerBase
 	{
 		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
-		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
+		protected readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
+		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, SubModuleRepository<MsSqlDbContext> subModuleRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_projectRepository = projectRepository;
+			_subModuleRepository = subModuleRepository;
 		}
 
 		#region GET
@@ -28,7 +30,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var projects = await _projectRepository.GetProjectsAsync();
+				var projects = await _projectRepository.GetAllAsync();
 				if (projects != null)
 				{
 					var projectsDto = _mapper.Map<List<ProjectBaseDto>>(projects);
@@ -51,7 +53,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _projectRepository.GetSubModulesAsync();
+				var subModules = await _subModuleRepository.GetSubModulesAsync();
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
@@ -74,7 +76,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _projectRepository.GetSubModulesAsync(projectId);
+				var subModules = await _subModuleRepository.GetSubModulesAsync(projectId);
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
@@ -100,7 +102,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var project = _mapper.Map<Project>(projectBaseDto);
-				var result = await _projectRepository.SaveProjectAsync(project);
+				var result = await _projectRepository.SaveAsync(project);
 				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
 				return result != null ? Ok(projectBaseDto) : Problem();
 			}
@@ -117,7 +119,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
-				var result = await _projectRepository.SaveSubModuleAsync(subModule);
+				var result = await _subModuleRepository.SaveSubModuleAsync(subModule);
 				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
 				return result != null ? Ok(subModule) : Problem();
 			}
@@ -135,7 +137,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var project = _mapper.Map<Project>(projectBaseDto);
-				var result = await _projectRepository.SaveProjectAsync(project);
+				var result = await _projectRepository.SaveAsync(project);
 				projectBaseDto = _mapper.Map<ProjectBaseDto>(result);
 				return result != null ? Ok(projectBaseDto) : Problem();
 			}
@@ -152,7 +154,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
-				var result = await _projectRepository.SaveSubModuleAsync(subModule);
+				var result = await _subModuleRepository.SaveSubModuleAsync(subModule);
 				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
 				return result != null ? Ok(subModule) : Problem();
 			}
@@ -169,7 +171,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var result = await _projectRepository.DeleteProjectAsync(projectId);
+				var result = await _projectRepository.DeleteAsync(projectId);
 				return result ? Ok() : Problem();
 			}
 			catch (Exception ex)
@@ -184,7 +186,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var result = await _projectRepository.DeleteSubModuleAsync(submoduleId);
+				var result = await _subModuleRepository.DeleteSubModuleAsync(submoduleId);
 				return result ? Ok() : Problem();
 			}
 			catch (Exception ex)

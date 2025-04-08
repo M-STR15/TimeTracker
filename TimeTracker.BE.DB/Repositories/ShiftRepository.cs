@@ -13,7 +13,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <summary>
 	/// Získá všechny směny z databáze, seřazené podle data začátku.
 	/// </summary>
-	public async Task<List<Shift>> GetShiftsAsync()
+	public async Task<IEnumerable<Shift>> GetShiftsAsync()
 	{
 		try
 		{
@@ -23,7 +23,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 		catch (Exception)
 		{
-			return new();
+			return default;
 		}
 	}
 
@@ -33,7 +33,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <param name="dateFrom">Počáteční datum.</param>
 	/// <param name="dateTo">Koncové datum.</param>
 	/// <returns>Seznam směn v zadaném časovém rozmezí.</returns>
-	public async Task<List<Shift>> GetShiftsAsync(DateTime dateFrom, DateTime dateTo)
+	public async Task<IEnumerable<Shift>> GetShiftsAsync(DateTime dateFrom, DateTime dateTo)
 	{
 		try
 		{
@@ -43,14 +43,14 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 		catch (Exception)
 		{
-			return new();
+			return default;
 		}
 	}
 
 	/// <summary>
 	/// Získá všechny typy směn z databáze.
 	/// </summary>
-	public async Task<List<TypeShift>> GetTypeShiftsAsync()
+	public async Task<IEnumerable<TypeShift>> GetTypeShiftsAsync()
 	{
 		try
 		{
@@ -60,14 +60,14 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 		catch (Exception)
 		{
-			return new();
+			return default;
 		}
 	}
 
 	/// <summary>
 	/// Získá všechny typy směn, které jsou viditelné v hlavním okně.
 	/// </summary>
-	public async Task<List<TypeShift>> GetTypeShiftsForMainWindowAsync()
+	public async Task<IEnumerable<TypeShift>> GetTypeShiftsForMainWindowAsync()
 	{
 		try
 		{
@@ -77,7 +77,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 		catch (Exception)
 		{
-			return new();
+			return default;
 		}
 	}
 
@@ -87,7 +87,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 	/// </summary>
 	/// <param name="shifts">Seznam směn k uložení.</param>
 	/// <returns>Vrací true, pokud operace proběhla úspěšně, jinak false.</returns>
-	public bool SaveShifts(List<Shift> shifts)
+	public bool SaveShifts(IEnumerable<Shift> shifts)
 	{
 		try
 		{

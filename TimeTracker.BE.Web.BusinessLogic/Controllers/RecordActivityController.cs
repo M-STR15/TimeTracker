@@ -50,7 +50,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var recordActivities = await _recordRepository.GetRecordsAsync();
+				var recordActivities = await _recordRepository.GetAllAsync();
 				if (recordActivities != null)
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityBaseDto>>(recordActivities);
@@ -99,7 +99,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var recordActivity = _mapper.Map<RecordActivity>(recordActivityInsertDto);
-				recordActivity = await _recordRepository.SaveRecordAsync(recordActivity);
+				recordActivity = await _recordRepository.SaveAsync(recordActivity);
 				if (recordActivity != null)
 				{
 					var recordActivityDto = _mapper.Map<RecordActivityBaseDto>(recordActivity);
@@ -126,7 +126,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 
-				var result = await _recordRepository.DeleteRecordAsync(recordActivityGuidId);
+				var result = await _recordRepository.DeleteAsync(recordActivityGuidId);
 				if (result != null)
 				{
 					return result == true ? Ok() : Problem();
