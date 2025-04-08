@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
-using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.Shared.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
@@ -13,7 +13,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	public class ShiftController : aControllerBase
 	{
 		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
-		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, IMapper mapper) : base(mapper)
+		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_shiftRepository = shiftRepository;
 		}
@@ -40,6 +40,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("87dc3ad8-7ca7-426f-96cf-0e4d7bf9a8e4"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -62,6 +63,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("50a7d33c-e03d-4362-bc4b-652979794a6b"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -89,6 +91,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("9ab1191b-6ca7-48af-8d0d-083b9c8c9254"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}

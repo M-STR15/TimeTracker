@@ -5,6 +5,7 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.Shared.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
@@ -14,7 +15,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	{
 		private readonly ActivityRepository<MsSqlDbContext> _activityRepository;
 		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
-		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper) : base(mapper)
+		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_activityRepository = activityRepository;
 			_recordRepository = recordRepository;
@@ -39,6 +40,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("92344ec4-e18f-4cef-ab10-631c18775e67"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -61,6 +63,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("2df8ed97-a336-45f8-b939-0795846b92d2"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -82,6 +85,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("c9b777fa-2481-4ca1-845c-dbcc549131a9"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -108,6 +112,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -133,6 +138,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("cac6b8ba-5ed2-41d2-8507-00218a8443ae"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}

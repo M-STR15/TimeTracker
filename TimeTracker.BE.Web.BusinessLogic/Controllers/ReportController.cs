@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
+using TimeTracker.BE.Web.Shared.Services;
 using TimeTracker.PC.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
@@ -14,7 +14,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	{
 		private readonly ReportRepository<MsSqlDbContext> _reportRepository;
 		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
-		public ReportController(IMapper mapper, ReportRepository<MsSqlDbContext> reportRepository, RecordRepository<MsSqlDbContext> recordRepository) : base(mapper)
+		public ReportController(IMapper mapper, ReportRepository<MsSqlDbContext> reportRepository, RecordRepository<MsSqlDbContext> recordRepository, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_reportRepository = reportRepository;
 			_recordRepository = recordRepository;
@@ -40,6 +40,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("adb89d9d-3723-41c4-949b-f7d9b23f899f"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
@@ -67,10 +68,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("4f259ab6-4044-41a1-9f66-8eb1147f8132"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
-	
+
 		[HttpGet("api/v1/reports/total-times")]
 		public async Task<ActionResult<TotalTimesDto>> GetTotalTimesDtoAsync()
 		{
@@ -95,6 +97,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
+				_eventLogService.LogError(Guid.Parse("048c4139-0645-4af9-a84e-fa90cc08c013"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}

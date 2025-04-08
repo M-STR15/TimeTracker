@@ -27,6 +27,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\TimeTracker.BE.DB\TimeTracker.BE.DB.csproj" />
+		<ProjectReference Include="..\TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj" />
 	</ItemGroup>
 
 </Project>
