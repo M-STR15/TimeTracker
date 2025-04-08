@@ -10,6 +10,8 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 	public RecordRepository(Func<T> contextFactory) : base(contextFactory)
 	{
 	}
+
+	#region DELETE
 	/// <summary>
 	/// Odstraní záznam aktivity podle zadaného Guid.
 	/// </summary>
@@ -37,6 +39,9 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 	}
 
+	#endregion DELETE
+
+	#region GET
 	/// <summary>
 	/// Získá poslední záznam aktivity z databáze.
 	/// </summary>
@@ -145,7 +150,8 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 			throw;
 		}
 	}
-
+	#endregion GET
+	#region SAVE
 	/// <summary>
 	/// Uloží záznam aktivity do databáze.
 	/// Pokud záznam obsahuje Guid, aktualizuje existující záznam, jinak přidá nový.
@@ -178,7 +184,8 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 			throw;
 		}
 	}
-
+	#endregion SAVE
+	#region UPDATE
 	/// <summary>
 	/// Aktualizuje čas ukončení záznamů aktivit.
 	/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
@@ -216,4 +223,5 @@ public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 			throw;
 		}
 	}
+	#endregion UPDATE
 }
