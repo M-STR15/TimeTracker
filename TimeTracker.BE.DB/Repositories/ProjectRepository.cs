@@ -5,12 +5,11 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-public class ProjectRepository<T> where T : MainDatacontext
+public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 {
-	private readonly Func<T> _contextFactory;
-	public ProjectRepository(Func<T> contextFactory)
+	public ProjectRepository(Func<T> contextFactory):base(contextFactory) 
 	{
-		_contextFactory = contextFactory;
+	
 	}
 	/// <summary>
 	/// Odstraní projekt z databáze.

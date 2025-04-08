@@ -4,12 +4,10 @@ using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ShiftRepository<T> where T : MainDatacontext
+public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 {
-	private readonly Func<T> _contextFactory;
-	public ShiftRepository(Func<T> contextFactory)
+	public ShiftRepository(Func<T> contextFactory) : base(contextFactory)
 	{
-		_contextFactory = contextFactory;
 	}
 
 	/// <summary>

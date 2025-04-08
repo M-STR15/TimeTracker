@@ -5,12 +5,10 @@ using TimeTracker.Enums;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class RecordRepository<T> where T : MainDatacontext
+public class RecordRepository<T> : aRepository<T> where T : MainDatacontext
 {
-	private readonly Func<T> _contextFactory;
-	public RecordRepository(Func<T> contextFactory)
+	public RecordRepository(Func<T> contextFactory) : base(contextFactory)
 	{
-		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Odstraní záznam aktivity podle zadaného Guid.

@@ -6,12 +6,10 @@ using TimeTracker.Enums;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ReportRepository<T> where T : MainDatacontext
+public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 {
-	private readonly Func<T> _contextFactory;
-	public ReportRepository(Func<T> contextFactory)
+	public ReportRepository(Func<T> contextFactory) : base(contextFactory)
 	{
-		_contextFactory = contextFactory;
 	}
 	/// <summary>
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.

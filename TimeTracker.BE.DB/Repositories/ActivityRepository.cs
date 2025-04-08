@@ -4,13 +4,10 @@ using TimeTracker.BE.DB.Models;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ActivityRepository<T> where T : MainDatacontext
+public class ActivityRepository<T> : aRepository<T> where T : MainDatacontext
 {
-	private readonly Func<T> _contextFactory;
-	public ActivityRepository(Func<T> contextFactory)
-	{
-		_contextFactory = contextFactory;
-	}
+	public ActivityRepository(Func<T> contextFactory) : base(contextFactory)
+	{}
 	/// <summary>
 	/// Získá seznam všech aktivit z databáze.
 	/// </summary>
