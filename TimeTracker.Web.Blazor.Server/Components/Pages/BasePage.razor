@@ -1,8 +1,11 @@
-﻿@inject IHttpClientFactory HttpClientFactory
+﻿@using TimeTracker.BE.Web.Shared.Services
+@inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager NavigationManager
 
 @code {
     protected HttpClient? _httpClient;
+    [Inject]
+    protected IEventLogService _eventLogService { get; set; }
 
     protected override void OnInitialized()
     {
@@ -12,7 +15,7 @@
         }
         catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("24cd2c19-6a7f-48b3-9533-e7981d87b63e"),ex);
         }
     }
 }

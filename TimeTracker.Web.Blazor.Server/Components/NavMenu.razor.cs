@@ -4,7 +4,7 @@ namespace TimeTracker.Web.Blazor.Server.Components
 {
 	public partial class NavMenu
 	{
-		BuildInfo _buildInfo = new BuildInfo();
+		BuildInfo _buildInfo = new();
 		private bool collapseNavMenu = true;
 
 		private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

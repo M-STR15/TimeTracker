@@ -83,9 +83,9 @@
                 }
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("18f5f853-7b0d-4525-868f-323b2e74de47"), ex);
         }
     }
 
@@ -102,7 +102,7 @@
         }
         catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("3079445b-6d96-431f-82b5-eb0b7e271cf3"), ex);
         }
     }
 
@@ -126,7 +126,7 @@
         }
         catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("01bbb693-50bd-4395-9bd5-ff466560a1d2"), ex);
         }
     }
 

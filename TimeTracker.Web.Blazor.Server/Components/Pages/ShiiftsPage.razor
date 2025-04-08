@@ -33,7 +33,11 @@
 </div>
 <div>
 
-    @if (_days != null && _days.Count > 0)
+    @if (_days == null && _days.Count == 0)
+    {
+        <MLoader />
+    }
+    else
     {
         <table class="table">
             <thead>
@@ -94,12 +98,19 @@
 
     protected async override Task OnInitializedAsync()
     {
-        _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
-        _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
-        _selectTypeShift = _typeShifts.FirstOrDefault();
-        SelectMonthAndYear = _monthAndYears.FirstOrDefault();
+        try
+        {
+            _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
+            _typeShifts = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+            _selectTypeShift = _typeShifts.FirstOrDefault();
+            SelectMonthAndYear = _monthAndYears.FirstOrDefault();
 
-        this.StateHasChanged();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _eventLogService.LogError(Guid.Parse("b4af9873-6259-4a02-aef9-69c3a0ca38a3"), ex);
+        }
     }
 
     // private void onChangItemDateChanged(ChangeEventArgs e)
@@ -114,15 +125,22 @@
 
     private async void generateDays(MonthAndYearItemViewModel item)
     {
-        // "api/v1/shifts"
-        var planShiftsInDB = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
-        // await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
+        try
+        {
+            // "api/v1/shifts"
+            var planShiftsInDB = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
+            // await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
 
-        _days.Clear();
-        _days = GeneratorDatesHelper.GetDaysInMonth(item, planShiftsInDB, _typeShifts).ToList();
+            _days.Clear();
+            _days = GeneratorDatesHelper.GetDaysInMonth(item, planShiftsInDB, _typeShifts).ToList();
 
 
-        this.StateHasChanged();
+            this.StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            _eventLogService.LogError(Guid.Parse("b7b5fd7d-ce70-4fb4-a9e1-4c9b752c5895"), ex);
+        }
     }
 
     private void setDayTypeShift(ShiftViewModel day)
@@ -182,16 +200,21 @@
 
     private async void onSave_Click()
     {
-        var shiftsDto = new List<ShiftBaseDto>();
-
-        foreach (var item in _days.Where(x => x.TypeShift != null).ToList())
+        try
         {
-            var shift = new ShiftBaseDto(item.GuidId, item.StartDate, item.TypeShift.Id);
-            shiftsDto.Add(shift);
+            var shiftsDto = new List<ShiftBaseDto>();
+
+            foreach (var item in _days.Where(x => x.TypeShift != null).ToList())
+            {
+                var shift = new ShiftBaseDto(item.GuidId, item.StartDate, item.TypeShift.Id);
+                shiftsDto.Add(shift);
+            }
+
+            var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
         }
-
-        var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
-
-
+        catch (Exception ex)
+        {
+            _eventLogService.LogError(Guid.Parse("0653d232-5285-414b-8ed9-98dad4958349"), ex);
+        }
     }
 }

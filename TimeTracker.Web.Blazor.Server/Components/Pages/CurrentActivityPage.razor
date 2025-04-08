@@ -45,7 +45,11 @@
     <MButton Text="End of shift" Style="width:150px"></MButton>
 </div>
 
-@if (_lastRecordActivity != null)
+@if (_lastRecordActivity == null)
+{
+    <MLoader />
+}
+else
 {
     <table>
         <tr>
@@ -98,10 +102,7 @@
             <td class="col-3">@_totalTime.TotalShiftTimeStr</td>
         </tr>
     </table>
-}
-else
-{
-    <MLoader />
+    <RecordListPage />
 }
 
 <AddActivityModal Title="Change activity"
@@ -126,9 +127,9 @@ else
             _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
             await base.OnInitializedAsync();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("d58ce7fb-9d3e-4947-82a6-346a78d3a4d3"), ex);
         }
         try
         {
@@ -141,9 +142,8 @@ else
         }
         catch (Exception ex)
         {
-
+            _eventLogService.LogError(Guid.Parse("0971010b-7fc3-4840-9c4b-14287fac3e8c"), ex);
         }
-
     }
 
     //   private RecordActivity? _lastRecordActivity

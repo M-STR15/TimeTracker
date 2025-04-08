@@ -47,7 +47,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 		/// <inheritdoc/>
 		protected async override Task OnInitializedAsync()
 		{
-
 			_projectColumns = CreateTableColumnDefinition_Project();
 			_subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
 
@@ -117,11 +116,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				}
 				catch (HttpRequestException ex)
 				{
-					Console.WriteLine($"Chyba HTTP: {ex.Message}");
+					_eventLogService.LogError(Guid.Parse("cb464ca7-881c-42c1-a37a-5c7afc7e258e"), ex);
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"Obecná chyba: {ex.Message}");
+					_eventLogService.LogError(Guid.Parse("a1857788-e073-4f05-a2fc-a79b5e1c8681"), ex);
 				}
 
 				base.StateHasChanged();
@@ -173,10 +172,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private void showModalEditProject() => IsOpenAddOrEdtiProjectModal = true;
 
-		private void showModalEditSubmodule()
-		{
-
-			IsOpenAddOrEditSubModuleModal = true;
-		}
+		private void showModalEditSubmodule() => IsOpenAddOrEditSubModuleModal = true;
 	}
 }
