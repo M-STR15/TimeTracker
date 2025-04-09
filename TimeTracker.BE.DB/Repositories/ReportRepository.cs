@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories.Models.Reports;

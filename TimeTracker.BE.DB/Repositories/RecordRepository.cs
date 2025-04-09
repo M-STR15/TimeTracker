@@ -94,6 +94,33 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	}
 
 	/// <summary>
+	/// Získá záznamy aktivit v zadaném časovém rozmezí.
+	/// </summary>
+	/// <param name="startTime">Počáteční časový bod.</param>
+	/// <param name="endTime">Koncový časový bod.</param>
+	/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
+	public async Task<IEnumerable<RecordActivity>> GetAsync(DateTime startTime, DateTime endTime)
+	{
+		try
+		{
+			var context = _contextFactory();
+			var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
+				.Include(x => x.Project)
+					.ThenInclude(x => x.SubModules)
+				.Include(x => x.Activity)
+				.Include(x => x.TypeShift)
+				.Include(x => x.Shift)
+				.OrderBy(x => x.StartDateTime).ToListAsync();
+
+			return recordActivities;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	/// <summary>
 	/// Získá poslední záznam aktivity z databáze.
 	/// </summary>
 	/// <returns>Poslední záznam aktivity.</returns>
@@ -117,32 +144,6 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 			}
 
 			return recordActivity;
-		}
-		catch (Exception)
-		{
-			throw;
-		}
-	}
-	/// <summary>
-	/// Získá záznamy aktivit v zadaném časovém rozmezí.
-	/// </summary>
-	/// <param name="startTime">Počáteční časový bod.</param>
-	/// <param name="endTime">Koncový časový bod.</param>
-	/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
-	public async Task<IEnumerable<RecordActivity>> GetAsync(DateTime startTime, DateTime endTime)
-	{
-		try
-		{
-			var context = _contextFactory();
-			var recordActivities = await context.RecordActivities.Where(x => x.StartDateTime >= startTime && x.StartDateTime <= endTime)
-				.Include(x => x.Project)
-					.ThenInclude(x => x.SubModules)
-				.Include(x => x.Activity)
-				.Include(x => x.TypeShift)
-				.Include(x => x.Shift)
-				.OrderBy(x => x.StartDateTime).ToListAsync();
-
-			return recordActivities;
 		}
 		catch (Exception)
 		{
