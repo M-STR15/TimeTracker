@@ -69,15 +69,7 @@ namespace TimeTracker.PC.Windows
 
 		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
 		{
-			if (recordActivity != null && recordActivity.Activity != null && recordActivity.TypeShift != null)
-			{
-				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
-
-			}
-			else
-			{
-				return false;
-			}
+			return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
 		}
 
 		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
@@ -311,7 +303,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				if (cmbProjects.SelectedItem != null && _subModuleRepository != null)
+				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
 					var subModules = (await _subModuleRepository.GetAsync(projectId)).ToList();

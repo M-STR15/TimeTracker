@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
@@ -9,6 +10,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 		/// <inheritdoc />
 		[Required(ErrorMessage = "Hodnota je vyžadována")]
 		public Guid GuidId { get; set; }
+
+		public ShiftBaseDto()
+		{ }
 
 		public ShiftBaseDto(Guid guidId, DateTime startDate, int typeShiftId, string? description = null)
 		{
