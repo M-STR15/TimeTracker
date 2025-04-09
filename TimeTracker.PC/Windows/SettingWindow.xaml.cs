@@ -31,8 +31,8 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				_mainStory = mainStory;
-				_projectProvider = _mainStory.DIContainerStore.GetProjectProvider();
-				_subModuleProvider = _mainStory.DIContainerStore.GetSubModuleProvider();
+				_projectProvider = _mainStory.DIContainerStore.GetProjectRepository();
+				_subModuleProvider = _mainStory.DIContainerStore.GetSubModuleRepository();
 				InitializeComponent();
 
 				ProjectListBox = new ObservableCollection<ProjectListBox>();
@@ -83,7 +83,7 @@ namespace TimeTracker.PC.Windows
 
 				if (selected != null)
 				{
-					var list = await _subModuleProvider.GetSubModulesAsync(selected.Id);
+					var list = await _subModuleProvider.GetAsync(selected.Id);
 					SubModuleListBox.Clear();
 
 					if (list != null && list.Any())
@@ -136,16 +136,16 @@ namespace TimeTracker.PC.Windows
 			}
 		}
 
-		private void onDeleteProject_Click(object sender, RoutedEventArgs e)
+		private async void onDeleteProject_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
 				var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _projectProvider.DeletAsync(selected);
+					var result = await _projectProvider.DeleteAsync(selected);
 
-					if (result != null)
+					if (result)
 					{
 						var item = ProjectListBox.First(x => x.GuidId == selected.GuidId);
 						ProjectListBox.Remove(selected);
@@ -159,15 +159,15 @@ namespace TimeTracker.PC.Windows
 			}
 		}
 
-		private void onDeleteSubModule_Click(object sender, RoutedEventArgs e)
+		private async void onDeleteSubModule_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
 				var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _subModuleProvider.DeleteSubModuleAsync(selected);
-					if (result != null)
+					var result = await _subModuleProvider.DeleteAsync(selected);
+					if (result)
 					{
 						var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
 						SubModuleListBox.Remove(selected);
@@ -253,7 +253,7 @@ namespace TimeTracker.PC.Windows
 				var item = (SubModuleListBox)parameter;
 				item.IsEditable = false;
 
-				var result = _subModuleProvider.SaveSubModuleAsync(item);
+				var result = _subModuleProvider.SaveAsync(item);
 				if (result != null)
 				{
 					var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);

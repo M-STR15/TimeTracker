@@ -4,8 +4,8 @@ using LiveCharts.Wpf;
 using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Windows.Reports.Services;
 

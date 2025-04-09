@@ -27,7 +27,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			{
 				var dateStart = DateTime.MinValue;
 				var dateEnd = DateTime.Now;
-				var recordActivities = await _recordRepository.GetRecordsAsync(dateStart, dateEnd);
+				var recordActivities = await _recordRepository.GetAsync(dateStart, dateEnd);
 				if (recordActivities != null)
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityDetailDto>>(recordActivities);
@@ -55,7 +55,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var recordActivities = await _recordRepository.GetRecordsAsync(dateStart, dateEnd);
+				var recordActivities = await _recordRepository.GetAsync(dateStart, dateEnd);
 				if (recordActivities != null)
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityDetailDto>>(recordActivities);
@@ -78,7 +78,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var _lastRecordActivity = await _recordRepository.GetLastRecordActivityAsync();
+				var _lastRecordActivity = await _recordRepository.GetLastAsync();
 				var shiftGuidId = _lastRecordActivity?.Shift?.GuidId ?? Guid.Empty;
 
 				var calcHours_forToday_fromDb = _reportRepository.GetActualSumaryHours();

@@ -24,16 +24,17 @@ namespace TimeTracker.PC.Windows
 		private EventLogService _eventLogService;
 		private EventHandler _lastRecordActivityHangler;
 		private RecordActivity? _lra;
-		private ProjectRepository<SqliteDbContext> _projectProvider;
-		private SubModuleRepository<SqliteDbContext> _subModuleProvider;
+		private ProjectRepository<SqliteDbContext> _projectRepository;
+		private SubModuleRepository<SqliteDbContext> _subModuleRepository;
 
-		private RecordRepository<SqliteDbContext> _recordProvider;
+		private RecordRepository<SqliteDbContext> _recordRepository;
 
-		private ReportRepository<SqliteDbContext> _reportProvider;
+		private ReportRepository<SqliteDbContext> _reportRepository;
 
 		private List<ShiftCmb> _shiftCmbs = new();
 
-		private ShiftRepository<SqliteDbContext> _shiftProvider;
+		private ShiftRepository<SqliteDbContext> _shiftRepository;
+		private TypeShiftRepository<SqliteDbContext> _typeShiftRepository;
 
 		//private int _totalActivityTimeBeforeInSecond;
 
@@ -83,7 +84,7 @@ namespace TimeTracker.PC.Windows
 				else
 					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
-				var result = await _recordProvider.SaveAsync(record);
+				var result = await _recordRepository.SaveAsync(record);
 				if (result != null)
 				{
 					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
@@ -123,10 +124,12 @@ namespace TimeTracker.PC.Windows
 				this.DataContext = new BaseViewModel("Timer tracker");
 				InitializeComponent();
 				var containerStore = _mainStory.DIContainerStore;
-				_shiftProvider = containerStore.GetShiftProvider();
-				_projectProvider = containerStore.GetProjectProvider();
-				_recordProvider = containerStore.GetRecordProvider();
-				_reportProvider = containerStore.GetReportProvider();
+				_shiftRepository = containerStore.GetShiftRepository();
+				_projectRepository = containerStore.GetProjectRepository();
+				_recordRepository = containerStore.GetRecordRepository();
+				_subModuleRepository = containerStore.GetSubModuleRepository();
+				_typeShiftRepository = containerStore.GetTypeShiftRepository();
+				_reportRepository = containerStore.GetReportRepository();
 
 				loadProjects();
 				loadShifts();
@@ -143,7 +146,7 @@ namespace TimeTracker.PC.Windows
 
 				_lastRecordActivityHangler += onSetLabelsHandler;
 
-				_lastRecordActivity = await _recordProvider.GetLastRecordActivityAsync();
+				_lastRecordActivity = await _recordRepository.GetLastAsync();
 
 				if (_lastRecordActivity != null && _lastRecordActivity.ActivityId != (int)eActivity.Stop)
 					_dispatcherTimer.Start();
@@ -156,14 +159,14 @@ namespace TimeTracker.PC.Windows
 		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
-			cmbProjects.ItemsSource = await _projectProvider.GetAllAsync();
+			cmbProjects.ItemsSource = await _projectRepository.GetAllAsync();
 			cmbProjects.SelectedIndex = 0;
 		}
 
 		private async void loadShifts()
 		{
 			var currentDate = DateTime.Now;
-			var getList = await _shiftProvider.GetShiftsAsync(currentDate.AddDays(-7), currentDate.AddDays(3));
+			var getList = await _shiftRepository.GetAsync(currentDate.AddDays(-7), currentDate.AddDays(3));
 			_shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
 			_shiftCmbs.Add(new ShiftCmb());
 			cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
@@ -172,7 +175,7 @@ namespace TimeTracker.PC.Windows
 
 		private async void loadTypeShifts()
 		{
-			_typeShifts = (await _shiftProvider.GetTypeShiftsForMainWindowAsync()).ToList();
+			_typeShifts = (await _typeShiftRepository.GetTypeShiftsForMainWindowAsync()).ToList();
 			cmbTypeShift.ItemsSource = _typeShifts;
 			cmbTypeShift.SelectedIndex = 0;
 		}
@@ -181,7 +184,7 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
-				var window = new ActivitiesOverDaysWindow(_reportProvider);
+				var window = new ActivitiesOverDaysWindow(_reportRepository);
 				window.Show();
 			}
 			catch (Exception ex)
@@ -303,7 +306,7 @@ namespace TimeTracker.PC.Windows
 				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
-					var subModules = (await _subModuleProvider.GetSubModulesAsync(projectId)).ToList();
+					var subModules = (await _subModuleRepository.GetAsync(projectId)).ToList();
 					cmbSubModule.ItemsSource = subModules;
 					if (subModules != null && subModules.Count > 0)
 						cmbSubModule.SelectedIndex = 0;
@@ -382,8 +385,8 @@ namespace TimeTracker.PC.Windows
 		{
 			var shiftGuidId = _lastRecordActivity?.Shift?.GuidId ?? Guid.Empty;
 
-			var calcHours_forToday_fromDb = _reportProvider.GetActualSumaryHours();
-			var calcHours_forShift_fromDb = _reportProvider.GetSumaryHoursShift(shiftGuidId);
+			var calcHours_forToday_fromDb = _reportRepository.GetActualSumaryHours();
+			var calcHours_forShift_fromDb = _reportRepository.GetSumaryHoursShift(shiftGuidId);
 
 			var totalTimes = TotalTimesService.Get(calcHours_forToday_fromDb, calcHours_forShift_fromDb, _lastRecordActivity);
 

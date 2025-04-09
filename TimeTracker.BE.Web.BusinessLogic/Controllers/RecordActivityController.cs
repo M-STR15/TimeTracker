@@ -27,7 +27,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var activities = await _activityRepository.GetActivitiesAsync();
+				var activities = await _activityRepository.GetAllAsync();
 				if (activities != null)
 				{
 					var activitiesDto = _mapper.Map<List<ActivityBaseDto>>(activities);
@@ -72,7 +72,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var recordActivity = await _recordRepository.GetLastRecordActivityAsync();
+				var recordActivity = await _recordRepository.GetLastAsync();
 				if (recordActivity != null)
 				{
 					var recordActivityDto = _mapper.Map<RecordActivityDetailDto>(recordActivity);

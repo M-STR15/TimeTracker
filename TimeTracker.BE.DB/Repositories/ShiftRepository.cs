@@ -1,19 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
+public class ShiftRepository<T> : aRepository<T>, IReadtableAll<Shift> where T : MainDatacontext
 {
 	public ShiftRepository(Func<T> contextFactory) : base(contextFactory)
 	{
 	}
 
+	#region GET
 	/// <summary>
 	/// Získá všechny směny z databáze, seřazené podle data začátku.
 	/// </summary>
-	public async Task<IEnumerable<Shift>> GetShiftsAsync()
+	public async Task<IEnumerable<Shift>> GetAllAsync()
 	{
 		try
 		{
@@ -33,7 +35,7 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 	/// <param name="dateFrom">Počáteční datum.</param>
 	/// <param name="dateTo">Koncové datum.</param>
 	/// <returns>Seznam směn v zadaném časovém rozmezí.</returns>
-	public async Task<IEnumerable<Shift>> GetShiftsAsync(DateTime dateFrom, DateTime dateTo)
+	public async Task<IEnumerable<Shift>> GetAsync(DateTime dateFrom, DateTime dateTo)
 	{
 		try
 		{
@@ -47,47 +49,27 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 		}
 	}
 
-	/// <summary>
-	/// Získá všechny typy směn z databáze.
-	/// </summary>
-	public async Task<IEnumerable<TypeShift>> GetTypeShiftsAsync()
-	{
-		try
-		{
-			var context = _contextFactory();
-			var typeShifts = await context.TypeShifts.AsNoTracking().ToListAsync();
-			return typeShifts;
-		}
-		catch (Exception)
-		{
-			return default;
-		}
-	}
+
 
 	/// <summary>
-	/// Získá všechny typy směn, které jsou viditelné v hlavním okně.
+	/// METHODA NENÍ DOKONČENÁ
 	/// </summary>
-	public async Task<IEnumerable<TypeShift>> GetTypeShiftsForMainWindowAsync()
+	/// <param name="shiftGuidId"></param>
+	/// <returns></returns>
+	public double GetSumShiftHours(Guid shiftGuidId)
 	{
-		try
-		{
-			var context = _contextFactory();
-			var typeShifts = await context.TypeShifts.Where(x => x.IsVisibleInMainWindow).AsNoTracking().ToListAsync();
-			return typeShifts;
-		}
-		catch (Exception)
-		{
-			return default;
-		}
-	}
+		var context = _contextFactory();
 
+		return 0;
+	}
+	#endregion GET
 	/// <summary>
 	/// Uloží seznam směn do databáze. Aktualizuje existující směny, přidá nové a odstraní ty, které již nejsou v seznamu.
 	/// Vždy je potřeba zaslat celý měsíc jinak budou dny smazány.
 	/// </summary>
 	/// <param name="shifts">Seznam směn k uložení.</param>
 	/// <returns>Vrací true, pokud operace proběhla úspěšně, jinak false.</returns>
-	public bool SaveShifts(IEnumerable<Shift> shifts)
+	public bool Save(IEnumerable<Shift> shifts)
 	{
 		try
 		{
@@ -132,17 +114,5 @@ public class ShiftRepository<T> : aRepository<T> where T : MainDatacontext
 			Console.WriteLine(ex.Message); // Například log do konzole
 			throw new ArgumentException("Chyba při ukládání směny do DB.", ex);
 		}
-	}
-
-	/// <summary>
-	/// METHODA NENÍ DOKONČENÁ
-	/// </summary>
-	/// <param name="shiftGuidId"></param>
-	/// <returns></returns>
-	public double GetSumShiftHours(Guid shiftGuidId)
-	{
-		var context = _contextFactory();
-
-		return 0;
 	}
 }

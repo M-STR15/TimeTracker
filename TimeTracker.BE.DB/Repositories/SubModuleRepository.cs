@@ -2,20 +2,22 @@
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
+using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories
 {
-	public class SubModuleRepository<T> : aRepository<T> where T : MainDatacontext
+	public class SubModuleRepository<T> : aRepository<T>, IWritable<ISubModuleBase>, IDeletableById, IDeletable<ISubModuleBase>, IReadtableAll<SubModule> where T : MainDatacontext
 	{
 		public SubModuleRepository(Func<T> contextFactory) : base(contextFactory)
 		{
 		}
 
+		#region GET
 		/// <summary>
 		/// Získá všechny podmoduly z databáze, seřazené podle názvu.
 		/// </summary>
 		/// <returns>Kolekce podmodulů.</returns>
-		public async Task<IEnumerable<SubModule>> GetSubModulesAsync()
+		public async Task<IEnumerable<SubModule>> GetAllAsync()
 		{
 			try
 			{
@@ -33,7 +35,7 @@ namespace TimeTracker.BE.DB.Repositories
 		/// </summary>
 		/// <param name="projectId">ID projektu</param>
 		/// <returns>Kolekce podmodulů.</returns>
-		public async Task<IEnumerable<SubModule>?> GetSubModulesAsync(int projectId)
+		public async Task<IEnumerable<SubModule>?> GetAsync(int projectId)
 		{
 			try
 			{
@@ -48,28 +50,28 @@ namespace TimeTracker.BE.DB.Repositories
 				throw;
 			}
 		}
+		#endregion GET
 
 		/// <summary>
 		/// Odstraní podmodul z databáze.
 		/// </summary>
 		/// <param name="subModule">Podmodul k odstranění.</param>
 		/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
-		public async Task<ISubModuleBase?> DeleteSubModuleAsync(ISubModuleBase subModule)
+		public async Task<bool> DeleteAsync(ISubModuleBase subModule)
 		{
 			try
 			{
+				var result = false;
 				var context = _contextFactory();
 				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
 				if (item != null)
 				{
 					context.SubModules.Remove(item);
 					await context.SaveChangesAsync();
+					result = true;
 				}
-				else
-				{
-					return null;
-				}
-				return item;
+
+				return result;
 			}
 			catch (Exception)
 			{
@@ -77,22 +79,21 @@ namespace TimeTracker.BE.DB.Repositories
 			}
 		}
 
-		public async Task<bool> DeleteSubModuleAsync(int subModuleId)
+		public async Task<bool> DeleteAsync(int id)
 		{
 			try
 			{
+				var result = false;
 				var context = _contextFactory();
-				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModuleId);
+				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == id);
 				if (item != null)
 				{
 					context.SubModules.Remove(item);
 					await context.SaveChangesAsync();
+					result = true;
 				}
-				else
-				{
-					return false;
-				}
-				return true;
+
+				return result;
 			}
 			catch (Exception)
 			{
@@ -105,21 +106,21 @@ namespace TimeTracker.BE.DB.Repositories
 		/// </summary>
 		/// <param name="subModule">Podmodul k uložení.</param>
 		/// <returns>Uložený podmodul nebo null, pokud došlo k chybě.</returns>
-		public async Task<ISubModuleBase?> SaveSubModuleAsync(ISubModuleBase subModule)
+		public async Task<ISubModuleBase?> SaveAsync(ISubModuleBase item)
 		{
 			try
 			{
-				var item = new SubModule(subModule);
+				var itemCon = new SubModule(item);
 
 				var context = _contextFactory();
 				if (item.Id == 0)
-					await context.SubModules.AddAsync(item);
+					await context.SubModules.AddAsync(itemCon);
 				else
-					context.SubModules.Update(item);
+					context.SubModules.Update(itemCon);
 
 				await context.SaveChangesAsync();
 
-				return item;
+				return itemCon;
 			}
 			catch (Exception)
 			{

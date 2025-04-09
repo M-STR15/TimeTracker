@@ -113,18 +113,19 @@ namespace TimeTracker.PC.Stories
 
 		public MainWindow GetMainWindow() => _container.Get<MainWindow>();
 
-		public RecordRepository<SqliteDbContext> GetDatabaseProvider() => _container.Get<RecordRepository<SqliteDbContext>>();
+		public RecordRepository<SqliteDbContext> GetDatabaseRepository() => _container.Get<RecordRepository<SqliteDbContext>>();
 
-		public ShiftRepository<SqliteDbContext> GetShiftProvider() => _container.Get<ShiftRepository<SqliteDbContext>>();
+		public ShiftRepository<SqliteDbContext> GetShiftRepository() => _container.Get<ShiftRepository<SqliteDbContext>>();
+		public TypeShiftRepository<SqliteDbContext> GetTypeShiftRepository() => _container.Get<TypeShiftRepository<SqliteDbContext>>();
 
-		public ActivityRepository<SqliteDbContext> GetActivityProvider() => _container.Get<ActivityRepository<SqliteDbContext>>();
+		public ActivityRepository<SqliteDbContext> GetActivityRepository() => _container.Get<ActivityRepository<SqliteDbContext>>();
 
-		public ProjectRepository<SqliteDbContext> GetProjectProvider() => _container.Get<ProjectRepository<SqliteDbContext>>();
+		public ProjectRepository<SqliteDbContext> GetProjectRepository() => _container.Get<ProjectRepository<SqliteDbContext>>();
 
-		public SubModuleRepository<SqliteDbContext> GetSubModuleProvider() => _container.Get<SubModuleRepository<SqliteDbContext>>();
+		public SubModuleRepository<SqliteDbContext> GetSubModuleRepository() => _container.Get<SubModuleRepository<SqliteDbContext>>();
 
-		public RecordRepository<SqliteDbContext> GetRecordProvider() => _container.Get<RecordRepository<SqliteDbContext>>();
+		public RecordRepository<SqliteDbContext> GetRecordRepository() => _container.Get<RecordRepository<SqliteDbContext>>();
 
-		public ReportRepository<SqliteDbContext> GetReportProvider() => _container.Get<ReportRepository<SqliteDbContext>>();
+		public ReportRepository<SqliteDbContext> GetReportRepository() => _container.Get<ReportRepository<SqliteDbContext>>();
 	}
 }

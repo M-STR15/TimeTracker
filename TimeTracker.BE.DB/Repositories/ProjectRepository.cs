@@ -4,70 +4,21 @@ using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
+using TimeTracker.BE.DB.Repositories.Interfaces;
 
-public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
+public class ProjectRepository<T> : aRepository<T>, IWritable<IProjectBase>, IDeletableById, IDeletable<IProjectBase>, IReadtableAll<Project> where T : MainDatacontext
 {
-	public ProjectRepository(Func<T> contextFactory):base(contextFactory) 
+	public ProjectRepository(Func<T> contextFactory) : base(contextFactory)
 	{
-	
-	}
-	/// <summary>
-	/// Odstraní projekt z databáze.
-	/// </summary>
-	/// <param name="project">Projekt k odstranění.</param>
-	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public async Task<IProjectBase?> DeletAsync(IProjectBase project)
-	{
-		try
-		{
-			var context = _contextFactory();
-			var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == project.Id);
-			if (item != null)
-			{
-				context.Projects.Remove(item);
-				await context.SaveChangesAsync();
-			}
-			else
-			{
-				return null;
-			}
-			return item;
-		}
-		catch (Exception)
-		{
-			throw;
-		}
-	}
 
-	public async Task<bool> DeleteAsync(int projectId)
-	{
-		try
-		{
-			var context = _contextFactory();
-			var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == projectId);
-			if (item != null)
-			{
-				context.Projects.Remove(item);
-				await context.SaveChangesAsync();
-			}
-			else
-			{
-				return false;
-			}
-			return true;
-		}
-		catch (Exception)
-		{
-			throw;
-		}
 	}
-
+	#region GET
 
 	/// <summary>
 	/// Získá všechny projekty z databáze, seřazené podle názvu a včetně jejich podmodulů.
 	/// </summary>
 	/// <returns>Kolekce projektů.</returns>
-	public async Task<ICollection<Project>> GetAllAsync()
+	public async Task<IEnumerable<Project>> GetAllAsync()
 	{
 		try
 		{
@@ -80,26 +31,75 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 			throw;
 		}
 	}
+	#endregion
+	/// <summary>
+	/// Odstraní projekt z databáze.
+	/// </summary>
+	/// <param name="project">Projekt k odstranění.</param>
+	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
+	public async Task<bool> DeleteAsync(IProjectBase item)
+	{
+		try
+		{
+			var result = false;
+			var context = _contextFactory();
+			var itemCon = await context.Projects.FirstOrDefaultAsync(x => x.Id == item.Id);
+			if (itemCon != null)
+			{
+				context.Projects.Remove(itemCon);
+				await context.SaveChangesAsync();
+				result = true;
+			}
+
+			return result;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	public async Task<bool> DeleteAsync(int id)
+	{
+		try
+		{
+			var result = false;
+			var context = _contextFactory();
+			var item = await context.Projects.FirstOrDefaultAsync(x => x.Id == id);
+			if (item != null)
+			{
+				context.Projects.Remove(item);
+				await context.SaveChangesAsync();
+				result = true;
+			}
+
+			return result;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
 
 	/// <summary>
 	/// Uloží projekt do databáze. Pokud projekt neexistuje, přidá ho, jinak ho aktualizuje.
 	/// </summary>
 	/// <param name="project">Projekt k uložení.</param>
 	/// <returns>Uložený projekt nebo null, pokud projekt s daným názvem již existuje.</returns>
-	public async Task<IProjectBase?> SaveAsync(IProjectBase project)
+	public async Task<IProjectBase?> SaveAsync(IProjectBase item)
 	{
 		try
 		{
 			//var item = project is Project p ? p : throw new InvalidCastException("Nepodařilo se převést na Project");
-			var item = new Project(project);
+			var itemCon = new Project(item);
 			var context = _contextFactory();
 			var existRecord = await context.Projects.AnyAsync(x => x.Name == item.Name);
 			if (!existRecord)
 			{
 				if (item.Id == 0)
-					await context.Projects.AddAsync(item);
+					await context.Projects.AddAsync(itemCon);
 				else
-					context.Projects.Update(item);
+					context.Projects.Update(itemCon);
 
 				await context.SaveChangesAsync();
 			}
@@ -110,9 +110,9 @@ public class ProjectRepository<T> : aRepository<T> where T : MainDatacontext
 
 			return item;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			throw ex;
+			throw;
 		}
 	}
 }

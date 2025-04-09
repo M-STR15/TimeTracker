@@ -52,6 +52,21 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 	}
 
 	/// <summary>
+	/// Methoda získává celokový počet jak odpracovaných hodin, tak i hodin na přestávce.
+	/// </summary>
+	/// <param name="date"></param>
+	/// <returns></returns>
+	public CalcHours GetActualSumaryHours()
+	{
+		var date = DateTime.Now;
+		return new CalcHours()
+		{
+			WorkHours = GetWorkHours(date),
+			PauseHours = GetPauseHours(date),
+		};
+	}
+
+	/// <summary>
 	/// Metoda získává počet hodin pauzy pro zadané datum.
 	/// </summary>
 	public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
@@ -69,22 +84,6 @@ public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
 		var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
 		return getPlanList_DayHours(start, end, dateList, typeShifts);
 	}
-
-	/// <summary>
-	/// Methoda získává celokový počet jak odpracovaných hodin, tak i hodin na přestávce.
-	/// </summary>
-	/// <param name="date"></param>
-	/// <returns></returns>
-	public CalcHours GetActualSumaryHours()
-	{
-		var date = DateTime.Now;
-		return new CalcHours()
-		{
-			WorkHours = GetWorkHours(date),
-			PauseHours = GetPauseHours(date),
-		};
-	}
-
 	public CalcHours GetSumaryHoursShift(Guid shiftGuidID)
 	{
 		if (shiftGuidID != Guid.Empty)

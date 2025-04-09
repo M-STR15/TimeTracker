@@ -3,8 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
-using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
 using TimeTracker.PC.ViewModels;
@@ -17,6 +17,7 @@ namespace TimeTracker.PC.Windows
 		private List<TypeShiftRadioButton> _typeShifts = new();
 		private readonly MainStory _mainStory;
 		private ShiftRepository<SqliteDbContext> _shiftProvider;
+		private TypeShiftRepository<SqliteDbContext> _typeShiftRepository;
 		private EventLogService _eventLogService;
 
 		public ShiftsPlanWindow(MainStory mainStory)
@@ -31,9 +32,10 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				InitializeComponent();
-				_shiftProvider = _mainStory.DIContainerStore.GetShiftProvider();
+				_shiftProvider = _mainStory.DIContainerStore.GetShiftRepository();
+				_typeShiftRepository = _mainStory.DIContainerStore.GetTypeShiftRepository();
 
-				_typeShifts = (await _shiftProvider.GetTypeShiftsAsync()).Select(x => new TypeShiftRadioButton(x)).ToList();
+				_typeShifts = (await _typeShiftRepository.GetAllAsync()).Select(x => new TypeShiftRadioButton(x)).ToList();
 				if (_typeShifts.Count > 0)
 					_typeShifts.First().IsSelected = true;
 
@@ -89,7 +91,7 @@ namespace TimeTracker.PC.Windows
 			var days = DateTime.DaysInMonth(firstDate.Year, firstDate.Month);
 			var lastDate = Convert.ToDateTime(days + "." + cmbMontAndYear.SelectedItem);
 
-			var planShiftsInDB = await _shiftProvider.GetShiftsAsync(firstDate, lastDate);
+			var planShiftsInDB = await _shiftProvider.GetAsync(firstDate, lastDate);
 			for (int i = 1; i <= days; i++)
 			{
 				var date = Convert.ToDateTime(i + "." + cmbMontAndYear.SelectedItem);
@@ -180,7 +182,7 @@ namespace TimeTracker.PC.Windows
 					var shift = new Shift(item.GuidId, item.Date, (int)item.ETypeShift);
 					shifts.Add(shift);
 				}
-				var result = _shiftProvider.SaveShifts(shifts);
+				var result = _shiftProvider.Save(shifts);
 
 				this.Close();
 			}

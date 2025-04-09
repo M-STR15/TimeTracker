@@ -11,6 +11,7 @@ namespace TimeTracker.BE.DB.Infrastructure
 		{
 			services.AddScoped<RecordRepository<T>>();
 			services.AddScoped<ShiftRepository<T>>();
+			services.AddScoped<TypeShiftRepository<T>>();
 
 			services.AddScoped<ActivityRepository<T>>();
 			services.AddScoped<ProjectRepository<T>>();

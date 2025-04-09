@@ -53,7 +53,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _subModuleRepository.GetSubModulesAsync();
+				var subModules = await _subModuleRepository.GetAllAsync();
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
@@ -76,7 +76,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _subModuleRepository.GetSubModulesAsync(projectId);
+				var subModules = await _subModuleRepository.GetAsync(projectId);
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
@@ -119,7 +119,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
-				var result = await _subModuleRepository.SaveSubModuleAsync(subModule);
+				var result = await _subModuleRepository.SaveAsync(subModule);
 				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
 				return result != null ? Ok(subModule) : Problem();
 			}
@@ -154,7 +154,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var subModule = _mapper.Map<SubModuleBaseDto>(subModuleBaseDto);
-				var result = await _subModuleRepository.SaveSubModuleAsync(subModule);
+				var result = await _subModuleRepository.SaveAsync(subModule);
 				subModuleBaseDto = _mapper.Map<SubModuleBaseDto>(result);
 				return result != null ? Ok(subModule) : Problem();
 			}
@@ -186,7 +186,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var result = await _subModuleRepository.DeleteSubModuleAsync(submoduleId);
+				var result = await _subModuleRepository.DeleteAsync(submoduleId);
 				return result ? Ok() : Problem();
 			}
 			catch (Exception ex)

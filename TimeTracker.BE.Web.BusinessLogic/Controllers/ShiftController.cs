@@ -13,9 +13,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	public class ShiftController : aControllerBase
 	{
 		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
-		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
+		private readonly TypeShiftRepository<MsSqlDbContext> _typeShiftRepository;
+		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, TypeShiftRepository<MsSqlDbContext> typeShiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_shiftRepository = shiftRepository;
+			_typeShiftRepository = typeShiftRepository;
 		}
 
 		/// <summary>
@@ -27,7 +29,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var shiftTypes = await _shiftRepository.GetTypeShiftsAsync();
+				var shiftTypes = await _typeShiftRepository.GetAllAsync();
 				if (shiftTypes != null)
 				{
 					var shiftTypesDto = _mapper.Map<List<TypeShiftBaseDto>>(shiftTypes);
@@ -50,7 +52,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var shifts = await _shiftRepository.GetShiftsAsync();
+				var shifts = await _shiftRepository.GetAllAsync();
 				if (shifts != null)
 				{
 					var shiftsDto = _mapper.Map<List<ShiftBaseDto>>(shifts);
@@ -81,7 +83,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (shiftsDto != null)
 				{
 					var shifts = _mapper.Map<List<Shift>>(shiftsDto);
-					var result = _shiftRepository.SaveShifts(shifts);
+					var result = _shiftRepository.Save(shifts);
 					return result ? Ok(shiftsDto) : Problem();
 				}
 				else

@@ -3,8 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
-using TimeTracker.BE.DB.Models.Enums;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
 using TimeTracker.PC.ViewModels;
@@ -31,21 +31,22 @@ namespace TimeTracker.PC.Windows.Reports
 			try
 			{
 				InitializeComponent();
-				_recordProvider = _mainStoru.DIContainerStore.GetRecordProvider();
-				_activityProvider = _mainStoru.DIContainerStore.GetActivityProvider();
+				_recordProvider = _mainStoru.DIContainerStore.GetRecordRepository();
+				_activityProvider = _mainStoru.DIContainerStore.GetActivityRepository();
 
-				Activities = await _activityProvider.GetActivitiesAsync();
+				Activities = (await _activityProvider.GetAllAsync()).ToList();
 				new ObservableCollection<string>(Enum.GetNames<eActivity>());
 
-				var projectProvider = new ProjectRepository<SqliteDbContext>(_context);
-				var projects = await projectProvider.GetAllAsync();
+				var projectRepository = new ProjectRepository<SqliteDbContext>(_context);
+				var projects = await projectRepository.GetAllAsync();
 				Projects = convertCollection<Project>(projects).ToList();
 
-				var shiftProvider = new ShiftRepository<SqliteDbContext>(_context);
-				var shifts = await shiftProvider.GetShiftsAsync();
+				var shiftRepository = new ShiftRepository<SqliteDbContext>(_context);
+				var shifts = await shiftRepository.GetAllAsync();
 				Shifts = convertCollection<Shift>(shifts).ToList();
 
-				var typeShifts = await shiftProvider.GetTypeShiftsAsync();
+				var typeShiftRepository = new TypeShiftRepository<SqliteDbContext>(_context);
+				var typeShifts = await typeShiftRepository.GetAllAsync();
 				TypeShifts = convertCollection<TypeShift>(typeShifts, false).ToList();
 
 				cmbMonth.ItemsSource = new ReportParameterService().Monts;
@@ -93,7 +94,7 @@ namespace TimeTracker.PC.Windows.Reports
 			}
 		}
 
-		private ICollection<T> convertCollection<T>(ICollection<T> collection, bool emptyValue = true)
+		private ICollection<T> convertCollection<T>(IEnumerable<T> collection, bool emptyValue = true)
 			where T : new()
 		{
 			var list = new ObservableCollection<T>();
@@ -208,7 +209,7 @@ namespace TimeTracker.PC.Windows.Reports
 			{
 				var startTime = Convert.ToDateTime("1." + cmbMonth.SelectedItem);
 				var endTime = startTime.AddMonths(1);
-				var origList = await _recordProvider.GetRecordsAsync(startTime, endTime);
+				var origList = await _recordProvider.GetAsync(startTime, endTime);
 				if (origList != null)
 				{
 					var list = origList.Select((record, index) =>
