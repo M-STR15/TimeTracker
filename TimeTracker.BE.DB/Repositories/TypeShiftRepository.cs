@@ -5,11 +5,8 @@ using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories
 {
-	public class TypeShiftRepository<T> : aRepository<T>, IReadtableAll<TypeShift> where T : MainDatacontext
+	public class TypeShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IReadtableAll<TypeShift> where T : MainDatacontext
 	{
-		public TypeShiftRepository(Func<T> contextFactory) : base(contextFactory)
-		{
-		}
 		/// <summary>
 		/// Získá všechny typy směn z databáze.
 		/// </summary>

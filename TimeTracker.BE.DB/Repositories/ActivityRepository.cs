@@ -5,10 +5,8 @@ using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ActivityRepository<T> : aRepository<T>, IReadtableAll<Activity> where T : MainDatacontext
+public class ActivityRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IReadtableAll<Activity> where T : MainDatacontext
 {
-	public ActivityRepository(Func<T> contextFactory) : base(contextFactory)
-	{ }
 	/// <summary>
 	/// Získá seznam všech aktivit z databáze.
 	/// </summary>

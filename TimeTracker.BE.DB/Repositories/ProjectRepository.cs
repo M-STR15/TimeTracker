@@ -6,12 +6,8 @@ using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories.Interfaces;
 
-public class ProjectRepository<T> : aRepository<T>, IWritable<IProjectBase>, IDeletableById, IDeletable<IProjectBase>, IReadtableAll<Project> where T : MainDatacontext
+public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<IProjectBase>, IDeletableById, IDeletable<IProjectBase>, IReadtableAll<Project> where T : MainDatacontext
 {
-	public ProjectRepository(Func<T> contextFactory) : base(contextFactory)
-	{
-
-	}
 	#region GET
 
 	/// <summary>

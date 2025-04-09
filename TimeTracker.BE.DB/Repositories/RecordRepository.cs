@@ -6,11 +6,8 @@ using TimeTracker.Enums;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class RecordRepository<T> : aRepository<T>, IWritable<RecordActivity>, IDeletableByGuidId, IReadtableAll<RecordActivity> where T : MainDatacontext
+public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<RecordActivity>, IDeletableByGuidId, IReadtableAll<RecordActivity> where T : MainDatacontext
 {
-	public RecordRepository(Func<T> contextFactory) : base(contextFactory)
-	{
-	}
 
 	#region DELETE
 	/// <summary>

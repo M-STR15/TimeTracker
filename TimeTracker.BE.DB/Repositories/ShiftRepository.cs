@@ -5,11 +5,8 @@ using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ShiftRepository<T> : aRepository<T>, IReadtableAll<Shift> where T : MainDatacontext
+public class ShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IReadtableAll<Shift> where T : MainDatacontext
 {
-	public ShiftRepository(Func<T> contextFactory) : base(contextFactory)
-	{
-	}
 
 	#region GET
 	/// <summary>

@@ -1,16 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories.Models.Reports;
 using TimeTracker.Enums;
-
 namespace TimeTracker.BE.DB.Repositories;
 
-public class ReportRepository<T> : aRepository<T> where T : MainDatacontext
+public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory) where T : MainDatacontext
 {
-	public ReportRepository(Func<T> contextFactory) : base(contextFactory)
-	{
-	}
+
 	/// <summary>
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.

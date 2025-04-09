@@ -6,11 +6,8 @@ using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories
 {
-	public class SubModuleRepository<T> : aRepository<T>, IWritable<ISubModuleBase>, IDeletableById, IDeletable<ISubModuleBase>, IReadtableAll<SubModule> where T : MainDatacontext
+	public class SubModuleRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<ISubModuleBase>, IDeletableById, IDeletable<ISubModuleBase>, IReadtableAll<SubModule> where T : MainDatacontext
 	{
-		public SubModuleRepository(Func<T> contextFactory) : base(contextFactory)
-		{
-		}
 
 		#region GET
 		/// <summary>
