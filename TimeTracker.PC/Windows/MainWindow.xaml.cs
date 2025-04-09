@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.Enums;
 using TimeTracker.PC.Models;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
@@ -24,6 +25,7 @@ namespace TimeTracker.PC.Windows
 		private EventHandler _lastRecordActivityHangler;
 		private RecordActivity? _lra;
 		private ProjectRepository<SqliteDbContext> _projectProvider;
+		private SubModuleRepository<SqliteDbContext> _subModuleProvider;
 
 		private RecordRepository<SqliteDbContext> _recordProvider;
 
@@ -170,7 +172,7 @@ namespace TimeTracker.PC.Windows
 
 		private async void loadTypeShifts()
 		{
-			_typeShifts = await _shiftProvider.GetTypeShiftsForMainWindowAsync();
+			_typeShifts = (await _shiftProvider.GetTypeShiftsForMainWindowAsync()).ToList();
 			cmbTypeShift.ItemsSource = _typeShifts;
 			cmbTypeShift.SelectedIndex = 0;
 		}
@@ -301,7 +303,7 @@ namespace TimeTracker.PC.Windows
 				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
-					var subModules = await _projectProvider.GetSubModulesAsync(projectId);
+					var subModules = (await _subModuleProvider.GetSubModulesAsync(projectId)).ToList();
 					cmbSubModule.ItemsSource = subModules;
 					if (subModules != null && subModules.Count > 0)
 						cmbSubModule.SelectedIndex = 0;

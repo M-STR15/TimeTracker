@@ -25,8 +25,7 @@ namespace TimeTracker.PC.Stories
 			createDb();
 
 			_container.Bind<SqliteDbContext>().To<SqliteDbContext>().InScope(ctx => ctx.Kernel);
-			_container.Bind<Func<SqliteDbContext>>()
-				.ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
+			_container.Bind<Func<SqliteDbContext>>().ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
 
 			//var dbContext = _container.Get<SqliteDbContext>();
 			//var fceDbContext = _container.Get<Func<SqliteDbContext>>();
@@ -121,6 +120,8 @@ namespace TimeTracker.PC.Stories
 		public ActivityRepository<SqliteDbContext> GetActivityProvider() => _container.Get<ActivityRepository<SqliteDbContext>>();
 
 		public ProjectRepository<SqliteDbContext> GetProjectProvider() => _container.Get<ProjectRepository<SqliteDbContext>>();
+
+		public SubModuleRepository<SqliteDbContext> GetSubModuleProvider() => _container.Get<SubModuleRepository<SqliteDbContext>>();
 
 		public RecordRepository<SqliteDbContext> GetRecordProvider() => _container.Get<RecordRepository<SqliteDbContext>>();
 

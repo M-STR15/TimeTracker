@@ -19,6 +19,7 @@ namespace TimeTracker.PC.Windows
 	{
 		private readonly MainStory _mainStory;
 		private readonly ProjectRepository<SqliteDbContext> _projectProvider;
+		private readonly SubModuleRepository<SqliteDbContext> _subModuleProvider;
 
 		private EventLogService _eventLogService;
 		private ProjectListBox _selectProjectListBox;
@@ -31,7 +32,7 @@ namespace TimeTracker.PC.Windows
 			{
 				_mainStory = mainStory;
 				_projectProvider = _mainStory.DIContainerStore.GetProjectProvider();
-
+				_subModuleProvider = _mainStory.DIContainerStore.GetSubModuleProvider();
 				InitializeComponent();
 
 				ProjectListBox = new ObservableCollection<ProjectListBox>();
@@ -82,7 +83,7 @@ namespace TimeTracker.PC.Windows
 
 				if (selected != null)
 				{
-					var list = await _projectProvider.GetSubModulesAsync(selected.Id);
+					var list = await _subModuleProvider.GetSubModulesAsync(selected.Id);
 					SubModuleListBox.Clear();
 
 					if (list != null && list.Any())
@@ -165,7 +166,7 @@ namespace TimeTracker.PC.Windows
 				var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = _projectProvider.DeleteSubModuleAsync(selected);
+					var result = _subModuleProvider.DeleteSubModuleAsync(selected);
 					if (result != null)
 					{
 						var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);
@@ -252,7 +253,7 @@ namespace TimeTracker.PC.Windows
 				var item = (SubModuleListBox)parameter;
 				item.IsEditable = false;
 
-				var result = _projectProvider.SaveSubModuleAsync(item);
+				var result = _subModuleProvider.SaveSubModuleAsync(item);
 				if (result != null)
 				{
 					var updateItem = SubModuleListBox.FirstOrDefault(x => x.GuidId == item.GuidId);
