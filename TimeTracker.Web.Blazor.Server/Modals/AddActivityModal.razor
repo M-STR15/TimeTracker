@@ -81,32 +81,35 @@
 
     private void OnTypeShiftChanged(ChangeEventArgs e)
     {
-        if (e.Value is TypeShiftBaseDto item)
+        if (_recordActivityInsertDto != null && e.Value is TypeShiftBaseDto item)
             _recordActivityInsertDto.TypeShiftId = item?.Id;
     }
 
     private void OnShiftChanged(ChangeEventArgs e)
     {
-        if (e.Value is ShiftBaseDto item)
+        if (_recordActivityInsertDto != null && e.Value is ShiftBaseDto item)
             _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
     }
 
     private void OnProjectChanged(ChangeEventArgs e)
     {
-        if (e.Value is ProjectBaseDto item)
+        if (_recordActivityInsertDto != null && e.Value is ProjectBaseDto item)
             _recordActivityInsertDto.ProjectId = item?.Id;
     }
 
     private void OnSubModuleChanged(ChangeEventArgs e)
     {
-        if (e.Value is SubModuleBaseDto item)
+        if (_recordActivityInsertDto != null && e.Value is SubModuleBaseDto item)
             _recordActivityInsertDto.SubModuleId = item?.Id;
     }
 
     private Task OnValueChanged(string newValue)
     {
-        _recordActivityInsertDto.Description = newValue;
-        StateHasChanged();  // Aktualizuje komponentu
+        if (_recordActivityInsertDto != null)
+        {
+            _recordActivityInsertDto.Description = newValue;
+            StateHasChanged();  // Aktualizuje komponentu
+        }
         return Task.CompletedTask;
     }
 
@@ -118,21 +121,24 @@
 
     protected async override void performActionOnOpen()
     {
-        var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
-        if (typeShiftsReq != null)
-            _typeShifts = typeShiftsReq;
+        if (_httpClient != null)
+        {
+            var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
+            if (typeShiftsReq != null)
+                _typeShifts = typeShiftsReq;
 
-        var shiftsReq = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
-        if (shiftsReq != null)
-            _shifts = shiftsReq;
+            var shiftsReq = await _httpClient.GetFromJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts");
+            if (shiftsReq != null)
+                _shifts = shiftsReq;
 
-        var projectsReq = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
-        if (projectsReq != null)
-            _projects = projectsReq;
+            var projectsReq = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
+            if (projectsReq != null)
+                _projects = projectsReq;
 
-        var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
-        if (subModulesReq != null)
-            _subModules = subModulesReq;
+            var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
+            if (subModulesReq != null)
+                _subModules = subModulesReq;
+        }
 
         _recordActivityInsertDto = new();
         editContext = new EditContext(_recordActivityInsertDto);

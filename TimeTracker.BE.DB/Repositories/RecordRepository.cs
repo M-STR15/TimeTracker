@@ -99,7 +99,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// <param name="startTime">Počáteční časový bod.</param>
 	/// <param name="endTime">Koncový časový bod.</param>
 	/// <returns>Seznam záznamů aktivit v zadaném časovém rozmezí.</returns>
-	public async Task<IEnumerable<RecordActivity>> GetAsync(DateTime startTime, DateTime endTime)
+	public async Task<IEnumerable<RecordActivity>?> GetAsync(DateTime startTime, DateTime endTime)
 	{
 		try
 		{

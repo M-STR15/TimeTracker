@@ -12,7 +12,7 @@ public class ShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(context
 	/// <summary>
 	/// Získá všechny směny z databáze, seřazené podle data začátku.
 	/// </summary>
-	public async Task<IEnumerable<Shift>> GetAllAsync()
+	public async Task<IEnumerable<Shift>?> GetAllAsync()
 	{
 		try
 		{
@@ -32,7 +32,7 @@ public class ShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(context
 	/// <param name="dateFrom">Počáteční datum.</param>
 	/// <param name="dateTo">Koncové datum.</param>
 	/// <returns>Seznam směn v zadaném časovém rozmezí.</returns>
-	public async Task<IEnumerable<Shift>> GetAsync(DateTime dateFrom, DateTime dateTo)
+	public async Task<IEnumerable<Shift>?> GetAsync(DateTime dateFrom, DateTime dateTo)
 	{
 		try
 		{

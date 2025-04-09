@@ -12,7 +12,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
 	/// </summary>
-	public IEnumerable<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
+	public IEnumerable<SumInDay>? GetActivityOverDays(DateTime start, DateTime end)
 	{
 		return Task.Run(() => GetActivityOverDaysAsync(start, end)).GetAwaiter().GetResult();
 	}
@@ -21,7 +21,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// Metoda získává seznam aktivit (práce a pauzy) pro každý den v zadaném rozsahu dat.
 	/// Pro každý den a typ směny vypočítá celkové hodiny práce a pauzy.
 	/// </summary>
-	public async Task<IEnumerable<SumInDay>> GetActivityOverDaysAsync(DateTime start, DateTime end)
+	public async Task<IEnumerable<SumInDay>?> GetActivityOverDaysAsync(DateTime start, DateTime end)
 	{
 		var activities = new List<RecordActivity>();
 
@@ -176,7 +176,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 
 			return planList;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return null;
 		}
