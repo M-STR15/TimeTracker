@@ -196,9 +196,11 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 			var context = _contextFactory();
 			var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
 
-			var allowedActivities = new List<int>();
-			allowedActivities.Add((int)eActivity.Start);
-			allowedActivities.Add((int)eActivity.Pause);
+			var allowedActivities = new List<int>()
+			{
+				(int)eActivity.Start,
+				(int)eActivity.Pause
+			};
 
 			for (int i = 0; i <= recordActivities.Count - 1; i++)
 			{

@@ -15,7 +15,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// </summary>
 	public IEnumerable<SumInDay> GetActivityOverDays(DateTime start, DateTime end)
 	{
-		return GetActivityOverDaysAsync(start, end).Result;
+		return Task.Run(() => GetActivityOverDaysAsync(start, end)).GetAwaiter().GetResult();
 	}
 
 	/// <summary>
