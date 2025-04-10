@@ -19,6 +19,8 @@ namespace TimeTracker.Web.Blazor.Server.Components
 		private void onOpenSettings_Click() => NavigationManager.NavigateTo("/settings");
 		private void onOpenShifts_Click() => NavigationManager.NavigateTo("/shifts");
 		private void onOpenReportRecordList_Click() => NavigationManager.NavigateTo("/reports/record-list");
+		private void onOpenReportActivitiesOverDays_Click() => NavigationManager.NavigateTo("/reports/activities-over-days");
+		private void onOpenReportPlanVsRealityWorkHours_Click() => NavigationManager.NavigateTo("/reports/plan-vs-reality-work-hours");
 
 	}
 }
