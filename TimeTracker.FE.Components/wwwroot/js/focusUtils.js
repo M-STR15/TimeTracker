@@ -1,11 +1,13 @@
-﻿function delayBlur(component) {
+﻿// wwwroot/js/focusUtils.js
+
+export function delayBlur(component) {
     setTimeout(() => {
         component.invokeMethodAsync('HandleBlur');
     }, 200);
 }
 
-window.removeFocus = function (element) {
+export function removeFocus(element) {
     if (element) {
         element.blur();
     }
-};
+}

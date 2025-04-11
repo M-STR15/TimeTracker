@@ -15,14 +15,14 @@ public class FocusJsInterop : IAsyncDisposable
     private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
 	public FocusJsInterop(IJSRuntime jsRuntime)
-    {
+    {	
 		_moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/TimeTracker.FE.Components/js/focusUtils.js").AsTask());
     }
 
 	public async ValueTask DelayBlur<TComponent>(DotNetObjectReference<TComponent> componentRef) where TComponent : class
 	{
 		var module = await _moduleTask.Value;
-		await module.InvokeVoidAsync("delayBlur", componentRef);
+		await module.InvokeVoidAsync("removeFocus", componentRef);
 	}
 
 	public async ValueTask RemoveFocus(ElementReference element)

@@ -1,7 +1,9 @@
 ﻿@using Microsoft.JSInterop
 
 @typeparam TItem
-@inject IJSRuntime JS
+@* @inject IJSRuntime JS *@
+
+@inject FocusJsInterop? _jsInterop;
 
 <div class="custom-combobox">
     <div class="input-container">
@@ -9,9 +11,9 @@
                type="text"
                class="form-control"
                @bind="SearchText"
-               @onfocus="OnFocus"
+               @onfocus="onFocus"
                @oninput="OnInput"
-               @onblur="@(() => JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this)))"
+               @onblur="onBlur"
                placeholder="Vyberte možnost..."
                readonly />
         <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
@@ -31,11 +33,17 @@
 
 @code {
     private ElementReference inputRef;
-    private FocusJsInterop? _jsInterop;
+    //private FocusJsInterop? _jsInterop;
 
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
+
+    // private void onBlur()
+    // {
+    //     JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this));
+
+    // }
     private async Task RemoveFocus()
     {
         // await JS.InvokeVoidAsync("removeFocus", inputRef);
@@ -48,10 +56,10 @@
 
     }
 
-    protected override void OnInitialized()
-    {
-        _jsInterop = new FocusJsInterop(JS);
-    }
+    // protected override void OnInitialized()
+    // {
+    //     _jsInterop = new FocusJsInterop(JS);
+    // }
 
     [Parameter]
     public TItem SelectedItem
@@ -108,12 +116,12 @@
         }
     }
 
-    private void OnFocus()
+    private void onFocus()
     {
         IsDropdownVisible = true;
     }
 
-    private void OnBlur()
+    private void onBlur()
     {
         // Po ztrátě zaměření skrytí dropdownu s malým zpožděním pro umožnění výběru
         Task.Delay(150);
