@@ -1,6 +1,6 @@
 ﻿using TimeTracker.BE.Web.Shared.Infrastructure;
 using TimeTracker.Web.Blazor.Server.MappingProfiles;
-using TimeTracker.Web.Blazor.Server.Services;
+using TimeTracker.FE.Components;
 
 namespace TimeTracker.Web.Blazor.Server.Infrastructure
 {
@@ -10,7 +10,6 @@ namespace TimeTracker.Web.Blazor.Server.Infrastructure
 		{
 			services.AddAutoMapper(typeof(MappingProfile));
 			services.AddTimeTrackerBeWebShared();
-			services.AddScoped<ToastNotificationService>();
 
 			return services;
 		}

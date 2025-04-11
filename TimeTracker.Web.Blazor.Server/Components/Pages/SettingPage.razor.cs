@@ -1,5 +1,5 @@
 ﻿using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
-using TimeTracker.Web.Blazor.Server.Models;
+using TimeTracker.FE.Components.Models;
 
 namespace TimeTracker.Web.Blazor.Server.Components.Pages
 {

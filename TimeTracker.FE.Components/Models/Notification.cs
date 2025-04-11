@@ -1,4 +1,6 @@
-﻿namespace TimeTracker.Web.Blazor.Server.Models
+﻿using TimeTracker.FE.Components.Models;
+
+namespace TimeTracker.FE.Components
 {
 	public class Notification
 	{

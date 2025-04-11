@@ -24,6 +24,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.BE.Web.Business
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Enums", "TimeTracker.Enums\TimeTracker.Enums.csproj", "{F91E0736-0387-473C-9E42-E6C923694386}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FE", "FE", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.FE.Components", "TimeTracker.FE.Components\TimeTracker.FE.Components.csproj", "{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTracker.Interfaces", "TimeTracker.Interfaces\TimeTracker.Interfaces.csproj", "{123AED4F-ADCE-4ECD-88BA-0090AD4E3F9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +60,14 @@ Global
 		{F91E0736-0387-473C-9E42-E6C923694386}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F91E0736-0387-473C-9E42-E6C923694386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F91E0736-0387-473C-9E42-E6C923694386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{123AED4F-ADCE-4ECD-88BA-0090AD4E3F9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{123AED4F-ADCE-4ECD-88BA-0090AD4E3F9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{123AED4F-ADCE-4ECD-88BA-0090AD4E3F9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{123AED4F-ADCE-4ECD-88BA-0090AD4E3F9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +77,7 @@ Global
 		{7779448F-3A66-4D20-AF00-E92EFD5A8B01} = {6C3DA257-6962-4EAA-9552-DDEA2495EDC6}
 		{69ABCD59-14B8-4608-BE6C-C8643ABF3AC5} = {7779448F-3A66-4D20-AF00-E92EFD5A8B01}
 		{93AC9D06-994C-03CE-8F8D-6E1E8F9709E5} = {7779448F-3A66-4D20-AF00-E92EFD5A8B01}
+		{9050FE53-4F50-47F6-B48E-2E2F38E1E7D9} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B973CB15-9F5A-4D35-A12E-6A398AEDD263}

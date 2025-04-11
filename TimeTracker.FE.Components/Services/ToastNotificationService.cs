@@ -1,6 +1,6 @@
-﻿using TimeTracker.Web.Blazor.Server.Models;
+﻿using TimeTracker.FE.Components.Models;
 
-namespace TimeTracker.Web.Blazor.Server.Services
+namespace TimeTracker.FE.Components.Services
 {
 	public class ToastNotificationService
 	{

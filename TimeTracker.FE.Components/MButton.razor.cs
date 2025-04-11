@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace TimeTracker.Web.Blazor.Server.Components.Elements
+namespace TimeTracker.FE.Components
 {
 	public partial class MButton
 	{

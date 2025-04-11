@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Blazor.Server.Models;
+using TimeTracker.FE.Components.Models;
 
-namespace TimeTracker.Web.Blazor.Server.Components.Elements
+namespace TimeTracker.FE.Components
 {
 	public partial class MTable<TRow> : ComponentBase
 	{

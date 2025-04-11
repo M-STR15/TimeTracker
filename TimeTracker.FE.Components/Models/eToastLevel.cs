@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Web.Blazor.Server.Models
+﻿namespace TimeTracker.FE.Components.Models
 {
 	public enum ToastLevel
 	{

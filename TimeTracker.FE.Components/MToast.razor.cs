@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using TimeTracker.Web.Blazor.Server.Models;
-using TimeTracker.Web.Blazor.Server.Services;
+using TimeTracker.FE.Components.Services;
 
-namespace TimeTracker.Web.Blazor.Server.Components.Elements
+namespace TimeTracker.FE.Components
 {
 	public partial class MToast
 	{

@@ -38,6 +38,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\TimeTracker.BE.Web.BusinessLogic\TimeTracker.BE.Web.BusinessLogic.csproj" />
 		<ProjectReference Include="..\TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj" />
+		<ProjectReference Include="..\TimeTracker.FE.Components\TimeTracker.FE.Components.csproj" />
 	</ItemGroup>
 
 </Project>

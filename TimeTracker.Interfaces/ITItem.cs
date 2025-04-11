@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Web.Blazor.Server.Models.Interfaces
+﻿namespace TimeTracker.Interfaces
 {
 	public interface ITItem
 	{
