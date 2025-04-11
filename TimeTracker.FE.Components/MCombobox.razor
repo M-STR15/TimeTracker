@@ -31,10 +31,27 @@
 
 @code {
     private ElementReference inputRef;
+    private FocusJsInterop? _jsInterop;
+
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
-    private async Task RemoveFocus() => await JS.InvokeVoidAsync("removeFocus", inputRef);
+    private async Task RemoveFocus()
+    {
+        // await JS.InvokeVoidAsync("removeFocus", inputRef);
+
+        if (_jsInterop is not null)
+        {
+            var dotNetRef = DotNetObjectReference.Create(this);
+            await _jsInterop.DelayBlur(dotNetRef);
+        }
+
+    }
+
+    protected override void OnInitialized()
+    {
+        _jsInterop = new FocusJsInterop(JS);
+    }
 
     [Parameter]
     public TItem SelectedItem
@@ -129,5 +146,13 @@
     private string getSelectedClass(TItem item)
     {
         return Equals(item, SelectedItem) ? "selected" : string.Empty;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_jsInterop is not null)
+        {
+            await _jsInterop.DisposeAsync();
+        }
     }
 }

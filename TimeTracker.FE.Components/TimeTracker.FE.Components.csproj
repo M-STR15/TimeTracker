@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\js\MCombobox.js">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
+	  <Content Update="wwwroot\js\MCombobox.js">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
 
 </Project>
