@@ -13,10 +13,6 @@
     {
       "library": "bootstrap@5.3.3",
       "destination": "wwwroot/bootstrap/"
-    },
-    {
-      "library": "Chart.js@4.4.1",
-      "destination": "wwwroot/lib/Chart.js/"
     }
   ]
 }
