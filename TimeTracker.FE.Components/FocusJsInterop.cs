@@ -12,17 +12,23 @@ namespace TimeTracker.FE.Components;
 
 public class FocusJsInterop : IAsyncDisposable
 {
-    private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
+	private readonly Lazy<Task<IJSObjectReference>> _moduleTask;
 
 	public FocusJsInterop(IJSRuntime jsRuntime)
-    {	
-		_moduleTask = new (() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/TimeTracker.FE.Components/js/focusUtils.js").AsTask());
-    }
+	{
+		_moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/TimeTracker.FE.Components/js/focusUtils.js").AsTask());
+	}
 
-	public async ValueTask DelayBlur<TComponent>(DotNetObjectReference<TComponent> componentRef) where TComponent : class
+	//public async ValueTask DelayBlur<TComponent>(DotNetObjectReference<TComponent> componentRef) where TComponent : class
+	//{
+	//	var module = await _moduleTask.Value;
+	//	await module.InvokeVoidAsync("removeFocus", componentRef);
+	//}
+
+	public async ValueTask DelayBlur(ElementReference element) 
 	{
 		var module = await _moduleTask.Value;
-		await module.InvokeVoidAsync("removeFocus", componentRef);
+		await module.InvokeVoidAsync("removeFocus", element);
 	}
 
 	public async ValueTask RemoveFocus(ElementReference element)
@@ -35,8 +41,15 @@ public class FocusJsInterop : IAsyncDisposable
 	{
 		if (_moduleTask.IsValueCreated)
 		{
-			var module = await _moduleTask.Value;
-			await module.DisposeAsync();
+			try
+			{
+				var module = await _moduleTask.Value;
+				await module.DisposeAsync();
+			}
+			catch (Exception)
+			{
+
+			}
 		}
 	}
 }
