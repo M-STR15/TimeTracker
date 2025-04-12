@@ -21,10 +21,10 @@ namespace TimeTracker.FE.Components.Interops
 			);
 		}
 
-		public async ValueTask SetupChart(ElementReference element, object config)
+		public async ValueTask SetupChartAsyncAsync(string id, object config)
 		{
 			var module = await _moduleTask.Value;
-			await module.InvokeVoidAsync("setupChart", element, config);
+			await module.InvokeVoidAsync("setup", id, config);
 		}
 
 		public async ValueTask DisposeAsync()
