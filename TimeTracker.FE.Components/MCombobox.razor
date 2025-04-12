@@ -39,36 +39,12 @@
     private TItem _selectedItem;
     [Inject] private FocusJsInterop FocusJsInterop { get; set; }
 
-    // private void onBlur()
-    // {
-    //     JS.InvokeVoidAsync("delayBlur", DotNetObjectReference.Create(this));
-
-    // }
-
-     protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await FocusJsInterop.RemoveFocus(inputRef);
-        }
-    }
 
     private async Task RemoveFocus()
     {
-        // await JS.InvokeVoidAsync("removeFocus", inputRef);
-
         if (FocusJsInterop is not null)
-        {
-            // var dotNetRef = DotNetObjectReference.Create(this);
             await FocusJsInterop.DelayBlur(inputRef);
-        }
-
     }
-
-    // protected override void OnInitialized()
-    // {
-    //     _jsInterop = new FocusJsInterop(JS);
-    // }
 
     [Parameter]
     public TItem SelectedItem
