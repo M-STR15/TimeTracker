@@ -45,9 +45,4 @@
 		<ProjectReference Include="..\TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj" />
 		<ProjectReference Include="..\TimeTracker.FE.Components\TimeTracker.FE.Components.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<Content Update="wwwroot\js\mchart2.js">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
 </Project>

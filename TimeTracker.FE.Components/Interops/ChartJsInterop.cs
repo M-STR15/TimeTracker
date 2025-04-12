@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 
 namespace TimeTracker.FE.Components.Interops
 {
@@ -14,11 +13,6 @@ namespace TimeTracker.FE.Components.Interops
 					"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
 				).AsTask()
 			);
-			//_moduleTask = new(() =>
-			//	jsRuntime.InvokeAsync<IJSObjectReference>(
-			//		"import", "https://cdn.jsdelivr.net/npm/chart.js"
-			//	).AsTask()
-			//);
 		}
 
 		public async ValueTask SetupChart(string id, object config)
