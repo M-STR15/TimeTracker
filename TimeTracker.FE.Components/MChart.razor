@@ -1,12 +1,15 @@
 ﻿@using Microsoft.JSInterop
+@using TimeTracker.FE.Components.Interops
 @using TimeTracker.FE.Components.Models
-@inject IJSRuntime JSRuntime
+
 @* <script src="lib/Chart.js/chart.js"></script> *@
 <script src="js/mchart2.js"></script>
 
 <canvas id="@Id"></canvas>
 
 @code {
+    [Inject] private ChartJsInterop _chartJsInterop { get; set; }
+
     [Parameter]
     public string Id { get; set; }
 
@@ -52,6 +55,14 @@
             }
         };
 
-        await JSRuntime.InvokeVoidAsync("setup", Id, config);
+ 
+        if (_chartJsInterop is not null)
+            await _chartJsInterop.SetupChart(Id, config);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_chartJsInterop is not null)
+            await _chartJsInterop.DisposeAsync();
     }
 }

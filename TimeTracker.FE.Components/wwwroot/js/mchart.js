@@ -1,5 +1,4 @@
-﻿window.setup = (id, config) => {
-    var ctx = document.getElementById(id).getContext('2d');
-    new Chart(ctx, config);
+﻿export function setup(id, config) {
+    const ctx = document.getElementById(id).getContext('2d');
+    new window.Chart(ctx, config); // Používáš Chart z CDN
 }
-

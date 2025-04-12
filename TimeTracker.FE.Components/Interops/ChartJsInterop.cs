@@ -9,22 +9,22 @@ namespace TimeTracker.FE.Components.Interops
 
 		public ChartJsInterop(IJSRuntime jsRuntime)
 		{
-			//_moduleTask = new(() =>
-			//	jsRuntime.InvokeAsync<IJSObjectReference>(
-			//		"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
-			//	).AsTask()
-			//);
 			_moduleTask = new(() =>
 				jsRuntime.InvokeAsync<IJSObjectReference>(
-					"import", "/js/mchart2.js"
+					"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
 				).AsTask()
 			);
+			//_moduleTask = new(() =>
+			//	jsRuntime.InvokeAsync<IJSObjectReference>(
+			//		"import", "https://cdn.jsdelivr.net/npm/chart.js"
+			//	).AsTask()
+			//);
 		}
 
-		public async ValueTask SetupChart(ElementReference element, object config)
+		public async ValueTask SetupChart(string id, object config)
 		{
 			var module = await _moduleTask.Value;
-			await module.InvokeVoidAsync("setupChart", element, config);
+			await module.InvokeVoidAsync("setup", id, config);
 		}
 
 		public async ValueTask DisposeAsync()
