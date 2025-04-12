@@ -2,10 +2,11 @@
 @using TimeTracker.FE.Components.Interops
 @using TimeTracker.FE.Components.Models
 
-@* <script src="lib/Chart.js/chart.js"></script> *@
 <script src="js/mchart2.js"></script>
 
-<canvas id="@Id"></canvas>
+<div style="height:400px; width:400px;">
+    <canvas id="@Id"></canvas>
+</div>
 
 @code {
     [Inject] private ChartJsInterop _chartJsInterop { get; set; }
@@ -55,7 +56,7 @@
             }
         };
 
- 
+
         if (_chartJsInterop is not null)
             await _chartJsInterop.SetupChart(Id, config);
     }
