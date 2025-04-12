@@ -1,4 +1,5 @@
 ﻿@using Microsoft.JSInterop
+@using TimeTracker.FE.Components.Interops
 
 @typeparam TItem
 @* @inject IJSRuntime JS *@
@@ -37,13 +38,13 @@
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
-    [Inject] private FocusJsInterop FocusJsInterop { get; set; }
+    [Inject] private FocusJsInterop _focusJsInterop { get; set; }
 
 
     private async Task RemoveFocus()
     {
-        if (FocusJsInterop is not null)
-            await FocusJsInterop.DelayBlur(inputRef);
+        if (_focusJsInterop is not null)
+            await _focusJsInterop.DelayBlur(inputRef);
     }
 
     [Parameter]
@@ -143,9 +144,7 @@
 
     public async ValueTask DisposeAsync()
     {
-        if (FocusJsInterop is not null)
-        {
-            await FocusJsInterop.DisposeAsync();
-        }
+        if (_focusJsInterop is not null)
+            await _focusJsInterop.DisposeAsync();
     }
 }

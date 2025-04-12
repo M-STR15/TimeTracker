@@ -1,0 +1,68 @@
+﻿@using Microsoft.JSInterop
+@using System.Diagnostics
+@using TimeTracker.FE.Components.Interops
+@using TimeTracker.FE.Components.Models
+@inject IJSRuntime JSRuntime
+
+<canvas @ref="_chartRef"></canvas>
+
+@code {
+    private ElementReference _chartRef;
+    private bool _disposed;
+
+    [Inject] private ChartJsInterop _chartJsInterop { get; set; }
+
+    [Parameter] public string Id { get; set; }
+    [Parameter] public eChartType Type { get; set; }
+    [Parameter] public string[] Data { get; set; }
+    [Parameter] public string[] BackgroundColor { get; set; }
+    [Parameter] public string[] Labels { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !_disposed && _chartJsInterop is not null)
+        {
+            try
+            {
+                var config = new
+                {
+                    Type = Type.ToString().ToLower(),
+                    Options = new
+                    {
+                        Responsive = true,
+                        Scales = new
+                        {
+                            YAxes = new[]
+                            {
+                            new { Ticks = new { BeginAtZero = true } }
+                        }
+                        }
+                    },
+                    Data = new
+                    {
+                        Datasets = new[]
+                        {
+                        new { Data = Data, BackgroundColor = BackgroundColor }
+                    },
+                        Labels = Labels
+                    }
+                };
+
+                await _chartJsInterop.SetupChart(_chartRef, config);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Chart setup failed: " + ex.Message);
+            }
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _disposed = true;
+        if (_chartJsInterop is not null)
+        {
+            await _chartJsInterop.DisposeAsync();
+        }
+    }
+}

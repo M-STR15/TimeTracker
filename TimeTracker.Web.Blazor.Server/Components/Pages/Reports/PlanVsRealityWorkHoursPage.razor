@@ -1,6 +1,13 @@
-﻿@page "/reports/plan-vs-reality-work-hours"
+﻿@using TimeTracker.FE.Components.Models
+@page "/reports/plan-vs-reality-work-hours"
 
 <h3>Plan vs reality work hours </h3>
+
+<MChart Id="pie1" Type="@eChartType.Pie"
+       Data="@(new[] { "1", "2" })"
+       BackgroundColor="@(new[] { "blue","green" })"
+       Labels="@(new[] { "Fail","Ok" })">
+</MChart>
 
 @code {
    

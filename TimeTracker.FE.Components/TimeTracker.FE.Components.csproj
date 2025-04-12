@@ -21,9 +21,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Update="wwwroot\js\MCombobox.js">
+		<Content Update="wwwroot\js\focusUtils.js">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\js\mchart.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
-
 </Project>

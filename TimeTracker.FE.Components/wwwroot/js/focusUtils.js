@@ -1,20 +1,20 @@
 ﻿// wwwroot/js/focusUtils.js
 
-export function delayBlur(component) {
+export function delayBlur(element) {
     setTimeout(() => {
-        component.invokeMethodAsync('HandleBlur');
+        if (element && typeof element.invokeMethodAsync === 'function') {
+            element.invokeMethodAsync('HandleBlur');
+        }
     }, 200);
 }
 
 export function removeFocus(element) {
     //console.log('removeFocus element:', element);
-    if (element && typeof element.blur === 'function')
-    {
+    if (element && typeof element.blur === 'function'){
         //console.warn('Element má .blur(), typ:', typeof element);
         element.blur();
     }
-    //else
-    //{
+    //else{
     //    console.warn('Element nemá .blur(), typ:', typeof element);
     //}
 }

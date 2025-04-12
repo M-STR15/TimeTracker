@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TimeTracker.FE.Components.Interops;
 using TimeTracker.FE.Components.Services;
 
 namespace TimeTracker.FE.Components.Infrastructure
@@ -9,6 +10,7 @@ namespace TimeTracker.FE.Components.Infrastructure
 		{
 			services.AddScoped<ToastNotificationService>();
 			services.AddScoped<FocusJsInterop>();
+			services.AddScoped<ChartJsInterop>();
 
 			return services;
 		}
