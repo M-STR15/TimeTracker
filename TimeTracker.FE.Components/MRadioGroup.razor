@@ -17,9 +17,10 @@
     <div class="container">
         @foreach (var item in ListItems)
         {
-            <div style="background-color:@getColor(item)" class="column">
-                <InputRadio Value="@item.Id" @onclick="()=>onRadioButtonClicked(item)" />
-                @item.Name
+            <div style="background-color:@getColor(item)" class="column" @onclick="()=>onRadioButtonClicked(item)">
+
+                <InputRadio Value="@item.Id"/>@item.Name
+          
             </div>
         }
     </div>
