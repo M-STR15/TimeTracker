@@ -9,9 +9,14 @@ namespace TimeTracker.FE.Components.Interops
 
 		public ChartJsInterop(IJSRuntime jsRuntime)
 		{
+			//_moduleTask = new(() =>
+			//	jsRuntime.InvokeAsync<IJSObjectReference>(
+			//		"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
+			//	).AsTask()
+			//);
 			_moduleTask = new(() =>
 				jsRuntime.InvokeAsync<IJSObjectReference>(
-					"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
+					"import", "/js/mchart2.js"
 				).AsTask()
 			);
 		}
