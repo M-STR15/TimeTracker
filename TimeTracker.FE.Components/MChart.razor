@@ -49,6 +49,7 @@
                 };
 
                 await _chartJsInterop.SetupChart(_chartRef, config);
+                StateHasChanged();
             }
             catch (Exception ex)
             {

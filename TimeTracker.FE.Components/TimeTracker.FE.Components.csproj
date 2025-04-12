@@ -27,5 +27,11 @@
 		<Content Update="wwwroot\js\mchart.js">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</Content>
+		<Content Update="wwwroot\lib\chart.js\chart.js">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
+		<Content Update="wwwroot\lib\chart.js\chart.umd.js">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 </Project>
