@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
+using TimeTracker.BE.DB.Repositories.Models.Reports;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.Web.Shared.Services;
 using TimeTracker.PC.Services;
@@ -53,11 +54,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="dateEnd">Koncové datum ve formátu ISO 8601, např. 2025-04-06.</param>
 		/// <returns>Seznam podrobností o záznamech aktivit.</returns>
 		[HttpGet("api/v1/reports/record-activiries/{dateStart}/{dateEnd}")]
-		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateStart, [FromRoute] DateTime dateEnd)
+		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
 		{
 			try
 			{
-				var recordActivities = await _recordRepository.GetAsync(dateStart, dateEnd);
+				var recordActivities = await _recordRepository.GetAsync(dateFrom, dateTo);
 				if (recordActivities != null)
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityDetailDto>>(recordActivities);
@@ -127,6 +128,25 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("9c7b676e-3561-4aa2-82fb-04ce7a8bcd2d"), ex);
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+
+		[HttpGet("api/v1/reports/activity-over-days/{dateFrom}/{dateTo}")]
+		public async Task<ActionResult<IEnumerable<SumInDay>>> GetActivityOverDaysAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
+		{
+			try
+			{
+				var list = _reportRepository.GetActivityOverDays(dateFrom, dateTo);
+				if (list != null)
+					return list != null ? Ok(list) : Problem();
+				else
+					return NotFound();
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.LogError(Guid.Parse("520a0d68-7b0a-4bef-ae9f-beab1e300ef4"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}

@@ -1,9 +1,106 @@
 ﻿@page "/reports/activities-over-days"
+@using TimeTracker.BE.DB.Repositories
+@using TimeTracker.BE.DB.Repositories.Models.Reports
+@using TimeTracker.Basic.Enums
+@using TimeTracker.Web.Blazor.Server.Helpers
+@using TimeTracker.Web.Blazor.Server.Models
 
 @inherits BasePage
 
 <h3>Activities over days</h3>
+<div>
+    <label>Month:</label>
+    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
+</div>
+
+
+@if (_dataset != null && _labels != null)
+{
+    <MChart Labels="_labels" Dataset="_dataset" Options="_options" />
+}
+else
+{
+    <MLoader />
+}
 
 @code {
-    
+    private object? _labels;
+    private object? _dataset;
+    private object? _options;
+
+    private List<MonthAndYearItemViewModel> _monthAndYears = new();
+    private MonthAndYearItemViewModel _selectMonthAndYear;
+    public MonthAndYearItemViewModel SelectMonthAndYear
+    {
+        get => _selectMonthAndYear;
+        set
+        {
+            if (value != null && _selectMonthAndYear != value)
+            {
+                _selectMonthAndYear = value;
+                onSelectMonthAndYearHandlerChange();
+            }
+        }
+    }
+
+    private EventHandler selectMonthAndYearHandler;
+
+    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler.Invoke(null, null);
+
+    protected async override void OnInitialized()
+    {
+        base.OnInitialized();
+        _options = new
+        {
+            scales = new
+            {
+                x = new { stacked = true },
+                y = new { stacked = true }
+            }
+        };
+
+        _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
+        selectMonthAndYearHandler += async (s, e) =>
+        {
+            await inicializationChartAsync();
+        };
+
+        SelectMonthAndYear = _monthAndYears.FirstOrDefault();
+    }
+
+    private async Task inicializationChartAsync()
+    {
+        var dateFrom = Convert.ToDateTime("1." + SelectMonthAndYear);
+        var dateTo = dateFrom.AddMonths(1);
+
+        var urlApi = $"/api/v1/reports/activity-over-days/{dateFrom.ToString("yyyy-MM-dd")}/{dateTo.ToString("yyyy-MM-dd")}";
+        var list = await _httpClient.GetFromJsonAsync<IEnumerable<SumInDay>>(urlApi);
+
+        var whOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.WorkHours);
+        var pOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.Pause);
+
+        var whHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.WorkHours);
+        var pHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.Pause);
+
+        var whOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.WorkHours);
+        var pOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.Pause);
+
+        _dataset = new[]
+                    {
+                         new { Data = whOffice, BackgroundColor = "CornflowerBlue", Type= "bar",Label= "Work hours Office"},
+                         new { Data = pOffice, BackgroundColor = "DarkSeaGreen", Type= "bar",Label= "Pause Office"},
+
+                         new { Data = whHomeOffice, BackgroundColor = "MediumOrchid", Type= "bar",Label= "Work hours-HomeOffice"},
+                         new { Data = pHomeOffice, BackgroundColor = "MediumSpringGreen", Type= "bar",Label= "Pause-HomeOffice"},
+
+                         new { Data = whOthers, BackgroundColor = "SlateBlue", Type= "bar",Label= "Work hours-Others"},
+                         new { Data = pOthers, BackgroundColor = "YellowGreen", Type= "bar",Label= "Pause-Others"}
+                         };
+
+        _labels = list.GroupBy(x => x.Date)
+                      .Select(g => g.Key.ToString("dd.MM") + " [" + g.First().WeekDay + "]")
+                      .ToArray();
+
+        StateHasChanged();
+    }
 }

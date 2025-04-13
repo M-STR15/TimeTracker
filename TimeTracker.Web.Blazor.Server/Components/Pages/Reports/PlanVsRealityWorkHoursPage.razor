@@ -13,7 +13,7 @@
 
 @if (_dataset != null && _labels != null)
 {
-    <MChart Labels="_labels" Dataset="_dataset" />
+    <MChart Labels="_labels" Dataset="_dataset" Options="_options" />
 }
 else
 {
@@ -23,6 +23,8 @@ else
 @code {
     private object? _labels;
     private object? _dataset;
+    private object? _options;
+
     private List<MonthAndYearItemViewModel> _monthAndYears = new();
     private MonthAndYearItemViewModel _selectMonthAndYear;
     public MonthAndYearItemViewModel SelectMonthAndYear
@@ -45,6 +47,21 @@ else
     protected async override void OnInitialized()
     {
         base.OnInitialized();
+        _options = new
+        {
+            Responsive = true,
+            Scales = new
+            {
+                YAxes = new[]
+                       {
+                        new { Ticks = new {
+                            BeginAtZero=true
+                        }
+                        }
+                       }
+            }
+        };
+
         _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
         selectMonthAndYearHandler += async (s, e) =>
         {

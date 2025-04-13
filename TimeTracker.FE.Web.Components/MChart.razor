@@ -17,6 +17,8 @@
     public object? Labels { get; set; }
     [Parameter, EditorRequired]
     public object? Dataset { get; set; }
+    [Parameter, EditorRequired]
+    public object? Options { get; set; }
 
     protected override void OnInitialized()
     {
@@ -45,20 +47,7 @@
         {
             var config = new
             {
-                Options = new
-                {
-                    Responsive = true,
-                    Scales = new
-                    {
-                        YAxes = new[]
-                       {
-                        new { Ticks = new {
-                            BeginAtZero=true
-                        }
-                        }
-                       }
-                    }
-                },
+                Options = Options,
                 Data = new
                 {
                     Datasets = Dataset,
