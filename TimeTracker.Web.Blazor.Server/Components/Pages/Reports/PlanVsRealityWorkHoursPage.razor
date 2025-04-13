@@ -1,28 +1,66 @@
 ﻿@using TimeTracker.BE.DB.Models
 @using TimeTracker.FE.Web.Components.Models
+@using TimeTracker.Web.Blazor.Server.Helpers
+@using TimeTracker.Web.Blazor.Server.Models
 @page "/reports/plan-vs-reality-work-hours"
 @inherits BasePage
 
 <h3>Plan vs reality work hours </h3>
+<div>
+    <label>Month:</label>
+    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
+</div>
 
-@if (false)
+@if (_dataset != null && _labels != null)
 {
-    <MLoader />
+    <MChart Id="pie1" Labels="_labels" Dataset="_dataset" />
 }
 else
 {
-    <MChart Id="pie1" Labels="_labels" Dataset="_dataset" />
+    <MLoader />
 }
 
 @code {
     private object? _labels;
     private object? _dataset;
+    private List<MonthAndYearItemViewModel> _monthAndYears = new();
+    private MonthAndYearItemViewModel _selectMonthAndYear;
+    public MonthAndYearItemViewModel SelectMonthAndYear
+    {
+        get => _selectMonthAndYear;
+        set
+        {
+            if (value != null && _selectMonthAndYear != value)
+            {
+                _selectMonthAndYear = value;
+                onSelectMonthAndYearHandlerChange();
+            }
+        }
+    }
+
+    private EventHandler selectMonthAndYearHandler;
+
+    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler.Invoke(null, null);
 
     protected async override void OnInitialized()
     {
         base.OnInitialized();
-        var month = 4;
-        var year = 2025;
+        _monthAndYears = GeneratorDatesHelper.GetMontData().ToList();
+        selectMonthAndYearHandler += async (s, e) =>
+        {
+            await inicializationChartAsync();
+        };
+
+        SelectMonthAndYear = _monthAndYears.FirstOrDefault();
+    }
+
+    private async Task inicializationChartAsync()
+    {
+        if (SelectMonthAndYear == null)
+            return;
+
+        var month = SelectMonthAndYear.Month;
+        var year = SelectMonthAndYear.Year;
         var urlApi = $"/api/v1/reports/workplace-hours/{year}/{month}";
         var workplaceHours = await _httpClient.GetFromJsonAsync<WorkplaceHours>(urlApi);
 
@@ -52,8 +90,6 @@ else
                          new { Data = homeOfficePlanWHData, BackgroundColor = "pink", Type= "line",Label= "Cum.-Homeoffice work hours-Plan",BorderColor="pink"}
                          };
         _labels = labels;
-
-
 
         StateHasChanged();
     }

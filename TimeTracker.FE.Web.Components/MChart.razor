@@ -4,9 +4,10 @@
 
 <script src="js/mchart2.js"></script>
 
-<canvas id="@Id"></canvas>
+<canvas @ref="canvasRef" id="@Id"></canvas>
 
 @code {
+    private ElementReference canvasRef;
     [Inject] private ChartJsInterop _chartJsInterop { get; set; }
 
     [Parameter]
@@ -20,7 +21,7 @@
     protected async override void OnParametersSet()
     {
         base.OnParametersSet();
-
+        
         if (Labels != null && Dataset != null)
         {
             var config = new
@@ -47,7 +48,10 @@
             };
 
             if (_chartJsInterop is not null && config != null)
+            {
                 await _chartJsInterop.SetupChart(Id, config);
+                StateHasChanged();
+            }
         }
     }
     public async ValueTask DisposeAsync()
