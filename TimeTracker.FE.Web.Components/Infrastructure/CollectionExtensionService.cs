@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TimeTracker.FE.Components.Interops;
-using TimeTracker.FE.Components.Services;
+using TimeTracker.FE.Web.Components.Interops;
+using TimeTracker.FE.Web.Components.Services;
 
-namespace TimeTracker.FE.Components.Infrastructure
+namespace TimeTracker.FE.Web.Components.Infrastructure
 {
 	public static class CollectionExtensionService
 	{

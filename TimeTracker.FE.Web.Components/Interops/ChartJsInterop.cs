@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace TimeTracker.FE.Components.Interops
+namespace TimeTracker.FE.Web.Components.Interops
 {
 	public class ChartJsInterop : IAsyncDisposable
 	{
@@ -10,7 +10,7 @@ namespace TimeTracker.FE.Components.Interops
 		{
 			_moduleTask = new(() =>
 				jsRuntime.InvokeAsync<IJSObjectReference>(
-					"import", "./_content/TimeTracker.FE.Components/js/mchart.js"
+					"import", "./_content/TimeTracker.FE.Web.Components/js/mchart.js"
 				).AsTask()
 			);
 		}

@@ -1,6 +1,6 @@
-﻿using TimeTracker.FE.Components.Models;
+﻿using TimeTracker.FE.Web.Components.Models;
 
-namespace TimeTracker.FE.Components
+namespace TimeTracker.FE.Web.Components
 {
 	public class Notification
 	{

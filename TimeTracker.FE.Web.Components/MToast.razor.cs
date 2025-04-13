@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using TimeTracker.FE.Components.Services;
+using TimeTracker.FE.Web.Components.Services;
 
-namespace TimeTracker.FE.Components
+namespace TimeTracker.FE.Web.Components
 {
 	public partial class MToast
 	{

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace TimeTracker.FE.Components.Interops;
+namespace TimeTracker.FE.Web.Components.Interops;
 
 // This class provides an example of how JavaScript functionality can be wrapped
 // in a .NET class for easy consumption. The associated JavaScript module is
@@ -16,7 +16,7 @@ public class FocusJsInterop : IAsyncDisposable
 
 	public FocusJsInterop(IJSRuntime jsRuntime)
 	{
-		_moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/TimeTracker.FE.Components/js/focusUtils.js").AsTask());
+		_moduleTask = new(() => jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/TimeTracker.FE.Web.Components/js/focusUtils.js").AsTask());
 	}
 
 	public async ValueTask DelayBlur(ElementReference element) 

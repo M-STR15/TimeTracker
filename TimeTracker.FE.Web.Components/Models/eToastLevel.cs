@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.FE.Components.Models
+﻿namespace TimeTracker.FE.Web.Components.Models
 {
 	public enum ToastLevel
 	{

@@ -1,6 +1,6 @@
 ﻿using TimeTracker.BE.Web.Shared.Infrastructure;
 using TimeTracker.Web.Blazor.Server.MappingProfiles;
-using TimeTracker.FE.Components;
+using TimeTracker.FE.Web.Components;
 
 namespace TimeTracker.Web.Blazor.Server.Infrastructure
 {

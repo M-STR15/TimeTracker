@@ -4,7 +4,7 @@ using TimeTracker.BE.Web.Shared.Infrastructure;
 using TimeTracker.Web.Blazor.Server.Components;
 using TimeTracker.Web.Blazor.Server.Helpers;
 using TimeTracker.Web.Blazor.Server.Infrastructure;
-using TimeTracker.FE.Components.Infrastructure;
+using TimeTracker.FE.Web.Components.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
