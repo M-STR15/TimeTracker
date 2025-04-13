@@ -1,17 +1,58 @@
-﻿@using TimeTracker.FE.Web.Components.Models
+﻿@using TimeTracker.BE.DB.Models
+@using TimeTracker.FE.Web.Components.Models
 @page "/reports/plan-vs-reality-work-hours"
+@inherits BasePage
 
 <h3>Plan vs reality work hours </h3>
 
 <div style="max-height:400px;max-width:400px;">
 
-    <MChart Id="pie1" Type="@eChartType.Bar"
-            Data="@(new[] { "1", "2" })"
-            BackgroundColor="@(new[] { "blue","green" })"
-            Labels="@(new[] { "Fail","Ok" })">
+    <MChart Id="pie1" Config="_config"
+    Data="@(new[] { "1", "2" })"
+    BackgroundColor="@(new[] { "blue","green" })"
+    Labels="@(new[] { "Fail","Ok" })">
     </MChart>
 </div>
 
 @code {
+    private object _config;
 
+    protected async override void OnInitialized()
+    {
+        base.OnInitialized();
+        var month = 4;
+        var year = 2025;
+        var urlApi = $"/api/v1/reports/workplace-hours/{year}/{month}";
+        var workplaceHours = await _httpClient.GetFromJsonAsync<WorkplaceHours>(urlApi);
+        var data = workplaceHours.OfficeWorkHourslist.Select(x=>x.DateHours).ToArray();
+        var labels = workplaceHours.OfficeWorkHourslist.Select(x => x.Date.ToString("dd.MM")).ToArray();
+        var backgroundColor = workplaceHours.OfficeWorkHourslist.Select(x => "blue").ToArray();
+        _config = new
+        {
+            Type = "bar",
+            Options = new
+            {
+                Responsive = true,
+                Scales = new
+                {
+                    YAxes = new[]
+             {
+                        new { Ticks = new {
+                            BeginAtZero=true
+                        } }
+                    }
+                }
+            },
+            Data = new
+            {
+                Datasets = new[]
+         {
+                    new { Data = data, BackgroundColor = backgroundColor}
+                },
+                Labels = labels
+            }
+        };
+
+        StateHasChanged();
+    }
 }

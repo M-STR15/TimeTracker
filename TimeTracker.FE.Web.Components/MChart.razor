@@ -12,51 +12,52 @@
     [Parameter]
     public string Id { get; set; }
 
-    [Parameter]
-    public eChartType Type { get; set; }
+    // [Parameter]
+    // public eChartType Type { get; set; }
 
-    [Parameter]
-    public string[] Data { get; set; }
+    // [Parameter]
+    // public string[] Data { get; set; }
 
-    [Parameter]
-    public string[] BackgroundColor { get; set; }
+    // [Parameter]
+    // public string[] BackgroundColor { get; set; }
 
+    // [Parameter]
+    // public string[] Labels { get; set; }
     [Parameter]
-    public string[] Labels { get; set; }
-
+    public object Config { get; set; }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // Here we create an anonymous type with all the options
         // that need to be sent to Chart.js
-        var config = new
-        {
-            Type = Type.ToString().ToLower(),
-            Options = new
-            {
-                Responsive = true,
-                Scales = new
-                {
-                    YAxes = new[]
-                    {
-                        new { Ticks = new {
-                            BeginAtZero=true
-                        } }
-                    }
-                }
-            },
-            Data = new
-            {
-                Datasets = new[]
-                {
-                    new { Data = Data, BackgroundColor = BackgroundColor}
-                },
-                Labels = Labels
-            }
-        };
+        // Config = new
+        // {
+        //     Type = Type.ToString().ToLower(),
+        //     Options = new
+        //     {
+        //         Responsive = true,
+        //         Scales = new
+        //         {
+        //             YAxes = new[]
+        //             {
+        //                 new { Ticks = new {
+        //                     BeginAtZero=true
+        //                 } }
+        //             }
+        //         }
+        //     },
+        //     Data = new
+        //     {
+        //         Datasets = new[]
+        //         {
+        //             new { Data = Data, BackgroundColor = BackgroundColor}
+        //         },
+        //         Labels = Labels
+        //     }
+        // };
 
 
         if (_chartJsInterop is not null)
-            await _chartJsInterop.SetupChart(Id, config);
+            await _chartJsInterop.SetupChart(Id, Config);
     }
 
     public async ValueTask DisposeAsync()
