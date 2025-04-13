@@ -41,6 +41,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\TimeTracker.Basic.Enums\TimeTracker.Basic.Enums.csproj" />
+		<ProjectReference Include="..\TimeTracker.Basic.Interfaces\TimeTracker.Basic.Interfaces.csproj" />
 		<ProjectReference Include="..\TimeTracker.BE.Web.BusinessLogic\TimeTracker.BE.Web.BusinessLogic.csproj" />
 		<ProjectReference Include="..\TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj" />
 		<ProjectReference Include="..\TimeTracker.FE.Web.Components\TimeTracker.FE.Web.Components.csproj" />

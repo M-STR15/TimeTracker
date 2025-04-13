@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TimeTracker.BE.DB.Models.Interfaces;
-using TimeTracker.Interfaces;
+using TimeTracker.Basic.Interfaces;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {

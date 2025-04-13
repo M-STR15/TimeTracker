@@ -1,5 +1,5 @@
 ﻿using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 
 namespace TimeTracker.Web.Blazor.Server.Models
 {

@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TimeTracker.Enums\TimeTracker.Enums.csproj" />
+    <ProjectReference Include="..\TimeTracker.Enums\TimeTracker.Basic.Enums.csproj" />
   </ItemGroup>
 
 </Project>

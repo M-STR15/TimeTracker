@@ -5,7 +5,7 @@ using System.Windows.Threading;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Models;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;

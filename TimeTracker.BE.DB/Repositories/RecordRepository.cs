@@ -2,7 +2,7 @@
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories.Interfaces;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 
 namespace TimeTracker.BE.DB.Repositories;
 

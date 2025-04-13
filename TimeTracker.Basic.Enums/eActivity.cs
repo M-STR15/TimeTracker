@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Enums
+﻿namespace TimeTracker.Basic.Enums
 {
 	public enum eActivity
 	{

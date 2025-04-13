@@ -1,5 +1,5 @@
 ﻿using TimeTracker.BE.DB.Models;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Models;
 
 namespace TimeTracker.PC.Services

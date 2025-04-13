@@ -1,4 +1,4 @@
-﻿using TimeTracker.Enums;
+﻿using TimeTracker.Basic.Enums;
 
 namespace TimeTracker.BE.DB.Repositories.Models.Reports
 {

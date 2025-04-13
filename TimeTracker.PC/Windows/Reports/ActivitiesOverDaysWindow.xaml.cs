@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Windows.Reports.Services;
 
 namespace TimeTracker.PC.Windows.Reports

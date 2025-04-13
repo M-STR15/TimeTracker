@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.Interfaces
+﻿namespace TimeTracker.Basic.Interfaces
 {
 	public interface ITItem
 	{

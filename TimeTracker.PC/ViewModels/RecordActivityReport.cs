@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Models.Interfaces;
-using TimeTracker.Enums;
+using TimeTracker.Basic.Enums;
 using Activity = TimeTracker.BE.DB.Models.Activity;
 
 namespace TimeTracker.PC.ViewModels
