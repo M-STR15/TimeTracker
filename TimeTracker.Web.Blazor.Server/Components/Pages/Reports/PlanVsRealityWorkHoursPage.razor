@@ -5,17 +5,18 @@
 
 <h3>Plan vs reality work hours </h3>
 
-<div style="max-height:400px;max-width:400px;">
-
-    <MChart Id="pie1" Config="_config"
-    Data="@(new[] { "1", "2" })"
-    BackgroundColor="@(new[] { "blue","green" })"
-    Labels="@(new[] { "Fail","Ok" })">
-    </MChart>
-</div>
+@if (false)
+{
+    <MLoader />
+}
+else
+{
+    <MChart Id="pie1" Labels="_labels" Dataset="_dataset" />
+}
 
 @code {
-    private object _config;
+    private object? _labels;
+    private object? _dataset;
 
     protected async override void OnInitialized()
     {
@@ -24,34 +25,35 @@
         var year = 2025;
         var urlApi = $"/api/v1/reports/workplace-hours/{year}/{month}";
         var workplaceHours = await _httpClient.GetFromJsonAsync<WorkplaceHours>(urlApi);
-        var data = workplaceHours.OfficeWorkHourslist.Select(x=>x.DateHours).ToArray();
+
         var labels = workplaceHours.OfficeWorkHourslist.Select(x => x.Date.ToString("dd.MM")).ToArray();
-        var backgroundColor = workplaceHours.OfficeWorkHourslist.Select(x => "blue").ToArray();
-        _config = new
-        {
-            Type = "bar",
-            Options = new
-            {
-                Responsive = true,
-                Scales = new
-                {
-                    YAxes = new[]
-             {
-                        new { Ticks = new {
-                            BeginAtZero=true
-                        } }
-                    }
-                }
-            },
-            Data = new
-            {
-                Datasets = new[]
-         {
-                    new { Data = data, BackgroundColor = backgroundColor}
-                },
-                Labels = labels
-            }
-        };
+
+        var officeWHData = workplaceHours.OfficeWorkHourslist.Select(x => x.DateHours).ToArray();
+        var homeOfficeWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.DateHours).ToArray();
+
+        var officeCumWHData = workplaceHours.OfficeWorkHourslist.Select(x => x.CumHours).ToArray();
+        var homeOfficeCumWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.CumHours).ToArray();
+
+        var officePlanWHData = workplaceHours.PlanWorkHoursList.Select(x => x.CumHours).ToArray();
+        var homeOfficePlanWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.CumHours).ToArray();
+
+        // var backgroundColor = workplaceHours.OfficeWorkHourslist.Select(x => "blue").ToArray();
+        // var backgroundColor2 = workplaceHours.OfficeWorkHourslist.Select(x => "red").ToArray();
+
+        _dataset = new[]
+                        {
+                         new { Data = officeWHData, BackgroundColor = "blue", Type= "bar",Label= "Office work hours",BorderColor="blue"},
+                         new { Data = homeOfficeWHData, BackgroundColor = "red", Type= "bar",Label= "Homeoffice work hours",BorderColor="red"},
+
+                         new { Data = officeCumWHData, BackgroundColor = "orange", Type= "line",Label= "Cum.-Office work hours" ,BorderColor="orange"},
+                         new { Data = homeOfficeCumWHData, BackgroundColor = "gray", Type= "line",Label= "Cum.-Homeoffice work hours",BorderColor="gray"},
+
+                         new { Data = officePlanWHData, BackgroundColor = "purple", Type= "line",Label= "Cum.-Office work hours-Plan",BorderColor="purple"},
+                         new { Data = homeOfficePlanWHData, BackgroundColor = "pink", Type= "line",Label= "Cum.-Homeoffice work hours-Plan",BorderColor="pink"}
+                         };
+        _labels = labels;
+
+
 
         StateHasChanged();
     }

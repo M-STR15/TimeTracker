@@ -12,54 +12,44 @@
     [Parameter]
     public string Id { get; set; }
 
-    // [Parameter]
-    // public eChartType Type { get; set; }
+    [Parameter, EditorRequired]
+    public object? Labels { get; set; }
+    [Parameter, EditorRequired]
+    public object? Dataset { get; set; }
 
-    // [Parameter]
-    // public string[] Data { get; set; }
-
-    // [Parameter]
-    // public string[] BackgroundColor { get; set; }
-
-    // [Parameter]
-    // public string[] Labels { get; set; }
-    [Parameter]
-    public object Config { get; set; }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override void OnParametersSet()
     {
-        // Here we create an anonymous type with all the options
-        // that need to be sent to Chart.js
-        // Config = new
-        // {
-        //     Type = Type.ToString().ToLower(),
-        //     Options = new
-        //     {
-        //         Responsive = true,
-        //         Scales = new
-        //         {
-        //             YAxes = new[]
-        //             {
-        //                 new { Ticks = new {
-        //                     BeginAtZero=true
-        //                 } }
-        //             }
-        //         }
-        //     },
-        //     Data = new
-        //     {
-        //         Datasets = new[]
-        //         {
-        //             new { Data = Data, BackgroundColor = BackgroundColor}
-        //         },
-        //         Labels = Labels
-        //     }
-        // };
+        base.OnParametersSet();
 
+        if (Labels != null && Dataset != null)
+        {
+            var config = new
+            {
+                Options = new
+                {
+                    Responsive = true,
+                    Scales = new
+                    {
+                        YAxes = new[]
+                       {
+                        new { Ticks = new {
+                            BeginAtZero=true
+                        }
+}
+                    }
+                    }
+                },
+                Data = new
+                {
+                    Datasets = Dataset,
+                    Labels = Labels
+                }
+            };
 
-        if (_chartJsInterop is not null)
-            await _chartJsInterop.SetupChart(Id, Config);
+            if (_chartJsInterop is not null && config != null)
+                await _chartJsInterop.SetupChart(Id, config);
+        }
     }
-
     public async ValueTask DisposeAsync()
     {
         if (_chartJsInterop is not null)
