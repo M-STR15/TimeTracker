@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace TimeTracker.FE.Web.Components.Interops
 {
@@ -15,11 +16,11 @@ namespace TimeTracker.FE.Web.Components.Interops
 			);
 		}
 
-		public async ValueTask SetupChart(string id, object config)
+		public async ValueTask SetupChartAsync(ElementReference canvasRef, object config)
 		{
 			var module = await _moduleTask.Value;
-			await module.InvokeVoidAsync("setup", id, config);
-		}
+			await module.InvokeVoidAsync("setup", canvasRef, config);
+		}	
 
 		public async ValueTask DisposeAsync()
 		{

@@ -1,19 +1,26 @@
-﻿const chartStore = {};
+﻿const chartStore = new WeakMap();
 
-export function setup(id, config) {
-    const canvas = document.getElementById(id);
-    if (!canvas) {
-        console.error(`Canvas element with id '${id}' not found.`);
+/**
+ * @param {HTMLCanvasElement} canvas - DOM prvek z Blazoru (ElementReference)
+ * @param {object} config - konfigurace grafu
+ */
+export function setup(canvas, config) {
+    console.log("canvas =", canvas);
+    console.log("typeof canvas.getContext =", typeof canvas.getContext);
+
+
+    if (!canvas || typeof canvas.getContext !== "function") {
+        console.error("Provided element is not a canvas!");
         return;
     }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     // Zničit předchozí graf, pokud existuje
-    if (chartStore[id]) {
-        chartStore[id].destroy();
+    if (chartStore.has(canvas)) {
+        chartStore.get(canvas).destroy();
     }
 
     const chart = new Chart(ctx, config);
-    chartStore[id] = chart;
+    chartStore.set(canvas, chart);
 }

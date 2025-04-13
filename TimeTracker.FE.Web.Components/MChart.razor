@@ -4,24 +4,26 @@
 
 <script src="js/mchart2.js"></script>
 
-<canvas @ref="canvasRef" id="@Id"></canvas>
+@if (shouldRenderChart)
+{
+    <canvas @ref="canvasRef"></canvas>
+}
 
 @code {
     private ElementReference canvasRef;
     [Inject] private ChartJsInterop _chartJsInterop { get; set; }
-
-    [Parameter]
-    public string Id { get; set; }
 
     [Parameter, EditorRequired]
     public object? Labels { get; set; }
     [Parameter, EditorRequired]
     public object? Dataset { get; set; }
 
+    private bool shouldRenderChart = false; // Výchozí stav je, že graf se nezobrazí
+
     protected async override void OnParametersSet()
     {
         base.OnParametersSet();
-        
+
         if (Labels != null && Dataset != null)
         {
             var config = new
@@ -49,7 +51,8 @@
 
             if (_chartJsInterop is not null && config != null)
             {
-                await _chartJsInterop.SetupChart(Id, config);
+                await _chartJsInterop.SetupChartAsync(canvasRef, config);
+                shouldRenderChart = true;
                 StateHasChanged();
             }
         }
