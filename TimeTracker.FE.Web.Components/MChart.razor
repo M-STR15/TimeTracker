@@ -4,12 +4,13 @@
 
 <script src="js/mchart2.js"></script>
 
-@if (shouldRenderChart)
-{
+
     <canvas @ref="canvasRef"></canvas>
-}
 
 @code {
+    private DotNetObjectReference<MChart>? dotNetRef;
+    [Inject] private IJSRuntime JSRuntime { get; set; }
+
     private ElementReference canvasRef;
     [Inject] private ChartJsInterop _chartJsInterop { get; set; }
 
@@ -18,12 +19,29 @@
     [Parameter, EditorRequired]
     public object? Dataset { get; set; }
 
-    private bool shouldRenderChart = false; // Výchozí stav je, že graf se nezobrazí
-
-    protected async override void OnParametersSet()
+    protected override void OnInitialized()
     {
-        base.OnParametersSet();
+        dotNetRef = DotNetObjectReference.Create(this);
+        StateHasChanged();
+    }
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            await inicializationChartAsync();
+        }
+    }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await inicializationChartAsync();
+        await base.OnParametersSetAsync();
+    }
+
+    private async Task inicializationChartAsync()
+    {
         if (Labels != null && Dataset != null)
         {
             var config = new
@@ -38,8 +56,8 @@
                         new { Ticks = new {
                             BeginAtZero=true
                         }
-}
-                    }
+                        }
+                       }
                     }
                 },
                 Data = new
@@ -51,15 +69,21 @@
 
             if (_chartJsInterop is not null && config != null)
             {
-                await _chartJsInterop.SetupChartAsync(canvasRef, config);
-                shouldRenderChart = true;
+                await _chartJsInterop.SetupChartAsync(canvasRef, config, dotNetRef);
                 StateHasChanged();
             }
         }
     }
+
     public async ValueTask DisposeAsync()
     {
         if (_chartJsInterop is not null)
             await _chartJsInterop.DisposeAsync();
+    }
+
+    [JSInvokable("OnChartReady")]
+    public void OnChartReady()
+    {
+        StateHasChanged(); // Tímto přerendujeme komponentu
     }
 }

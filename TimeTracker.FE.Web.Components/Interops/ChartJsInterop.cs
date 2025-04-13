@@ -16,10 +16,10 @@ namespace TimeTracker.FE.Web.Components.Interops
 			);
 		}
 
-		public async ValueTask SetupChartAsync(ElementReference canvasRef, object config)
+		public async ValueTask SetupChartAsync(ElementReference canvasRef, object config, DotNetObjectReference<MChart>? dotNetRef)
 		{
 			var module = await _moduleTask.Value;
-			await module.InvokeVoidAsync("setup", canvasRef, config);
+			await module.InvokeVoidAsync("setup", canvasRef, config, dotNetRef);
 		}	
 
 		public async ValueTask DisposeAsync()

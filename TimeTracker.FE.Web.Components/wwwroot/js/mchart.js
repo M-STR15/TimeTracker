@@ -3,8 +3,9 @@
 /**
  * @param {HTMLCanvasElement} canvas - DOM prvek z Blazoru (ElementReference)
  * @param {object} config - konfigurace grafu
+ * @param {DotNetObjectReference<MChart>} dotNetRef - reference na MChart
  */
-export function setup(canvas, config) {
+export function setup(canvas, config, dotNetRef) {
     console.log("canvas =", canvas);
     console.log("typeof canvas.getContext =", typeof canvas.getContext);
 
@@ -23,4 +24,9 @@ export function setup(canvas, config) {
 
     const chart = new Chart(ctx, config);
     chartStore.set(canvas, chart);
+
+    // zavolání metody OnChartReady v Blazoru
+    if (dotNetRef) {
+        dotNetRef.invokeMethodAsync("OnChartReady");
+    }
 }
