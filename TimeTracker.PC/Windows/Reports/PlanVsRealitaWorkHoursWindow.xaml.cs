@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Media;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Repositories;
-using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Windows.Reports.Services;
 
@@ -23,7 +22,7 @@ namespace TimeTracker.PC.Windows.Reports
 		[ObservableProperty]
 		private string[] _labels;
 
-		private ReportRepository<SqliteDbContext> _reportProvider;
+		private ReportRepository<SqliteDbContext> _reportRepository;
 
 		[ObservableProperty]
 		private SeriesCollection _seriesCollection;
@@ -37,7 +36,7 @@ namespace TimeTracker.PC.Windows.Reports
 		{
 			InitializeComponent();
 			_context = context;
-			_reportProvider = new ReportRepository<SqliteDbContext>(_context);
+			_reportRepository = new ReportRepository<SqliteDbContext>(_context);
 			var reportParametersService = new ReportParameterService();
 			cmbMonth.ItemsSource = reportParametersService.Monts;
 			_eventLogService = new EventLogService();
@@ -53,26 +52,19 @@ namespace TimeTracker.PC.Windows.Reports
 		{
 			try
 			{
-				var selectItemCmb = cmbMonth.SelectedItem as string;
-				var selectDate = Convert.ToDateTime("1." + selectItemCmb);
+				var selectMonth = cmbMonth.SelectedItem as string;
+				var selectDate = Convert.ToDateTime("1." + selectMonth);
 
-				var start = selectDate;
-				var end = selectDate.AddMonths(1);
-				var typeShifts_Office = new eTypeShift[] { eTypeShift.Office };
-				var officeWorkHourslist = _reportProvider.GetWorkHours(start, end, typeShifts_Office);
-
-				var typeShifts_WithOutOffice = new eTypeShift[] { eTypeShift.HomeOffice, eTypeShift.Others };
-				var homeOfficeWorkHourslist = _reportProvider.GetWorkHours(start, end, typeShifts_WithOutOffice);
-
-				var planWorkHoursList = _reportProvider.GetPlanWorkHours(start, end, typeShifts_Office);
-				var planHomeOfficeWorkHoursList = _reportProvider.GetPlanWorkHours(start, end, typeShifts_WithOutOffice);
+				var month = selectDate.Month;
+				var year = selectDate.Year;
+				var workplaceHours = _reportRepository.GetWorkplaceHours(year, month);
 
 				SeriesCollection = new SeriesCollection
 				{
 					new StackedColumnSeries
 					{
 						Title = "Work hours-Real",
-						Values = new ChartValues<double>(officeWorkHourslist.Select(x => x.DateHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.OfficeWorkHourslist.Select(x => x.DateHours).ToArray()),
 						PointGeometry = DefaultGeometries.Circle,
 						//Fill= new SolidColorBrush(Colors.Pink),
 						 ScalesYAt = 1
@@ -80,7 +72,7 @@ namespace TimeTracker.PC.Windows.Reports
 					new StackedColumnSeries
 					{
 						Title = "Home office-Real",
-						Values = new ChartValues<double>(homeOfficeWorkHourslist.Select(x => x.DateHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.HomeOfficeWorkHourslist.Select(x => x.DateHours).ToArray()),
 						PointGeometry = DefaultGeometries.Circle,
 						Stroke = Brushes.Black,
 						Fill=null,
@@ -90,7 +82,7 @@ namespace TimeTracker.PC.Windows.Reports
 					new LineSeries
 					{
 						Title = "Cum.-Work hours-Real",
-						Values = new ChartValues<double>(officeWorkHourslist.Select(x => x.CumHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.OfficeWorkHourslist.Select(x => x.CumHours).ToArray()),
 						PointGeometry = DefaultGeometries.Circle,
 						LineSmoothness = 0,
 						ScalesYAt = 0
@@ -99,7 +91,7 @@ namespace TimeTracker.PC.Windows.Reports
 					new LineSeries
 					{
 						Title = "Cum.-Home office-Real",
-						Values = new ChartValues<double>(homeOfficeWorkHourslist.Select(x => x.CumHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.HomeOfficeWorkHourslist.Select(x => x.CumHours).ToArray()),
 						PointGeometry = DefaultGeometries.Circle,
 						LineSmoothness = 0,
 						ScalesYAt = 0
@@ -108,7 +100,7 @@ namespace TimeTracker.PC.Windows.Reports
 					new LineSeries
 					{
 						Title = "Cum.-Work hours-Plan",
-						Values = new ChartValues<double>(planWorkHoursList.Select(x => x.CumHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.PlanWorkHoursList.Select(x => x.CumHours).ToArray()),
 						PointGeometry = DefaultGeometries.Diamond,
 						LineSmoothness = 0,
 						ScalesYAt = 0
@@ -117,7 +109,7 @@ namespace TimeTracker.PC.Windows.Reports
 					new LineSeries
 					{
 						Title = "Cum.-Home office-Plan",
-						Values = new ChartValues<double>(planHomeOfficeWorkHoursList.Select(x => x.CumHours).ToArray()),
+						Values = new ChartValues<double>(workplaceHours.PlanHomeOfficeWorkHoursList.Select(x => x.CumHours).ToArray()),
 						PointGeometry = DefaultGeometries.Diamond,
 						LineSmoothness = 0,
 						ScalesYAt = 0
@@ -125,7 +117,7 @@ namespace TimeTracker.PC.Windows.Reports
 					}
 				};
 
-				Labels = officeWorkHourslist.Select(x => x.Date.ToString("dd.MM [ddd}")).ToArray();
+				Labels = workplaceHours.OfficeWorkHourslist.Select(x => x.Date.ToString("dd.MM [ddd}")).ToArray();
 				YFormatter = value => value.ToString();
 
 				AxisYCollection = new AxesCollection

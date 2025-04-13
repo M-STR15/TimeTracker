@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.Web.Shared.Services;
@@ -44,12 +45,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
 		/// <summary>
-		/// 
+		/// Získá podrobnosti o záznamech aktivit v zadaném časovém rozmezí.
 		/// </summary>
-		/// <param name="dateStart">datum musí být ve formátu ISO 8601 např. 2025-04-06</param>
-		/// <param name="dateEnd">datum musí být ve formátu ISO 8601 např. 2025-04-06</param>
-		/// <returns></returns>
+		/// <param name="dateStart">Počáteční datum ve formátu ISO 8601, např. 2025-04-06.</param>
+		/// <param name="dateEnd">Koncové datum ve formátu ISO 8601, např. 2025-04-06.</param>
+		/// <returns>Seznam podrobností o záznamech aktivit.</returns>
 		[HttpGet("api/v1/reports/record-activiries/{dateStart}/{dateEnd}")]
 		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateStart, [FromRoute] DateTime dateEnd)
 		{
@@ -73,6 +75,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Získá celkové časy pro aktuální den a směnu.
+		/// </summary>
+		/// <returns>Objekt TotalTimesDto obsahující celkové časy.</returns>
 		[HttpGet("api/v1/reports/total-times")]
 		public async Task<ActionResult<TotalTimesDto>> GetTotalTimesDtoAsync()
 		{
@@ -87,17 +93,40 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				var totalTime = TotalTimesService.Get(calcHours_forToday_fromDb, calcHours_forShift_fromDb, _lastRecordActivity);
 
 				if (totalTime != null)
-				{
 					return totalTime != null ? Ok(totalTime) : Problem();
-				}
 				else
-				{
 					return NotFound();
-				}
 			}
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("048c4139-0645-4af9-a84e-fa90cc08c013"), ex);
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+
+		/// <summary>
+		/// Získá pracovní hodiny na pracovišti a v režimu home office pro zadaný měsíc a rok.
+		/// Vrací také plánované pracovní hodiny pro obě kategorie.
+		/// </summary>
+		/// <param name="year">Rok, pro který se mají získat pracovní hodiny (např. 2023).</param>
+		/// <param name="month">Měsíc, pro který se mají získat pracovní hodiny (1-12).</param>
+		/// <returns>Objekt WorkplaceHours obsahující seznamy pracovních hodin a plánovaných hodin.</returns>
+		[HttpGet("api/v1/reports/workplace-hours/{year}/{month}")]
+		public async Task<ActionResult<WorkplaceHours>> GetTotalTimesDtoAsync(int year, int month)
+		{
+			try
+			{
+				var workplaceHours = _reportRepository.GetWorkplaceHours(year, month);
+
+				if (workplaceHours != null)
+					return workplaceHours != null ? Ok(workplaceHours) : Problem();
+				else
+					return NotFound();
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.LogError(Guid.Parse("9c7b676e-3561-4aa2-82fb-04ce7a8bcd2d"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}

@@ -81,6 +81,12 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		var dateList = getDatesInRange(start, end).Select(x => new DayHours(x.Date)).ToList();
 		return getPlanList_DayHours(start, end, dateList, typeShifts);
 	}
+	/// <summary>
+	/// Metoda získává souhrn pracovních a pauzových hodin pro zadanou směnu.
+	/// Pokud je ID směny prázdné, vrací prázdný objekt CalcHours.
+	/// </summary>
+	/// <param name="shiftGuidID">Globálně unikátní identifikátor směny.</param>
+	/// <returns>Objekt CalcHours obsahující pracovní a pauzové hodiny.</returns>
 	public CalcHours GetSumaryHoursShift(Guid shiftGuidID)
 	{
 		if (shiftGuidID != Guid.Empty)
@@ -113,6 +119,36 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// Metoda získává počet hodin práce pro zadanou směnu.
 	/// </summary>
 	public double GetWorkHoursShift(Guid shiftGuidID) => getHoursShif(shiftGuidID, eActivity.Start);
+
+	/// <summary>
+	/// Metoda získává pracovní hodiny na pracovišti a v režimu home office pro zadaný měsíc a rok.
+	/// Vrací také plánované pracovní hodiny pro obě kategorie.
+	/// </summary>
+	/// <param name="month">Číslo měsíce (1-12).</param>
+	/// <param name="year">Rok (např. 2023).</param>
+	/// <returns>Objekt WorkplaceHours obsahující seznamy pracovních hodin a plánovaných hodin.</returns>
+	public WorkplaceHours GetWorkplaceHours(int year, int month)
+	{
+		var selectDate = new DateTime(year,month,1);
+		var start = selectDate;
+		var end = selectDate.AddMonths(1);
+		var typeShifts_Office = new eTypeShift[] { eTypeShift.Office };
+		var officeWorkHourslist = GetWorkHours(start, end, typeShifts_Office);
+
+		var typeShifts_WithOutOffice = new eTypeShift[] { eTypeShift.HomeOffice, eTypeShift.Others };
+		var homeOfficeWorkHourslist = GetWorkHours(start, end, typeShifts_WithOutOffice);
+
+		var planWorkHoursList = GetPlanWorkHours(start, end, typeShifts_Office);
+		var planHomeOfficeWorkHoursList = GetPlanWorkHours(start, end, typeShifts_WithOutOffice);
+
+		return new WorkplaceHours()
+		{
+			OfficeWorkHourslist = officeWorkHourslist,
+			HomeOfficeWorkHourslist = homeOfficeWorkHourslist,
+			PlanHomeOfficeWorkHoursList = planHomeOfficeWorkHoursList,
+			PlanWorkHoursList = planWorkHoursList
+		};
+	}
 
 	private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
 	{
