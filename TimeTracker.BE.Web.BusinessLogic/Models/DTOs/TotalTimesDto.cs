@@ -1,4 +1,4 @@
-﻿using TimeTracker.PC.Models;
+﻿using TimeTracker.BE.DB.Models.Responses;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 {

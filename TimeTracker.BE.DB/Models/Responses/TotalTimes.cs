@@ -1,6 +1,6 @@
 ﻿using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.PC.Models
+namespace TimeTracker.BE.DB.Models.Responses
 {
 	/// <summary>
 	/// Třída TotalTimes reprezentuje model pro sledování časových údajů spojených s aktivitami a směnami.

@@ -1,4 +1,4 @@
-﻿using TimeTracker.BE.DB.Models;
+﻿using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.PC.Models
 {

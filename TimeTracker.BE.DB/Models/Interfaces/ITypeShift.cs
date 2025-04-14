@@ -1,4 +1,6 @@
-﻿namespace TimeTracker.BE.DB.Models.Interfaces
+﻿using TimeTracker.BE.DB.Models.Entities;
+
+namespace TimeTracker.BE.DB.Models.Interfaces
 {
 	/// <summary>
 	/// Rozhraní pro typ směny.

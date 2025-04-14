@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Models;
@@ -11,7 +10,8 @@ using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
 using TimeTracker.PC.ViewModels;
 using TimeTracker.PC.Windows.Reports;
-using Activity = TimeTracker.BE.DB.Models.Activity;
+using Activity = TimeTracker.BE.DB.Models.Entities.Activity;
+using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.PC.Windows
 {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Index(nameof(ProjectId), nameof(Name), IsUnique = true)]
 	[Table("SubModule", Schema = "dbo")]

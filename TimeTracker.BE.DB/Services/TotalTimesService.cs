@@ -1,6 +1,6 @@
-﻿using TimeTracker.BE.DB.Models;
-using TimeTracker.Basic.Enums;
-using TimeTracker.PC.Models;
+﻿using TimeTracker.Basic.Enums;
+using TimeTracker.BE.DB.Models.Responses;
+using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.PC.Services
 {

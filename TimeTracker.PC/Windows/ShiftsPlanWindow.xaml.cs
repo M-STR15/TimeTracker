@@ -2,12 +2,12 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
 using TimeTracker.PC.ViewModels;
+using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.PC.Windows
 {

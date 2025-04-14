@@ -2,14 +2,14 @@
 using System.Windows;
 using System.Windows.Controls;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.Basic.Enums;
 using TimeTracker.PC.Services;
 using TimeTracker.PC.Stories;
 using TimeTracker.PC.ViewModels;
 using TimeTracker.PC.Windows.Reports.Services;
-using Activity = TimeTracker.BE.DB.Models.Activity;
+using Activity = TimeTracker.BE.DB.Models.Entities.Activity;
+using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.PC.Windows.Reports
 {

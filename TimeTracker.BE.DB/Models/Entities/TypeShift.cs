@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Table("TypeShifts", Schema = "dbo")]
 	[Comment("Tabulka všech možných směn.")]

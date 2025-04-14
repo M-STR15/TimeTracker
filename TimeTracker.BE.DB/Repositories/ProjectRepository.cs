@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories.Interfaces;
 

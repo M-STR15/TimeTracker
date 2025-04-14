@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Entities
 {
-	public abstract class Stamp : IStamp
+	public abstract class aStamp : IStamp
 	{
 		private DateTime _stampDateTime;
 		/// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TimeTracker.BE.DB.Models
 			}
 		}
 
-		public Stamp()
+		public aStamp()
 		{
 			StampDateTime = DateTime.Now;
 		}

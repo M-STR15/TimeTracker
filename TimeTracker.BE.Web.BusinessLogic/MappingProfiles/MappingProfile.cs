@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Entities;
+using TimeTracker.BE.DB.Models.Responses;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
-using TimeTracker.PC.Models;
 
 namespace TimeTracker.BE.Web.BusinessLogic.MappingProfiles
 {

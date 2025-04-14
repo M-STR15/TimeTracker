@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Table("Record_activities", Schema = "dbo")]
-	public class RecordActivity : Stamp, IRecordActivity, IRecordActivityBase
+	public class RecordActivity : aStamp, IRecordActivity, IRecordActivityBase
 	{
 		private DateTime? _endDateTime;
 		private DateTime _startDateTime;

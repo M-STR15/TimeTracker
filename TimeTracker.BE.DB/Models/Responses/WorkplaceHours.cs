@@ -1,7 +1,7 @@
 ﻿using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories.Models.Reports;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Responses
 {
 	/// <summary>
 	/// Třída reprezentující pracovní hodiny na různých pracovištích.

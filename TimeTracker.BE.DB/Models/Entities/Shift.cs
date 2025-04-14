@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TimeTracker.BE.DB.Models.Interfaces;
 
-namespace TimeTracker.BE.DB.Models
+namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Index(nameof(StartDate), IsUnique = true)]
 	[Table("Shifts", Schema = "dbo")]
 	[Comment("Tabulka slouží k naplánování směny.")]
-	public class Shift : Stamp, IIdentifiableGuid, IShift, IShiftBase
+	public class Shift : aStamp, IIdentifiableGuid, IShift, IShiftBase
 	{
 		/// <inheritdoc />
 		public string? Description { get; set; }
@@ -24,7 +24,7 @@ namespace TimeTracker.BE.DB.Models
 		public DateTime StartDate { get; set; }
 
 		[NotMapped]
-		public string StartDateLongStr { get => (GuidId == Guid.Empty ? "" : StartDate.Date.ToString("dd.MM.yyyy")); }
+		public string StartDateLongStr { get => GuidId == Guid.Empty ? "" : StartDate.Date.ToString("dd.MM.yyyy"); }
 		/// <inheritdoc />
 		[ForeignKey("TypeShiftId")]
 		public TypeShift? TypeShift { get; set; }

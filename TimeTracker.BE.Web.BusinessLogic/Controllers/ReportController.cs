@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
+using TimeTracker.BE.DB.Models.Responses;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.DB.Repositories.Models.Reports;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TimeTracker.BE.DB.DataAccess;
-using TimeTracker.BE.DB.Models;
 using TimeTracker.BE.DB.Repositories.Interfaces;
 using TimeTracker.Basic.Enums;
+using TimeTracker.BE.DB.Models.Entities;
 
 namespace TimeTracker.BE.DB.Repositories;
 

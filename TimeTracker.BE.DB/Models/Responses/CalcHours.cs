@@ -1,4 +1,4 @@
-﻿namespace TimeTracker.BE.DB.Models
+﻿namespace TimeTracker.BE.DB.Models.Responses
 {
 	/// <summary>
 	/// Třída pro výpočet hodin, obsahuje pracovní a pauzové hodiny.
