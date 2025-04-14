@@ -53,7 +53,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="dateStart">Počáteční datum ve formátu ISO 8601, např. 2025-04-06.</param>
 		/// <param name="dateEnd">Koncové datum ve formátu ISO 8601, např. 2025-04-06.</param>
 		/// <returns>Seznam podrobností o záznamech aktivit.</returns>
-		[HttpGet("api/v1/reports/record-activiries/{dateStart}/{dateEnd}")]
+		[HttpGet("api/v1/reports/record-activiries/{dateFrom}/{dateTo}")]
 		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
 		{
 			try
