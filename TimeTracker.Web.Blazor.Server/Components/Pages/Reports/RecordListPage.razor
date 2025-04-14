@@ -14,7 +14,7 @@
 @if (_monthAndYears != null)
 {
     <div>
-        <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item?.ToString()" />
+        <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
         <MButton Text="Add" OnClick="onOpenAddActvityModal"></MButton>
         <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)"></MButton>
     </div>
@@ -48,9 +48,9 @@
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
     private void onOpenQueryDeleteActvityModal() => _isOpenDeleteQueryModal = true;
 
-    private List<MonthAndYearItemViewModel>? _monthAndYears;
-    private MonthAndYearItemViewModel? _selectMonthAndYear;
-    public MonthAndYearItemViewModel? SelectMonthAndYear
+    private List<DateTime>? _monthAndYears;
+    private DateTime _selectMonthAndYear;
+    public DateTime SelectMonthAndYear
     {
         get => _selectMonthAndYear;
         set
@@ -62,6 +62,8 @@
             }
         }
     }
+
+    private string formatMonthAndYear(DateTime item)=> item.ToString("MM.yyyy");
 
     private void onAfterCloseModalAddActivity_Changed()
     {
@@ -111,8 +113,8 @@
         try
         {
             _recordActivity = null;
-            var dateStart = SelectMonthAndYear.Date;
-            var dateEnd = SelectMonthAndYear.Date.AddMonths(1);
+            var dateStart = SelectMonthAndYear;
+            var dateEnd = SelectMonthAndYear.AddMonths(1);
 
             var formattedDateStart = dateStart.ToString("yyyy-MM-dd");
             var formattedDateEnd = dateEnd.ToString("yyyy-MM-dd");

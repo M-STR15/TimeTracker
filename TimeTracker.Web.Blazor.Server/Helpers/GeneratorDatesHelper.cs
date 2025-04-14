@@ -5,22 +5,22 @@ namespace TimeTracker.Web.Blazor.Server.Helpers
 {
 	internal static class GeneratorDatesHelper
 	{
-		internal static IEnumerable<MonthAndYearItemViewModel> GetMontData()
+		internal static IEnumerable<DateTime> GetMontData()
 		{
-			List<MonthAndYearItemViewModel> monthAndYears = new();
+			List<DateTime> monthAndYears = new();
 			var startDate = new DateTime(2025, 1, 1);
 			var endDate = DateTime.Today;
 
 			while (startDate <= endDate)
 			{
-				monthAndYears.Add(new MonthAndYearItemViewModel(startDate));
+				monthAndYears.Add(startDate);
 				startDate = startDate.AddMonths(1);
 			}
 
 			return monthAndYears.OrderByDescending(x => x.Date);
 		}
 
-		internal static IEnumerable<ShiftViewModel> GetDaysInMonth(MonthAndYearItemViewModel item, List<ShiftBaseDto> planShiftsInDB, List<TypeShiftBaseDto> typeShifts)
+		internal static IEnumerable<ShiftViewModel> GetDaysInMonth(DateTime item, List<ShiftBaseDto> planShiftsInDB, List<TypeShiftBaseDto> typeShifts)
 		{
 			List<ShiftViewModel> _days = new();
 			var daysInMonth = DateTime.DaysInMonth(item.Year, item.Month);

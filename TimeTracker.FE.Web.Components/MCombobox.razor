@@ -61,7 +61,7 @@
 
             if (_selectedItem != null)
             {
-                SearchText = _selectedItem.ToString();
+                SearchText = ItemText?.Invoke(_selectedItem) ?? _selectedItem.ToString();
                 selectItem(_selectedItem);
             }
         }

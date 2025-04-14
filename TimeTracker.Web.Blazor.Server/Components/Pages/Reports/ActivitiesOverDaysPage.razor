@@ -10,7 +10,7 @@
 <h3>Activities over days</h3>
 <div>
     <label>Month:</label>
-    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
+    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
 </div>
 
 
@@ -27,10 +27,10 @@ else
     private object? _labels;
     private object? _dataset;
     private object? _options;
-
-    private List<MonthAndYearItemViewModel> _monthAndYears = new();
-    private MonthAndYearItemViewModel _selectMonthAndYear;
-    public MonthAndYearItemViewModel SelectMonthAndYear
+    private string formatMonthAndYear(DateTime item) => item.ToString("MM.yyyy");
+    private List<DateTime> _monthAndYears = new();
+    private DateTime _selectMonthAndYear;
+    public DateTime SelectMonthAndYear
     {
         get => _selectMonthAndYear;
         set
@@ -70,7 +70,7 @@ else
 
     private async Task inicializationChartAsync()
     {
-        var dateFrom = Convert.ToDateTime("1." + SelectMonthAndYear);
+        var dateFrom = SelectMonthAndYear;
         var dateTo = dateFrom.AddMonths(1);
 
         var urlApi = $"/api/v1/reports/activity-over-days/{dateFrom.ToString("yyyy-MM-dd")}/{dateTo.ToString("yyyy-MM-dd")}";

@@ -8,7 +8,7 @@
 <h3>Plan vs reality work hours </h3>
 <div>
     <label>Month:</label>
-    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="item => item.ToString()" />
+    <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
 </div>
 
 @if (_dataset != null && _labels != null)
@@ -25,9 +25,9 @@ else
     private object? _dataset;
     private object? _options;
 
-    private List<MonthAndYearItemViewModel> _monthAndYears = new();
-    private MonthAndYearItemViewModel _selectMonthAndYear;
-    public MonthAndYearItemViewModel SelectMonthAndYear
+    private List<DateTime> _monthAndYears = new();
+    private DateTime _selectMonthAndYear;
+    public DateTime SelectMonthAndYear
     {
         get => _selectMonthAndYear;
         set
@@ -40,6 +40,7 @@ else
         }
     }
 
+    private string formatMonthAndYear(DateTime item) => item.ToString("MM.yyyy");
     private EventHandler selectMonthAndYearHandler;
 
     private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler.Invoke(null, null);
