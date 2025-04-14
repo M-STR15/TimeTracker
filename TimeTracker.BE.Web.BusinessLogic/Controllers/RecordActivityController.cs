@@ -11,10 +11,21 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
 
 	[ApiExplorerSettings(GroupName = "v1")]
+	/// <summary>
+	/// Kontroler pro správu záznamů aktivit.
+	/// </summary>
 	public class RecordActivityController : aControllerBase
 	{
 		private readonly ActivityRepository<MsSqlDbContext> _activityRepository;
 		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
+
+		/// <summary>
+		/// Konstruktor kontroleru pro správu záznamů aktivit.
+		/// </summary>
+		/// <param name="activityRepository">Repozitář aktivit.</param>
+		/// <param name="recordRepository">Repozitář záznamů aktivit.</param>
+		/// <param name="mapper">Mapper pro mapování objektů.</param>
+		/// <param name="eventLogService">Služba pro logování událostí.</param>
 		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_activityRepository = activityRepository;
@@ -22,6 +33,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		}
 
 		#region GET
+
+		/// <summary>
+		/// Získá seznam všech aktivit.
+		/// </summary>
+		/// <returns>Seznam aktivit.</returns>
 		[HttpGet("api/v1/activities")]
 		public async Task<ActionResult<List<ActivityBaseDto>>> GetActivitiesAsync()
 		{
@@ -45,6 +61,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Získá seznam všech záznamů aktivit.
+		/// </summary>
+		/// <returns>Seznam záznamů aktivit.</returns>
 		[HttpGet("api/v1/record-activities")]
 		public async Task<ActionResult<List<RecordActivityBaseDto>>> GetRecordActivitiesAsync()
 		{
@@ -67,6 +87,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
+		/// <summary>
+		/// Získá poslední záznam aktivity.
+		/// </summary>
+		/// <returns>Poslední záznam aktivity.</returns>
 		[HttpGet("api/v1/last-record-activity")]
 		public async Task<ActionResult<RecordActivityDetailDto>> GetLastRecordActivityAsync()
 		{
@@ -89,10 +114,16 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
 		#endregion GET
 
 		#region ADD
 
+		/// <summary>
+		/// Přidá nový záznam aktivity.
+		/// </summary>
+		/// <param name="recordActivityInsertDto">Data nového záznamu aktivity.</param>
+		/// <returns>Vytvořený záznam aktivity.</returns>
 		[HttpPost("api/v1/record-activities")]
 		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync([FromBody] RecordActivityInsertDto recordActivityInsertDto)
 		{
@@ -120,12 +151,17 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		#endregion ADD
 
 		#region DELETE
+
+		/// <summary>
+		/// Odstraní záznam aktivity podle zadaného Guid.
+		/// </summary>
+		/// <param name="recordActivityGuidId">Globálně unikátní identifikátor záznamu aktivity.</param>
+		/// <returns>Výsledek operace.</returns>
 		[HttpDelete("api/v1/record-activities/{recordActivityGuidId}")]
 		public async Task<ActionResult<List<RecordActivityInsertDto>>> DeleteRecordActivitiesAsync(Guid recordActivityGuidId)
 		{
 			try
 			{
-
 				var result = await _recordRepository.DeleteAsync(recordActivityGuidId);
 				if (result != null)
 				{
@@ -142,6 +178,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
 		#endregion DELETE
 	}
 }

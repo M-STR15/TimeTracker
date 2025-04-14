@@ -9,21 +9,33 @@ using TimeTracker.BE.Web.Shared.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
+	/// <summary>
+	/// Řadič pro správu směn a typů směn.
+	/// </summary>
 	[ApiExplorerSettings(GroupName = "v1")]
 	public class ShiftController : aControllerBase
 	{
 		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
 		private readonly TypeShiftRepository<MsSqlDbContext> _typeShiftRepository;
+
+		/// <summary>
+		/// Konstruktor řadiče ShiftController.
+		/// </summary>
+		/// <param name="shiftRepository">Úložiště směn.</param>
+		/// <param name="typeShiftRepository">Úložiště typů směn.</param>
+		/// <param name="mapper">Automapper pro mapování objektů.</param>
+		/// <param name="eventLogService">Služba pro logování událostí.</param>
 		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, TypeShiftRepository<MsSqlDbContext> typeShiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_shiftRepository = shiftRepository;
 			_typeShiftRepository = typeShiftRepository;
 		}
 
+	
 		/// <summary>
-		/// Vrátí všechny typy směn
+		/// Vrátí všechny typy směn.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Seznam typů směn.</returns>
 		[HttpGet("api/v1/shifts/types")]
 		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetShiftTypesAsync()
 		{
@@ -46,7 +58,12 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+	
 
+		/// <summary>
+		/// Vrátí všechny směny.
+		/// </summary>
+		/// <returns>Seznam směn.</returns>
 		[HttpGet("api/v1/shifts")]
 		public async Task<ActionResult<List<ShiftBaseDto>>> GetShiftsAsync()
 		{
@@ -69,12 +86,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
 		/// <summary>
-		/// Kontrole slouží k přesnosu směn do DB, pokud nebude nějaký den na seznamu bude smazán z databáze.
-		/// Vždy je potřeba zadat celý měsíc jinak budou ostatní dny smazány.
+		/// Uloží seznam směn do databáze. Aktualizuje existující směny, přidá nové a odstraní ty, které již nejsou v seznamu.
+		/// Vždy je potřeba zadat celý měsíc, jinak budou ostatní dny smazány.
 		/// </summary>
-		/// <param name="shiftsDto"></param>
-		/// <returns></returns>
+		/// <param name="shiftsDto">Seznam směn k uložení.</param>
+		/// <returns>Seznam uložených směn.</returns>
 		[HttpPut("api/v1/shifts")]
 		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync([FromBody] List<ShiftBaseDto> shiftsDto)
 		{

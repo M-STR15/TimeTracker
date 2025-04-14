@@ -11,17 +11,34 @@ using TimeTracker.PC.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
+	#region ReportController
+	/// <summary>
+	/// Řídící třída pro zpracování reportů.
+	/// </summary>
 	[ApiExplorerSettings(GroupName = "v1")]
 	public class ReportController : aControllerBase
 	{
 		private readonly ReportRepository<MsSqlDbContext> _reportRepository;
 		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
-		public ReportController(IMapper mapper, ReportRepository<MsSqlDbContext> reportRepository, RecordRepository<MsSqlDbContext> recordRepository, IEventLogService eventLogService) : base(mapper, eventLogService)
+
+		/// <summary>
+		/// Konstruktor třídy ReportController.
+		/// </summary>
+		/// <param name="mapper">Instance mapperu pro mapování objektů.</param>
+		/// <param name="reportRepository">Repozitář pro práci s reporty.</param>
+		/// <param name="recordRepository">Repozitář pro práci se záznamy aktivit.</param>
+		/// <param name="eventLogService">Služba pro logování událostí.</param>
+		public ReportController(IMapper mapper, ReportRepository<MsSqlDbContext> reportRepository, RecordRepository<MsSqlDbContext> recordRepository, IEventLogService eventLogService)
+			: base(mapper, eventLogService)
 		{
 			_reportRepository = reportRepository;
 			_recordRepository = recordRepository;
 		}
 
+		/// <summary>
+		/// Získá podrobnosti o všech záznamech aktivit.
+		/// </summary>
+		/// <returns>Seznam podrobností o záznamech aktivit.</returns>
 		[HttpGet("api/v1/reports/record-activiries")]
 		public async Task<ActionResult<List<TypeShiftBaseDto>>> GetRecordActivitiesDetailAsync()
 		{
@@ -50,8 +67,8 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <summary>
 		/// Získá podrobnosti o záznamech aktivit v zadaném časovém rozmezí.
 		/// </summary>
-		/// <param name="dateStart">Počáteční datum ve formátu ISO 8601, např. 2025-04-06.</param>
-		/// <param name="dateEnd">Koncové datum ve formátu ISO 8601, např. 2025-04-06.</param>
+		/// <param name="dateFrom">Počáteční datum ve formátu ISO 8601, např. 2025-04-06.</param>
+		/// <param name="dateTo">Koncové datum ve formátu ISO 8601, např. 2025-04-06.</param>
 		/// <returns>Seznam podrobností o záznamech aktivit.</returns>
 		[HttpGet("api/v1/reports/record-activiries/{dateFrom}/{dateTo}")]
 		public async Task<ActionResult<List<RecordActivityDetailDto>>> GetRecordActivitiesDetailAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
@@ -105,7 +122,6 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
-
 		/// <summary>
 		/// Získá pracovní hodiny na pracovišti a v režimu home office pro zadaný měsíc a rok.
 		/// Vrací také plánované pracovní hodiny pro obě kategorie.
@@ -132,7 +148,12 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
-
+		/// <summary>
+		/// Získá aktivity (práce a pauzy) pro každý den v zadaném rozsahu dat.
+		/// </summary>
+		/// <param name="dateFrom">Počáteční datum ve formátu ISO 8601.</param>
+		/// <param name="dateTo">Koncové datum ve formátu ISO 8601.</param>
+		/// <returns>Seznam aktivit pro jednotlivé dny.</returns>
 		[HttpGet("api/v1/reports/activity-over-days/{dateFrom}/{dateTo}")]
 		public async Task<ActionResult<IEnumerable<SumInDay>>> GetActivityOverDaysAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
 		{
@@ -150,5 +171,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
+
+		#endregion GET
 	}
 }

@@ -14,6 +14,14 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	{
 		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
 		protected readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
+
+		/// <summary>
+		/// Konstruktor kontroleru pro práci s projekty a podmoduly.
+		/// </summary>
+		/// <param name="projectRepository">Repozitář pro práci s projekty.</param>
+		/// <param name="subModuleRepository">Repozitář pro práci s podmoduly.</param>
+		/// <param name="mapper">Mapper pro mapování objektů.</param>
+		/// <param name="eventLogService">Služba pro logování událostí.</param>
 		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, SubModuleRepository<MsSqlDbContext> subModuleRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_projectRepository = projectRepository;
@@ -22,9 +30,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 
 		#region GET
 		/// <summary>
-		/// Vrátí všechny projekty
+		/// Vrátí všechny projekty.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Seznam projektů.</returns>
 		[HttpGet("api/v1/projects")]
 		public async Task<ActionResult<List<ProjectBaseDto>>> GetProjectsAsync()
 		{
@@ -48,6 +56,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Vrátí všechny podmoduly.
+		/// </summary>
+		/// <returns>Seznam podmodulů.</returns>
 		[HttpGet("api/v1/projects/submodules")]
 		public async Task<ActionResult<List<SubModuleBaseDto>>> GetSubModulesAsync()
 		{
@@ -71,6 +83,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Vrátí podmoduly podle ID projektu.
+		/// </summary>
+		/// <param name="projectId">ID projektu.</param>
+		/// <returns>Seznam podmodulů.</returns>
 		[HttpGet("api/v1/projects/submodules/{projectId}")]
 		public async Task<ActionResult<List<SubModuleBaseDto>>> GetSubModulesAsync(int projectId)
 		{
@@ -93,9 +110,14 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
-
 		#endregion GET
+
 		#region POST
+		/// <summary>
+		/// Přidá nový projekt.
+		/// </summary>
+		/// <param name="projectBaseDto">Data projektu k přidání.</param>
+		/// <returns>Přidaný projekt.</returns>
 		[HttpPost("api/v1/project")]
 		public async Task<ActionResult<ProjectBaseDto>> AddProjectsAsync([FromBody] ProjectInsertDto projectBaseDto)
 		{
@@ -113,6 +135,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Přidá nový podmodul.
+		/// </summary>
+		/// <param name="subModuleBaseDto">Data podmodulu k přidání.</param>
+		/// <returns>Přidaný podmodul.</returns>
 		[HttpPost("api/v1/projects/submodule")]
 		public async Task<ActionResult<SubModuleBaseDto>> AddSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
 		{
@@ -130,7 +157,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 		#endregion POST
+
 		#region PUT
+		/// <summary>
+		/// Aktualizuje existující projekt.
+		/// </summary>
+		/// <param name="projectBaseDto">Data projektu k aktualizaci.</param>
+		/// <returns>Aktualizovaný projekt.</returns>
 		[HttpPut("api/v1/project")]
 		public async Task<ActionResult<ProjectBaseDto>> UpdateProjectsAsync([FromBody] ProjectBaseDto projectBaseDto)
 		{
@@ -148,6 +181,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Aktualizuje existující podmodul.
+		/// </summary>
+		/// <param name="subModuleBaseDto">Data podmodulu k aktualizaci.</param>
+		/// <returns>Aktualizovaný podmodul.</returns>
 		[HttpPut("api/v1/projects/submodule")]
 		public async Task<ActionResult<SubModuleBaseDto>> PutSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
 		{
@@ -165,7 +203,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 		#endregion PUT
+
 		#region DELETE
+		/// <summary>
+		/// Smaže projekt podle ID.
+		/// </summary>
+		/// <param name="projectId">ID projektu k odstranění.</param>
+		/// <returns>Výsledek operace.</returns>
 		[HttpDelete("api/v1/project/{projectId}")]
 		public async Task<IActionResult> DeleteProjectsAsync(int projectId)
 		{
@@ -181,6 +225,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 		}
 
+		/// <summary>
+		/// Smaže podmodul podle ID.
+		/// </summary>
+		/// <param name="submoduleId">ID podmodulu k odstranění.</param>
+		/// <returns>Výsledek operace.</returns>
 		[HttpDelete("api/v1/projects/submodule/{submoduleId}")]
 		public async Task<IActionResult> DeleteSubModulesAsync(int submoduleId)
 		{
