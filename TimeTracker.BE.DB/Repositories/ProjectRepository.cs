@@ -27,6 +27,27 @@ public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(conte
 			throw;
 		}
 	}
+
+	public async Task<Project?> GetAsync(int id)
+	{
+		try
+		{
+			if (id > 0)
+			{
+				var context = _contextFactory();
+				var project = await context.Projects.Where(x => x.Id == id).FirstAsync();
+				return project;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
 	#endregion
 	/// <summary>
 	/// Odstraní projekt z databáze.
@@ -104,7 +125,7 @@ public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(conte
 				return null;
 			}
 
-			return item;
+			return itemCon;
 		}
 		catch (Exception)
 		{
