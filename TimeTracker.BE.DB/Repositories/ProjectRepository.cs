@@ -28,6 +28,11 @@ public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(conte
 		}
 	}
 
+	/// <summary>
+	/// Získá projekt z databáze na základě jeho ID.
+	/// </summary>
+	/// <param name="id">ID projektu, který má být získán.</param>
+	/// <returns>Projekt, pokud existuje, jinak null.</returns>
 	public async Task<Project?> GetAsync(int id)
 	{
 		try
@@ -76,6 +81,11 @@ public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(conte
 		}
 	}
 
+	/// <summary>
+	/// Odstraní projekt z databáze na základě jeho ID.
+	/// </summary>
+	/// <param name="id">ID projektu, který má být odstraněn.</param>
+	/// <returns>True, pokud byl projekt úspěšně odstraněn, jinak false.</returns>
 	public async Task<bool> DeleteAsync(int id)
 	{
 		try

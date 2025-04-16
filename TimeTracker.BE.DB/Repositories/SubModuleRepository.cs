@@ -76,6 +76,11 @@ namespace TimeTracker.BE.DB.Repositories
 			}
 		}
 
+		/// <summary>  
+		/// Odstraní podmodul z databáze podle jeho ID.  
+		/// </summary>  
+		/// <param name="id">ID podmodulu, který má být odstraněn.</param>  
+		/// <returns>True, pokud byl podmodul úspěšně odstraněn, jinak false.</returns>  
 		public async Task<bool> DeleteAsync(int id)
 		{
 			try

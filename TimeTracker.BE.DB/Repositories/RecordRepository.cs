@@ -40,7 +40,6 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	}
 
 	#endregion DELETE
-
 	#region GET
 	/// <summary>
 	/// Získá všechny záznamy aktivit z databáze.

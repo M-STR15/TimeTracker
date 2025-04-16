@@ -105,11 +105,9 @@ public class ShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(context
 			context.SaveChanges();
 			return true;
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			// Zde můžeš přidat logování chyby pro další diagnostiku
-			Console.WriteLine(ex.Message); // Například log do konzole
-			throw new ArgumentException("Chyba při ukládání směny do DB.", ex);
+			throw;
 		}
 	}
 }
