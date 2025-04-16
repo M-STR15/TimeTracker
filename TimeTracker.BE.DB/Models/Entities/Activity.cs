@@ -17,7 +17,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		[Key]
 		[Column("Activity_ID")]
 		[Comment("Primární klíč aktivity.")]
-		public int Id { get; set; }
+		public int Id { get; protected set; }
 		/// <inheritdoc />
 		[Required]
 		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]

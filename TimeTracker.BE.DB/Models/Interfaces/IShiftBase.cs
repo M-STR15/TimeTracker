@@ -12,7 +12,7 @@
 		/// <summary>
 		/// Identifikátor směny.
 		/// </summary>
-		Guid GuidId { get; set; }
+		Guid GuidId { get; }
 		/// <summary>
 		/// Datum a čas začátku směny.
 		/// </summary>

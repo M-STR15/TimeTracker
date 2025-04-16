@@ -11,7 +11,7 @@ using TimeTracker.BE.DB.DataAccess;
 namespace TimeTracker.BE.DB.Migrations.SQLite
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20250301145954_Inicialization")]
+    [Migration("20250416221401_Inicialization")]
     partial class Inicialization
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Activity", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         });
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Project", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,6 +76,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT")
                         .HasComment("Název projektu.");
 
@@ -90,7 +91,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         });
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.RecordActivity", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.RecordActivity", b =>
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
@@ -151,7 +152,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.ToTable("Record_activities", "dbo");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Shift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Shift", b =>
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
@@ -191,7 +192,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         });
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.SubModule", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.SubModule", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,7 +226,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         });
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.TypeShift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.TypeShift", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -245,6 +246,7 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(30)
                         .HasColumnType("TEXT")
                         .HasColumnName("Name")
                         .HasComment("Název typu směny.");
@@ -292,27 +294,27 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                         });
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.RecordActivity", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.RecordActivity", b =>
                 {
-                    b.HasOne("TimeTracker.BE.DB.Models.Activity", "Activity")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.Activity", "Activity")
                         .WithMany("Activities")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TimeTracker.BE.DB.Models.Project", "Project")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.Project", "Project")
                         .WithMany("Activities")
                         .HasForeignKey("ProjectId");
 
-                    b.HasOne("TimeTracker.BE.DB.Models.Shift", "Shift")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.Shift", "Shift")
                         .WithMany()
                         .HasForeignKey("ShiftGuidId");
 
-                    b.HasOne("TimeTracker.BE.DB.Models.SubModule", "SubModule")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.SubModule", "SubModule")
                         .WithMany("Activities")
                         .HasForeignKey("SubModuleId");
 
-                    b.HasOne("TimeTracker.BE.DB.Models.TypeShift", "TypeShift")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.TypeShift", "TypeShift")
                         .WithMany("RecordActivity")
                         .HasForeignKey("TypeShiftId");
 
@@ -327,13 +329,13 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.Navigation("TypeShift");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Shift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Shift", b =>
                 {
-                    b.HasOne("TimeTracker.BE.DB.Models.Shift", null)
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.Shift", null)
                         .WithMany("Shifts")
                         .HasForeignKey("ShiftGuidId");
 
-                    b.HasOne("TimeTracker.BE.DB.Models.TypeShift", "TypeShift")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.TypeShift", "TypeShift")
                         .WithMany()
                         .HasForeignKey("TypeShiftId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -342,9 +344,9 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.Navigation("TypeShift");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.SubModule", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.SubModule", b =>
                 {
-                    b.HasOne("TimeTracker.BE.DB.Models.Project", "Project")
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.Project", "Project")
                         .WithMany("SubModules")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -353,36 +355,36 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.TypeShift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.TypeShift", b =>
                 {
-                    b.HasOne("TimeTracker.BE.DB.Models.TypeShift", null)
+                    b.HasOne("TimeTracker.BE.DB.Models.Entities.TypeShift", null)
                         .WithMany("TypeShifts")
                         .HasForeignKey("TypeShiftId");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Activity", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Activity", b =>
                 {
                     b.Navigation("Activities");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Project", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Project", b =>
                 {
                     b.Navigation("Activities");
 
                     b.Navigation("SubModules");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.Shift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Shift", b =>
                 {
                     b.Navigation("Shifts");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.SubModule", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.SubModule", b =>
                 {
                     b.Navigation("Activities");
                 });
 
-            modelBuilder.Entity("TimeTracker.BE.DB.Models.TypeShift", b =>
+            modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.TypeShift", b =>
                 {
                     b.Navigation("RecordActivity");
 

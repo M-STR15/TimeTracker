@@ -21,7 +21,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		[Key]
 		[Column("Project_ID")]
 		[Comment("Primární klíč projektu.")]
-		public virtual int Id { get; set; }
+		public virtual int Id { get; protected set; }
 		/// <inheritdoc />
 		[Comment("Název projektu.")]
 		[Required(ErrorMessage = "Hodnota je vyžadována")]

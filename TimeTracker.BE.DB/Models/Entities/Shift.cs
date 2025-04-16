@@ -15,7 +15,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		/// <inheritdoc />
 		[Key]
 		[Column("Guid_ID")]
-		public Guid GuidId { get; set; }
+		public Guid GuidId { get; protected set; }
 		/// <inheritdoc />
 		public ICollection<Shift>? Shifts { get; set; }
 		/// <inheritdoc />

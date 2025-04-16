@@ -3,11 +3,11 @@
 	/// <summary>
 	/// Rozhraní pro základní podmodul.
 	/// </summary>
-	public interface ISubModuleBase: ISubModuleInsert
+	public interface ISubModuleBase : ISubModuleInsert
 	{
 		/// <summary>
 		/// Identifikátor podmodulu.
 		/// </summary>
-		int Id { get; set; }
+		int Id { get; }
 	}
 }

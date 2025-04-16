@@ -211,11 +211,9 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				var startTimeActivity = DateTime.Now;
-				var activity = new Activity()
-				{
-					Id = (int)eActivity.Start,
-					Name = eActivity.Start.ToString()
-				};
+				var id = (int)eActivity.Start;
+				var name = eActivity.Start.ToString();
+				var activity = new Activity(id, name);
 
 				var selProject = (Project)cmbProjects.SelectedItem;
 				var selShift = (ShiftCmb)cmbShift.SelectedItem;
@@ -245,11 +243,9 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				var startTimeActivity = DateTime.Now;
-				var activity = new Activity()
-				{
-					Id = (int)eActivity.Stop,
-					Name = eActivity.Stop.ToString()
-				};
+				var id = (int)eActivity.Stop;
+				var name = eActivity.Stop.ToString();
+				var activity = new Activity(id, name);
 
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
@@ -272,11 +268,10 @@ namespace TimeTracker.PC.Windows
 			try
 			{
 				var startTimeActivity = DateTime.Now;
-				var activity = new Activity()
-				{
-					Id = (int)eActivity.Pause,
-					Name = eActivity.Pause.ToString()
-				};
+				var id = (int)eActivity.Pause;
+				var name = eActivity.Pause.ToString();
+
+				var activity = new Activity(id, name);
 
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 

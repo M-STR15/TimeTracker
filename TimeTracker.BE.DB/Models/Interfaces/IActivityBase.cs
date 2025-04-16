@@ -5,7 +5,7 @@
 		/// <summary>
 		/// Primární klíč.
 		/// </summary>
-		int Id { get; set; }
+		int Id { get; }
 
 		/// <summary>
 		/// Název aktivity.

@@ -13,7 +13,7 @@
 		/// <summary>
 		/// Identifikátor směny.
 		/// </summary>
-		int Id { get; set; }
+		int Id { get; }
 
 		/// <summary>
 		/// Viditelnost směny v hlavním okně.

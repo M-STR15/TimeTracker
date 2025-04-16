@@ -10,6 +10,6 @@
 		/// <summary>
 		/// Globálně unikátní identifikátor záznamu.
 		/// </summary>
-		Guid GuidId { get; set; }
+		Guid GuidId { get; }
 	}
 }

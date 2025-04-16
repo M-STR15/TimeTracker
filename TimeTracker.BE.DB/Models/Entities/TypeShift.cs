@@ -17,7 +17,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		[Key]
 		[Column("TypeShift_ID")]
 		[Comment("Primární klíč typu směny.")]
-		public int Id { get; set; }
+		public int Id { get; protected set; }
 		/// <inheritdoc />
 		[Comment("Viditelnost směny v hlavním okně.")]
 		public bool IsVisibleInMainWindow { get; set; }

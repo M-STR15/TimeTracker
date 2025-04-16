@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Migrations\MSSQL\" />
+    <Folder Include="Migrations\SQLite\" />
   </ItemGroup>
 
   <ItemGroup>

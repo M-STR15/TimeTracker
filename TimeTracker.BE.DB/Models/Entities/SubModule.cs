@@ -20,7 +20,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		[Key]
 		[Column("SubModule_ID")]
 		[Comment("Primární klíč podmodulu.")]
-		public virtual int Id { get; set; }
+		public virtual int Id { get; protected set; }
 		/// <inheritdoc />
 		[Required]
 		[MaxLength(30, ErrorMessage = "Název je příliš dlouhý.")]

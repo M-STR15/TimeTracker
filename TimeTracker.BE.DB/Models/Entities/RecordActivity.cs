@@ -39,7 +39,7 @@ namespace TimeTracker.BE.DB.Models.Entities
 		/// <inheritdoc />
 		[Key]
 		[Column("Guid_ID")]
-		public virtual Guid GuidId { get; set; }
+		public virtual Guid GuidId { get; protected set; }
 		/// <inheritdoc />
 		[ForeignKey("ProjectId")]
 		public virtual Project? Project { get; set; }
