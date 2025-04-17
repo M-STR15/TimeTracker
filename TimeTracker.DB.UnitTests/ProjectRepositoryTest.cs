@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Ninject.Activation;
 using System.ComponentModel.DataAnnotations;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
@@ -122,7 +123,7 @@ namespace TimeTracker.DB.UnitTests
 			var shouldSucceed = true;
 			try
 			{
-				var list = new List<ItemTest<Project>>
+				var inputList = new List<ItemTest<Project>>
 				{
 					new ItemTest<Project>(new Project { Name = "TestProject1", Description = "Test Description 1" },true),
 					new ItemTest<Project>(new Project { Name = "TestProject1", Description = "Test Description 1" },false),
@@ -130,7 +131,7 @@ namespace TimeTracker.DB.UnitTests
 					new ItemTest<Project>(new Project { Name = "TestProject3"},true)
 				};
 
-				foreach (var item in list)
+				foreach (var item in inputList)
 				{
 					shouldSucceed = item.ShouldSucceed;
 					var result = await _projectRepository.SaveAsync(item.Model);
@@ -150,6 +151,39 @@ namespace TimeTracker.DB.UnitTests
 				{
 					Assert.True(false, $"Test mìl uspìt, ale došlo k výjimce: {ex.Message}");
 				}
+			}
+		}
+
+		[Fact]
+		public async Task GetProjectTestAsync()
+		{
+			await using var context = await createContextAsync();
+			await resetDBAsync(context);
+			var shouldSucceed = true;
+			try
+			{
+				var inputList = new List<Project>
+				{
+					new Project { Name = "TestProject1", Description = "Test Description 1" },
+					new Project { Name = "TestProject2", Description = "Test Description 1" },
+					new Project { Name = "TestProject3"}
+				};
+
+				foreach (var item in inputList)
+				{
+					var result = await _projectRepository.SaveAsync(item);
+					Assert.NotNull(result);
+				}
+
+				var resultDb = await _projectRepository.GetAllAsync();
+				foreach (var expectedItem in inputList)
+				{
+					Assert.Contains(resultDb, a => a.Name == expectedItem.Name && a.Description == expectedItem.Description);
+				}
+			}
+			catch (Exception ex)
+			{
+				Assert.True(false, $"Test mìl uspìt, ale došlo k výjimce: {ex.Message}");
 			}
 		}
 

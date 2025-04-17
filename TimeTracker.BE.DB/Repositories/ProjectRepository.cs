@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories.Interfaces;
 
-public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<IProjectBase>, IDeletableById, IDeletable<IProjectBase>, IReadtableAll<Project> where T : MainDatacontext
+public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<IProjectBase>, IDeletableById, IReadtableAll<Project> where T : MainDatacontext
 {
 	#region GET
 
@@ -54,32 +54,6 @@ public class ProjectRepository<T>(Func<T> contextFactory) : aRepository<T>(conte
 		}
 	}
 	#endregion
-	/// <summary>
-	/// Odstraní projekt z databáze.
-	/// </summary>
-	/// <param name="project">Projekt k odstranění.</param>
-	/// <returns>Odstraněný projekt nebo null, pokud projekt neexistuje.</returns>
-	public async Task<bool> DeleteAsync(IProjectBase item)
-	{
-		try
-		{
-			var result = false;
-			var context = _contextFactory();
-			var itemCon = await context.Projects.FirstOrDefaultAsync(x => x.Id == item.Id);
-			if (itemCon != null)
-			{
-				context.Projects.Remove(itemCon);
-				await context.SaveChangesAsync();
-				result = true;
-			}
-
-			return result;
-		}
-		catch (Exception)
-		{
-			throw;
-		}
-	}
 
 	/// <summary>
 	/// Odstraní projekt z databáze na základě jeho ID.

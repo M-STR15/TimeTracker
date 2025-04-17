@@ -143,7 +143,7 @@ namespace TimeTracker.PC.Windows
 				var selected = (ProjectListBox)ProjectItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = await _projectProvider.DeleteAsync(selected);
+					var result = await _projectProvider.DeleteAsync(selected.Id);
 
 					if (result)
 					{
