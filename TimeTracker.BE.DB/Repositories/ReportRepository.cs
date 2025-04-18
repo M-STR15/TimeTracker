@@ -130,7 +130,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// <returns>Objekt WorkplaceHours obsahující seznamy pracovních hodin a plánovaných hodin.</returns>
 	public WorkplaceHours GetWorkplaceHours(int year, int month)
 	{
-		var selectDate = new DateTime(year,month,1);
+		var selectDate = new DateTime(year, month, 1);
 		var start = selectDate;
 		var end = selectDate.AddMonths(1);
 		var typeShifts_Office = new eTypeShift[] { eTypeShift.Office };
@@ -164,7 +164,8 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		try
 		{
 			var context = _contextFactory();
-			foreach (var item in context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity))
+			var records = context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity).ToList();
+			foreach (var item in records)
 			{
 				sumHours += item.DurationSec;
 			}
