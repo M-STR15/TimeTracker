@@ -46,19 +46,6 @@ public class ShiftRepository<T>(Func<T> contextFactory) : aRepository<T>(context
 		}
 	}
 
-
-
-	/// <summary>
-	/// METHODA NENÍ DOKONČENÁ
-	/// </summary>
-	/// <param name="shiftGuidId"></param>
-	/// <returns></returns>
-	public double GetSumShiftHours(Guid shiftGuidId)
-	{
-		var context = _contextFactory();
-
-		return 0;
-	}
 	#endregion GET
 	/// <summary>
 	/// Uloží seznam směn do databáze. Aktualizuje existující směny, přidá nové a odstraní ty, které již nejsou v seznamu.
