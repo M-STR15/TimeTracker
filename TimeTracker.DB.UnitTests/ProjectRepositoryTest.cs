@@ -1,57 +1,57 @@
-using Microsoft.EntityFrameworkCore;
-using Moq;
-using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
-using TimeTracker.BE.DB.Repositories;
 using TimeTracker.DB.UnitTests.Models;
 
 namespace TimeTracker.DB.UnitTests
 {
 	public class ProjectRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly ProjectRepository<MsSqlDbContext> _projectRepository;
 		public ProjectRepositoryTest() : base()
 		{
-			_projectRepository = new ProjectRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
 		}
 
 		/// <summary>
-		/// Otestování methody pro vkládání produktu do DB.
+		/// Otestování methody pro vkládání projektu do DB.
 		/// </summary>
 		[Fact]
-		public async Task AddProjectTestAsync()
+		public async Task SaveAsync_ShouldAddProject()
 		{
-			await using var context = await createContextAsync();
-			await resetDBAsync(context);
+			try
+			{
+				await using var context = await createContextAsync();
+				await resetDBAsync(context);
 
-			var project = new Project { Name = "Test Product", Description = "Test Description" };
+				var project = new Project { Name = "Test Product", Description = "Test Description" };
 
-			var result = await _projectRepository.SaveAsync(project);
-			checkSavedData(project, result);
+				var result = await _projectRepository.SaveAsync(project);
+				checkSavedData(project, result);
 
-			var resultDb = await _projectRepository.GetAsync(result.Id);
+				var resultDb = await _projectRepository.GetAsync(result.Id);
 
-			Assert.NotNull(result);
-			Assert.NotNull(resultDb);
+				Assert.NotNull(result);
+				Assert.NotNull(resultDb);
 
-			//otesování zda se vrácený objekt co vystupuje z methody se shoduje s tím co je v DB
-			var ignoredProperties2 = new HashSet<string> { nameof(Project.SubModules), nameof(Project.Activities) };
-			compareAllProperties<IProjectBase>(result, resultDb, ignoredProperties2);
+				//otesování zda se vrácený objekt co vystupuje z methody se shoduje s tím co je v DB
+				var ignoredProperties = new HashSet<string> { nameof(Project.SubModules), nameof(Project.Activities) };
+				compareAllProperties<IProjectBase>(result, resultDb, ignoredProperties);
+			}
+			catch (Exception ex)
+			{
+				Assert.True(false, $"Test mìl uspìt, ale došlo k výjimce: {ex.Message}");
+			}
 		}
 
 		[Theory]
 		[InlineData("TestProject", "Test Description", true)]
 		[InlineData("TestProject", null, true)]
 		[InlineData(null, "Test Description", false)]
-		public async Task InsertProjectTestAsync(string name, string? description, bool shouldSucceed)
+		public async Task SaveAsync_ShouldInsertProject(string name, string? description, bool shouldSucceed)
 		{
 			await using var context = await createContextAsync();
 			await resetDBAsync(context);
 
 			try
 			{
-
 				var project = new Project { Name = name, Description = description };
 				var result = await _projectRepository.SaveAsync(project);
 				checkSavedData(project, result);
@@ -75,7 +75,7 @@ namespace TimeTracker.DB.UnitTests
 		[Theory]
 		[InlineData("TestProject", true)]
 		[InlineData("", false)]
-		public async Task DeleteProjectTestAsync(string name, bool shouldSucceed)
+		public async Task DeleteAsync_ShouldRemoveProject(string name, bool shouldSucceed)
 		{
 			await using var context = await createContextAsync();
 			resetDBAsync(context).Wait();
@@ -108,7 +108,7 @@ namespace TimeTracker.DB.UnitTests
 		/// </summary>
 		/// <returns></returns>
 		[Fact]
-		public async Task MultiInsertProjectTestAsync()
+		public async Task SaveAsync_ShouldMultiInsertProjects()
 		{
 			await using var context = await createContextAsync();
 			await resetDBAsync(context);
@@ -147,7 +147,7 @@ namespace TimeTracker.DB.UnitTests
 		}
 
 		[Fact]
-		public async Task GetProjectTestAsync()
+		public async Task GetAllAsync_ShouldReturnAllProjects()
 		{
 			await using var context = await createContextAsync();
 			await resetDBAsync(context);

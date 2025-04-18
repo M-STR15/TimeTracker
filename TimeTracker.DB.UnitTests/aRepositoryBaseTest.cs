@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
 using TimeTracker.BE.DB.DataAccess;
+using TimeTracker.BE.DB.Models.Entities;
+using TimeTracker.BE.DB.Models.Interfaces;
+using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.DB.UnitTests
 {
@@ -8,13 +11,15 @@ namespace TimeTracker.DB.UnitTests
 	{
 		protected readonly Mock<IDbContextFactory<MsSqlDbContext>> _contextFactoryMock;
 		protected readonly DbContextOptions<MsSqlDbContext> _dbOptions;
-
+		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
 		public aRepositoryBaseTest()
 		{
 			_contextFactoryMock = new Mock<IDbContextFactory<MsSqlDbContext>>();
 			_dbOptions = new DbContextOptionsBuilder<MsSqlDbContext>()
 							.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unikátní DB pro každý test
 							.Options;
+
+			_projectRepository = new ProjectRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
 		}
 
 		protected async Task<MsSqlDbContext> createContextAsync()
@@ -46,6 +51,13 @@ namespace TimeTracker.DB.UnitTests
 				var actual = prop.GetValue(actualObj);
 				Assert.Equal(expected, actual);
 			}
+		}
+
+		protected async Task<IProjectBase?> seedProjectAsync(string name)
+		{
+			var project = new Project { Name = name, Description = "TestDescr" };
+			var result = await _projectRepository.SaveAsync(project);
+			return result;
 		}
 	}
 }
