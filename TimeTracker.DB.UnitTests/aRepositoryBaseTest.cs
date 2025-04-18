@@ -48,12 +48,19 @@ namespace TimeTracker.DB.UnitTests
 		{
 			foreach (var prop in typeof(T).GetProperties())
 			{
-				if (ignoredProperties != null && ignoredProperties.Contains(prop.Name))
-					continue;
+				try
+				{
+					if (ignoredProperties != null && ignoredProperties.Contains(prop.Name))
+						continue;
 
-				var expected = prop.GetValue(expectedObj);
-				var actual = prop.GetValue(actualObj);
-				Assert.Equal(expected, actual);
+					var expected = prop.GetValue(expectedObj);
+					var actual = prop.GetValue(actualObj);
+					Assert.Equal(expected, actual);
+				}
+				catch (Exception ex)
+				{
+					Assert.True(false, $"Test měl uspět, ale došlo k výjimce: {ex.Message}" + "; Název property:" + prop.Name);
+				}
 			}
 		}
 
