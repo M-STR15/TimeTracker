@@ -26,6 +26,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 			{
 				context.RecordActivities.Remove(selectRow);
 				await context.SaveChangesAsync();
+				result = true;
 			}
 
 
