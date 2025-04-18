@@ -11,7 +11,7 @@ namespace TimeTracker.DB.UnitTests
 		}
 
 		/// <summary>
-		/// Otestování methody pro vkládání projektu do DB.
+		/// Testuje metodu pro uložení projektu do databáze.
 		/// </summary>
 		[Fact]
 		public async Task SaveAsync_ShouldAddProject()
@@ -31,7 +31,7 @@ namespace TimeTracker.DB.UnitTests
 				Assert.NotNull(result);
 				Assert.NotNull(resultDb);
 
-				//otesování zda se vrácený objekt co vystupuje z methody se shoduje s tím co je v DB
+				// Testuje, zda se vrácený objekt z metody shoduje s tím, co je v databázi.
 				var ignoredProperties = new HashSet<string> { nameof(Project.SubModules), nameof(Project.Activities) };
 				compareAllProperties<IProjectBase>(result, resultDb, ignoredProperties);
 			}
@@ -41,6 +41,9 @@ namespace TimeTracker.DB.UnitTests
 			}
 		}
 
+		/// <summary>
+		/// Testuje uložení projektu do databáze s rùznými vstupními daty.
+		/// </summary>
 		[Theory]
 		[InlineData("TestProject", "Test Description", true)]
 		[InlineData("TestProject", null, true)]
@@ -72,6 +75,10 @@ namespace TimeTracker.DB.UnitTests
 				}
 			}
 		}
+
+		/// <summary>
+		/// Testuje odstranìní projektu z databáze.
+		/// </summary>
 		[Theory]
 		[InlineData("TestProject", true)]
 		[InlineData("", false)]
@@ -103,10 +110,10 @@ namespace TimeTracker.DB.UnitTests
 				}
 			}
 		}
+
 		/// <summary>
-		/// testuje multi vkládání projektù do DB i to , když se opakuje název projektu, tak to správnì vyhodnotí
+		/// Testuje hromadné vkládání projektù do databáze a kontroluje, zda se správnì vyhodnotí duplicity názvù.
 		/// </summary>
-		/// <returns></returns>
 		[Fact]
 		public async Task SaveAsync_ShouldMultiInsertProjects()
 		{
@@ -146,6 +153,9 @@ namespace TimeTracker.DB.UnitTests
 			}
 		}
 
+		/// <summary>
+		/// Testuje získání všech projektù z databáze.
+		/// </summary>
 		[Fact]
 		public async Task GetAllAsync_ShouldReturnAllProjects()
 		{
@@ -179,6 +189,9 @@ namespace TimeTracker.DB.UnitTests
 			}
 		}
 
+		/// <summary>
+		/// Kontroluje, zda jsou data uložená v databázi správná.
+		/// </summary>
 		private void checkSavedData(Project inputProject, IProjectBase outputProejct)
 		{
 			Assert.NotNull(outputProejct);
