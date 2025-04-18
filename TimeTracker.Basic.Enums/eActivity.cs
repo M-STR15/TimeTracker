@@ -1,5 +1,6 @@
 ﻿namespace TimeTracker.Basic.Enums
 {
+	[Flags]
 	public enum eActivity
 	{
 		Start = 1,

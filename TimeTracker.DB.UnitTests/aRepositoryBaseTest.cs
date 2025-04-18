@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
+using Ninject.Activation;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
@@ -11,7 +12,9 @@ namespace TimeTracker.DB.UnitTests
 	{
 		protected readonly Mock<IDbContextFactory<MsSqlDbContext>> _contextFactoryMock;
 		protected readonly DbContextOptions<MsSqlDbContext> _dbOptions;
+
 		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
+		protected readonly ActivityRepository<MsSqlDbContext> _activityRepository;
 		public aRepositoryBaseTest()
 		{
 			_contextFactoryMock = new Mock<IDbContextFactory<MsSqlDbContext>>();
@@ -20,6 +23,7 @@ namespace TimeTracker.DB.UnitTests
 							.Options;
 
 			_projectRepository = new ProjectRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_activityRepository = new ActivityRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
 		}
 
 		protected async Task<MsSqlDbContext> createContextAsync()
@@ -58,6 +62,14 @@ namespace TimeTracker.DB.UnitTests
 			var project = new Project { Name = name, Description = "TestDescr" };
 			var result = await _projectRepository.SaveAsync(project);
 			return result;
+		}
+
+		protected async Task<Activity?> seedActivityAsync(string name)
+		{
+			await using var context = await createContextAsync();
+			var activity = new Activity { Name = name };
+			context.Activities.Add(activity);
+			return activity;
 		}
 	}
 }
