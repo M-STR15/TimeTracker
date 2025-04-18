@@ -166,7 +166,7 @@ namespace TimeTracker.PC.Windows
 				var selected = (SubModuleListBox)SubModuleItemsView.CurrentItem;
 				if (selected != null)
 				{
-					var result = await _subModuleProvider.DeleteAsync(selected);
+					var result = await _subModuleProvider.DeleteAsync(selected.Id);
 					if (result)
 					{
 						var item = ProjectListBox.FirstOrDefault(x => x.GuidId == selected.GuidId);

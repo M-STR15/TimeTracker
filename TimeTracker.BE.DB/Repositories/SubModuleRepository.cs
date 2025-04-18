@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Repositories.Interfaces;
 
 namespace TimeTracker.BE.DB.Repositories
 {
-	public class SubModuleRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<ISubModuleBase>, IDeletableById, IDeletable<ISubModuleBase>, IReadtableAll<SubModule> where T : MainDatacontext
+	public class SubModuleRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory), IWritable<ISubModuleBase>, IDeletableById,  IReadtableAll<SubModule> where T : MainDatacontext
 	{
 
 		#region GET
@@ -48,33 +48,6 @@ namespace TimeTracker.BE.DB.Repositories
 			}
 		}
 		#endregion GET
-
-		/// <summary>
-		/// Odstraní podmodul z databáze.
-		/// </summary>
-		/// <param name="subModule">Podmodul k odstranění.</param>
-		/// <returns>Odstraněný podmodul nebo null, pokud podmodul neexistuje.</returns>
-		public async Task<bool> DeleteAsync(ISubModuleBase subModule)
-		{
-			try
-			{
-				var result = false;
-				var context = _contextFactory();
-				var item = await context.SubModules.FirstOrDefaultAsync(x => x.Id == subModule.Id);
-				if (item != null)
-				{
-					context.SubModules.Remove(item);
-					await context.SaveChangesAsync();
-					result = true;
-				}
-
-				return result;
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
 
 		/// <summary>  
 		/// Odstraní podmodul z databáze podle jeho ID.  
