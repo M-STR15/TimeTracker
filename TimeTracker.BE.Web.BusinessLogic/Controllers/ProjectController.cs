@@ -93,7 +93,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _subModuleRepository.GetAsync(projectId);
+				var subModules = await _subModuleRepository.GetForTheProjectAsync(projectId);
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);

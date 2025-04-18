@@ -301,7 +301,7 @@ namespace TimeTracker.PC.Windows
 				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
-					var subModules = (await _subModuleRepository.GetAsync(projectId)).ToList();
+					var subModules = (await _subModuleRepository.GetForTheProjectAsync(projectId)).ToList();
 					cmbSubModule.ItemsSource = subModules;
 					if (subModules != null && subModules.Count > 0)
 						cmbSubModule.SelectedIndex = 0;

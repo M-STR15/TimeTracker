@@ -83,7 +83,7 @@ namespace TimeTracker.PC.Windows
 
 				if (selected != null)
 				{
-					var list = await _subModuleProvider.GetAsync(selected.Id);
+					var list = await _subModuleProvider.GetForTheProjectAsync(selected.Id);
 					SubModuleListBox.Clear();
 
 					if (list != null && list.Any())

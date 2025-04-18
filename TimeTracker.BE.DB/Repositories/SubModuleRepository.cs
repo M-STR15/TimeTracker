@@ -32,7 +32,7 @@ namespace TimeTracker.BE.DB.Repositories
 		/// </summary>
 		/// <param name="projectId">ID projektu</param>
 		/// <returns>Kolekce podmodulů.</returns>
-		public async Task<IEnumerable<SubModule>?> GetAsync(int projectId)
+		public async Task<IEnumerable<SubModule>?> GetForTheProjectAsync(int projectId)
 		{
 			try
 			{
