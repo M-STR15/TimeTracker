@@ -17,6 +17,11 @@
 		<DefineConstants>$(DefineConstants);TIMETRACKER_WEB</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<Content Remove="compilerconfig.json" />
 	</ItemGroup>
@@ -32,6 +37,7 @@
 		</None>
 		<None Include="compilerconfig.json" />
 	</ItemGroup>
+	
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">

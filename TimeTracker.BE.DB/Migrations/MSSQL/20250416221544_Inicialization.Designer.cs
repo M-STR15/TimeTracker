@@ -11,7 +11,7 @@ using TimeTracker.BE.DB.DataAccess;
 
 namespace TimeTracker.BE.DB.Migrations.MSSQL
 {
-    [DbContext(typeof(MsSqlDbContext))]
+    [DbContext(typeof(InMemoryDbContext))]
     [Migration("20250416221544_Inicialization")]
     partial class Inicialization
     {

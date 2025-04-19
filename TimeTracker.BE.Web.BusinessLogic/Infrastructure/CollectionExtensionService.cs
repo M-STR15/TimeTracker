@@ -5,16 +5,32 @@ using TimeTracker.BE.DB.Infrastructure;
 using TimeTracker.BE.Web.BusinessLogic.Controllers;
 using TimeTracker.BE.Web.BusinessLogic.MappingProfiles;
 
-namespace TimeTracker.BE.Web.Shared.Infrastructure
+namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic(this IServiceCollection services, string connectionString)
+		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic(
+		this IServiceCollection services,
+		string connectionString,
+		bool useInMemoryDatabase = false) // Parametr pro volbu mezi InMemory a SQL Server
 		{
-			services.AddDbContext<MsSqlDbContext>(options =>
-				options.UseSqlServer(connectionString)
-					.EnableSensitiveDataLogging()
-					.LogTo(Console.WriteLine), ServiceLifetime.Scoped);
+			if (useInMemoryDatabase)
+			{
+				services.AddDbContext<InMemoryDbContext>(options =>
+				{
+					options.UseInMemoryDatabase("TestDb");
+				}, ServiceLifetime.Scoped);
+			}
+			else
+			{
+				services.AddDbContext<MsSqlDbContext>(options =>
+				{
+					options.UseSqlServer(connectionString)
+					   .EnableSensitiveDataLogging()
+					   .LogTo(Console.WriteLine);
+
+				}, ServiceLifetime.Scoped);
+			}
 
 
 			services.AddScoped<Func<MsSqlDbContext>>(provider => () => provider.GetRequiredService<MsSqlDbContext>());
@@ -23,24 +39,27 @@ namespace TimeTracker.BE.Web.Shared.Infrastructure
 
 			services.AddScoped<ProjectController>();
 			services.AddScoped<ShiftController>();
-			// AutoMapper pro mapování
 			services.AddAutoMapper(typeof(MappingProfile));
 
-			// Automatické vytvoření databáze (pokud neexistuje)
+			// Automatické vytvoření databáze
 			using (var serviceProvider = services.BuildServiceProvider())
+			using (var scope = serviceProvider.CreateScope())
 			{
-				using (var scope = serviceProvider.CreateScope())
+				var dbContext = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+				try
 				{
-					var dbContext = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
-					try
+					if (useInMemoryDatabase)
 					{
-						dbContext.Database.Migrate();  // Aplikuje všechny migrace a vytvoří databázi, pokud neexistuje
-						Console.WriteLine("Databáze byla úspěšně vytvořena nebo aktualizována.");
+						dbContext.Database.EnsureCreated();
 					}
-					catch (Exception ex)
+					else
 					{
-						Console.WriteLine($"Chyba při migraci databáze: {ex.Message}");
+						dbContext.Database.Migrate();
 					}
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Chyba při migraci databáze: {ex.Message}");
 				}
 			}
 

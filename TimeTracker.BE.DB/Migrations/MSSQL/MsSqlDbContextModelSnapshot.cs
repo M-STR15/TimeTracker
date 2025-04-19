@@ -10,7 +10,7 @@ using TimeTracker.BE.DB.DataAccess;
 
 namespace TimeTracker.BE.DB.Migrations.MSSQL
 {
-    [DbContext(typeof(MsSqlDbContext))]
+    [DbContext(typeof(InMemoryDbContext))]
     partial class MsSqlDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
