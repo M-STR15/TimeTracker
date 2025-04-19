@@ -1,7 +1,6 @@
 using TimeTracker.Basic.Enums;
-using TimeTracker.BE.DB.Models.Entities;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class ActivityRepositoryTest : aRepositoryBaseTest
 	{

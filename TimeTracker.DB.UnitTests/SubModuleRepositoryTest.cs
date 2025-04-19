@@ -3,7 +3,7 @@ using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class SubModuleRepositoryTest : aRepositoryBaseTest
 	{
@@ -153,7 +153,7 @@ namespace TimeTracker.DB.UnitTests
 
 				// Assert
 				var ignoredProperties = new HashSet<string> { nameof(SubModule.Activities), nameof(SubModule.Id), nameof(SubModule.Activities), nameof(SubModule.Project) };
-				compareAllProperties<ISubModuleBase?>(subModule, subModuleFromDb, ignoredProperties);
+				compareAllProperties(subModule, subModuleFromDb, ignoredProperties);
 			}
 			catch (Exception ex)
 			{

@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
-using Ninject.Activation;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	public abstract class aRepositoryBaseTest
 	{

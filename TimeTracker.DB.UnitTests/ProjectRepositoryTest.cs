@@ -2,7 +2,7 @@ using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.DB.UnitTests.Models;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class ProjectRepositoryTest : aRepositoryBaseTest
 	{
@@ -33,7 +33,7 @@ namespace TimeTracker.DB.UnitTests
 
 				// Testuje, zda se vrácený objekt z metody shoduje s tím, co je v databázi.
 				var ignoredProperties = new HashSet<string> { nameof(Project.SubModules), nameof(Project.Activities) };
-				compareAllProperties<IProjectBase>(result, resultDb, ignoredProperties);
+				compareAllProperties(result, resultDb, ignoredProperties);
 			}
 			catch (Exception ex)
 			{
@@ -203,7 +203,7 @@ namespace TimeTracker.DB.UnitTests
 						nameof(Project.Id)
 					};
 
-			compareAllProperties<IProjectBase>(inputProject, outputProejct, ignoredProperties);
+			compareAllProperties(inputProject, outputProejct, ignoredProperties);
 		}
 	}
 }

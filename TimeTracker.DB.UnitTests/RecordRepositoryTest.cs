@@ -2,7 +2,7 @@
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Repositories;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	/// <summary>
 	/// Testovací třída pro testování metod třídy RecordRepository.
@@ -47,7 +47,7 @@ namespace TimeTracker.DB.UnitTests
 				Assert.NotNull(resultDb);
 
 				var ignoredProperties = new HashSet<string> { nameof(RecordActivity.GuidId), nameof(RecordActivity.Activity), nameof(RecordActivity.Project), nameof(RecordActivity.SubModule), nameof(RecordActivity.TypeShift) };
-				compareAllProperties<RecordActivity>(record, resultDb, ignoredProperties);
+				compareAllProperties(record, resultDb, ignoredProperties);
 			}
 			catch (Exception ex)
 			{
@@ -118,7 +118,7 @@ namespace TimeTracker.DB.UnitTests
 				Assert.NotNull(result);
 
 				var ignoredProperties = new HashSet<string> { nameof(RecordActivity.GuidId), nameof(RecordActivity.Activity), nameof(RecordActivity.Project), nameof(RecordActivity.SubModule), nameof(RecordActivity.TypeShift) };
-				compareAllProperties<RecordActivity>(record, resultDb, ignoredProperties);
+				compareAllProperties(record, resultDb, ignoredProperties);
 			}
 			catch (Exception ex)
 			{

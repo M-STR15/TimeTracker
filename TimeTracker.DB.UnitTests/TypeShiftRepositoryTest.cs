@@ -3,7 +3,7 @@ using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Repositories;
 
-namespace TimeTracker.DB.UnitTests
+namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class TypeShiftRepositoryTest : aRepositoryBaseTest
 	{
