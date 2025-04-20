@@ -14,10 +14,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	/// <summary>
 	/// Kontroler pro správu záznamů aktivit.
 	/// </summary>
-	public class RecordActivityController<T> : aControllerBase where T : MainDatacontext
+	public class RecordActivityController : aControllerBase
 	{
-		private readonly ActivityRepository<T> _activityRepository;
-		private readonly RecordRepository<T> _recordRepository;
+		private readonly ActivityRepository<MsSqlDbContext> _activityRepository;
+		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
 
 		/// <summary>
 		/// Konstruktor kontroleru pro správu záznamů aktivit.
@@ -26,7 +26,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="recordRepository">Repozitář záznamů aktivit.</param>
 		/// <param name="mapper">Mapper pro mapování objektů.</param>
 		/// <param name="eventLogService">Služba pro logování událostí.</param>
-		public RecordActivityController(ActivityRepository<T> activityRepository, RecordRepository<T> recordRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
+		public RecordActivityController(ActivityRepository<MsSqlDbContext> activityRepository, RecordRepository<MsSqlDbContext> recordRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_activityRepository = activityRepository;
 			_recordRepository = recordRepository;

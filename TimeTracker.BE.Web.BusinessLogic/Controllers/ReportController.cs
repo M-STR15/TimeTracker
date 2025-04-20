@@ -16,10 +16,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	/// Řídící třída pro zpracování reportů.
 	/// </summary>
 	[ApiExplorerSettings(GroupName = "v1")]
-	public class ReportController<T> : aControllerBase where T : MainDatacontext
+	public class ReportController : aControllerBase
 	{
-		private readonly ReportRepository<T> _reportRepository;
-		private readonly RecordRepository<T> _recordRepository;
+		private readonly ReportRepository<MsSqlDbContext> _reportRepository;
+		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
 
 		/// <summary>
 		/// Konstruktor třídy ReportController.
@@ -28,7 +28,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="reportRepository">Repozitář pro práci s reporty.</param>
 		/// <param name="recordRepository">Repozitář pro práci se záznamy aktivit.</param>
 		/// <param name="eventLogService">Služba pro logování událostí.</param>
-		public ReportController(IMapper mapper, ReportRepository<T> reportRepository, RecordRepository<T> recordRepository, IEventLogService eventLogService)
+		public ReportController(IMapper mapper, ReportRepository<MsSqlDbContext> reportRepository, RecordRepository<MsSqlDbContext> recordRepository, IEventLogService eventLogService)
 			: base(mapper, eventLogService)
 		{
 			_reportRepository = reportRepository;

@@ -7,8 +7,6 @@
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<ApplicationIcon>clock-violet.ico</ApplicationIcon>
 		<PackageIcon>clock-violet.png</PackageIcon>
-		<PreserveCompilationContext>true</PreserveCompilationContext>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,22 +17,27 @@
 		<DefineConstants>$(DefineConstants);TIMETRACKER_WEB</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<Content Remove="compilerconfig.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="clock-violet.ico" />
+	  <Content Include="clock-violet.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\TimeTracker.PC\Resources\clock-violet.png">
-			<Pack>True</Pack>
-			<PackagePath>\</PackagePath>
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
 		</None>
 		<None Include="compilerconfig.json" />
 	</ItemGroup>
-
+	
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">

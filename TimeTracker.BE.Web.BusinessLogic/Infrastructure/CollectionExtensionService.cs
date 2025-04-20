@@ -9,11 +9,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		const string connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;";
-		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<T>(
+		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic(
 		this IServiceCollection services,
+		string connectionString,
 		bool useInMemoryDatabase = false) // Parametr pro volbu mezi InMemory a SQL Server
-			where T : MainDatacontext
 		{
 			if (useInMemoryDatabase)
 			{
@@ -31,29 +30,32 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 					   .LogTo(Console.WriteLine);
 
 				}, ServiceLifetime.Scoped);
-
 			}
 
-			services.AddScoped<Func<T>>(provider => () => provider.GetRequiredService<T>());
 
-			services.AddTimeTrackerBeDd<T>();
+			services.AddScoped<Func<MsSqlDbContext>>(provider => () => provider.GetRequiredService<MsSqlDbContext>());
 
-			services.AddScoped<ProjectController<T>>();
-			services.AddScoped<ShiftController<T>>();
+			services.AddTimeTrackerBeDd<MsSqlDbContext>();
 
+			services.AddScoped<ProjectController>();
+			services.AddScoped<ShiftController>();
 			services.AddAutoMapper(typeof(MappingProfile));
 
 			// Automatické vytvoření databáze
 			using (var serviceProvider = services.BuildServiceProvider())
 			using (var scope = serviceProvider.CreateScope())
 			{
+				var dbContext = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
 				try
 				{
-					var dbContext = scope.ServiceProvider.GetRequiredService<T>();
 					if (useInMemoryDatabase)
+					{
 						dbContext.Database.EnsureCreated();
+					}
 					else
+					{
 						dbContext.Database.Migrate();
+					}
 				}
 				catch (Exception ex)
 				{
