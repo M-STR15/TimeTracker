@@ -13,10 +13,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 	/// Řadič pro správu směn a typů směn.
 	/// </summary>
 	[ApiExplorerSettings(GroupName = "v1")]
-	public class ShiftController : aControllerBase
+	public class ShiftController<T> : aControllerBase where T : MainDatacontext
 	{
-		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
-		private readonly TypeShiftRepository<MsSqlDbContext> _typeShiftRepository;
+		private readonly ShiftRepository<T> _shiftRepository;
+		private readonly TypeShiftRepository<T> _typeShiftRepository;
 
 		/// <summary>
 		/// Konstruktor řadiče ShiftController.
@@ -25,7 +25,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="typeShiftRepository">Úložiště typů směn.</param>
 		/// <param name="mapper">Automapper pro mapování objektů.</param>
 		/// <param name="eventLogService">Služba pro logování událostí.</param>
-		public ShiftController(ShiftRepository<MsSqlDbContext> shiftRepository, TypeShiftRepository<MsSqlDbContext> typeShiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
+		public ShiftController(ShiftRepository<T> shiftRepository, TypeShiftRepository<T> typeShiftRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_shiftRepository = shiftRepository;
 			_typeShiftRepository = typeShiftRepository;

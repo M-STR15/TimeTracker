@@ -15,21 +15,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests.Factories
 
 			builder.ConfigureServices(services =>
 			{
-				// Odeberte registraci existujícího DbContextu
-				//var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<InMemoryDbContext>));
-
-				//if (descriptor != null)
-				//	services.Remove(descriptor);
-
-				// Přidejte InMemory databázi pro testování
-				//services.AddDbContext<MsSqlDbContext>(options =>
-				//	options.UseInMemoryDatabase("TestDb"));
-
-				// Přidejte logiku pro business logic (bez znovu registrace DbContextu)
-				services.AddTimeTrackerBeWebSharedBusinessLogic(
-					connectionString: "",
-					useInMemoryDatabase: true // Určte, že používáte InMemory databázi
-				);
+				services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>(useInMemoryDatabase: true);
 
 				// Inicializace databáze pro testy
 				using var scope = services.BuildServiceProvider().CreateScope();
