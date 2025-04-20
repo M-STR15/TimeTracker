@@ -216,7 +216,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var result = await _projectRepository.DeleteAsync(projectId);
-				return result ? Ok() : Problem();
+				return result ? Ok() : NotFound();
 			}
 			catch (Exception ex)
 			{
