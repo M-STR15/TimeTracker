@@ -9,12 +9,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic(
-		this IServiceCollection services,
-		string connectionString,
-		bool useInMemoryDatabase = false) // Parametr pro volbu mezi InMemory a SQL Server
+		private const string _connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;";
+
+		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<T>(
+		this IServiceCollection services) // Parametr pro volbu mezi InMemory a SQL Server
+			where T : MainDatacontext
 		{
-			if (useInMemoryDatabase)
+			if (typeof(T) == typeof(InMemoryDbContext))
 			{
 				services.AddDbContext<InMemoryDbContext>(options =>
 				{
@@ -25,7 +26,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			{
 				services.AddDbContext<MsSqlDbContext>(options =>
 				{
-					options.UseSqlServer(connectionString)
+					options.UseSqlServer(_connectionString)
 					   .EnableSensitiveDataLogging()
 					   .LogTo(Console.WriteLine);
 
@@ -33,9 +34,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			}
 
 
-			services.AddScoped<Func<MsSqlDbContext>>(provider => () => provider.GetRequiredService<MsSqlDbContext>());
+			services.AddScoped<Func<T>>(provider => () => provider.GetRequiredService<T>());
 
-			services.AddTimeTrackerBeDd<MsSqlDbContext>();
+			services.AddTimeTrackerBeDd<T>();
 
 			services.AddScoped<ProjectController>();
 			services.AddScoped<ShiftController>();
@@ -45,17 +46,13 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			using (var serviceProvider = services.BuildServiceProvider())
 			using (var scope = serviceProvider.CreateScope())
 			{
-				var dbContext = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
+				var dbContext = scope.ServiceProvider.GetRequiredService<T>();
 				try
 				{
-					if (useInMemoryDatabase)
-					{
+					if (typeof(T) == typeof(InMemoryDbContext))
 						dbContext.Database.EnsureCreated();
-					}
 					else
-					{
 						dbContext.Database.Migrate();
-					}
 				}
 				catch (Exception ex)
 				{
