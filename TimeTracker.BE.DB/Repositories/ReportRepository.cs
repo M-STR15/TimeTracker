@@ -4,6 +4,7 @@ using TimeTracker.BE.DB.Repositories.Models.Reports;
 using TimeTracker.Basic.Enums;
 using TimeTracker.BE.DB.Models.Responses;
 using TimeTracker.BE.DB.Models.Entities;
+
 namespace TimeTracker.BE.DB.Repositories;
 
 public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contextFactory) where T : MainDatacontext
