@@ -38,8 +38,8 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 
 			services.AddTimeTrackerBeDd<T>();
 
-			services.AddScoped<ProjectController>();
-			services.AddScoped<ShiftController>();
+			//services.AddScoped<ProjectController>();
+			//services.AddScoped<ShiftController>();
 			services.AddAutoMapper(typeof(MappingProfile));
 
 			// Automatické vytvoření databáze
