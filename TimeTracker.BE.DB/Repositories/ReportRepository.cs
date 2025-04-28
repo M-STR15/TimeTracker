@@ -152,9 +152,16 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		};
 	}
 
+	/// <summary>
+	/// Metoda získává seznam dat v zadaném rozsahu od počátečního data do koncového data.
+	/// </summary>
+	/// <param name="start">Počáteční datum.</param>
+	/// <param name="end">Koncové datum.</param>
+	/// <returns>Seznam dat v zadaném rozsahu.</returns>
 	private static List<DateTime> getDatesInRange(DateTime start, DateTime end)
 	{
-		return Enumerable.Range(0, (end - start).Days)
+		var days = (end - start).Days == 0 ? 1 : (end - start).Days;
+		return Enumerable.Range(0, days)
 						 .Select(offset => start.AddDays(offset))
 						 .ToList();
 	}

@@ -27,22 +27,29 @@ namespace TimeTracker.Tests.DB.UnitTests
 
 				var record1 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.AddHours(-2),
+					StartDateTime = DateTime.Now.AddHours(-3),
 					ActivityId = (int)eActivity.Start,
 					TypeShiftId = (int)eTypeShift.Office,
 				};
 
 				var record2 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.AddHours(-1),
+					StartDateTime = DateTime.Now.AddHours(-1.5),
 					ActivityId = (int)eActivity.Pause,
 					TypeShiftId = (int)eTypeShift.Office,
 				};
 
-				var resutl = await _recordRepository.SaveAsync(record1);
-				var result2 = await _recordRepository.SaveAsync(record2);
-
-				var start = DateTime.Now.AddHours(-3);
+				var record3 = new RecordActivity
+				{
+					StartDateTime = DateTime.Now.AddHours(-1),
+					ActivityId = (int)eActivity.Start,
+					TypeShiftId = (int)eTypeShift.Office,
+				};
+				var item1 = await _recordRepository.SaveAsync(record1);
+				var item2 = await _recordRepository.SaveAsync(record2);
+				var item3 = await _recordRepository.SaveAsync(record3);
+				//var allItems = _recordRepository.GetAllAsync();
+				var start = DateTime.Now.AddHours(-4);
 				var end = DateTime.Now;
 
 				// Act
@@ -52,8 +59,8 @@ namespace TimeTracker.Tests.DB.UnitTests
 				Assert.NotNull(result);
 				var dayData = result.FirstOrDefault(x => x.Date == record1.StartDateTime.Date && x.TypeShift == eTypeShift.Office);
 				Assert.NotNull(dayData);
-				//Assert.Equal(1, dayData.WorkHours);
-				//Assert.Equal(0.5, dayData.PauseHours);
+				Assert.Equal(1.5, dayData.WorkHours);
+				Assert.Equal(0.5, dayData.Pause);
 			}
 			catch (Exception ex)
 			{
@@ -72,18 +79,25 @@ namespace TimeTracker.Tests.DB.UnitTests
 
 				var record1 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.Date.AddHours(-4),
+					StartDateTime = DateTime.Now.AddHours(-6),
+					TypeShiftId = (int)eTypeShift.Office,
 					ActivityId = (int)eActivity.Start,
 				};
-
 				var record2 = new RecordActivity
 				{
 					StartDateTime = DateTime.Now.AddHours(-5),
+					TypeShiftId = (int)eTypeShift.Office,
+					ActivityId = (int)eActivity.Start,
+				};
+				var record3 = new RecordActivity
+				{
+					StartDateTime = DateTime.Now.Date.AddHours(-4),
 					ActivityId = (int)eActivity.Pause,
 				};
 
-				await _recordRepository.SaveAsync(record2);
-				await _recordRepository.SaveAsync(record1);
+				var item1 = await _recordRepository.SaveAsync(record1);
+				var item2 = await _recordRepository.SaveAsync(record2);
+				var item3 = await _recordRepository.SaveAsync(record3);
 
 				// Act
 				var result = _reportRepository.GetActualSumaryHours();
