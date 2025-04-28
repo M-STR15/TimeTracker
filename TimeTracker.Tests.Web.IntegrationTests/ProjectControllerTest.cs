@@ -4,6 +4,7 @@ using System.Net;
 using System.Text.Json;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.Tests.Web.IntegrationTests.Factories;
+using TimeTracker.Tests.Web.IntegrationTests.Helpers;
 
 namespace TimeTracker.Tests.Web.IntegrationTests
 {
@@ -35,7 +36,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				{
 					PropertyNameCaseInsensitive = true
 				});
-
+				// Assert
 				Assert.NotNull(projects);
 			}
 			catch (Exception ex)
@@ -74,7 +75,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				var urlApi = "/api/v1/project";
 				var newProject = new ProjectInsertDto
 				{
-					Name = "Test Project",
+					Name = MRandom.RandomString(10),
 					Description = "Test Description"
 				};
 
@@ -98,13 +99,22 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 		{
 			try
 			{
-				await AddProjectsAsync_ReturnsOkWithCreatedProject();
-				// Arrange
 				var urlApi = "/api/v1/project";
+				var newProject = new ProjectInsertDto
+				{
+					Name = MRandom.RandomString(10),
+					Description = "Test Description"
+				};
+
+				// Act
+				var responsePost = await _client.PostAsJsonAsync(urlApi, newProject);
+				Assert.Equal(HttpStatusCode.OK, responsePost.StatusCode);
+				var project = (await responsePost.Content.ReadFromJsonAsync<ProjectBaseDto>());
+				// Arrange
 				var updatedProject = new ProjectBaseDto
 				{
-					Id = 1,
-					Name = "Updated Project",
+					Id = project.Id,
+					Name = MRandom.RandomString(10),
 					Description = "Updated Description"
 				};
 
@@ -116,6 +126,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				var resultProject = await response.Content.ReadFromJsonAsync<ProjectBaseDto>();
 				Assert.NotNull(resultProject);
 				Assert.Equal(updatedProject.Name, resultProject.Name);
+				Assert.Equal(updatedProject.Description, "Updated Description");
 			}
 			catch (Exception ex)
 			{
@@ -128,16 +139,27 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 		{
 			try
 			{
-				await AddProjectsAsync_ReturnsOkWithCreatedProject();
 				// Arrange
-				var projectId = 1;
-				var urlApi = $"/api/v1/project/{projectId}";
+				var postUrlApi = "/api/v1/project";
+				var newProject = new ProjectInsertDto
+				{
+					Name = MRandom.RandomString(10),
+					Description = "Test Description"
+				};
 
 				// Act
-				var response = await _client.DeleteAsync(urlApi);
+				var responsePost = await _client.PostAsJsonAsync(postUrlApi, newProject);
+				Assert.Equal(HttpStatusCode.OK, responsePost.StatusCode);
+				// Arrange
+
+				var projectId = (await responsePost.Content.ReadFromJsonAsync<ProjectBaseDto>()).Id;
+				var delUrlApi = $"/api/v1/project/{projectId}";
+
+				// Act
+				var responseDelete = await _client.DeleteAsync(delUrlApi);
 
 				// Assert
-				Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+				Assert.Equal(HttpStatusCode.OK, responseDelete.StatusCode);
 			}
 			catch (Exception ex)
 			{
