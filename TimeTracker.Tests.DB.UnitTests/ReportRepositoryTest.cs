@@ -67,7 +67,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 				Assert.True(false, $"Test mìl uspìt, ale došlo k výjimce: {ex.Message}");
 			}
 		}
-
+		//TODO dodìlat, když v pøípadì, že se testuje pøes pùlnoc, tak to mùže haprovat
 		[Fact]
 		public async Task GetActualSumaryHours_ShouldReturnCorrectSummary()
 		{
@@ -76,35 +76,41 @@ namespace TimeTracker.Tests.DB.UnitTests
 				// Arrange
 				await using var context = await createContextAsync();
 				await resetDBAsync(context);
-
+				var setDate = DateTime.Now;
 				var record1 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.AddHours(-6),
+					StartDateTime = setDate.AddHours(-6),
 					TypeShiftId = (int)eTypeShift.Office,
 					ActivityId = (int)eActivity.Start,
 				};
 				var record2 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.AddHours(-5),
+					StartDateTime = setDate.AddHours(-5),
 					TypeShiftId = (int)eTypeShift.Office,
 					ActivityId = (int)eActivity.Start,
 				};
 				var record3 = new RecordActivity
 				{
-					StartDateTime = DateTime.Now.Date.AddHours(-4),
+					StartDateTime = setDate.AddHours(-4),
 					ActivityId = (int)eActivity.Pause,
+				};
+				var record4 = new RecordActivity
+				{
+					StartDateTime = setDate.AddHours(-3),
+					ActivityId = (int)eActivity.Stop,
 				};
 
 				var item1 = await _recordRepository.SaveAsync(record1);
 				var item2 = await _recordRepository.SaveAsync(record2);
 				var item3 = await _recordRepository.SaveAsync(record3);
+				var item4 = await _recordRepository.SaveAsync(record4);
 
 				// Act
-				var result = _reportRepository.GetActualSumaryHours();
+				var result = _reportRepository.GetSumaryHoursInDay(setDate.Year, setDate.Month, setDate.Day);
 
 				// Assert
 				Assert.NotNull(result);
-				Assert.Equal(4, result.WorkHours);
+				Assert.Equal(2, result.WorkHours);
 				Assert.Equal(1, result.PauseHours);
 			}
 			catch (Exception ex)
