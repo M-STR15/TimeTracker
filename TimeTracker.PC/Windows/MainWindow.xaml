@@ -242,11 +242,11 @@
                                 <TextBlock
                                     x:Name="lblStartTime_time"
                                     Style="{StaticResource txbGrid}"
-                                    Text="00:00:00" />
+                                    Text="" />
                                 <TextBlock
                                     x:Name="lblStartTime_date"
                                     Style="{StaticResource txbGrid}"
-                                    Text="dd:MM:yy" />
+                                    Text="" />
                             </StackPanel>
                         </Grid>
                     </Border>
