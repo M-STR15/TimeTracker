@@ -164,13 +164,9 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		{
 			var context = _contextFactory();
 			if (item.GuidId != Guid.Empty)
-			{
 				context.RecordActivities.Update(item);
-			}
 			else
-			{
 				await context.RecordActivities.AddAsync(item);
-			}
 
 			await context.SaveChangesAsync();
 
@@ -185,6 +181,13 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		}
 	}
 
+	private static List<int> _allowedActivities = new()
+			{
+				(int)eActivity.Start,
+				(int)eActivity.Pause
+			};
+
+	//TODO dodělat, aby se při běžném zápisu měnila hodnota pouze u posledního zápisu před tímto, z důvodu zefektivnění
 	/// <summary>
 	/// Aktualizuje čas ukončení záznamů aktivit.
 	/// Pro každý záznam aktivity nastaví čas ukončení na čas zahájení následující aktivity,
@@ -197,20 +200,16 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 			var context = _contextFactory();
 			var recordActivities = await context.RecordActivities.OrderBy(x => x.StartDateTime).ToListAsync();
 
-			var allowedActivities = new List<int>()
-			{
-				(int)eActivity.Start,
-				(int)eActivity.Pause
-			};
-
 			for (int i = 0; i <= recordActivities.Count - 1; i++)
 			{
 				var currentItem = recordActivities[i];
+				//u podledního zápisu se nemění endTime
 				if (i == recordActivities.Count - 1)
 				{
 					currentItem.EndDateTime = null;
 				}
-				else if (currentItem.ActivityId != (int)eActivity.Stop && allowedActivities.Any(x => x == currentItem.ActivityId))
+				// pokdu existuje následující aktivita připíše datum dané aktivity jako konec aktivity před ní
+				else if (_allowedActivities.Any(x => x == currentItem.ActivityId))
 				{
 					var nextItem = recordActivities[i + 1];
 					currentItem.EndDateTime = nextItem.StartDateTime;

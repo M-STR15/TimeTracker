@@ -58,17 +58,26 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	public CalcHours GetActualSumaryHours()
 	{
 		var date = DateTime.Now;
+		return GetSumaryHoursInDay(date.Year, date.Month, date.Day);
+	}
+	// <summary>
+	/// Methoda získává celokový počet jak odpracovaných hodin, tak i hodin na přestávce.
+	/// </summary>
+	/// <param name="date"></param>
+	/// <returns></returns>
+	public CalcHours GetSumaryHoursInDay(int year, int month, int day)
+	{
 		return new CalcHours()
 		{
-			WorkHours = GetWorkHours(date),
-			PauseHours = GetPauseHours(date),
+			WorkHours = GetWorkHours(year, month, day),
+			PauseHours = GetPauseHours(year, month, day),
 		};
 	}
 
 	/// <summary>
 	/// Metoda získává počet hodin pauzy pro zadané datum.
 	/// </summary>
-	public double GetPauseHours(DateTime date) => getHours(date, eActivity.Pause);
+	public double GetPauseHours(int year, int month, int day) => getHoursInDay(year, month, day, eActivity.Pause);
 
 	/// <summary>
 	/// Metoda získává počet hodin pauzy pro zadanou směnu.
@@ -105,7 +114,7 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 	/// <summary>
 	/// Metoda získává celkový počet pracovních hodin pro konkrétní datum.
 	/// </summary>
-	public double GetWorkHours(DateTime date) => getHours(date, eActivity.Start);
+	public double GetWorkHours(int year, int month, int day) => getHoursInDay(year, month, day, eActivity.Start);
 
 	/// <summary>
 	/// Metoda získává pracovní hodiny pro zadaný rozsah dat a typy směn.
@@ -166,16 +175,17 @@ public class ReportRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 						 .ToList();
 	}
 
-	private double getHours(DateTime date, eActivity eActivity)
+	private double getHoursInDay(int year, int month, int day, eActivity eActivity)
 	{
 		var sumHours = 0.00;
+		DateTime date = new DateTime(year, month, day);
 		try
 		{
 			var context = _contextFactory();
 			var records = context.RecordActivities.Where(x => x.StartDateTime >= date.Date && x.StartDateTime <= date.Date.AddDays(1) && x.ActivityId == (int)eActivity).ToList();
 			foreach (var item in records)
 			{
-				sumHours += item.DurationSec;
+				sumHours += item.DurationSec / 3600;
 			}
 		}
 		catch (Exception)
