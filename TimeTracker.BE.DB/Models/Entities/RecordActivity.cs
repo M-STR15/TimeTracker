@@ -5,7 +5,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models.Entities
 {
-	[Table("Record_activities", Schema = "dbo")]
+	[Table("Record_activities", Schema = "Record")]
 	public class RecordActivity : aStamp, IRecordActivity, IRecordActivityBase
 	{
 		private DateTime? _endDateTime;

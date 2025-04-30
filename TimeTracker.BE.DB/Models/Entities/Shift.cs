@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Index(nameof(StartDate), IsUnique = true)]
-	[Table("Shifts", Schema = "dbo")]
+	[Table("Shifts", Schema = "Shift")]
 	[Comment("Tabulka slouží k naplánování směny.")]
 	public class Shift : aStamp, IIdentifiableGuid, IShift, IShiftBase
 	{

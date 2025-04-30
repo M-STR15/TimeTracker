@@ -5,7 +5,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.DB.Models.Entities
 {
-	[Table("TypeShifts", Schema = "dbo")]
+	[Table("TypeShifts", Schema = "Shift")]
 	[Comment("Tabulka všech možných směn.")]
 	public class TypeShift : IIdentifiable, ITypeShift, ITypeShiftBase
 	{

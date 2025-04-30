@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Index(nameof(ProjectId), nameof(Name), IsUnique = true)]
-	[Table("SubModule", Schema = "dbo")]
+	[Table("SubModule", Schema = "Project")]
 	[Comment("Tabulka podmodulů.")]
 	public class SubModule : IIdentifiable, ISubModule, ISubModuleBase
 	{

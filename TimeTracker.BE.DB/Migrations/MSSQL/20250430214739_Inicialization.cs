@@ -14,11 +14,17 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "dbo");
+                name: "Record");
+
+            migrationBuilder.EnsureSchema(
+                name: "Project");
+
+            migrationBuilder.EnsureSchema(
+                name: "Shift");
 
             migrationBuilder.CreateTable(
                 name: "Activities",
-                schema: "dbo",
+                schema: "Record",
                 columns: table => new
                 {
                     Activity_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč aktivity.")
@@ -33,7 +39,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateTable(
                 name: "Project",
-                schema: "dbo",
+                schema: "Project",
                 columns: table => new
                 {
                     Project_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč projektu.")
@@ -49,7 +55,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateTable(
                 name: "TypeShifts",
-                schema: "dbo",
+                schema: "Shift",
                 columns: table => new
                 {
                     TypeShift_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč typu směny.")
@@ -65,7 +71,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     table.ForeignKey(
                         name: "FK_TypeShifts_TypeShifts_TypeShiftId",
                         column: x => x.TypeShiftId,
-                        principalSchema: "dbo",
+                        principalSchema: "Shift",
                         principalTable: "TypeShifts",
                         principalColumn: "TypeShift_ID");
                 },
@@ -73,7 +79,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateTable(
                 name: "SubModule",
-                schema: "dbo",
+                schema: "Project",
                 columns: table => new
                 {
                     SubModule_ID = table.Column<int>(type: "int", nullable: false, comment: "Primární klíč podmodulu.")
@@ -88,7 +94,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     table.ForeignKey(
                         name: "FK_SubModule_Project_Project_ID",
                         column: x => x.Project_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Project",
                         principalTable: "Project",
                         principalColumn: "Project_ID",
                         onDelete: ReferentialAction.Cascade);
@@ -97,7 +103,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateTable(
                 name: "Shifts",
-                schema: "dbo",
+                schema: "Shift",
                 columns: table => new
                 {
                     Guid_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -113,13 +119,13 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     table.ForeignKey(
                         name: "FK_Shifts_Shifts_ShiftGuidId",
                         column: x => x.ShiftGuidId,
-                        principalSchema: "dbo",
+                        principalSchema: "Shift",
                         principalTable: "Shifts",
                         principalColumn: "Guid_ID");
                     table.ForeignKey(
                         name: "FK_Shifts_TypeShifts_TypeShift_ID",
                         column: x => x.TypeShift_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Shift",
                         principalTable: "TypeShifts",
                         principalColumn: "TypeShift_ID",
                         onDelete: ReferentialAction.Cascade);
@@ -128,7 +134,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateTable(
                 name: "Record_activities",
-                schema: "dbo",
+                schema: "Record",
                 columns: table => new
                 {
                     Guid_ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -148,38 +154,38 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     table.ForeignKey(
                         name: "FK_Record_activities_Activities_Activity_ID",
                         column: x => x.Activity_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Record",
                         principalTable: "Activities",
                         principalColumn: "Activity_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Record_activities_Project_Project_ID",
                         column: x => x.Project_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Project",
                         principalTable: "Project",
                         principalColumn: "Project_ID");
                     table.ForeignKey(
                         name: "FK_Record_activities_Shifts_Shift_GuidID",
                         column: x => x.Shift_GuidID,
-                        principalSchema: "dbo",
+                        principalSchema: "Shift",
                         principalTable: "Shifts",
                         principalColumn: "Guid_ID");
                     table.ForeignKey(
                         name: "FK_Record_activities_SubModule_SubModule_ID",
                         column: x => x.SubModule_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Project",
                         principalTable: "SubModule",
                         principalColumn: "SubModule_ID");
                     table.ForeignKey(
                         name: "FK_Record_activities_TypeShifts_TypeShift_ID",
                         column: x => x.TypeShift_ID,
-                        principalSchema: "dbo",
+                        principalSchema: "Shift",
                         principalTable: "TypeShifts",
                         principalColumn: "TypeShift_ID");
                 });
 
             migrationBuilder.InsertData(
-                schema: "dbo",
+                schema: "Record",
                 table: "Activities",
                 columns: new[] { "Activity_ID", "Name" },
                 values: new object[,]
@@ -190,7 +196,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                 });
 
             migrationBuilder.InsertData(
-                schema: "dbo",
+                schema: "Shift",
                 table: "TypeShifts",
                 columns: new[] { "TypeShift_ID", "Color", "IsVisibleInMainWindow", "Name", "TypeShiftId" },
                 values: new object[,]
@@ -203,77 +209,77 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_Name",
-                schema: "dbo",
+                schema: "Record",
                 table: "Activities",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_Name",
-                schema: "dbo",
+                schema: "Project",
                 table: "Project",
                 column: "Name",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Record_activities_Activity_ID",
-                schema: "dbo",
+                schema: "Record",
                 table: "Record_activities",
                 column: "Activity_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Record_activities_Project_ID",
-                schema: "dbo",
+                schema: "Record",
                 table: "Record_activities",
                 column: "Project_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Record_activities_Shift_GuidID",
-                schema: "dbo",
+                schema: "Record",
                 table: "Record_activities",
                 column: "Shift_GuidID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Record_activities_SubModule_ID",
-                schema: "dbo",
+                schema: "Record",
                 table: "Record_activities",
                 column: "SubModule_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Record_activities_TypeShift_ID",
-                schema: "dbo",
+                schema: "Record",
                 table: "Record_activities",
                 column: "TypeShift_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_ShiftGuidId",
-                schema: "dbo",
+                schema: "Shift",
                 table: "Shifts",
                 column: "ShiftGuidId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_Start_date",
-                schema: "dbo",
+                schema: "Shift",
                 table: "Shifts",
                 column: "Start_date",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_TypeShift_ID",
-                schema: "dbo",
+                schema: "Shift",
                 table: "Shifts",
                 column: "TypeShift_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubModule_Project_ID_Name",
-                schema: "dbo",
+                schema: "Project",
                 table: "SubModule",
                 columns: new[] { "Project_ID", "Name" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_TypeShifts_TypeShiftId",
-                schema: "dbo",
+                schema: "Shift",
                 table: "TypeShifts",
                 column: "TypeShiftId");
         }
@@ -283,27 +289,27 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
         {
             migrationBuilder.DropTable(
                 name: "Record_activities",
-                schema: "dbo");
+                schema: "Record");
 
             migrationBuilder.DropTable(
                 name: "Activities",
-                schema: "dbo");
+                schema: "Record");
 
             migrationBuilder.DropTable(
                 name: "Shifts",
-                schema: "dbo");
+                schema: "Shift");
 
             migrationBuilder.DropTable(
                 name: "SubModule",
-                schema: "dbo");
+                schema: "Project");
 
             migrationBuilder.DropTable(
                 name: "TypeShifts",
-                schema: "dbo");
+                schema: "Shift");
 
             migrationBuilder.DropTable(
                 name: "Project",
-                schema: "dbo");
+                schema: "Project");
         }
     }
 }

@@ -6,7 +6,7 @@ using TimeTracker.BE.DB.Models.Interfaces;
 namespace TimeTracker.BE.DB.Models.Entities
 {
 	[Index(nameof(Name), IsUnique = true)]
-	[Table("Activities", Schema = "dbo")]
+	[Table("Activities", Schema = "Record")]
 	[Comment("Primární klíč aktivity.")]
 	public class Activity : IIdentifiable, IActivity, IActivityBase
 	{
