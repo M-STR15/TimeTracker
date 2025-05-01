@@ -17,9 +17,16 @@ builder.Services.AddControllers();
 builder.Services.AddTimeTrackerWebBlazorServer();
 builder.Services.AddTimeTrackerFeComponents();
 
-builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
+if (builder.Environment.IsEnvironment("Testing"))
+{
+	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>();
+}
+else
+{
+	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
+}
 
-builder.Services.AddHostedService<ApplicationLifecycleLogger>();
+	builder.Services.AddHostedService<ApplicationLifecycleLogger>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

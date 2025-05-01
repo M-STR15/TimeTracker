@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.Web.BusinessLogic.Infrastructure;
@@ -26,7 +25,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests.Factories
 				//	options.UseInMemoryDatabase("TestDb"));
 
 				// Přidejte logiku pro business logic (bez znovu registrace DbContextu)
-				services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>();
+				//services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>();
 
 				// Inicializace databáze pro testy
 				using var scope = services.BuildServiceProvider().CreateScope();

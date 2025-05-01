@@ -11,11 +11,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 	{
 		private const string _connectionString = @"Server=DESKTOP-JS0N1LD\SQLEXPRESS;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB";
 
-		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<T>(
+		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<TContext>(
 		this IServiceCollection services) // Parametr pro volbu mezi InMemory a MS SQL Server
-			where T : MainDatacontext
+			where TContext : MainDatacontext
 		{
-			if (typeof(T) == typeof(InMemoryDbContext))
+			if (typeof(TContext) == typeof(InMemoryDbContext))
 			{
 				services.AddDbContext<InMemoryDbContext>(options =>
 				{
@@ -34,9 +34,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			}
 
 
-			services.AddScoped<Func<T>>(provider => () => provider.GetRequiredService<T>());
+			services.AddScoped<Func<TContext>>(provider => () => provider.GetRequiredService<TContext>());
 
-			services.AddTimeTrackerBeDd<T>();
+			services.AddTimeTrackerBeDd<TContext>();
 
 			//services.AddScoped<ProjectController>();
 			//services.AddScoped<ShiftController>();
@@ -46,10 +46,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			using (var serviceProvider = services.BuildServiceProvider())
 			using (var scope = serviceProvider.CreateScope())
 			{
-				var dbContext = scope.ServiceProvider.GetRequiredService<T>();
+				var dbContext = scope.ServiceProvider.GetRequiredService<TContext>();
 				try
 				{
-					if (typeof(T) == typeof(InMemoryDbContext))
+					if (typeof(TContext) == typeof(InMemoryDbContext))
 						dbContext.Database.EnsureCreated();
 					else
 						dbContext.Database.Migrate();

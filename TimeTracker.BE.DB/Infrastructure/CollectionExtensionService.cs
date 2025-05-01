@@ -7,16 +7,16 @@ namespace TimeTracker.BE.DB.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		public static IServiceCollection AddTimeTrackerBeDd<T>(this IServiceCollection services) where T : MainDatacontext
+		public static IServiceCollection AddTimeTrackerBeDd<TContext>(this IServiceCollection services) where TContext : MainDatacontext
 		{
-			services.AddScoped<RecordRepository<T>>();
-			services.AddScoped<ShiftRepository<T>>();
-			services.AddScoped<TypeShiftRepository<T>>();
+			services.AddScoped<RecordRepository<TContext>>();
+			services.AddScoped<ShiftRepository<TContext>>();
+			services.AddScoped<TypeShiftRepository<TContext>>();
 
-			services.AddScoped<ActivityRepository<T>>();
-			services.AddScoped<ProjectRepository<T>>();
-			services.AddScoped<SubModuleRepository<T>>();
-			services.AddScoped<ReportRepository<T>>();
+			services.AddScoped<ActivityRepository<TContext>>();
+			services.AddScoped<ProjectRepository<TContext>>();
+			services.AddScoped<SubModuleRepository<TContext>>();
+			services.AddScoped<ReportRepository<TContext>>();
 
 
 			return services;

@@ -10,7 +10,7 @@ using TimeTracker.BE.Web.Shared.Services;
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
 	[ApiExplorerSettings(GroupName = "v1")]
-	public class ProjectController : aControllerBase
+	public class ProjectController : aControllerBase 
 	{
 		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
 		protected readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
