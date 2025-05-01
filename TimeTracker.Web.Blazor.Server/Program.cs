@@ -6,9 +6,6 @@ using TimeTracker.Web.Blazor.Server.Infrastructure;
 using TimeTracker.FE.Web.Components.Infrastructure;
 using TimeTracker.BE.Web.BusinessLogic.Infrastructure;
 using TimeTracker.BE.DB.DataAccess;
-using Microsoft.AspNetCore.Mvc;
-using TimeTracker.BE.Web.BusinessLogic.Controllers.MSSQL;
-using TimeTracker.BE.Web.BusinessLogic.Controllers.InMemory;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,26 +13,20 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents();
 
 
+builder.Services.AddControllers();
 builder.Services.AddTimeTrackerWebBlazorServer();
 builder.Services.AddTimeTrackerFeComponents();
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
-	builder.Services
-		.AddControllers()
-		.AddApplicationPart(typeof(ProjectMSSQLController).Assembly); // pouze assembly s konkrétním controllerem
-
 	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>();
 }
 else
 {
-	builder.Services
-	.AddControllers();
-	
 	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
 }
 
-builder.Services.AddHostedService<ApplicationLifecycleLogger>();
+	builder.Services.AddHostedService<ApplicationLifecycleLogger>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
