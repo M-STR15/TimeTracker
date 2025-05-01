@@ -15,15 +15,15 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 		this IServiceCollection services) // Parametr pro volbu mezi InMemory a MS SQL Server
 			where TContext : MainDatacontext
 		{
-			if (typeof(TContext) == typeof(InMemoryDbContext))
-			{
-				services.AddDbContext<InMemoryDbContext>(options =>
-				{
-					options.UseInMemoryDatabase("TestDb");
-				}, ServiceLifetime.Scoped);
-			}
-			else
-			{
+			//if (typeof(TContext) == typeof(InMemoryDbContext))
+			//{
+			//	services.AddDbContext<InMemoryDbContext>(options =>
+			//	{
+			//		options.UseInMemoryDatabase("TestDb");
+			//	}, ServiceLifetime.Scoped);
+			//}
+			//else
+			//{
 				services.AddDbContext<MsSqlDbContext>(options =>
 				{
 					options.UseSqlServer(_connectionString);
@@ -31,7 +31,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 					//.LogTo(Console.WriteLine);
 
 				}, ServiceLifetime.Scoped);
-			}
+			//}
 
 
 			services.AddScoped<Func<TContext>>(provider => () => provider.GetRequiredService<TContext>());
@@ -49,9 +49,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 				var dbContext = scope.ServiceProvider.GetRequiredService<TContext>();
 				try
 				{
-					if (typeof(TContext) == typeof(InMemoryDbContext))
-						dbContext.Database.EnsureCreated();
-					else
+					//if (typeof(TContext) == typeof(InMemoryDbContext))
+					//	dbContext.Database.EnsureCreated();
+					//else
 						dbContext.Database.Migrate();
 				}
 				catch (Exception ex)

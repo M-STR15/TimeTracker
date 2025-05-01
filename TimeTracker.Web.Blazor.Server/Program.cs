@@ -19,14 +19,14 @@ builder.Services.AddTimeTrackerFeComponents();
 
 if (builder.Environment.IsEnvironment("Testing"))
 {
-	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<InMemoryDbContext>();
+	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
 }
 else
 {
 	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
 }
 
-	builder.Services.AddHostedService<ApplicationLifecycleLogger>();
+builder.Services.AddHostedService<ApplicationLifecycleLogger>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>

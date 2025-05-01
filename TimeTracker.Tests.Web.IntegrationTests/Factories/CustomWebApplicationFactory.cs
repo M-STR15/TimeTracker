@@ -29,7 +29,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests.Factories
 
 				// Inicializace databáze pro testy
 				using var scope = services.BuildServiceProvider().CreateScope();
-				var db = scope.ServiceProvider.GetRequiredService<InMemoryDbContext>();
+				var db = scope.ServiceProvider.GetRequiredService<MsSqlDbContext>();
 				db.Database.EnsureCreated(); // Ujistěte se, že databáze je vytvořena
 			});
 		}
