@@ -7,7 +7,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 	/// <summary>
 	/// Testovací třída pro testování metod třídy RecordRepository.
 	/// </summary>
-	public class RecordRepositoryTest : aRepositoryBaseTest
+	public class RecordRepositoryTest : aRepositoryBaseTest<InMemoryDbContext>
 	{
 		private readonly RecordRepository<InMemoryDbContext> _recordRepository;
 
@@ -17,7 +17,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 		/// </summary>
 		public RecordRepositoryTest() : base()
 		{
-			_recordRepository = new RecordRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
+			_recordRepository = new RecordRepository<InMemoryDbContext>(() => (InMemoryDbContext)Activator.CreateInstance(typeof(InMemoryDbContext), _dbOptions)!);
 		}
 
 		/// <summary>

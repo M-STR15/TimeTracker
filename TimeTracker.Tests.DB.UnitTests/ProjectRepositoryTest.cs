@@ -1,10 +1,11 @@
+using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
 using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.DB.UnitTests.Models;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public class ProjectRepositoryTest : aRepositoryBaseTest
+	public class ProjectRepositoryTest : aRepositoryBaseTest<InMemoryDbContext>
 	{
 		public ProjectRepositoryTest() : base()
 		{

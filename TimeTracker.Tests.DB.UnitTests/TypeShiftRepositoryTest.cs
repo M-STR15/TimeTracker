@@ -5,12 +5,12 @@ using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public class TypeShiftRepositoryTest : aRepositoryBaseTest
+	public class TypeShiftRepositoryTest : aRepositoryBaseTest<InMemoryDbContext> 
 	{
 		private readonly TypeShiftRepository<InMemoryDbContext> _typeShiftRepository;
 
 		public TypeShiftRepositoryTest() : base()
-		{
+		{		
 			_typeShiftRepository = new TypeShiftRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 

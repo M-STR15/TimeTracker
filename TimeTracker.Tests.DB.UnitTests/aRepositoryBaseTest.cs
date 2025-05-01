@@ -7,27 +7,28 @@ using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public abstract class aRepositoryBaseTest
+	public abstract class aRepositoryBaseTest<TContext> where TContext : MainDatacontext
 	{
-		protected readonly Mock<IDbContextFactory<InMemoryDbContext>> _contextFactoryMock;
-		protected readonly DbContextOptions<InMemoryDbContext> _dbOptions;
+		protected readonly Mock<IDbContextFactory<TContext>> _contextFactoryMock;
+		protected readonly DbContextOptions<TContext> _dbOptions;
 
-		protected readonly ProjectRepository<InMemoryDbContext> _projectRepository;
-		protected readonly ActivityRepository<InMemoryDbContext> _activityRepository;
+		protected readonly ProjectRepository<TContext> _projectRepository;
+		protected readonly ActivityRepository<TContext> _activityRepository;
+
 		public aRepositoryBaseTest()
 		{
-			_contextFactoryMock = new Mock<IDbContextFactory<InMemoryDbContext>>();
-			_dbOptions = new DbContextOptionsBuilder<InMemoryDbContext>()
-							.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unikátní DB pro každý test
+			_contextFactoryMock = new Mock<IDbContextFactory<TContext>>();
+			_dbOptions = new DbContextOptionsBuilder<TContext>()
+							.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique DB for each test
 							.Options;
 
-			_projectRepository = new ProjectRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
-			_activityRepository = new ActivityRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
+			_projectRepository = new ProjectRepository<TContext>(() => (TContext)Activator.CreateInstance(typeof(TContext), _dbOptions)!);
+			_activityRepository = new ActivityRepository<TContext>(() => (TContext)Activator.CreateInstance(typeof(TContext), _dbOptions)!);
 		}
 
-		protected async Task<InMemoryDbContext> createContextAsync()
+		protected async Task<TContext> createContextAsync()
 		{
-			var context = new InMemoryDbContext(_dbOptions);
+			var context = (TContext)Activator.CreateInstance(typeof(TContext), _dbOptions)!;
 			await context.Database.EnsureCreatedAsync();
 			_contextFactoryMock.Setup(x => x.CreateDbContextAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(context);
@@ -35,14 +36,15 @@ namespace TimeTracker.Tests.DB.UnitTests
 		}
 
 		/// <summary>
-		/// Před každým testem databázi explicitně odstraňte a znovu vytvořte
+		/// Explicitly delete and recreate the database before each test.
 		/// </summary>
 		/// <param name="context"></param>
-		protected async Task resetDBAsync(InMemoryDbContext context)
+		protected async Task resetDBAsync(TContext context)
 		{
 			await context.Database.EnsureDeletedAsync();
 			await context.Database.EnsureCreatedAsync();
 		}
+
 		protected void compareAllProperties<T>(T expectedObj, T actualObj, HashSet<string>? ignoredProperties = null)
 		{
 			foreach (var prop in typeof(T).GetProperties())
@@ -58,7 +60,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 				}
 				catch (Exception ex)
 				{
-					Assert.True(false, $"Test měl uspět, ale došlo k výjimce: {ex.Message}" + "; Název property:" + prop.Name);
+					Assert.True(false, $"Test failed due to exception: {ex.Message}" + "; Property name:" + prop.Name);
 				}
 			}
 		}

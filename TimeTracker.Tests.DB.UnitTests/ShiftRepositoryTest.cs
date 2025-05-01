@@ -4,7 +4,7 @@ using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public class ShiftRepositoryTest : aRepositoryBaseTest
+	public class ShiftRepositoryTest : aRepositoryBaseTest<InMemoryDbContext>
 	{
 		private readonly ShiftRepository<InMemoryDbContext> _shiftRepository;
 

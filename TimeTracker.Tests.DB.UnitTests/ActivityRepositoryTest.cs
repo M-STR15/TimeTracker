@@ -1,8 +1,9 @@
 using TimeTracker.Basic.Enums;
+using TimeTracker.BE.DB.DataAccess;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public class ActivityRepositoryTest : aRepositoryBaseTest
+	public class ActivityRepositoryTest : aRepositoryBaseTest<InMemoryDbContext>
 	{
 		public ActivityRepositoryTest() : base()
 		{ }

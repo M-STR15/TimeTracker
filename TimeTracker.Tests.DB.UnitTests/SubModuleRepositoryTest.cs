@@ -5,7 +5,7 @@ using TimeTracker.BE.DB.Repositories;
 
 namespace TimeTracker.Tests.DB.UnitTests
 {
-	public class SubModuleRepositoryTest : aRepositoryBaseTest
+	public class SubModuleRepositoryTest: aRepositoryBaseTest<InMemoryDbContext> 
 	{
 		private readonly SubModuleRepository<InMemoryDbContext> _subModuleRepository;
 		public SubModuleRepositoryTest() : base()
