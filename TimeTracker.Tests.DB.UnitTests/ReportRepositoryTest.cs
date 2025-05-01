@@ -7,13 +7,13 @@ namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class ReportRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly ReportRepository<MsSqlDbContext> _reportRepository;
-		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
+		private readonly ReportRepository<InMemoryDbContext> _reportRepository;
+		private readonly RecordRepository<InMemoryDbContext> _recordRepository;
 
 		public ReportRepositoryTest() : base()
 		{
-			_reportRepository = new ReportRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
-			_recordRepository = new RecordRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_reportRepository = new ReportRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
+			_recordRepository = new RecordRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
 		[Fact]

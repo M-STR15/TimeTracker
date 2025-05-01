@@ -9,25 +9,25 @@ namespace TimeTracker.Tests.DB.UnitTests
 {
 	public abstract class aRepositoryBaseTest
 	{
-		protected readonly Mock<IDbContextFactory<MsSqlDbContext>> _contextFactoryMock;
-		protected readonly DbContextOptions<MsSqlDbContext> _dbOptions;
+		protected readonly Mock<IDbContextFactory<InMemoryDbContext>> _contextFactoryMock;
+		protected readonly DbContextOptions<InMemoryDbContext> _dbOptions;
 
-		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
-		protected readonly ActivityRepository<MsSqlDbContext> _activityRepository;
+		protected readonly ProjectRepository<InMemoryDbContext> _projectRepository;
+		protected readonly ActivityRepository<InMemoryDbContext> _activityRepository;
 		public aRepositoryBaseTest()
 		{
-			_contextFactoryMock = new Mock<IDbContextFactory<MsSqlDbContext>>();
-			_dbOptions = new DbContextOptionsBuilder<MsSqlDbContext>()
+			_contextFactoryMock = new Mock<IDbContextFactory<InMemoryDbContext>>();
+			_dbOptions = new DbContextOptionsBuilder<InMemoryDbContext>()
 							.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unikátní DB pro každý test
 							.Options;
 
-			_projectRepository = new ProjectRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
-			_activityRepository = new ActivityRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_projectRepository = new ProjectRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
+			_activityRepository = new ActivityRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
-		protected async Task<MsSqlDbContext> createContextAsync()
+		protected async Task<InMemoryDbContext> createContextAsync()
 		{
-			var context = new MsSqlDbContext(_dbOptions);
+			var context = new InMemoryDbContext(_dbOptions);
 			await context.Database.EnsureCreatedAsync();
 			_contextFactoryMock.Setup(x => x.CreateDbContextAsync(It.IsAny<CancellationToken>()))
 				.ReturnsAsync(context);
@@ -38,7 +38,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 		/// Před každým testem databázi explicitně odstraňte a znovu vytvořte
 		/// </summary>
 		/// <param name="context"></param>
-		protected async Task resetDBAsync(MsSqlDbContext context)
+		protected async Task resetDBAsync(InMemoryDbContext context)
 		{
 			await context.Database.EnsureDeletedAsync();
 			await context.Database.EnsureCreatedAsync();

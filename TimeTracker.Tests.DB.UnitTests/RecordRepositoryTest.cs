@@ -9,7 +9,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 	/// </summary>
 	public class RecordRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly RecordRepository<MsSqlDbContext> _recordRepository;
+		private readonly RecordRepository<InMemoryDbContext> _recordRepository;
 
 		/// <summary>
 		/// Konstruktor třídy RecordRepositoryTest.
@@ -17,7 +17,7 @@ namespace TimeTracker.Tests.DB.UnitTests
 		/// </summary>
 		public RecordRepositoryTest() : base()
 		{
-			_recordRepository = new RecordRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_recordRepository = new RecordRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
 		/// <summary>

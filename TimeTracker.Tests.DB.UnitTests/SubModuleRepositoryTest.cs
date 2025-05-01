@@ -7,10 +7,10 @@ namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class SubModuleRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
+		private readonly SubModuleRepository<InMemoryDbContext> _subModuleRepository;
 		public SubModuleRepositoryTest() : base()
 		{
-			_subModuleRepository = new SubModuleRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_subModuleRepository = new SubModuleRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
 		/// Testuje, zda metoda GetAllAsync správnì nastaví a získá podmoduly.

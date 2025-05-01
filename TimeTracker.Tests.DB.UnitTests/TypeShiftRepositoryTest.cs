@@ -7,11 +7,11 @@ namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class TypeShiftRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly TypeShiftRepository<MsSqlDbContext> _typeShiftRepository;
+		private readonly TypeShiftRepository<InMemoryDbContext> _typeShiftRepository;
 
 		public TypeShiftRepositoryTest() : base()
 		{
-			_typeShiftRepository = new TypeShiftRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_typeShiftRepository = new TypeShiftRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
 		[Fact]

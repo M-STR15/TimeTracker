@@ -6,11 +6,11 @@ namespace TimeTracker.Tests.DB.UnitTests
 {
 	public class ShiftRepositoryTest : aRepositoryBaseTest
 	{
-		private readonly ShiftRepository<MsSqlDbContext> _shiftRepository;
+		private readonly ShiftRepository<InMemoryDbContext> _shiftRepository;
 
 		public ShiftRepositoryTest() : base()
 		{
-			_shiftRepository = new ShiftRepository<MsSqlDbContext>(() => new MsSqlDbContext(_dbOptions));
+			_shiftRepository = new ShiftRepository<InMemoryDbContext>(() => new InMemoryDbContext(_dbOptions));
 		}
 
 		[Fact]
