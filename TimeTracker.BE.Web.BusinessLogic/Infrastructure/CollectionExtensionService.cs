@@ -9,7 +9,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		private const string _connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;";
+		private const string _connectionString = @"Server=DESKTOP-JS0N1LD\SQLEXPRESS;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB";
 
 		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<T>(
 		this IServiceCollection services) // Parametr pro volbu mezi InMemory a MS SQL Server
@@ -26,9 +26,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 			{
 				services.AddDbContext<MsSqlDbContext>(options =>
 				{
-					options.UseSqlServer(_connectionString)
-					   .EnableSensitiveDataLogging()
-					   .LogTo(Console.WriteLine);
+					options.UseSqlServer(_connectionString);
+					//.EnableSensitiveDataLogging()
+					//.LogTo(Console.WriteLine);
 
 				}, ServiceLifetime.Scoped);
 			}
