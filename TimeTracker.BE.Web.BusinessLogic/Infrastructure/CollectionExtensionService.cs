@@ -12,7 +12,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 		private const string _connectionString = "Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;";
 
 		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<T>(
-		this IServiceCollection services) // Parametr pro volbu mezi InMemory a SQL Server
+		this IServiceCollection services) // Parametr pro volbu mezi InMemory a MS SQL Server
 			where T : MainDatacontext
 		{
 			if (typeof(T) == typeof(InMemoryDbContext))
