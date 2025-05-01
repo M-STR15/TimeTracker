@@ -9,11 +9,10 @@ using TimeTracker.BE.Web.Shared.Services;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
-	[ApiExplorerSettings(GroupName = "v1")]
-	public class ProjectController : aControllerBase 
+	public abstract class ProjectController<TContext> : aControllerBase where TContext : MainDatacontext
 	{
-		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
-		protected readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
+		protected readonly ProjectRepository<TContext> _projectRepository;
+		protected readonly SubModuleRepository<TContext> _subModuleRepository;
 
 		/// <summary>
 		/// Konstruktor kontroleru pro práci s projekty a podmoduly.
@@ -22,7 +21,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="subModuleRepository">Repozitář pro práci s podmoduly.</param>
 		/// <param name="mapper">Mapper pro mapování objektů.</param>
 		/// <param name="eventLogService">Služba pro logování událostí.</param>
-		public ProjectController(ProjectRepository<MsSqlDbContext> projectRepository, SubModuleRepository<MsSqlDbContext> subModuleRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
+		public ProjectController(ProjectRepository<TContext> projectRepository, SubModuleRepository<TContext> subModuleRepository, IMapper mapper, IEventLogService eventLogService) : base(mapper, eventLogService)
 		{
 			_projectRepository = projectRepository;
 			_subModuleRepository = subModuleRepository;
