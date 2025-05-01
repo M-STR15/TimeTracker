@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net.Http.Json;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.Tests.Web.IntegrationTests.Factories;
@@ -87,6 +87,10 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				var createdProject = await response.Content.ReadFromJsonAsync<ProjectBaseDto>();
 				Assert.NotNull(createdProject);
 				Assert.Equal(newProject.Name, createdProject.Name);
+
+				// Clearning
+				var delUrlApi = $"/api/v1/project/{createdProject.Id}";
+				_ = await _client.DeleteAsync(delUrlApi);
 			}
 			catch (Exception ex)
 			{
@@ -127,6 +131,10 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				Assert.NotNull(resultProject);
 				Assert.Equal(updatedProject.Name, resultProject.Name);
 				Assert.Equal(updatedProject.Description, "Updated Description");
+
+				// Clearning
+				var delUrlApi = $"/api/v1/project/{updatedProject.Id}";
+				_ = await _client.DeleteAsync(delUrlApi);
 			}
 			catch (Exception ex)
 			{
