@@ -10,7 +10,7 @@ using TimeTracker.BE.DB.DataAccess;
 
 namespace TimeTracker.BE.DB.Migrations.MSSQL
 {
-    [DbContext(typeof(InMemoryDbContext))]
+    [DbContext(typeof(MsSqlDbContext))]
     partial class MsSqlDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Activities", "dbo", t =>
+                    b.ToTable("Activities", "Record", t =>
                         {
                             t.HasComment("Primární klíč aktivity.");
                         });
@@ -91,7 +91,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Project", "dbo", t =>
+                    b.ToTable("Project", "Project", t =>
                         {
                             t.HasComment("Tabulka projektů.");
                         });
@@ -155,7 +155,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
                     b.HasIndex("TypeShiftId");
 
-                    b.ToTable("Record_activities", "dbo");
+                    b.ToTable("Record_activities", "Record");
                 });
 
             modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Shift", b =>
@@ -192,7 +192,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
                     b.HasIndex("TypeShiftId");
 
-                    b.ToTable("Shifts", "dbo", t =>
+                    b.ToTable("Shifts", "Shift", t =>
                         {
                             t.HasComment("Tabulka slouží k naplánování směny.");
                         });
@@ -228,7 +228,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
                     b.HasIndex("ProjectId", "Name")
                         .IsUnique();
 
-                    b.ToTable("SubModule", "dbo", t =>
+                    b.ToTable("SubModule", "Project", t =>
                         {
                             t.HasComment("Tabulka podmodulů.");
                         });
@@ -268,7 +268,7 @@ namespace TimeTracker.BE.DB.Migrations.MSSQL
 
                     b.HasIndex("TypeShiftId");
 
-                    b.ToTable("TypeShifts", "dbo", t =>
+                    b.ToTable("TypeShifts", "Shift", t =>
                         {
                             t.HasComment("Tabulka všech možných směn.");
                         });
