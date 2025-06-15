@@ -8,13 +8,19 @@
 main {
     flex: 1;
     overflow: auto;
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .sidebar {
     background-image: linear-gradient(180deg, #130f42 0%, #701686 70%);
+    position: sticky;
+    z-index: 1;
+}
+
+.body-content {
+    min-height: 100%;
 }
 
 .top-row {
@@ -36,7 +42,7 @@ main {
         text-overflow: ellipsis;
     }
 
-@media (max-width: 640.98px) {
+@media (max-width: 640px) {
     .top-row:not(.auth) {
         display: none;
     }
@@ -48,18 +54,20 @@ main {
     .top-row a, .top-row .btn-link {
         margin-left: 0;
     }
+
+    .sidebar {
+        /*height: 100vh;*/
+    }
+
 }
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
     .page {
         flex-direction: row;
     }
 
     .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+        /*height: auto;*/
     }
 
     .top-row {
