@@ -7,15 +7,18 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 	public abstract class BaseSaveViewModal : BaseViewModal
 	{
 		[Inject]
-		protected IMapper _mapper { get; set; }
+		protected IMapper? _mapper { get; set; }
 		protected abstract void save_Click();
 
 		protected bool isFormValid = false;
-		protected EditContext editContext;
+		protected EditContext? editContext;
 		protected virtual void onFieldChanged(object? sender, FieldChangedEventArgs e)
 		{
-			isFormValid = editContext.Validate();
-			StateHasChanged(); // přepočítá stav komponenty
+			if (editContext != null)
+			{
+				isFormValid = editContext.Validate();
+				StateHasChanged(); // přepočítá stav komponenty
+			}
 		}
 
 		protected virtual async Task closeModalAsync()
@@ -24,7 +27,7 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 			await OnModalClosed.InvokeAsync(null);
 		}
 
-		protected override async Task OnParametersSetAsync()
+		protected override void OnParametersSet()
 		{
 			if (Visible)
 			{
@@ -46,7 +49,7 @@ namespace TimeTracker.Web.Blazor.Server.Modals.Models
 			{
 				_httpClient = _httpClientFactory.CreateClient("TimeTrackerAPI");
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 
 			}

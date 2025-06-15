@@ -36,7 +36,7 @@
         {
             _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
 
         }
@@ -49,7 +49,10 @@
             var urlApi = "/api/v1/projects/submodule";
             if (SubModule.Id == 0)
             {
-                var subModuleMod = _mapper.Map<SubModuleInsertDto>(SubModule);
+                var subModuleMod = _mapper?.Map<SubModuleInsertDto>(SubModule);
+                if (subModuleMod == null)
+                    return;
+
                 await _httpClient.PostAsJsonAsync<SubModuleInsertDto>(urlApi, subModuleMod);
             }
             else

@@ -7,7 +7,7 @@ namespace TimeTracker.Web.Blazor.Server.Models
 	{
 		private const string _formTime = @"hh\:mm\:ss";
 
-		public string ActualTimeStr { get => ActualTime.ToString(_formTime); }
+		public string ActualTimeStr { get => this?.ActualTime.ToString(_formTime) ?? string.Empty; }
 
 		public string WorkTimeStr { get => WorkTime.ToString(_formTime); }
 		public string PauseTimeStr { get => PauseTime.ToString(_formTime); }

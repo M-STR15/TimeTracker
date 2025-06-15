@@ -35,7 +35,7 @@ else
         get => _selectMonthAndYear;
         set
         {
-            if (value != null && _selectMonthAndYear != value)
+            if (_selectMonthAndYear != value)
             {
                 _selectMonthAndYear = value;
                 onSelectMonthAndYearHandlerChange();
@@ -43,11 +43,11 @@ else
         }
     }
 
-    private EventHandler selectMonthAndYearHandler;
+    private EventHandler? selectMonthAndYearHandler;
 
-    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler.Invoke(null, null);
+    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler?.Invoke(null, AssemblyLoadEventArgs.Empty);
 
-    protected async override void OnInitialized()
+    protected override void OnInitialized()
     {
         base.OnInitialized();
         _options = new
@@ -73,20 +73,25 @@ else
         var dateFrom = SelectMonthAndYear;
         var dateTo = dateFrom.AddMonths(1);
 
-        var urlApi = $"/api/v1/reports/activity-over-days/{dateFrom.ToString("yyyy-MM-dd")}/{dateTo.ToString("yyyy-MM-dd")}";
+        string urlApi = $"/api/v1/reports/activity-over-days/{dateFrom.ToString("yyyy-MM-dd")}/{dateTo.ToString("yyyy-MM-dd")}";
+        if (_httpClient == null)
+            return;
+
         var list = await _httpClient.GetFromJsonAsync<IEnumerable<SumInDay>>(urlApi);
 
-        var whOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.WorkHours);
-        var pOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.Pause);
+        if (list != null)
+        {
+            var whOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.WorkHours);
+            var pOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.Pause);
 
-        var whHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.WorkHours);
-        var pHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.Pause);
+            var whHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.WorkHours);
+            var pHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.Pause);
 
-        var whOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.WorkHours);
-        var pOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.Pause);
+            var whOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.WorkHours);
+            var pOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.Pause);
 
-        _dataset = new[]
-                    {
+            _dataset = new[]
+                        {
                          new { Data = whOffice, BackgroundColor = "CornflowerBlue", Type= "bar",Label= "Work hours Office"},
                          new { Data = pOffice, BackgroundColor = "DarkSeaGreen", Type= "bar",Label= "Pause Office"},
 
@@ -97,9 +102,10 @@ else
                          new { Data = pOthers, BackgroundColor = "YellowGreen", Type= "bar",Label= "Pause-Others"}
                          };
 
-        _labels = list.GroupBy(x => x.Date)
-                      .Select(g => g.Key.ToString("dd.MM") + " [" + g.First().WeekDay + "]")
-                      .ToArray();
+            _labels = list.GroupBy(x => x.Date)
+                          .Select(g => g.Key.ToString("dd.MM") + " [" + g.First().WeekDay + "]")
+                          .ToArray();
+        }
 
         StateHasChanged();
     }

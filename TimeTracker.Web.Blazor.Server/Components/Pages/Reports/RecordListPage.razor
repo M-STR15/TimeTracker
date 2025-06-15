@@ -13,8 +13,9 @@
 
 @if (_monthAndYears != null)
 {
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div class="v-gap">
         <div>
+            <label>Month:</label>
             <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
         </div>
         <div>
@@ -59,7 +60,7 @@
         get => _selectMonthAndYear;
         set
         {
-            if (value != null && _selectMonthAndYear != value)
+            if (_selectMonthAndYear != value)
             {
                 _selectMonthAndYear = value;
                 loadData();
@@ -91,7 +92,7 @@
         }
         catch (Exception ex)
         {
-            _eventLogService.LogError(Guid.Parse("18f5f853-7b0d-4525-868f-323b2e74de47"), ex);
+            _eventLogService?.LogError(Guid.Parse("18f5f853-7b0d-4525-868f-323b2e74de47"), ex);
         }
     }
 
@@ -108,7 +109,7 @@
         }
         catch (Exception ex)
         {
-            _eventLogService.LogError(Guid.Parse("3079445b-6d96-431f-82b5-eb0b7e271cf3"), ex);
+            _eventLogService?.LogError(Guid.Parse("3079445b-6d96-431f-82b5-eb0b7e271cf3"), ex);
         }
     }
 
@@ -125,6 +126,10 @@
 
 
             var urlApi = $"/api/v1/reports/record-activiries/{formattedDateStart}/{formattedDateEnd}";
+
+            if (_httpClient == null)
+                return;
+
             var recordActivityDto = await _httpClient.GetFromJsonAsync<List<RecordActivityDetailDto>>(urlApi);
             _recordActivity = _mapper.Map<List<RecordListViewModel>>(recordActivityDto);
 
@@ -132,7 +137,7 @@
         }
         catch (Exception ex)
         {
-            _eventLogService.LogError(Guid.Parse("01bbb693-50bd-4395-9bd5-ff466560a1d2"), ex);
+            _eventLogService?.LogError(Guid.Parse("01bbb693-50bd-4395-9bd5-ff466560a1d2"), ex);
         }
     }
 

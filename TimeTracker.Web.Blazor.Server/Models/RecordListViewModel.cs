@@ -7,15 +7,15 @@
 		public DateTime StartDateTime { get; set; }
 		public DateTime? EndDateTime { get; set; }
 		public Guid GuidId { get; set; }
-		public string ShiftDateStr { get; set; }
+		public string ShiftDateStr { get; set; } = string.Empty;
 
-		public string ActivityName { get; set; }
+		public string ActivityName { get; set; } = string.Empty;
 
-		public string ProjectName { get; set; }
+		public string ProjectName { get; set; } = string.Empty;
 
-		public string SubModuleName { get; set; }
+		public string SubModuleName { get; set; } = string.Empty;
 
-		public string TypeShiftName { get; set; }
+		public string TypeShiftName { get; set; } = string.Empty;
 
 		public string Time
 		{

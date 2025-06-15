@@ -1,0 +1,27 @@
+﻿table {
+	border-collapse: collapse;
+	width: auto;
+}
+
+td, th {
+	border: 1px solid black;
+	padding: 8px;
+	text-align: center;
+}
+
+.col-1 {
+	width: 30%;
+}
+
+.col-2 {
+	width: 40%;
+}
+
+.col-3 {
+	width: 30%;
+}
+
+table {
+	table-layout: fixed;
+	width: 450px;
+}

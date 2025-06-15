@@ -33,7 +33,7 @@ else
         get => _selectMonthAndYear;
         set
         {
-            if (value != null && _selectMonthAndYear != value)
+            if (_selectMonthAndYear != value)
             {
                 _selectMonthAndYear = value;
                 onSelectMonthAndYearHandlerChange();
@@ -42,11 +42,11 @@ else
     }
 
     private string formatMonthAndYear(DateTime item) => item.ToString("MM.yyyy");
-    private EventHandler selectMonthAndYearHandler;
+    private EventHandler? selectMonthAndYearHandler;
 
-    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler.Invoke(null, null);
+    private void onSelectMonthAndYearHandlerChange() => selectMonthAndYearHandler?.Invoke(null, EventArgs.Empty);
 
-    protected async override void OnInitialized()
+    protected override void OnInitialized()
     {
         base.OnInitialized();
         _options = new
@@ -75,24 +75,28 @@ else
 
     private async Task inicializationChartAsync()
     {
-        if (SelectMonthAndYear == null)
-            return;
-
         var month = SelectMonthAndYear.Month;
         var year = SelectMonthAndYear.Year;
         var urlApi = $"/api/v1/reports/workplace-hours/{year}/{month}";
+
+        if (_httpClient == null)
+            return;
+
         var workplaceHours = await _httpClient.GetFromJsonAsync<WorkplaceHours>(urlApi);
 
-        var labels = workplaceHours.OfficeWorkHourslist.Select(x => x.Date.ToString("dd.MM")).ToArray();
+        if (workplaceHours == null)
+            return;
 
-        var officeWHData = workplaceHours.OfficeWorkHourslist.Select(x => x.DateHours).ToArray();
-        var homeOfficeWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.DateHours).ToArray();
+        var labels = workplaceHours?.OfficeWorkHourslist?.Select(x => x.Date.ToString("dd.MM")).ToArray();
 
-        var officeCumWHData = workplaceHours.OfficeWorkHourslist.Select(x => x.CumHours).ToArray();
-        var homeOfficeCumWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.CumHours).ToArray();
+        var officeWHData = workplaceHours?.OfficeWorkHourslist?.Select(x => x.DateHours).ToArray();
+        var homeOfficeWHData = workplaceHours?.HomeOfficeWorkHourslist?.Select(x => x.DateHours).ToArray();
 
-        var officePlanWHData = workplaceHours.PlanWorkHoursList.Select(x => x.CumHours).ToArray();
-        var homeOfficePlanWHData = workplaceHours.HomeOfficeWorkHourslist.Select(x => x.CumHours).ToArray();
+        var officeCumWHData = workplaceHours?.OfficeWorkHourslist?.Select(x => x.CumHours).ToArray();
+        var homeOfficeCumWHData = workplaceHours?.HomeOfficeWorkHourslist?.Select(x => x.CumHours).ToArray();
+
+        var officePlanWHData = workplaceHours?.PlanWorkHoursList?.Select(x => x.CumHours).ToArray();
+        var homeOfficePlanWHData = workplaceHours?.HomeOfficeWorkHourslist?.Select(x => x.CumHours).ToArray();
 
         // var backgroundColor = workplaceHours.OfficeWorkHourslist.Select(x => "blue").ToArray();
         // var backgroundColor2 = workplaceHours.OfficeWorkHourslist.Select(x => "red").ToArray();
