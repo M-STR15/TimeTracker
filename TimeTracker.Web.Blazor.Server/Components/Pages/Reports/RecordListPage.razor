@@ -13,10 +13,14 @@
 
 @if (_monthAndYears != null)
 {
-    <div>
-        <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
-        <MButton Text="Add" OnClick="onOpenAddActvityModal"></MButton>
-        <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)"></MButton>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+            <MCombobox Items="_monthAndYears" @bind-SelectedItem="SelectMonthAndYear" ItemText="formatMonthAndYear" />
+        </div>
+        <div>
+            <MButton Text="Add" OnClick="onOpenAddActvityModal" />
+            <MButton Text="Delete" OnClick="onOpenQueryDeleteActvityModal" IsDisabled="@(_selectedRecordActivity==null)" />
+        </div>
     </div>
     if (_recordActivity == null)
     {
@@ -63,7 +67,7 @@
         }
     }
 
-    private string formatMonthAndYear(DateTime item)=> item.ToString("MM.yyyy");
+    private string formatMonthAndYear(DateTime item) => item.ToString("MM.yyyy");
 
     private void onAfterCloseModalAddActivity_Changed()
     {
