@@ -40,6 +40,7 @@
                     <div class="row">
                         <h6>Description</h6>
                         <MTextArea @bind-Value="@_recordActivityInsertDto.Description" />
+                        <ValidationMessage For="@(() => _recordActivityInsertDto.Description)" />
                     </div>
                     <div class="row">
                         <MButton IsDisabled="@(!editContext.Validate())" OnClick="save_Click">Save</MButton>
