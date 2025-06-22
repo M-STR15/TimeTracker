@@ -80,3 +80,8 @@
 		background-color: mediumpurple;
 		color: white;
 	}
+
+input[readonly] {
+	background-color: #f5f5f5;
+	cursor: not-allowed;
+}

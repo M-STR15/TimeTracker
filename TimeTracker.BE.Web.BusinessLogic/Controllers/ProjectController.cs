@@ -10,7 +10,7 @@ using TimeTracker.BE.Web.Shared.Services;
 namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 {
 	[ApiExplorerSettings(GroupName = "v1")]
-	public class ProjectController : aControllerBase 
+	public class ProjectController : aControllerBase
 	{
 		protected readonly ProjectRepository<MsSqlDbContext> _projectRepository;
 		protected readonly SubModuleRepository<MsSqlDbContext> _subModuleRepository;
@@ -93,15 +93,22 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		{
 			try
 			{
-				var subModules = await _subModuleRepository.GetForTheProjectAsync(projectId);
-				if (subModules != null)
+				if (projectId > 0)
 				{
-					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
-					return subModulesDto != null ? Ok(subModulesDto) : Problem();
+					var subModules = await _subModuleRepository.GetForTheProjectAsync(projectId);
+					if (subModules != null)
+					{
+						var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
+						return subModulesDto != null ? Ok(subModulesDto) : Problem();
+					}
+					else
+					{
+						return NotFound();
+					}
 				}
 				else
 				{
-					return NotFound();
+					return BadRequest("Invalid projectId");
 				}
 			}
 			catch (Exception ex)

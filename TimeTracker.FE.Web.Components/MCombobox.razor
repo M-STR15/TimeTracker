@@ -15,8 +15,14 @@
                @oninput="OnInput"
                @onblur="onBlur"
                placeholder="Vyberte možnost..."
-               readonly />
-        <button type="button" class="dropdown-button" @onclick="ToggleDropdown">▼</button>
+               disabled="@(IsEditable ? null : true)"
+               readonly="@(IsEditable ? null : true)" />
+        <button type="button" class="dropdown-button"
+                @onclick="ToggleDropdown"
+                disabled="@(IsEditable ? null : true)"
+                readonly="@(IsEditable ? null : true)">
+            ▼
+        </button>
     </div>
     @if (IsDropdownVisible && Items != null && Items.Any())
     {
@@ -38,8 +44,21 @@
     private bool IsDropdownVisible { get; set; } = false;
     private string SearchText { get; set; } = string.Empty;
     private TItem _selectedItem;
-    [Inject] private FocusJsInterop _focusJsInterop { get; set; }
+    [Inject]
+    private FocusJsInterop _focusJsInterop { get; set; }
 
+    private bool _isEditable = true;
+
+    [Parameter]
+    public bool IsEditable
+    {
+        get => _isEditable;
+        set
+        {
+            _isEditable = value;
+            StateHasChanged();
+        }
+    }
 
     private async Task RemoveFocus()
     {

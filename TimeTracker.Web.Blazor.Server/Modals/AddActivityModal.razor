@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.Net
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Basic.Enums
 @using TimeTracker.FE.Web.Components
@@ -32,11 +33,15 @@
                         <MCombobox Items="_projects" ItemText="item => item.Name" OnChange="OnProjectChanged" />
                         <ValidationMessage For="@(() => _recordActivityInsertDto.ProjectId)" />
                     </div>
-                    <div class="row">
-                        <h6>Sub module</h6>
-                        <MCombobox Items="_subModules" ItemText="item => item.Name" OnChange="OnSubModuleChanged" />
-                        <ValidationMessage For="@(() => _recordActivityInsertDto.SubModuleId)" />
-                    </div>
+                    @if (_subModules != null && _subModules.Count > 0)
+                    {
+                        <div class="row">
+                            <h6>Sub module</h6>
+                            <MCombobox Items="_subModules" ItemText="item => item.Name" OnChange="OnSubModuleChanged"
+                            IsEditable=_isEditableSubModule />
+                            <ValidationMessage For="@(() => _recordActivityInsertDto.SubModuleId)" />
+                        </div>
+                    }
                     <div class="row">
                         <h6>Description</h6>
                         <MTextArea @bind-Value="@_recordActivityInsertDto.Description" />
@@ -63,6 +68,8 @@
 
     private RecordActivityInsertDto? _recordActivityInsertDto;
 
+    private bool _isEditableSubModule => _recordActivityInsertDto?.ProjectId != null;
+
     private bool _isFormValid => _recordActivityInsertDto?.TypeShiftId != null;
 
     private void OnTypeShiftChanged(ChangeEventArgs e)
@@ -77,10 +84,53 @@
             _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
     }
 
-    private void OnProjectChanged(ChangeEventArgs e)
+    private async void OnProjectChanged(ChangeEventArgs e)
     {
         if (e.Value is ProjectBaseDto item)
+        {
             _recordActivityInsertDto.ProjectId = item?.Id;
+
+            try
+            {
+
+                var url = $"/api/v1/projects/submodules/{_recordActivityInsertDto.ProjectId}";
+                var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+                var response = await _httpClient.SendAsync(request);
+                _subModules = null;
+                if (response.IsSuccessStatusCode)
+                {
+                    var subModules = await response.Content.ReadFromJsonAsync<List<SubModuleBaseDto>>();
+                    if (subModules != null)
+                        _subModules = subModules;
+                }
+                else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // Např. projekt nemá žádné submoduly — nemusíš logovat chybu
+                    Console.WriteLine("Žádné submoduly nenalezeny (404).");
+                }
+                else
+                {
+                    // Jiná chyba (např. 500), zde si můžeš rozhodnout, co dál
+                    Console.WriteLine($"Chyba volání API: {(int)response.StatusCode} {response.ReasonPhrase}");
+                }
+
+                var aaa = _isEditableSubModule;
+                StateHasChanged();
+                // var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>(url);
+                // if (subModulesReq != null)
+                //     _subModules = subModulesReq;
+            }
+            catch (HttpRequestException ex)
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 
     private void OnSubModuleChanged(ChangeEventArgs e)
@@ -115,10 +165,6 @@
         var projectsReq = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>("/api/v1/projects");
         if (projectsReq != null)
             _projects = projectsReq;
-
-        var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>("/api/v1/projects/submodules");
-        if (subModulesReq != null)
-            _subModules = subModulesReq;
 
         _recordActivityInsertDto = new();
         editContext = new EditContext(_recordActivityInsertDto);
