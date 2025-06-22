@@ -94,7 +94,7 @@
 
     private async void OnInput(ChangeEventArgs e)
     {
-        if (SearchText != e?.Value?.ToString())
+        if (e != null && e.Value != null && SearchText != e?.Value?.ToString())
         {
             SearchText = e.Value.ToString();
             await OnSearchTextChanged.InvokeAsync(SearchText);

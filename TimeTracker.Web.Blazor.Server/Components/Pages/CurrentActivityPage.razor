@@ -79,6 +79,7 @@
 
 <AddActivityModal Title="Change activity"
                   @bind-Visible="_isOpenAddActivityModal"
+                  @key="_isOpenAddActivityModal"
                   OnModalClosed="onAfterCloseModalAddActivity_Changed" />
 @code {
     private bool _isOpenAddActivityModal;

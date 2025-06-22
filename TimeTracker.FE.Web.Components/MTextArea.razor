@@ -1,14 +1,6 @@
 ﻿@using System.Linq.Expressions
 @using Microsoft.AspNetCore.Components.Forms
 @typeparam T
-<style>
-    .custom-textarea {
-        width: 100%;
-        height: 150px;
-        border-radius: 5px;
-        padding: 10px;
-    }
-</style>
 
 <input @bind="@Value" @oninput="HandleInput" class="form-control"></input>
 

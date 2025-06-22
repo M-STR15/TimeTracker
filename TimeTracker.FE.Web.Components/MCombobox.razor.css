@@ -3,10 +3,18 @@
 	width: 100%;
 }
 
+
 	.custom-combobox .form-control {
 		width: 100%;
-		padding: 8px;
+		transition: all 0.2s ease;
 	}
+
+		.custom-combobox .form-control:focus {
+			border-color: #8000ff; /* fialová */
+			box-shadow: 0 0 5px rgba(128, 0, 255, 0.5); /* fialový stín */
+			outline: none;
+			background-color: #f8f0ff; /* volitelně světlé fialové pozadí */
+		}
 
 	.custom-combobox .dropdown-list {
 		position: absolute;
@@ -29,7 +37,8 @@
 	}
 
 		.custom-combobox .dropdown-item:hover {
-			background-color: #f1f1f1;
+			background-color: rebeccapurple;
+			color: white;
 		}
 
 .input-container {

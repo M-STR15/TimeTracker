@@ -6,27 +6,10 @@
 @inherits BaseSaveViewModal
 @inject IHttpClientFactory HttpClientFactory
 
-<style>
-    div .main {
-        display: flex;
-        flex-direction: column;
-        margin: 10px;
-        width: 450px;
-    }
-
-    div .row {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-</style>
-
-
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
         @if (_recordActivityInsertDto != null)
         {
-
             <EditForm Model="@editContext">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
@@ -58,7 +41,9 @@
                         <h6>Description</h6>
                         <MTextArea @bind-Value="@_recordActivityInsertDto.Description" />
                     </div>
-                    <MButton IsDisabled="@(!editContext.Validate())" OnClick="save_Click">Save</MButton>
+                    <div class="row">
+                        <MButton IsDisabled="@(!editContext.Validate())" OnClick="save_Click">Save</MButton>
+                    </div>
                 </div>
             </EditForm>
         }

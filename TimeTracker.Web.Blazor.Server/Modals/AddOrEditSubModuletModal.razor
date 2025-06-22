@@ -10,16 +10,21 @@
     <BodyContent>
         <EditForm EditContext="@editContext">
             <DataAnnotationsValidator />
-
-            <h6>Name</h6>
-            <MTextBox @bind-Value="@SubModule.Name"></MTextBox>
-            <ValidationMessage For="@(() => SubModule.Name)" />
-
-            <h6>Description</h6>
-            <MTextArea @bind-Value="@SubModule.Description" />
-            <ValidationMessage For="@(() => SubModule.Description)" />
-
-            <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
+            <div class="main">
+                <div class="row">
+                    <h6>Name</h6>
+                    <MTextBox @bind-Value="@SubModule.Name" />
+                    <ValidationMessage For="@(() => SubModule.Name)" />
+                </div>
+                <div class="row">
+                    <h6>Description</h6>
+                    <MTextArea @bind-Value="@SubModule.Description" />
+                    <ValidationMessage For="@(() => SubModule.Description)" />
+                </div>
+                <div class="row">
+                    <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
+                </div>
+            </div>
         </EditForm>
     </BodyContent>
 </BaseModal>

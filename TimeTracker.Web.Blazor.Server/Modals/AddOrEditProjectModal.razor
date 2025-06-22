@@ -11,12 +11,16 @@
     <BodyContent>
         <EditForm EditContext="@editContext">
             <DataAnnotationsValidator />
-
-            <h6>Name</h6>
-            <MTextBox @bind-Value="@Project.Name"></MTextBox>
-            <ValidationMessage For="@(() => Project.Name)" />
-
-            <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
+            <div class="main">
+                <div class="row">
+                    <h6>Name</h6>
+                    <MTextBox @bind-Value="@Project.Name" />
+                    <ValidationMessage For="@(() => Project.Name)" />
+                </div>
+                <div class="row">
+                    <MButton Text="Save" IsDisabled="@(!isFormValid)" OnClick="save_Click" />
+                </div>
+            </div>
         </EditForm>
     </BodyContent>
 </BaseModal>
@@ -24,7 +28,7 @@
 @code {
 
     [Parameter, EditorRequired]
-    public ProjectBaseDto Project { get; set; }
+    public ProjectBaseDto? Project { get; set; }
 
 
     protected override void performActionOnOpen()
@@ -41,7 +45,7 @@
 
     protected async override void save_Click()
     {
-        if (_httpClient != null)
+        if (_httpClient != null && Project != null)
         {
             var urlApi = "/api/v1/project";
             if (Project.Id != 0)
