@@ -1,0 +1,17 @@
+﻿@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
+<div id="@ContainerId" style="width: 300px; height: 300px;"></div>
+
+@code {
+    [Parameter] public string Path { get; set; }
+    [Parameter] public string ContainerId { get; set; } = "lottie-container";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !string.IsNullOrEmpty(Path))
+        {
+            await JSRuntime.InvokeVoidAsync("loadLottieAnimation", ContainerId, Path);
+        }
+    }
+}
