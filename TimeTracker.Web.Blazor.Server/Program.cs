@@ -56,6 +56,8 @@ builder.Services.AddHttpClient("TimeTrackerAPI", client =>
 
 var app = builder.Build();
 
+app.UseStatusCodePagesWithRedirects("/Error");
+
 app.UseRouting();
 
 // Configure the HTTP request pipeline.

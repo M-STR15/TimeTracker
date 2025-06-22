@@ -3,6 +3,10 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
+      "library": "bodymovin@5.12.2",
+      "destination": "wwwroot/lib/bodymovin/"
+    },
+    {
       "library": "open-iconic@1.1.1",
       "destination": "wwwroot/lib/open-iconic/"
     },
