@@ -1,0 +1,90 @@
+﻿@using TimeTracker.Web.Blazor.Server.Models
+@using TimeTracker.BE.Web.Shared.Services
+
+<table>
+    <tr>
+        <th colspan="3">Last setting</th>
+    </tr>
+    <tr>
+        <th class="col-1">Date shift</th>
+        <th class="col-2">Activity</th>
+        <th class="col-3">Time</th>
+    </tr>
+    <tr>
+        <td class="col-1">@(_lastRecordActivity.ShiftDateStr)</td>
+        <td class="col-2">@(_lastRecordActivity?.ActivityName ?? "")</td>
+        <td class="col-3">@(_lastRecordActivity?.Time ?? "")</td>
+    </tr>
+    <tr>
+        <th class="col-1">Project</th>
+        <th class="col-2">Submodule</th>
+        <th class="col-3">Act. time</th>
+    </tr>
+    <tr>
+        <td class="col-1">@(_lastRecordActivity?.ProjectName ?? "")</td>
+        <td class="col-2">@(_lastRecordActivity?.SubModuleName ?? "")</td>
+        <td class="col-3">@(_lastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th colspan="3">Total time</th>
+    </tr>
+    <tr>
+        <th class="col-1"></th>
+        <th class="col-2">Today</th>
+        <th class="col-3">In shift</th>
+    </tr>
+    <tr>
+        <th class="col-1">Work</th>
+        <td class="col-2">@_totalTime?.WorkTimeStr</td>
+        <td class="col-3">@_totalTime?.WorkShiftTimeStr</td>
+    </tr>
+    <tr>
+        <th class="col-1">Pause</th>
+        <td class="col-2">@_totalTime?.PauseTimeStr</td>
+        <td class="col-3">@_totalTime?.PauseShiftTimeStr</td>
+    </tr>
+    <tr>
+        <th class="col-1">Total</th>
+        <td class="col-2">@_totalTime?.TotalTimeStr</td>
+        <td class="col-3">@_totalTime?.TotalShiftTimeStr</td>
+    </tr>
+</table>
+
+@code {
+    [Parameter]
+    public TotalTimesViewModel? _totalTime { get; set; }
+    [Parameter]
+    public RecordListViewModel? _lastRecordActivity { get; set; }
+    [Inject]
+    protected IEventLogService? _eventLogService { get; set; }
+    private bool isRunning = true;
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(1)); // každé 1 sekundy
+            if (_totalTime != null)
+            {
+                while (await timer.WaitForNextTickAsync() && isRunning)
+                {
+                    _totalTime.Update();
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _eventLogService?.LogError(Guid.Parse("0971010b-7fc3-4840-9c4b-14287fac3e8c"), ex);
+        }
+    }
+
+
+    public void Dispose()
+    {
+        isRunning = false;
+    }
+}
