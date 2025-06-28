@@ -11,6 +11,7 @@ namespace TimeTracker.FE.Web.Components.Infrastructure
 			services.AddScoped<ToastNotificationService>();
 			services.AddScoped<FocusJsInterop>();
 			services.AddScoped<ChartJsInterop>();
+			services.AddScoped<LottieLoaderInterop>();
 
 			return services;
 		}

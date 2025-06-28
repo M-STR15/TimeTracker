@@ -20,12 +20,21 @@
 	  <ProjectReference Include="..\TimeTracker.Basic.Interfaces\TimeTracker.Basic.Interfaces.csproj" />
 	</ItemGroup>
 
+	<!--<ItemGroup>
+		<Content Include="wwwroot\**" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>-->
+	
 	<ItemGroup>
 		<Content Update="wwwroot\js\focusUtils.js">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Update="wwwroot\js\mchart.js">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Update="wwwroot\js\lottieLoader.js">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+
+		<!--<Content Include="wwwroot\**\*" CopyToOutputDirectory="Always" />-->
 	</ItemGroup>
 </Project>

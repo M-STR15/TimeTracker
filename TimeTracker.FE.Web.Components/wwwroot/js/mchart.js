@@ -1,4 +1,5 @@
 ﻿const chartStore = new WeakMap();
+console.log("✅ mchart.js loaded");
 
 /**
  * @param {HTMLCanvasElement} canvas - DOM prvek z Blazoru (ElementReference)
@@ -11,7 +12,7 @@ export function setup(canvas, config, dotNetRef) {
 
 
     if (!canvas || typeof canvas.getContext !== "function") {
-        console.error("Provided element is not a canvas!");
+        //console.error("Provided element is not a canvas!");
         return;
     }
 

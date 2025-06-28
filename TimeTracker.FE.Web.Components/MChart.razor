@@ -8,10 +8,12 @@
 
 @code {
     private DotNetObjectReference<MChart>? dotNetRef;
-    [Inject] private IJSRuntime JSRuntime { get; set; }
+    // [Inject] 
+    // private IJSRuntime _jsRuntime { get; set; }
 
     private ElementReference canvasRef;
-    [Inject] private ChartJsInterop _chartJsInterop { get; set; }
+    [Inject] 
+    private ChartJsInterop _chartJsInterop { get; set; }
 
     [Parameter, EditorRequired]
     public object? Labels { get; set; }

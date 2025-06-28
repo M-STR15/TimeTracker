@@ -7,8 +7,8 @@
       "destination": "wwwroot/lib/Chart.js/"
     },
     {
-      "library": "bodymovin@5.12.2",
-      "destination": "wwwroot/lib/bodymovin/"
+      "library": "lottie-web@5.13.0",
+      "destination": "wwwroot/lib/lottie-web/"
     }
   ]
 }
