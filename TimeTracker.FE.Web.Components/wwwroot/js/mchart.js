@@ -16,6 +16,11 @@ export function setup(canvas, config, dotNetRef) {
         return;
     }
 
+    //if (!window.Chart) {
+    //    console.log("📦 Importing Chart from CDN...");
+    //    await import('https://cdn.jsdelivr.net/npm/chart.js');
+    //}
+
     const ctx = canvas.getContext("2d");
 
     // Zničit předchozí graf, pokud existuje

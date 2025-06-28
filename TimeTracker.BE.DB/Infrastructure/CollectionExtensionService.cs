@@ -22,7 +22,7 @@ namespace TimeTracker.BE.DB.Infrastructure
 			return services;
 		}
 
-		public static void AddToNinject(this IServiceCollection services, IKernel kernel)
+		public static void ConvertToNinject(this IServiceCollection services, IKernel kernel)
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			if (kernel == null) throw new ArgumentNullException(nameof(kernel));

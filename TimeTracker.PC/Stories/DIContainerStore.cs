@@ -31,7 +31,7 @@ namespace TimeTracker.PC.Stories
 			//var fceDbContext = _container.Get<Func<SqliteDbContext>>();
 			var services = new ServiceCollection();
 			services.AddTimeTrackerBeDd<SqliteDbContext>();
-			services.AddToNinject(_container);
+			services.ConvertToNinject(_container);
 
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
