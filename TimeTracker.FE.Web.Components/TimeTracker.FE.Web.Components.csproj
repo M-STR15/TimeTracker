@@ -34,6 +34,9 @@
 		<Content Update="wwwroot\js\lottieLoader.js">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
+		<Content Update="wwwroot\js\mlog.js">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
 
 		<!--<Content Include="wwwroot\**\*" CopyToOutputDirectory="Always" />-->
 	</ItemGroup>

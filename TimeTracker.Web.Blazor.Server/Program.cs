@@ -18,13 +18,10 @@ builder.Services.AddTimeTrackerWebBlazorServer();
 builder.Services.AddTimeTrackerFeComponents();
 
 if (builder.Environment.IsEnvironment("Testing"))
-{
 	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
-}
 else
-{
 	builder.Services.AddTimeTrackerBeWebSharedBusinessLogic<MsSqlDbContext>();
-}
+
 
 builder.Services.AddHostedService<ApplicationLifecycleLogger>();
 
@@ -47,6 +44,9 @@ builder.Services.AddSwaggerGen(options =>
 		Description = ""
 	});
 });
+
+builder.Services.AddServerSideBlazor()
+	.AddCircuitOptions(options => { options.DetailedErrors = true; });
 
 var apiBaseUrl = builder.Configuration["ProjectUrl"] ?? "https://localhost:5001";
 builder.Services.AddHttpClient("TimeTrackerAPI", client =>

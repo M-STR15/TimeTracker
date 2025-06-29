@@ -1,7 +1,7 @@
 ﻿const chartStore = new WeakMap();
 console.log("✅ mchart.js loaded");
 
-/**
+/**     
  * @param {HTMLCanvasElement} canvas - DOM prvek z Blazoru (ElementReference)
  * @param {object} config - konfigurace grafu
  * @param {DotNetObjectReference<MChart>} dotNetRef - reference na MChart
@@ -9,7 +9,6 @@ console.log("✅ mchart.js loaded");
 export function setup(canvas, config, dotNetRef) {
     console.log("canvas =", canvas);
     console.log("typeof canvas.getContext =", typeof canvas.getContext);
-
 
     if (!canvas || typeof canvas.getContext !== "function") {
         //console.error("Provided element is not a canvas!");

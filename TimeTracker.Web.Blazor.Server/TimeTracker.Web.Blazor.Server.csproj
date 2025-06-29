@@ -43,6 +43,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		<None Include="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
 		<None Include="compilerconfig.json" />
 	</ItemGroup>
 
@@ -65,5 +66,9 @@
 		<ProjectReference Include="..\TimeTracker.BE.Web.BusinessLogic\TimeTracker.BE.Web.BusinessLogic.csproj" />
 		<ProjectReference Include="..\TimeTracker.BE.Web.Shared\TimeTracker.BE.Web.Shared.csproj" />
 		<ProjectReference Include="..\TimeTracker.FE.Web.Components\TimeTracker.FE.Web.Components.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EditorConfigFiles Remove="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
 	</ItemGroup>
 </Project>

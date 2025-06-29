@@ -22,6 +22,7 @@ namespace TimeTracker.FE.Web.Components.Interops
 			await module.InvokeVoidAsync("setup", canvasRef, config, dotNetRef);
 		}	
 
+
 		public async ValueTask DisposeAsync()
 		{
 			if (_moduleTask.IsValueCreated)
