@@ -48,8 +48,8 @@
             {
                 var lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
                 var urlApiTotalTime = "/api/v1/reports/total-times";
-                var totalTime = await _httpClient.GetFromJsonAsync<TotalTimesDto>(urlApiTotalTime);
-                _totalTime = _mapper.Map<TotalTimesViewModel>(totalTime);
+                var totalTimeDto = await _httpClient.GetFromJsonAsync<TotalTimesDto>(urlApiTotalTime);
+                _totalTime = _mapper.Map<TotalTimesViewModel>(totalTimeDto);
                 _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
             }
             await base.OnInitializedAsync();

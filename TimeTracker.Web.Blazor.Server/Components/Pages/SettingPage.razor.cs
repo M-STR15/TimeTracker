@@ -51,16 +51,15 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			_subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
 
 			await loadProjectListAsync();
-
 			await base.OnInitializedAsync();
 		}
 
 		private async Task processingDeleteProjectResult(bool confirmed)
 		{
-			if (confirmed && _selectedProject != null)
+			if (confirmed && _selectedProject != null && _httpClient != null)
 			{
 				var urlApi = $"/api/v1/project/{_selectedProject.Id}";
-				await _httpClient.DeleteAsync(urlApi);
+				_ = await _httpClient.DeleteAsync(urlApi);
 				_selectedProject = null;
 				await loadProjectListAsync();
 			}
@@ -68,7 +67,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private async Task processingDeleteSubModuleResult(bool confirmed)
 		{
-			if (confirmed && _selectedSubModule != null)
+			if (confirmed && _selectedSubModule != null && _httpClient != null)
 			{
 				var urlApi = $"/api/v1/projects/submodule/{_selectedSubModule.Id}";
 				await _httpClient.DeleteAsync(urlApi);
@@ -79,12 +78,15 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 		private async Task loadProjectListAsync()
 		{
-			var urlApi = $"/api/v1/projects";
-			var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>(urlApi);
-			if (projects != null)
-				_projects = projects;
+			if (_httpClient != null)
+			{
+				var urlApi = $"/api/v1/projects";
+				var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>(urlApi);
+				if (projects != null)
+					_projects = projects;
 
-			base.StateHasChanged();
+				base.StateHasChanged();
+			}
 		}
 
 		private async Task loadSubModuleListAsync()
