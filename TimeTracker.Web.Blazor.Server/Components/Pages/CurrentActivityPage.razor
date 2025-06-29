@@ -42,15 +42,42 @@
     {
         try
         {
-            var urlApi = "/api/v1/last-record-activity";
-
             if (_httpClient != null)
             {
-                var lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApi);
+                var urlApiLastRecordActivity = "/api/v1/last-record-activity";
                 var urlApiTotalTime = "/api/v1/reports/total-times";
-                var totalTimeDto = await _httpClient.GetFromJsonAsync<TotalTimesDto>(urlApiTotalTime);
-                _totalTime = _mapper.Map<TotalTimesViewModel>(totalTimeDto);
-                _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
+                // var lastRecordActivity = await _httpClient.GetFromJsonAsync<RecordActivityDetailDto>(urlApiLastRecordActivity);
+                // var totalTimeDto = await _httpClient.GetFromJsonAsync<TotalTimesDto>(urlApiTotalTime);
+
+                var responsevLastRecordActivity = await _httpClient.GetAsync(urlApiLastRecordActivity);
+                var responsevApiTotalTime = await _httpClient.GetAsync(urlApiTotalTime);
+
+                if (responsevLastRecordActivity.IsSuccessStatusCode && responsevApiTotalTime.IsSuccessStatusCode)
+                {
+                    // Status 200 OK
+                    var recordActivityDetailDto = await responsevLastRecordActivity.Content.ReadFromJsonAsync<RecordActivityDetailDto>();
+                    var totalTimesDto = await responsevApiTotalTime.Content.ReadFromJsonAsync<TotalTimesDto>();
+                    if (recordActivityDetailDto != null && totalTimesDto != null)
+                        setObjects(recordActivityDetailDto, totalTimesDto);
+                }
+                else if (responsevLastRecordActivity.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    // Status 404 Not Found
+                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Info, "Not Found", "Data nebyla nalezena.");
+                }
+                else if (responsevLastRecordActivity.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // Status 400 Bad Request
+                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
+                }
+                else
+                {
+                    // Ostatní chyby
+                    // Console.WriteLine($"Chyba: {(int)response.StatusCode} - {response.ReasonPhrase}");
+                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Error, "Error", "Chybný požadavek.");
+                }
+
+
             }
             await base.OnInitializedAsync();
         }
@@ -58,7 +85,14 @@
         {
             _eventLogService?.LogError(Guid.Parse("d58ce7fb-9d3e-4947-82a6-346a78d3a4d3"), ex);
         }
-    
+
+    }
+
+    private void setObjects(RecordActivityDetailDto lastRecordActivity, TotalTimesDto totalTimeDto)
+    {
+        _totalTime = _mapper.Map<TotalTimesViewModel>(totalTimeDto);
+        _lastRecordActivity = _mapper.Map<RecordListViewModel>(lastRecordActivity);
+
     }
 
 

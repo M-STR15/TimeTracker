@@ -1,0 +1,10 @@
+﻿@using TimeTracker.FE.Web.Components.Models
+@using TimeTracker.FE.Web.Components.Services
+@inject ToastNotificationService _notificationService
+
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    @foreach (var notification in _notificationService.Notifications)
+    {
+        <MToast Notification="@notification" />
+    }
+</div>

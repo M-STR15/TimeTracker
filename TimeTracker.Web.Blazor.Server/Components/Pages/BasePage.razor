@@ -1,21 +1,26 @@
 ﻿@using TimeTracker.BE.Web.Shared.Services
-@inject IHttpClientFactory HttpClientFactory
-@inject NavigationManager NavigationManager
+@using TimeTracker.FE.Web.Components.Services
 
 @code {
     protected HttpClient? _httpClient;
     [Inject]
     protected IEventLogService? _eventLogService { get; set; }
+    [Inject]
+    protected ToastNotificationService _toastNotificationService { get; set; }
+    [Inject]
+    private IHttpClientFactory _httpClientFactory { get; set; } 
+    [Inject]
+    protected NavigationManager _navigationManager { get; set; }
 
     protected override void OnInitialized()
     {
         try
         {
-            _httpClient = HttpClientFactory.CreateClient("TimeTrackerAPI");
+            _httpClient = _httpClientFactory.CreateClient("TimeTrackerAPI");
         }
         catch (Exception ex)
         {
-            _eventLogService?.LogError(Guid.Parse("24cd2c19-6a7f-48b3-9533-e7981d87b63e"),ex);
+            _eventLogService?.LogError(Guid.Parse("24cd2c19-6a7f-48b3-9533-e7981d87b63e"), ex);
         }
     }
 }
