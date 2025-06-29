@@ -70,28 +70,54 @@ else
 
     private async Task inicializationChartAsync()
     {
+        if (_httpClient == null)
+            return;
+
         var dateFrom = SelectMonthAndYear;
         var dateTo = dateFrom.AddMonths(1);
 
         string urlApi = $"/api/v1/reports/activity-over-days/{dateFrom.ToString("yyyy-MM-dd")}/{dateTo.ToString("yyyy-MM-dd")}";
-        if (_httpClient == null)
-            return;
+        var response = await _httpClient.GetAsync(urlApi);
 
-        var list = await _httpClient.GetFromJsonAsync<IEnumerable<SumInDay>>(urlApi);
-
-        if (list != null)
+        if (response.IsSuccessStatusCode)
         {
-            var whOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.WorkHours);
-            var pOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.Pause);
+            // Status 200 OK
+            var list = await response.Content.ReadFromJsonAsync<IEnumerable<SumInDay>>();
+            if (list != null)
+                setDataset(list);
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+        {
+            // Status 404 Not Found
+            Console.WriteLine("Data nebyla nalezena.");
+        }
+        else if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            // Status 400 Bad Request
+            Console.WriteLine("Chybný požadavek.");
+        }
+        else
+        {
+            // Ostatní chyby
+            Console.WriteLine($"Chyba: {(int)response.StatusCode} - {response.ReasonPhrase}");
+        }
 
-            var whHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.WorkHours);
-            var pHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.Pause);
+        StateHasChanged();
+    }
 
-            var whOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.WorkHours);
-            var pOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.Pause);
+    private void setDataset(IEnumerable<SumInDay> list)
+    {
+        var whOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.WorkHours);
+        var pOffice = list.Where(x => x.TypeShift == eTypeShift.Office).Select(x => x.Pause);
 
-            _dataset = new[]
-                        {
+        var whHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.WorkHours);
+        var pHomeOffice = list.Where(x => x.TypeShift == eTypeShift.HomeOffice).Select(x => x.Pause);
+
+        var whOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.WorkHours);
+        var pOthers = list.Where(x => x.TypeShift == eTypeShift.Others).Select(x => x.Pause);
+
+        _dataset = new[]
+                    {
                          new { Data = whOffice, BackgroundColor = "CornflowerBlue", Type= "bar",Label= "Work hours Office"},
                          new { Data = pOffice, BackgroundColor = "DarkSeaGreen", Type= "bar",Label= "Pause Office"},
 
@@ -102,11 +128,9 @@ else
                          new { Data = pOthers, BackgroundColor = "YellowGreen", Type= "bar",Label= "Pause-Others"}
                          };
 
-            _labels = list.GroupBy(x => x.Date)
-                          .Select(g => g.Key.ToString("dd.MM") + " [" + g.First().WeekDay + "]")
-                          .ToArray();
-        }
+        _labels = list.GroupBy(x => x.Date)
+                      .Select(g => g.Key.ToString("dd.MM") + " [" + g.First().WeekDay + "]")
+                      .ToArray();
 
-        StateHasChanged();
     }
 }
