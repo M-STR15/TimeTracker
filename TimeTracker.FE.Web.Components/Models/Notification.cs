@@ -20,15 +20,15 @@ namespace TimeTracker.FE.Web.Components
 				var difference = DateTime.Now - CreatedAt;
 
 				if (difference.Days > 0)
-					return createText(difference.Minutes, "d");
+					return createText(difference.Days, "d");
 
 				if (difference.Hours > 0)
-					return createText(difference.Minutes, "hod");
+					return createText(difference.Hours, "hod");
 
 				if (difference.Minutes > 0)
 					return createText(difference.Minutes, "min");
 
-				return createText(difference.Minutes, "s");
+				return createText(difference.Seconds, "s");
 			}
 		}
 
@@ -42,7 +42,10 @@ namespace TimeTracker.FE.Web.Components
 		}
 		private string createText(int time, string unit)
 		{
-			return "před " + time.ToString() + " " + unit;
+			if (unit == "s")
+				return "před méně než minutou";
+			else
+				return "před " + time.ToString() + " " + unit;
 		}
 
 		public DateTime? GetExitTime()

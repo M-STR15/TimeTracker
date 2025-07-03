@@ -12,11 +12,6 @@ namespace TimeTracker.FE.Web.Components
 		[Parameter]
 		public Notification Notification { get; set; } = default!;
 
-		protected override void OnParametersSet()
-		{
-			base.OnParametersSet();
-		}
-
 		private void deleteNotification()
 		{
 			_notificationService.RemoveNotification(Notification);

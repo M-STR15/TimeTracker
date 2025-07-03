@@ -36,6 +36,8 @@ namespace TimeTracker.FE.Web.Components.Services
 			{
 				RemoveNotification(item);
 			}
+
+			NotifyStateChanged();
 		}
 		/// <summary>
 		/// Vrací seznam aktuálních notifikací.
