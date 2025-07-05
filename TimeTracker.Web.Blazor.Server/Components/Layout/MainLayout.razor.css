@@ -19,9 +19,6 @@ main {
     z-index: 1;
 }
 
-.body-content {
-    min-height: 100%;
-}
 
 .top-row {
     background-color: #f7f7f7;
