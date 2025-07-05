@@ -23,7 +23,7 @@ Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv
 
 
 ## Installation
-
+aby u generovnání informace ovětvy bylo možné vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
 
     
 ## Release
