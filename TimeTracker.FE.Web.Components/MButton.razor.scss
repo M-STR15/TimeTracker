@@ -1,0 +1,40 @@
+﻿$btn-color: white;
+$btn-bg: #6a0dad;
+$btn-bg-hover: #590b9b;
+$btn-bg-active: #4d097e;
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: $btn-color;
+    background-color: $btn-bg;
+    border: 2px solid $btn-bg;
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:hover {
+        background-color: $btn-bg-hover;
+        border-color: $btn-bg-hover;
+    }
+
+    &:active {
+        background-color: $btn-bg-active;
+        border-color: $btn-bg-active;
+    }
+
+    &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &-text {
+        display: block;
+    }
+}

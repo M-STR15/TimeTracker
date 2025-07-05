@@ -5,7 +5,7 @@ namespace TimeTracker.Web.Blazor.Server
 	public class BuildInfo
 	{
 		public string BranchName => "develop";
-		public DateTime BuildDate => DateTime.Parse("2025-07-05 22:22:53");
+		public DateTime BuildDate => DateTime.Parse("2025-07-06 00:17:21");
 		public string VersionStr => getVersion();
 
 		private string getVersion()

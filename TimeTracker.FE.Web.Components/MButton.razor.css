@@ -1,35 +1,31 @@
 ﻿.btn {
-	display: inline-block;
-	padding: 10px 20px;
-	margin: 10px 0; /* Mezery mezi tlačítky */
-	font-size: 16px;
-	font-weight: bold;
-	text-align: center;
-	color: white;
-	background-color: #6a0dad; /* Fialová */
-	border: 2px solid #6a0dad;
-	border-radius: 4px; /* Hranaté */
-	cursor: pointer;
-	user-select: none;
-	transition: background-color 0.2s, border-color 0.2s;
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background-color: #6a0dad;
+  border: 2px solid #6a0dad;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, border-color 0.2s;
 }
-
-	.btn:hover {
-		background-color: #590b9b; /* Tmavší fialová při hover */
-		border-color: #590b9b;
-	}
-
-	.btn:active {
-		background-color: #4d097e; /* Ještě tmavší při kliknutí */
-		border-color: #4d097e;
-	}
-
-.disabled {
-	pointer-events: none;
-	opacity: 0.5;
-	cursor: not-allowed;
+.btn:hover {
+  background-color: #590b9b;
+  border-color: #590b9b;
 }
-
+.btn:active {
+  background-color: #4d097e;
+  border-color: #4d097e;
+}
+.btn.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .btn-text {
-	display: block;
+  display: block;
 }

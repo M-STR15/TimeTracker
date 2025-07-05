@@ -2,17 +2,6 @@
 
 @typeparam TItem where TItem : ITItemWithColor
 
-<style>
-    .container {
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .column {
-        width: 120px;
-    }
-</style>
-
 <InputRadioGroup @bind-Value="_selectId">
     <div class="container">
         @foreach (var item in ListItems)

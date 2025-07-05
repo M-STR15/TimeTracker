@@ -1,47 +1,51 @@
-﻿
-table {
-	width: 100%; /* Zajistí roztáhnutí tabulky přes celou šířku rodiče */
-	border-collapse: collapse;
-}
+﻿table {
+	width: 100%;
+	// Zajistí roztáhnutí tabulky přes celou šířku rodiče border-collapse: collapse;
+	thead
 
-thead {
+{
 	background-color: #343a40;
 	color: #ffffff;
+	th
+
+{
+	padding: 10px;
+	text-align: left;
 }
 
-	thead th {
-		padding: 10px;
-		text-align: left;
-	}
+}
 
-tbody td {
+tbody {
+	td
+
+{
 	padding: 10px;
 	border-bottom: 1px solid #dee2e6;
 	text-align: left;
 }
 
-/*tbody tr:nth-child(even) {
-	background-color: #f1f1f1;
-}
-*/
-.selected-row {
-	background-color: mediumpurple; /* Světle modrá barva pro vybraný řádek */`
-}
+tr {
+	&:hover
 
-img {
-	max-width: 100%; /* Obrázek se přizpůsobí sloupci */
-	max-height: 50px; /* Maximální výška obrázku */
-	display: block;
-}
-
-tbody tr:hover {
+{
 	background-color: #e9ecef;
 }
 
-td, th {
-	text-align: center; /* Text bude centrován ve sloupcích */
+}
+}
 }
 
-	td:last-child, th:last-child {
-		text-align: left; /* Poslední sloupec je zarovnán doprava */
-	}
+.selected-row {
+	background-color: mediumpurple;
+	// Světle modrá barva pro vybraný řádek
+}
+
+img {
+	max-width: 100%;
+	// Obrázek se přizpůsobí sloupci max-height: 50px;
+	// Maximální výška obrázku display: block;
+}
+
+td, th {
+	text-align: center;
+	/

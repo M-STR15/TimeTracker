@@ -1,0 +1,7 @@
+﻿.container {
+  display: flex;
+  justify-content: flex-start;
+}
+.container .column {
+  width: 120px;
+}

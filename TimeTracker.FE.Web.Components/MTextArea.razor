@@ -2,15 +2,6 @@
 @using Microsoft.AspNetCore.Components.Forms
 @typeparam T
 
-<style>
-    .form-control:focus {
-        border-color: #8000ff; /* fialová barva rámečku */
-        box-shadow: 0 0 5px rgba(128, 0, 255, 0.5); /* fialový stín */
-        background-color: #f5e6ff; /* jemné fialové pozadí */
-        outline: none;
-    }
-</style>
-
 <input @bind="@Value" @oninput="HandleInput" class="form-control"></input>
 
 @code {

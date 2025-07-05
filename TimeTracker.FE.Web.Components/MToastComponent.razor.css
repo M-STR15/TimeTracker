@@ -1,10 +1,9 @@
-﻿/* ::deep required on everything to make scoped css work */
-::deep .toast-container {
-	position: fixed;
-	bottom: 0px;
-	right: 20px;
-	display: flex;
-	flex-direction: column;
-	min-height: 0vh;
-	margin-top: 3.5rem;
+﻿::deep .toast-container {
+  position: fixed;
+  bottom: 0px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0vh;
+  margin-top: 3.5rem;
 }
