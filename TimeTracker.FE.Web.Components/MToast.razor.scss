@@ -11,19 +11,16 @@ $toast-default: #17a2b8;
     top: 20px;
     right: 20px;
     width: 300px;
+    min-height: 120px;
     z-index: 1000;
+    background-color: white;
     animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 5s forwards;
 
-    .toast-message-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px;
-        border-radius: 5px;
-        color: white;
-        font-weight: bold;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        margin-bottom: 10px;
+    .toast-header {
+        background-color: $toast-default;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 10px;
 
         &.toast-message-success {
             background-color: $toast-success;
@@ -35,15 +32,10 @@ $toast-default: #17a2b8;
 
         &.toast-message-alert {
             background-color: $toast-alert;
-            color: $toast-alert-text;
         }
 
         &.toast-message-warning {
             background-color: $toast-warning;
-        }
-
-        &.toast-message-default {
-            background-color: $toast-default;
         }
 
         .toast-close-button {
@@ -57,6 +49,22 @@ $toast-default: #17a2b8;
             &:hover {
                 color: #000;
             }
+        }
+    }
+
+    .toast-message-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 5px;
+        font-weight: bold;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+
+        .toast-message-text {
+            padding-top: 10px;
         }
     }
 }

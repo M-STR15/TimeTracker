@@ -3,37 +3,30 @@
   top: 20px;
   right: 20px;
   width: 300px;
+  min-height: 120px;
   z-index: 1000;
+  background-color: white;
   animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 5s forwards;
 }
-.toast-message-container .toast-message-box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
-  border-radius: 5px;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
+.toast-message-container .toast-header {
+  background-color: #17a2b8;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
 }
-.toast-message-container .toast-message-box.toast-message-success {
+.toast-message-container .toast-header.toast-message-success {
   background-color: #28a745;
 }
-.toast-message-container .toast-message-box.toast-message-failure {
+.toast-message-container .toast-header.toast-message-failure {
   background-color: #dc3545;
 }
-.toast-message-container .toast-message-box.toast-message-alert {
+.toast-message-container .toast-header.toast-message-alert {
   background-color: #ffc107;
-  color: #212529;
 }
-.toast-message-container .toast-message-box.toast-message-warning {
+.toast-message-container .toast-header.toast-message-warning {
   background-color: #ff8800;
 }
-.toast-message-container .toast-message-box.toast-message-default {
-  background-color: #17a2b8;
-}
-.toast-message-container .toast-message-box .toast-close-button {
+.toast-message-container .toast-header .toast-close-button {
   background: none;
   border: none;
   color: white;
@@ -41,8 +34,22 @@
   font-weight: bold;
   cursor: pointer;
 }
-.toast-message-container .toast-message-box .toast-close-button:hover {
+.toast-message-container .toast-header .toast-close-button:hover {
   color: #000;
+}
+.toast-message-container .toast-message-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+.toast-message-container .toast-message-box .toast-message-text {
+  padding-top: 10px;
 }
 
 @keyframes slide-in {
