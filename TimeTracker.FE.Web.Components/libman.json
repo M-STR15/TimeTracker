@@ -1,14 +1,18 @@
 {
   "version": "3.0",
   "defaultProvider": "cdnjs",
-  "libraries": [
-    {
-      "library": "Chart.js@4.4.1",
-      "destination": "wwwroot/lib/Chart.js/"
-    },
-    {
-      "library": "lottie-web@5.13.0",
-      "destination": "wwwroot/lib/lottie-web/"
-    }
-  ]
+	"libraries": [
+		{
+			"library": "Chart.js@4.4.1",
+			"destination": "wwwroot/lib/Chart.js/"
+		},
+		{
+			"library": "lottie-web@5.13.0",
+			"destination": "wwwroot/lib/lottie-web/"
+		},
+		{
+			"library": "bootstrap@5.3.7",
+			"destination": "wwwroot/lib/bootstrap/"
+		}
+	]
 }

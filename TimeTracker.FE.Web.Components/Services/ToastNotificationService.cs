@@ -55,7 +55,7 @@ namespace TimeTracker.FE.Web.Components.Services
 		/// <param name="message">Zpráva notifikace.</param>
 		/// <param name="isEnableDeleteTime">Povolit automatické odstranění po čase.</param>
 		/// <param name="deleteTimeForSeconds">Doba v sekundách, po které bude notifikace odstraněna.</param>
-		public void AddNotification(eNotificationType type, string title, string message, bool isEnableDeleteTime = true, int deleteTimeForSeconds = 15)
+		public void AddNotification(eNotificationType type, string title, string message, bool isEnableDeleteTime = true, int deleteTimeForSeconds = 65)
 		{
 			var notification = new Notification(deleteTimeForSeconds)
 			{

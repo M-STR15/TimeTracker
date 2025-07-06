@@ -16,5 +16,19 @@ namespace TimeTracker.FE.Web.Components
 		{
 			_notificationService.RemoveNotification(Notification);
 		}
+
+		private string CssClass = "";
+
+		protected override async Task OnInitializedAsync()
+		{
+			// Delay pro slide-out
+			//await Task.Delay(500);
+			//CssClass = "slide-out";
+			//StateHasChanged();
+
+			//// Delay pro odstranění z DOMu
+			//await Task.Delay(500);
+			//_notificationService.RemoveNotification(Notification);
+		}
 	}
 }

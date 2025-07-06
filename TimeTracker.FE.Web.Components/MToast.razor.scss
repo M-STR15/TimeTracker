@@ -6,15 +6,14 @@ $toast-alert-text: #212529;
 $toast-warning: #ff8800;
 $toast-default: #17a2b8;
 
-.toast-message-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
+.toast-message {
     width: 300px;
-    min-height: 120px;
-    z-index: 1000;
     background-color: white;
-    animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 5s forwards;
+    animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 125s forwards;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    transition: all 0.5s ease-in;
+    overflow: hidden;
 
     .toast-header {
         background-color: $toast-default;
@@ -68,11 +67,11 @@ $toast-default: #17a2b8;
         }
     }
 }
-
+    
 // Animace
 @keyframes slide-in {
     from {
-        transform: translateX(100%);
+        transform: translateX(10%);
         opacity: 0;
     }
 

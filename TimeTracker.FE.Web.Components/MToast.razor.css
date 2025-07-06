@@ -1,32 +1,31 @@
-﻿.toast-message-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+﻿.toast-message {
   width: 300px;
-  min-height: 120px;
-  z-index: 1000;
   background-color: white;
-  animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 5s forwards;
+  animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 125s forwards;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  transition: all 0.5s ease-in;
+  overflow: hidden;
 }
-.toast-message-container .toast-header {
+.toast-message .toast-header {
   background-color: #17a2b8;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 10px;
 }
-.toast-message-container .toast-header.toast-message-success {
+.toast-message .toast-header.toast-message-success {
   background-color: #28a745;
 }
-.toast-message-container .toast-header.toast-message-failure {
+.toast-message .toast-header.toast-message-failure {
   background-color: #dc3545;
 }
-.toast-message-container .toast-header.toast-message-alert {
+.toast-message .toast-header.toast-message-alert {
   background-color: #ffc107;
 }
-.toast-message-container .toast-header.toast-message-warning {
+.toast-message .toast-header.toast-message-warning {
   background-color: #ff8800;
 }
-.toast-message-container .toast-header .toast-close-button {
+.toast-message .toast-header .toast-close-button {
   background: none;
   border: none;
   color: white;
@@ -34,10 +33,10 @@
   font-weight: bold;
   cursor: pointer;
 }
-.toast-message-container .toast-header .toast-close-button:hover {
+.toast-message .toast-header .toast-close-button:hover {
   color: #000;
 }
-.toast-message-container .toast-message-box {
+.toast-message .toast-message-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,13 +47,13 @@
   padding-right: 10px;
   padding-bottom: 10px;
 }
-.toast-message-container .toast-message-box .toast-message-text {
+.toast-message .toast-message-box .toast-message-text {
   padding-top: 10px;
 }
 
 @keyframes slide-in {
   from {
-    transform: translateX(100%);
+    transform: translateX(10%);
     opacity: 0;
   }
   to {

@@ -11,8 +11,8 @@
       "destination": "wwwroot/lib/bootstrap-icons/"
     },
     {
-      "library": "bootstrap@5.3.3",
-      "destination": "wwwroot/bootstrap/"
+      "library": "bootstrap@5.3.7",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }
