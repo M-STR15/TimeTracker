@@ -7,7 +7,14 @@ namespace TimeTracker.PC.ViewModels
 		private string? _description;
 
 		private bool _isPlanShiftInDay;
-
+		/// <summary>
+		/// Třída uchovávající informace o konkrétním datu.
+		/// </summary>
+		/// <param name="date">Datum, ke kterému se informace vztahují.</param>
+		/// <param name="guidID">Jedinečný identifikátor záznamu.</param>
+		/// <param name="isPlanShiftInDay">Určuje, zda je v daný den plánována směna.</param>
+		/// <param name="eTypeShift">Typ směny přiřazený k datu.</param>
+		/// <param name="description">Volitelný popis dne nebo směny.</param>
 		public InfoOfDate(DateTime date, Guid guidID, bool isPlanShiftInDay, eTypeShift eTypeShift, string? description = null)
 		{
 			GuidId = guidID;
@@ -21,10 +28,22 @@ namespace TimeTracker.PC.ViewModels
 			IsEdited = false;
 		}
 
+		/// <summary>
+		/// Datum, ke kterému se informace vztahují.
+		/// </summary>
 		public DateTime Date { get; private set; }
+		/// <summary>
+		/// Den v měsíci, ke kterému se informace vztahují.
+		/// </summary>
 		public int Day { get; private set; }
+		/// <summary>
+		/// Den v týdnu, ke kterému se informace vztahují.
+		/// </summary>
 		public DayOfWeek DayOfWeek { get; private set; }
 
+		/// <summary>
+		/// Popis dne nebo směny. Nastavením této vlastnosti se označí záznam jako upravený.
+		/// </summary>
 		public string? Description
 		{
 			get => _description;
@@ -35,9 +54,19 @@ namespace TimeTracker.PC.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Jedinečný identifikátor záznamu.
+		/// </summary>
 		public Guid GuidId { get; private set; }
+		/// <summary>
+		/// Určuje, zda byl záznam upraven od svého vytvoření nebo posledního uložení.
+		/// </summary>
 		public bool IsEdited { get; private set; }
 
+		/// <summary>
+		/// Určuje, zda je v daný den plánována směna.
+		/// Nastavením této vlastnosti se označí záznam jako upravený.
+		/// </summary>
 		public bool IsPlanShiftInDay
 		{
 			get => _isPlanShiftInDay;
@@ -48,8 +77,14 @@ namespace TimeTracker.PC.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Pořadí týdne v měsíci, ve kterém se dané datum nachází.
+		/// </summary>
 		public int WeekInMont { get; private set; }
 
+		/// <summary>
+		/// Typ směny přiřazený k tomuto datu.
+		/// </summary>
 		public eTypeShift ETypeShift { get; set; }
 
 		/// <summary>

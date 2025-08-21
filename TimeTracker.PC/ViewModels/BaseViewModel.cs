@@ -25,7 +25,7 @@ namespace TimeTracker.PC.ViewModels
 			}
 		}
 
-		public Window Window { get; set; }
+		public Window? Window { get; set; }
 
 		public BaseViewModel(string title)
 		{
