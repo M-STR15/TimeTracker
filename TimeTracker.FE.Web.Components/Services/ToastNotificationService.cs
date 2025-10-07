@@ -4,13 +4,13 @@ namespace TimeTracker.FE.Web.Components.Services
 {
 	public class ToastNotificationService : IDisposable
 	{
-		private Timer _timerRemove;
+		private Timer? _timerRemove;
 
 		/// <summary>
 		/// Událost, která je vyvolána při změně seznamu notifikací.
 		/// Komponenty mohou tuto událost odebírat pro aktualizaci svého stavu.
 		/// </summary>
-		public event Action OnChange = default;
+		public event Action? OnChange = default;
 
 		private List<Notification> _notifications = new();
 
@@ -20,7 +20,7 @@ namespace TimeTracker.FE.Web.Components.Services
 			_timerRemove = new Timer(removeNotificationTick, null, 1000, 1);
 		}
 
-		private void removeNotificationTick(object state)
+		private void removeNotificationTick(object? state)
 		{
 			var removeList = new List<Guid>();
 			var now = DateTime.Now;
@@ -55,7 +55,7 @@ namespace TimeTracker.FE.Web.Components.Services
 		/// <param name="message">Zpráva notifikace.</param>
 		/// <param name="isEnableDeleteTime">Povolit automatické odstranění po čase.</param>
 		/// <param name="deleteTimeForSeconds">Doba v sekundách, po které bude notifikace odstraněna.</param>
-		public void AddNotification(eNotificationType type, string title, string message, bool isEnableDeleteTime = true, int deleteTimeForSeconds = 65)
+		public void AddNotification(eNotificationType type, string title, string message, bool isEnableDeleteTime = true, int deleteTimeForSeconds = 5)
 		{
 			var notification = new Notification(deleteTimeForSeconds)
 			{
@@ -96,8 +96,11 @@ namespace TimeTracker.FE.Web.Components.Services
 
 		public void Dispose()
 		{
-			_timerRemove.Dispose();
-			_timerRemove = null;
+			if (_timerRemove != null)
+			{
+				_timerRemove.Dispose();
+				_timerRemove = null;
+			}
 		}
 	}
 }

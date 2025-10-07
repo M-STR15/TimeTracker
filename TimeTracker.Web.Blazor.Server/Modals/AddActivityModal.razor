@@ -115,13 +115,12 @@
                     Console.WriteLine($"Chyba volání API: {(int)response.StatusCode} {response.ReasonPhrase}");
                 }
 
-                var aaa = _isEditableSubModule;
                 StateHasChanged();
                 // var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>(url);
                 // if (subModulesReq != null)
                 //     _subModules = subModulesReq;
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
 
             }

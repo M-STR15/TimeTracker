@@ -5,6 +5,8 @@
 @using TimeTracker.Web.Blazor.Server.Modals
 @using TimeTracker.Web.Blazor.Server.Models
 @using TimeTracker.Web.Blazor.Server.Components.Pages.Components.CurrentActivityPage
+@using System.Net
+@using FE.Web.Components.Models
 
 @inherits BasePage
 @inject IMapper _mapper
@@ -13,13 +15,20 @@
 
     <div>
         <MButton Text="Change" OnClick="onOpenAddActvityModal" Style="width:150px"></MButton>
-        <MButton Text="Pause" Style="width:150px"></MButton>
-        <MButton Text="End of shift" Style="width:150px"></MButton>
+        <MButton Text="Pause" Style="width:150px" IsDisabled=isDisableButtons></MButton>
+        <MButton Text="End of shift" Style="width:150px" IsDisabled=isDisableButtons></MButton>
     </div>
 
     @if (_lastRecordActivity == null)
     {
-        <MLoader />
+        @if (_responsevLastRecordActivityStatusCode == HttpStatusCode.NotFound)
+        {
+            <label>V databázi není vložena žádná aktivita. Prvně je potřeba aktivitu zadat->"Change"</label>
+        }
+        else
+        {
+            <MLoader />
+        }
     }
     else
     {
@@ -37,8 +46,16 @@
     private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
     private RecordListViewModel? _lastRecordActivity;
     private TotalTimesViewModel? _totalTime;
+    private HttpStatusCode _responsevLastRecordActivityStatusCode;
+    private bool isDisableButtons => _lastRecordActivity == null;
 
     protected async override Task OnInitializedAsync()
+    {
+        await loadDataAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task loadDataAsync()
     {
         try
         {
@@ -52,40 +69,45 @@
                 var responsevLastRecordActivity = await _httpClient.GetAsync(urlApiLastRecordActivity);
                 var responsevApiTotalTime = await _httpClient.GetAsync(urlApiTotalTime);
 
-                if (responsevLastRecordActivity.IsSuccessStatusCode && responsevApiTotalTime.IsSuccessStatusCode)
+                if (responsevLastRecordActivity.StatusCode == HttpStatusCode.OK && responsevApiTotalTime.StatusCode == HttpStatusCode.OK)
                 {
                     // Status 200 OK
                     var recordActivityDetailDto = await responsevLastRecordActivity.Content.ReadFromJsonAsync<RecordActivityDetailDto>();
                     var totalTimesDto = await responsevApiTotalTime.Content.ReadFromJsonAsync<TotalTimesDto>();
                     if (recordActivityDetailDto != null && totalTimesDto != null)
                         setObjects(recordActivityDetailDto, totalTimesDto);
+
+                    _responsevLastRecordActivityStatusCode = HttpStatusCode.OK;
                 }
-                else if (responsevLastRecordActivity.StatusCode == System.Net.HttpStatusCode.NotFound)
+                else if (responsevLastRecordActivity.StatusCode == HttpStatusCode.NotFound)
                 {
                     // Status 404 Not Found
-                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Info, "Not Found", "Data nebyla nalezena.");
+                    _responsevLastRecordActivityStatusCode = HttpStatusCode.NotFound;
+                    _toastNotificationService.AddNotification(eNotificationType.Info, "Not Found", "Data nebyla nalezena.");
                 }
-                else if (responsevLastRecordActivity.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                else if (responsevLastRecordActivity.StatusCode == HttpStatusCode.BadRequest)
                 {
+                    _responsevLastRecordActivityStatusCode = HttpStatusCode.BadRequest;
                     // Status 400 Bad Request
-                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
+                    _toastNotificationService.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
                 }
                 else
                 {
+                    _responsevLastRecordActivityStatusCode = HttpStatusCode.InternalServerError;
                     // Ostatní chyby
                     // Console.WriteLine($"Chyba: {(int)response.StatusCode} - {response.ReasonPhrase}");
-                    _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Error, "Error", "Chybný požadavek.");
+                    _toastNotificationService.AddNotification(eNotificationType.Error, "Error", "Chybný požadavek.");
                 }
 
 
             }
-            await base.OnInitializedAsync();
+
+            StateHasChanged();
         }
         catch (Exception ex)
         {
             _eventLogService?.LogError(Guid.Parse("d58ce7fb-9d3e-4947-82a6-346a78d3a4d3"), ex);
         }
-
     }
 
     private void setObjects(RecordActivityDetailDto lastRecordActivity, TotalTimesDto totalTimeDto)
@@ -96,10 +118,9 @@
     }
 
 
-    private void onAfterCloseModalAddActivity_Changed()
+    private async void onAfterCloseModalAddActivity_Changed()
     {
-
-
+        await loadDataAsync();
     }
 
 }

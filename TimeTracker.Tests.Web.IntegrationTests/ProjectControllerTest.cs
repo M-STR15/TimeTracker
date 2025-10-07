@@ -117,7 +117,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				// Arrange
 				var updatedProject = new ProjectBaseDto
 				{
-					Id = project.Id,
+					Id = project?.Id ?? 0,
 					Name = MRandom.RandomString(10),
 					Description = "Updated Description"
 				};
@@ -130,7 +130,7 @@ namespace TimeTracker.Tests.Web.IntegrationTests
 				var resultProject = await response.Content.ReadFromJsonAsync<ProjectBaseDto>();
 				Assert.NotNull(resultProject);
 				Assert.Equal(updatedProject.Name, resultProject.Name);
-				Assert.Equal(updatedProject.Description, "Updated Description");
+				Assert.Equal(updatedProject?.Description ?? "", "Updated Description");
 
 				// Clearning
 				var delUrlApi = $"/api/v1/project/{updatedProject.Id}";

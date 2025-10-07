@@ -7,14 +7,15 @@ namespace TimeTracker.FE.Web.Components
 	{
 
 		[Inject]
-		private ToastNotificationService _notificationService { get; set; }
+		private ToastNotificationService? _notificationService { get; set; }
 
 		[Parameter]
 		public Notification Notification { get; set; } = default!;
 
 		private void deleteNotification()
 		{
-			_notificationService.RemoveNotification(Notification);
+			if (_notificationService != null)
+				_notificationService.RemoveNotification(Notification);
 		}
 
 		private string CssClass = "";

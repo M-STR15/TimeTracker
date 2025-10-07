@@ -225,8 +225,11 @@
 
             foreach (var item in days)
             {
-                var shift = new ShiftBaseDto(item.GuidId, item.StartDate, item.TypeShift.Id);
-                shiftsDto.Add(shift);
+                if (item != null)
+                {
+                    var shift = new ShiftBaseDto(item.GuidId, item.StartDate, item.TypeShift.Id);
+                    shiftsDto.Add(shift);
+                }
             }
 
 

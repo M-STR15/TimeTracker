@@ -4,7 +4,7 @@
 	</PropertyGroup>
 
 	<Target Name="RunPowerShellScript" BeforeTargets="BeforeBuild">
-		<Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(GenerateBuildInfoScript)&quot;"/>
+		<Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(GenerateBuildInfoScript)&quot;" />
 	</Target>
 
 	<PropertyGroup>
@@ -16,6 +16,8 @@
 		<PackageIcon>clock-violet.png</PackageIcon>
 		<PreserveCompilationContext>true</PreserveCompilationContext>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AssemblyVersion>0.0.1.0</AssemblyVersion>
+		<FileVersion>0.0.1.0</FileVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
