@@ -73,7 +73,6 @@
     {
         editContext = new EditContext(SubModule);
         editContext.OnFieldChanged += onFieldChanged;
-
     }
 
     protected override void performActionOnClose()
@@ -81,5 +80,4 @@
         if (editContext != null)
             editContext.OnFieldChanged -= onFieldChanged;
     }
-
 }

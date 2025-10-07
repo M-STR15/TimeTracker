@@ -13,6 +13,9 @@ namespace TimeTracker.BE.DB.Repositories
 		/// <summary>
 		/// Získá všechny podmoduly z databáze, seřazené podle názvu.
 		/// </summary>
+		/// <remarks>
+		/// Navrácená kolekce je seřazena podle názvu podmodulu vzestupně (A-Z).
+		/// </remarks>
 		/// <returns>Kolekce podmodulů.</returns>
 		public async Task<IEnumerable<SubModule>> GetAllAsync()
 		{
@@ -30,9 +33,12 @@ namespace TimeTracker.BE.DB.Repositories
 		/// <summary>
 		/// Získá všechny podmoduly z databáze podle ID projektu, seřazené podle názvu.
 		/// </summary>
+		/// <remarks>
+		/// Navrácena kolekce je seřazena podle názvu podmodulu vzestupně (A-Z). 
+		/// </remarks>
 		/// <param name="projectId">ID projektu</param>
 		/// <returns>Kolekce podmodulů.</returns>
-		public async Task<IEnumerable<SubModule>?> GetForTheProjectAsync(int projectId)
+		public async Task<List<SubModule>?> GetForTheProjectAsync(int projectId)
 		{
 			try
 			{

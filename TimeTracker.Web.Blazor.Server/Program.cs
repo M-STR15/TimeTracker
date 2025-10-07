@@ -35,7 +35,6 @@ builder.Services.AddSwaggerGen(options =>
 
 	options.IncludeXmlComments(xmlPath);
 	options.IncludeXmlComments(beXmlPath);
-
 	options.EnableAnnotations();
 	options.SwaggerDoc("v1", new OpenApiInfo
 	{
@@ -43,6 +42,8 @@ builder.Services.AddSwaggerGen(options =>
 		Version = "v1",
 		Description = ""
 	});
+
+	//options.UseInlineDefinitionsForEnums();
 });
 
 builder.Services.AddServerSideBlazor()

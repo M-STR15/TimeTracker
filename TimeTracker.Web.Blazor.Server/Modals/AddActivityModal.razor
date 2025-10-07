@@ -38,7 +38,7 @@
                         <div class="row">
                             <h6>Sub module</h6>
                             <MCombobox Items="_subModules" ItemText="item => item.Name" OnChange="OnSubModuleChanged"
-                            IsEditable=_isEditableSubModule />
+                                       IsEditable=_isEditableSubModule />
                             <ValidationMessage For="@(() => _recordActivityInsertDto.SubModuleId)" />
                         </div>
                     }
@@ -64,7 +64,7 @@
     private List<ProjectBaseDto>? _projects;
     private List<SubModuleBaseDto>? _subModules;
 
-    private bool _isDisable => editContext.Validate();
+    private bool _isDisable => editContext?.Validate() ?? false;
 
     private RecordActivityInsertDto? _recordActivityInsertDto;
 
@@ -74,19 +74,19 @@
 
     private void OnTypeShiftChanged(ChangeEventArgs e)
     {
-        if (e.Value is TypeShiftBaseDto item)
+        if (e.Value is TypeShiftBaseDto item && _recordActivityInsertDto != null)
             _recordActivityInsertDto.TypeShiftId = item?.Id;
     }
 
     private void OnShiftChanged(ChangeEventArgs e)
     {
-        if (e.Value is ShiftBaseDto item)
+        if (e.Value is ShiftBaseDto item && _recordActivityInsertDto != null)
             _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
     }
 
     private async void OnProjectChanged(ChangeEventArgs e)
     {
-        if (e.Value is ProjectBaseDto item)
+        if (e.Value is ProjectBaseDto item && _recordActivityInsertDto != null)
         {
             _recordActivityInsertDto.ProjectId = item?.Id;
 
@@ -135,13 +135,15 @@
 
     private void OnSubModuleChanged(ChangeEventArgs e)
     {
-        if (e.Value is SubModuleBaseDto item)
+        if (e.Value is SubModuleBaseDto item && _recordActivityInsertDto != null)
             _recordActivityInsertDto.SubModuleId = item?.Id;
     }
 
     private Task OnValueChanged(string newValue)
     {
-        _recordActivityInsertDto.Description = newValue;
+        if (_recordActivityInsertDto != null)
+            _recordActivityInsertDto.Description = newValue;
+
         StateHasChanged();  // Aktualizuje komponentu
         return Task.CompletedTask;
     }
@@ -154,6 +156,9 @@
 
     protected async override void performActionOnOpen()
     {
+        if (_httpClient == null)
+            return;
+
         var typeShiftsReq = await _httpClient.GetFromJsonAsync<List<TypeShiftBaseDto>>("/api/v1/shifts/types");
         if (typeShiftsReq != null)
             _typeShifts = typeShiftsReq;
@@ -181,7 +186,7 @@
 
     protected async override void save_Click()
     {
-        if (_httpClient != null)
+        if (_httpClient != null && _recordActivityInsertDto != null)
         {
             _recordActivityInsertDto.StartDateTime = DateTime.Now;
             _recordActivityInsertDto.ActivityId = (int)eActivity.Start;

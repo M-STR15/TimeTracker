@@ -74,7 +74,7 @@ namespace TimeTracker.BE.Web.Shared.Services
 		/// <param name="message">Zpráva k dané události.</param>
 		public void LogInformation(Guid guidId, Exception? exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null)
+			if (inputObject != null && exception != null)
 				exception.Data.Add("InputObject", inputObject);
 
 			var eventLog = getEventLog(guidId, exception, message);

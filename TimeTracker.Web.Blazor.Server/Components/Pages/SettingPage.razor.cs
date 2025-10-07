@@ -16,7 +16,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 		private bool IsOpenProductDeleteQueryModal { get; set; } = false;
 		private bool IsOpenSubModuleDeleteQueryModal { get; set; } = false;
 
-		public static List<TableColumnDefinition<ProjectBaseDto>> CreateTableColumnDefinition_Project()
+		private static List<TableColumnDefinition<ProjectBaseDto>> createTableColumnDefinition_Project()
 		{
 			return new List<TableColumnDefinition<ProjectBaseDto>>
 				{
@@ -30,7 +30,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				};
 		}
 
-		public static List<TableColumnDefinition<SubModuleBaseDto>> CreateTableColumnDefinition_SubModuleBaseDto()
+		private static List<TableColumnDefinition<SubModuleBaseDto>> createTableColumnDefinition_SubModuleBaseDto()
 		{
 			return new List<TableColumnDefinition<SubModuleBaseDto>>
 				{
@@ -44,11 +44,10 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				};
 		}
 
-		/// <inheritdoc/>
 		protected async override Task OnInitializedAsync()
 		{
-			_projectColumns = CreateTableColumnDefinition_Project();
-			_subModuleColumns = CreateTableColumnDefinition_SubModuleBaseDto();
+			_projectColumns = createTableColumnDefinition_Project();
+			_subModuleColumns = createTableColumnDefinition_SubModuleBaseDto();
 
 			await loadProjectListAsync();
 			await base.OnInitializedAsync();
@@ -76,14 +75,18 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			}
 		}
 
-		private async Task loadProjectListAsync()
+		private async Task loadProjectListAsync(ProjectBaseDto? selectProject = null)
 		{
 			if (_httpClient != null)
 			{
 				var urlApi = $"/api/v1/projects";
 				var projects = await _httpClient.GetFromJsonAsync<List<ProjectBaseDto>>(urlApi);
 				if (projects != null)
+				{
 					_projects = projects;
+					if (selectProject != null)
+						_selectedProject = selectProject;
+				}
 
 				base.StateHasChanged();
 			}
@@ -98,6 +101,9 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 				try
 				{
+					if (_httpClient == null)
+						return;
+
 					var response = await _httpClient.GetAsync(urlApi);
 
 					if (response.IsSuccessStatusCode)
@@ -118,11 +124,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				}
 				catch (HttpRequestException ex)
 				{
-					_eventLogService.LogError(Guid.Parse("cb464ca7-881c-42c1-a37a-5c7afc7e258e"), ex);
+					_eventLogService?.LogError(Guid.Parse("cb464ca7-881c-42c1-a37a-5c7afc7e258e"), ex);
 				}
 				catch (Exception ex)
 				{
-					_eventLogService.LogError(Guid.Parse("a1857788-e073-4f05-a2fc-a79b5e1c8681"), ex);
+					_eventLogService?.LogError(Guid.Parse("a1857788-e073-4f05-a2fc-a79b5e1c8681"), ex);
 				}
 
 				base.StateHasChanged();

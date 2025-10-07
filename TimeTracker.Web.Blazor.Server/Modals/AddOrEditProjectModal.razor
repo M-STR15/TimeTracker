@@ -30,11 +30,17 @@
     [Parameter, EditorRequired]
     public ProjectBaseDto? Project { get; set; }
 
+    [Parameter]
+    public EventCallback<ProjectBaseDto> ProjectChanged { get; set; }
+
 
     protected override void performActionOnOpen()
     {
-        editContext = new EditContext(Project);
-        editContext.OnFieldChanged += onFieldChanged;
+        if (Project != null)
+        {
+            editContext = new EditContext(Project);
+            editContext.OnFieldChanged += onFieldChanged;
+        }
     }
 
     protected override void performActionOnClose()
@@ -57,6 +63,10 @@
                 var projectConvert = _mapper.Map<ProjectInsertDto>(Project);
                 var result = await _httpClient.PostAsJsonAsync<ProjectInsertDto>(urlApi, projectConvert);
             }
+
+            if (ProjectChanged.HasDelegate)
+                ProjectChanged.InvokeAsync(Project).Wait();
+
             await closeModalAsync();
         }
     }

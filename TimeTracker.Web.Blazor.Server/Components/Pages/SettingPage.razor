@@ -46,7 +46,7 @@
 </div>
 
 <AddOrEditProjectModal Title="Add project"
-                       Project="_selectedProject"
+                       @bind-Project="_selectedProject"
                        @bind-Visible="IsOpenAddOrEdtiProjectModal"
                        OnModalClosed="onAfterCloseModalAddOrEditProjectChanged" />
 

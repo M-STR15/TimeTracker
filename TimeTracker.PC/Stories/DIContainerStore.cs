@@ -11,6 +11,10 @@ using TimeTracker.PC.Windows.Reports;
 
 namespace TimeTracker.PC.Stories
 {
+	/// <summary>
+	/// Třída pro správu DI kontejneru pomocí Ninject.
+	/// Zajišťuje konfiguraci závislostí a inicializaci databáze.
+	/// </summary>
 	public class DIContainerStore
 	{
 		private IKernel _container = new StandardKernel();
@@ -47,7 +51,7 @@ namespace TimeTracker.PC.Stories
 			registerForDependencyInjection(options);
 		}
 		/// <summary>
-		/// Vytvoření cesty k databázi
+		/// Vypíše cestu k databázi
 		/// </summary>
 		/// <returns></returns>
 		private string getDatabasePath()
@@ -101,15 +105,6 @@ namespace TimeTracker.PC.Stories
 				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
 				.Build();
 		}
-
-
-
-
-
-
-
-
-
 
 		public MainWindow GetMainWindow() => _container.Get<MainWindow>();
 

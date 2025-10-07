@@ -234,6 +234,10 @@
                 return;
 
             var result = await _httpClient.PutAsJsonAsync<List<ShiftBaseDto>>("/api/v1/shifts", shiftsDto);
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                _toastNotificationService.AddNotification(FE.Web.Components.Models.eNotificationType.Success, "Save", "Data byla uloženy.");
+            }
         }
         catch (Exception ex)
         {
