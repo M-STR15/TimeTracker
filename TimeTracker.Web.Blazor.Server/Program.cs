@@ -44,6 +44,7 @@ builder.Services.AddSwaggerGen(options =>
 	});
 
 	//options.UseInlineDefinitionsForEnums();
+	options.SchemaFilter<EnumSchemaFilter>();
 });
 
 builder.Services.AddServerSideBlazor()
