@@ -30,7 +30,16 @@ aby u generovnání informace zobrazil vygenerovat název větve, je potřeba m�
 
 ### 0.0.1   (2025-10-10)
 
-uvolněna první betaverze - u webové aplikace je ještě potřeba doladit některé funkce (informační panel po změně  aktivity)
+-uvolněna první betaverze - u webové aplikace je ještě potřeba doladit některé funkce (informační panel po změně  aktivity)
+
+PC verze:
+
+-využívá MS SQL
+
+WEB verze:
+
+-využívá SQLite
+
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/M-STR15/TimeTracker)
