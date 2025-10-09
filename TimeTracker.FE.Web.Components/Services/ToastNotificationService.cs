@@ -24,11 +24,12 @@ namespace TimeTracker.FE.Web.Components.Services
 		{
 			var removeList = new List<Guid>();
 			var now = DateTime.Now;
-			foreach (var item in _notifications)
+			if (_notifications != null && _notifications.Count > 0)
 			{
-				if (item.GetExitTime() <= now)
+				foreach (var item in _notifications)
 				{
-					removeList.Add(item.GuidId);
+					if (item.GetExitTime() <= now)
+						removeList.Add(item.GuidId);
 				}
 			}
 

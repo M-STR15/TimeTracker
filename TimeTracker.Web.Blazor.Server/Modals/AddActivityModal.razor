@@ -3,18 +3,21 @@
 @using TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 @using TimeTracker.Basic.Enums
 @using TimeTracker.FE.Web.Components
+@using TimeTracker.FE.Web.Components.Models
+@using TimeTracker.FE.Web.Components.Services
 @using TimeTracker.Web.Blazor.Server.Modals.Models
+@implements IDisposable
+
 @inherits BaseSaveViewModal
 @inject IHttpClientFactory HttpClientFactory
+@inject ToastNotificationService _toastNotificationService
 
 <BaseModal @bind-Visible=Visible Title=@Title>
     <BodyContent>
         @if (_recordActivityInsertDto != null)
         {
-            <EditForm Model="@editContext">
+            <EditForm EditContext="@editContext">
                 <DataAnnotationsValidator />
-                <ValidationSummary />
-
                 <div class="main">
                     <div class="row">
                         <div class="col-6">
@@ -48,7 +51,7 @@
                         <ValidationMessage For="@(() => _recordActivityInsertDto.Description)" />
                     </div>
                     <div class="row">
-                        <MButton IsDisabled="@(!editContext.Validate())" OnClick="save_Click">Save</MButton>
+                        <MButton IsDisabled="@(!isFormValid)" OnClick="save_Click">Save</MButton>
                     </div>
                 </div>
             </EditForm>
@@ -64,8 +67,6 @@
     private List<ProjectBaseDto>? _projects;
     private List<SubModuleBaseDto>? _subModules;
 
-    private bool _isDisable => editContext?.Validate() ?? false;
-
     private RecordActivityInsertDto? _recordActivityInsertDto;
 
     private bool _isEditableSubModule => _recordActivityInsertDto?.ProjectId != null;
@@ -75,13 +76,23 @@
     private void OnTypeShiftChanged(ChangeEventArgs e)
     {
         if (e.Value is TypeShiftBaseDto item && _recordActivityInsertDto != null)
+        {
             _recordActivityInsertDto.TypeShiftId = item?.Id;
+
+            var fieldIdentifier = FieldIdentifier.Create(() => _recordActivityInsertDto.TypeShiftId);
+            editContext?.NotifyFieldChanged(fieldIdentifier);
+        }
     }
 
     private void OnShiftChanged(ChangeEventArgs e)
     {
         if (e.Value is ShiftBaseDto item && _recordActivityInsertDto != null)
+        {
             _recordActivityInsertDto.ShiftGuidId = item?.GuidId;
+
+            var fieldIdentifier = FieldIdentifier.Create(() => _recordActivityInsertDto.ShiftGuidId);
+            editContext?.NotifyFieldChanged(fieldIdentifier);
+        }
     }
 
     private async void OnProjectChanged(ChangeEventArgs e)
@@ -115,10 +126,9 @@
                     Console.WriteLine($"Chyba volání API: {(int)response.StatusCode} {response.ReasonPhrase}");
                 }
 
-                StateHasChanged();
-                // var subModulesReq = await _httpClient.GetFromJsonAsync<List<SubModuleBaseDto>>(url);
-                // if (subModulesReq != null)
-                //     _subModules = subModulesReq;
+
+                var fieldIdentifier = FieldIdentifier.Create(() => _recordActivityInsertDto.ProjectId);
+                editContext?.NotifyFieldChanged(fieldIdentifier);
             }
             catch (HttpRequestException)
             {
@@ -135,7 +145,12 @@
     private void OnSubModuleChanged(ChangeEventArgs e)
     {
         if (e.Value is SubModuleBaseDto item && _recordActivityInsertDto != null)
+        {
             _recordActivityInsertDto.SubModuleId = item?.Id;
+
+            var fieldIdentifier = FieldIdentifier.Create(() => _recordActivityInsertDto.SubModuleId);
+            editContext?.NotifyFieldChanged(fieldIdentifier);
+        }
     }
 
     private Task OnValueChanged(string newValue)
@@ -143,15 +158,9 @@
         if (_recordActivityInsertDto != null)
             _recordActivityInsertDto.Description = newValue;
 
-        StateHasChanged();  // Aktualizuje komponentu
         return Task.CompletedTask;
     }
 
-
-    private void onFieldChange(object sender, EventArgs args)
-    {
-        StateHasChanged();
-    }
 
     protected async override void performActionOnOpen()
     {
@@ -171,6 +180,7 @@
             _projects = projectsReq;
 
         _recordActivityInsertDto = new();
+        _recordActivityInsertDto.ActivityId = (int)eActivity.Start;
         editContext = new EditContext(_recordActivityInsertDto);
         editContext.OnFieldChanged += onFieldChanged;
 
@@ -183,22 +193,23 @@
             editContext.OnFieldChanged -= onFieldChanged;
     }
 
+    public void Dispose()
+    {
+        performActionOnClose();
+    }
+
     protected async override void save_Click()
     {
         if (_httpClient != null && _recordActivityInsertDto != null)
         {
             _recordActivityInsertDto.StartDateTime = DateTime.Now;
-            _recordActivityInsertDto.ActivityId = (int)eActivity.Start;
             var result = await _httpClient.PostAsJsonAsync<RecordActivityInsertDto>("api/v1/record-activities", _recordActivityInsertDto);
 
-            if (result.IsSuccessStatusCode)
-            {
-
-            }
+            if (result.StatusCode == HttpStatusCode.OK)
+                _toastNotificationService.AddNotification(eNotificationType.Success, "Success", "Data byala upraveny.");
             else
-            {
-
-            }
+                _toastNotificationService.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
+            
             await closeModalAsync();
         }
     }

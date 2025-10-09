@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TimeTracker.Basic.Enums;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Models.Entities;
+using TimeTracker.BE.DB.Models.Interfaces;
 using TimeTracker.BE.DB.Repositories;
 using TimeTracker.BE.Web.BusinessLogic.Models.DTOs;
 using TimeTracker.BE.Web.Shared.Services;
@@ -47,7 +49,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (activities != null)
 				{
 					var activitiesDto = _mapper.Map<List<ActivityBaseDto>>(activities);
-					return activitiesDto != null ? Ok(activitiesDto) : Problem();
+					return activitiesDto != null ? Ok(activitiesDto) : BadRequest();
 				}
 				else
 				{
@@ -74,7 +76,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (recordActivities != null)
 				{
 					var recordActivitiesDto = _mapper.Map<List<RecordActivityBaseDto>>(recordActivities);
-					return recordActivitiesDto != null ? Ok(recordActivitiesDto) : Problem();
+					return recordActivitiesDto != null ? Ok(recordActivitiesDto) : BadRequest();
 				}
 				else
 				{
@@ -101,7 +103,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (recordActivity != null)
 				{
 					var recordActivityDto = _mapper.Map<RecordActivityDetailDto>(recordActivity);
-					return recordActivityDto != null ? Ok(recordActivityDto) : Problem();
+					return recordActivityDto != null ? Ok(recordActivityDto) : BadRequest();
 				}
 				else
 				{
@@ -125,7 +127,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="recordActivityInsertDto">Data nového záznamu aktivity.</param>
 		/// <returns>Vytvořený záznam aktivity.</returns>
 		[HttpPost("api/v1/record-activities")]
-		public async Task<ActionResult<List<RecordActivityInsertDto>>> AddRecordActivitiesAsync([FromBody] RecordActivityInsertDto recordActivityInsertDto)
+		public async Task<ActionResult<RecordActivityBaseDto?>> AddRecordActivitiesAsync([FromBody] RecordActivityInsertDto recordActivityInsertDto)
 		{
 			try
 			{
@@ -134,12 +136,60 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (recordActivity != null)
 				{
 					var recordActivityDto = _mapper.Map<RecordActivityBaseDto>(recordActivity);
-					return recordActivityDto != null ? Ok(recordActivityDto) : Problem();
+					return recordActivityDto != null ? Ok(recordActivityDto) : BadRequest();
 				}
 				else
 				{
 					return NotFound();
 				}
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.LogError(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// Přidá záznam o pozastavení (Pause) pro poslední aktivitu.
+		/// </summary>
+		/// <returns>Výsledek operace.</returns>
+		[HttpPost("api/v1/record-activity/pause")]
+		public async Task<ActionResult<RecordActivityDetailDto?>> AddRecordActivityPauseAsync()
+		{
+			try
+			{
+				var lastRecordActivity = await _recordRepository.ChangeOnPause();
+				if (lastRecordActivity == null)
+					return BadRequest("Neexistuje žádný předchozí záznam aktivity.");
+
+				var recordActivityDto = _mapper.Map<RecordActivityDetailDto>(lastRecordActivity);
+
+				return recordActivityDto != null ? Ok(recordActivityDto) : BadRequest();
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.LogError(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
+				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// Přidá záznam o ukončení směny (End Shift) pro poslední aktivitu.
+		/// </summary>
+		/// <returns>Výsledek operace.</returns>
+		[HttpPost("api/v1/record-activity/end-shift")]
+		public async Task<ActionResult<RecordActivityDetailDto?>> AddRecordActivityEndShiftAsync()
+		{
+			try
+			{
+				var lastRecordActivity = await _recordRepository.ChangeOnEndShift();
+				if (lastRecordActivity == null)
+					return BadRequest("Neexistuje žádný předchozí záznam aktivity.");
+
+				var recordActivityDto = _mapper.Map<RecordActivityDetailDto>(lastRecordActivity);
+
+				return recordActivityDto != null ? Ok(recordActivityDto) : BadRequest();
 			}
 			catch (Exception ex)
 			{
@@ -163,9 +213,9 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var result = await _recordRepository.DeleteAsync(recordActivityGuidId);
-				if (result != null)
+				if (result)
 				{
-					return result == true ? Ok() : Problem();
+					return result == true ? Ok() : BadRequest();
 				}
 				else
 				{

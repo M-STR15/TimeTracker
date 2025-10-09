@@ -6,17 +6,18 @@
     [Inject]
     protected IEventLogService? _eventLogService { get; set; }
     [Inject]
-    protected ToastNotificationService _toastNotificationService { get; set; }
+    protected ToastNotificationService? _toastNotificationService { get; set; }
     [Inject]
-    private IHttpClientFactory _httpClientFactory { get; set; } 
+    private IHttpClientFactory? _httpClientFactory { get; set; }
     [Inject]
-    protected NavigationManager _navigationManager { get; set; }
+    protected NavigationManager? _navigationManager { get; set; }
 
     protected override void OnInitialized()
     {
         try
         {
-            _httpClient = _httpClientFactory.CreateClient("TimeTrackerAPI");
+            if (_httpClientFactory != null)
+                _httpClient = _httpClientFactory.CreateClient("TimeTrackerAPI");
         }
         catch (Exception ex)
         {

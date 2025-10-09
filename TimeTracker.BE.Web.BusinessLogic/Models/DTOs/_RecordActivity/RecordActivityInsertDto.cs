@@ -9,21 +9,21 @@ namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
 	public class RecordActivityInsertDto : IRecordActivityInsert
 	{
 		/// <inheritdoc />
-		[Required(ErrorMessage = "Hodnota je vyžadována")]
-		[EnumDataType(typeof(eActivity), ErrorMessage = "Hodnota neodpovídá požadovanému typu.")]
+		[Required(ErrorMessage = "Activity:Hodnota je vyžadována")]
+		[EnumDataType(typeof(eActivity), ErrorMessage = "Activity:Hodnota neodpovídá požadovanému typu.")]
 		public int ActivityId { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? Description { get; set; }
 		/// <inheritdoc />
-		[Required(ErrorMessage = "Hodnota je vyžadována")]
+		[Required(ErrorMessage = "Project:Hodnota je vyžadována")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public int? ProjectId { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public Guid? ShiftGuidId { get; set; }
 		/// <inheritdoc />
-		[Required(ErrorMessage = "Hodnota je vyžadována")]
+		[Required(ErrorMessage = "StartDateTime:Hodnota je vyžadována")]
 		public DateTime StartDateTime { get; set; }
 		/// <inheritdoc />
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

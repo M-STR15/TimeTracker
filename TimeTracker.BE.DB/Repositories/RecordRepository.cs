@@ -130,7 +130,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		{
 			RecordActivity? recordActivity = null;
 
-			var context = _contextFactory();
+			using var context = _contextFactory();
 			if (context.RecordActivities.Count() > 0)
 			{
 				recordActivity = await context.RecordActivities.OrderByDescending(x => x.StartDateTime)
@@ -174,6 +174,70 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 
 			var getDat = item;
 			return getDat;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	public async Task<RecordActivity?> ChangeOnPause()
+	{
+		try
+		{
+			var context = _contextFactory();
+			var item = new RecordActivity(DateTime.Now, (int)eActivity.Pause);
+			await context.RecordActivities.AddAsync(item);
+			await context.SaveChangesAsync();
+			await updateRefreshEndTimeAsync();
+
+			RecordActivity? recordActivity = null;
+
+			if (context.RecordActivities.Count() > 0)
+			{
+				recordActivity = await context.RecordActivities.OrderByDescending(x => x.StartDateTime)
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.Shift)
+					.Include(x => x.SubModule)
+					.Include(x => x.TypeShift)
+					.FirstOrDefaultAsync();
+			}
+
+			return recordActivity;
+		}
+		catch (Exception)
+		{
+			throw;
+		}
+	}
+
+	public async Task<RecordActivity?> ChangeOnEndShift()
+	{
+		try
+		{
+			var context = _contextFactory();
+			var item = new RecordActivity(DateTime.Now, (int)eActivity.Stop);
+			await context.RecordActivities.AddAsync(item);
+			await context.SaveChangesAsync();
+			await updateRefreshEndTimeAsync();
+
+			RecordActivity? recordActivity = null;
+
+			if (context.RecordActivities.Count() > 0)
+			{
+				recordActivity = await context.RecordActivities.OrderByDescending(x => x.StartDateTime)
+					.Include(x => x.Project)
+						.ThenInclude(x => x.SubModules)
+					.Include(x => x.Activity)
+					.Include(x => x.Shift)
+					.Include(x => x.SubModule)
+					.Include(x => x.TypeShift)
+					.FirstOrDefaultAsync();
+			}
+
+			return recordActivity;
 		}
 		catch (Exception)
 		{
