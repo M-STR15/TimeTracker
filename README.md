@@ -23,14 +23,14 @@ Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv
 
 
 ## Installation
-aby u generovnání informace ovětvy bylo možné vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
+aby u generovnání informace zobrazil vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
 
     
-## Release
+## Release/master větev
 
-### 0.0.0   (202x-xx-xxx)
+### 0.0.1   (2025-10-10)
 
-na SW se stále pracuje
+uvolněna první betaverze - u webové aplikace je ještě potřeba doladit některé funkce (informační panel po změně  aktivity)
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/M-STR15/TimeTracker)
