@@ -10,8 +10,6 @@ dotnet ef migrations add Inicialization --project TimeTracker.BE.DB --startup-pr
 
 
 dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext
-
-
 dotnet ef database drop --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext -f
 
 
@@ -28,6 +26,15 @@ Update-Database -Project TimeTracker.BE.DB -StartupProject TimeTracker.Web.Blazo
 
 dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.PC
 dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.PC --output-dir Migrations/PC
+dotnet ef migrations add Update01 --project TimeTracker.BE.DB --startup-project TimeTracker.PC --output-dir Migrations/SQLite --context SqliteDbContext
 
+
+// je potřeba přepnout Package manager Console na TimeTracker.Web.Blazor.Server
 dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server
-dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/WEB
+dotnet ef migrations add Update01 --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/MSSQL --context MsSqlDbContext
+
+
+
+
+// vypsání DB contextu
+dotnet ef dbcontext list --project TimeTracker.BE.DB --startup-project TimeTracker.PC

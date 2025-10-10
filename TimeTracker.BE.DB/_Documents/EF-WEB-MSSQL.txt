@@ -1,0 +1,11 @@
+﻿// je potřeba přepnout Package manager Console na TimeTracker.Web.Blazor.Server
+
+//první inicializace DB
+dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server
+// následující změny v DB
+dotnet ef migrations add Update01 --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --output-dir Migrations/MSSQL --context MsSqlDbContext
+
+//nahrání změn do DB
+dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext
+//odstranění DB
+dotnet ef database drop --project TimeTracker.BE.DB --startup-project TimeTracker.Web.Blazor.Server --context MsSqlDbContext -f

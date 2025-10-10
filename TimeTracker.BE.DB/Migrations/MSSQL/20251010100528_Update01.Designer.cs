@@ -2,33 +2,43 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TimeTracker.BE.DB.DataAccess;
 
 #nullable disable
 
-namespace TimeTracker.BE.DB.Migrations.SQLite
+namespace TimeTracker.BE.DB.Migrations.MSSQL
 {
-    [DbContext(typeof(SqliteDbContext))]
-    partial class SqliteDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MsSqlDbContext))]
+    [Migration("20251010100528_Update01")]
+    partial class Update01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.2");
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("TimeTracker.BE.DB.Models.Entities.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("Activity_ID")
                         .HasComment("Primární klíč aktivity.");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(30)")
                         .HasComment("Název aktivity.");
 
                     b.HasKey("Id");
@@ -63,18 +73,20 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("Project_ID")
                         .HasComment("Primární klíč projektu.");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasComment("Popis projektu.");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(30)")
                         .HasComment("Název projektu.");
 
                     b.HasKey("Id");
@@ -92,46 +104,46 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid_ID");
 
                     b.Property<int>("ActivityId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("Activity_ID")
                         .HasComment("Primární klíč aktivity.");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasComment("Popis aktivity.");
 
                     b.Property<DateTime?>("EndDateTime")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("End_DateTime")
                         .HasComment("Datum a čas ukončení aktivity.");
 
                     b.Property<int?>("ProjectId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("Project_ID");
 
                     b.Property<Guid?>("ShiftGuidId")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Shift_GuidID");
 
                     b.Property<DateTime>("StampDateTime")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("Stamp_DateTime");
 
                     b.Property<DateTime>("StartDateTime")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("Start_DateTime")
                         .HasComment("Datum a čas zahájení aktivity.");
 
                     b.Property<int?>("SubModuleId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("SubModule_ID");
 
                     b.Property<int?>("TypeShiftId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("TypeShift_ID");
 
                     b.HasKey("GuidId");
@@ -153,25 +165,25 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                 {
                     b.Property<Guid>("GuidId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("Guid_ID");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ShiftGuidId")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StampDateTime")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("Stamp_DateTime");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("datetime2")
                         .HasColumnName("Start_date");
 
                     b.Property<int>("TypeShiftId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("TypeShift_ID");
 
                     b.HasKey("GuidId");
@@ -193,22 +205,24 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("SubModule_ID")
                         .HasComment("Primární klíč podmodulu.");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasComment("Popis podmodulu.");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(30)")
                         .HasComment("Název podmodulu.");
 
                     b.Property<int>("ProjectId")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("Project_ID")
                         .HasComment("ID projektu, ke kterému podmodul patří.");
 
@@ -227,29 +241,31 @@ namespace TimeTracker.BE.DB.Migrations.SQLite
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("int")
                         .HasColumnName("TypeShift_ID")
                         .HasComment("Primární klíč typu směny.");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Color")
                         .HasComment("Barva směny.");
 
                     b.Property<bool>("IsVisibleInMainWindow")
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("bit")
                         .HasComment("Viditelnost směny v hlavním okně.");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("TEXT")
+                        .HasColumnType("nvarchar(30)")
                         .HasColumnName("Name")
                         .HasComment("Název typu směny.");
 
                     b.Property<int?>("TypeShiftId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

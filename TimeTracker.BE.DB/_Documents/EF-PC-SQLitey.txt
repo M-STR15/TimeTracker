@@ -1,0 +1,16 @@
+﻿// je potřeba přepnout Package manager Console na TimeTracker.PC
+
+//první inicializace DB
+dotnet ef migrations add inicialization --project TimeTracker.BE.DB --startup-project TimeTracker.PC
+// následující změny v DB
+dotnet ef migrations add Update01 --project TimeTracker.BE.DB --startup-project TimeTracker.PC --output-dir Migrations/SQLite --context TimeTracker.BE.DB.DataAccess.SqliteDbContext
+
+//nahrání změn do DB
+dotnet ef database update --project TimeTracker.BE.DB --startup-project TimeTracker.PC --context SqliteDbContext
+//odstranění DB
+dotnet ef database drop --project TimeTracker.BE.DB --startup-project TimeTracker.PC --context SqliteDbContext -f
+
+
+
+
+dotnet ef migrations add Update01 --project TimeTracker.BE.DB --startup-project TimeTracker.PC --output-dir Migrations/SQLite --context TimeTracker.BE.DB.DataAccess.SqliteDbContext

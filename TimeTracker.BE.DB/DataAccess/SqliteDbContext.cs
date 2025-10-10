@@ -6,6 +6,7 @@ namespace TimeTracker.BE.DB.DataAccess
 	{
 		public SqliteDbContext(DbContextOptions<SqliteDbContext> options) : base(options) { }
 
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			var folder = Environment.SpecialFolder.LocalApplicationData;
