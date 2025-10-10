@@ -1,7 +1,7 @@
 
 # TimerTracker (ve vývoji)
 
-Aplikace vznikla za účelem evidování aktivit při vývoji SWs. A následné zobrazení výsledků aktivit za jednotlivé dny. 
+Aplikace vznikla za účelem evidování aktivit při vývoji SWs. Následné zobrazení výsledků aktivit za jednotlivé dny. 
 
 Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv užívat zdarma.
 
@@ -23,12 +23,59 @@ Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv
 
 
 ## Installation
+
+### PC verze:
+
+- aplikace sama po spuštění vytvoří potřebné databázové tabulky na uložišti:
+ 
+   - "C:\Users\<user>\AppData\Local\TimeTracker.db"
+   - "C:\Users\<user>\AppData\Local\TimeTracker.db-wal"
+   - "C:\Users\<user>\AppData\Local\TimeTracker.db-shm"
+
+### Web verze:
+
+- aplikace sama po spuštění vytvoří potřebné databázové tabulky v MS SQL databázi, jenom je potřeba změnit připojovací řetězec TimeTracker.BE.DB.DataAccess.MsSqlDbContext->OnConfiguring()
+
+
+## Installation for develop
+
 aby u generovnání informace zobrazil vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
 
     
-## Release/master větev
+## Release
 
-### 0.0.1   (2025-10-10)
+### Changes
+Legend: 
+
+Hlavní kategorie 
+
+- 🚀 - Nová funkce
+- 🐞 - Oprava chyby
+- 📝 - Dokumentace
+- 🛠 - Úprava kódu
+- 🚨 - Bezpečnostní aktualizace
+- ❌ - Odstranění funkce
+- 🛢 - Databázové úpravy
+
+Dodatečné info
+- 🔒 - Nezveřejňovat informaci zákazníkovi
+- 🔥 – Kritická
+- ⚠ – Důležitá -> ovlivňující mnoho uživatelů
+- 🛑 – Zásadní
+- 🚨 – Bezpečnostní
+- ***
+
+***
+
+#### 0.0.2   (2025-10-11)
+
+PC verze:
+- 🐞 vytvořen nový migrační balíček a oživení připojování k DB 
+- 🐞 při přepínání projektů, aby 
+
+***
+
+#### 0.0.1   (2025-10-10)
 
 -uvolněna první betaverze - u webové aplikace je ještě potřeba doladit některé funkce (informační panel po změně  aktivity)
 
