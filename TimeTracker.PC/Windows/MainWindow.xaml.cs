@@ -22,7 +22,7 @@ namespace TimeTracker.PC.Windows
 		private readonly MainStory _mainStory;
 		private DispatcherTimer _dispatcherTimer;
 		private EventLogService _eventLogService;
-		private EventHandler _lastRecordActivityHangler;
+		private EventHandler? _lastRecordActivityHangler;
 		private RecordActivity? _lra;
 		private ProjectRepository<SqliteDbContext> _projectRepository;
 		private SubModuleRepository<SqliteDbContext> _subModuleRepository;
@@ -70,13 +70,13 @@ namespace TimeTracker.PC.Windows
 
 		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
 		{
-			if (recordActivity.Activity != null && recordActivity.TypeShift != null)
+			if (recordActivity.Activity != null)
 				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
 			else
 				return false;
 		}
 
-		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+		private async Task<bool> addActiviteAsync(Activity activity, TypeShift? typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
 		{
 			try
 			{
