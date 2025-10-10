@@ -39,7 +39,10 @@ Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv
 
 ## Installation for develop
 
-aby u generovnání informace zobrazil vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
+- Aby u generovnání informace zobrazil vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
+
+- Někdy se nespustí kompilace hned na poprvé, je to z důvodu, že aplikace má nastavený powershell script, který generuje BuildInfo.cs.
+ Někdy se stane, že se to nepovede na poprvé, je potřeba spustit znovu kompilaci.
 
     
 ## Release
