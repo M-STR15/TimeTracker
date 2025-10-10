@@ -59,7 +59,8 @@ namespace TimeTracker.PC.Windows
 
 		public void Dispose()
 		{
-			_lastRecordActivityHangler -= onSetLabelsHandler;
+			if (_lastRecordActivityHangler != null)
+				_lastRecordActivityHangler -= onSetLabelsHandler;
 		}
 
 		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
@@ -69,7 +70,10 @@ namespace TimeTracker.PC.Windows
 
 		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
 		{
-			return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+			if (recordActivity.Activity != null && recordActivity.TypeShift != null)
+				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+			else
+				return false;
 		}
 
 		private async Task<bool> addActiviteAsync(Activity activity, TypeShift typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
@@ -315,10 +319,16 @@ namespace TimeTracker.PC.Windows
 				if (cmbProjects.SelectedItem != null)
 				{
 					var projectId = ((Project)cmbProjects.SelectedItem).Id;
-					var subModules = (await _subModuleRepository.GetForTheProjectAsync(projectId)).ToList();
-					cmbSubModule.ItemsSource = subModules;
-					if (subModules != null && subModules.Count > 0)
-						cmbSubModule.SelectedIndex = 0;
+					cmbSubModule.ItemsSource = null;
+					var subModulesForProject = await _subModuleRepository.GetForTheProjectAsync(projectId);
+
+					if (subModulesForProject != null)
+					{
+						var subModules = subModulesForProject.ToList();
+						cmbSubModule.ItemsSource = subModules;
+						if (subModules != null && subModules.Count > 0)
+							cmbSubModule.SelectedIndex = 0;
+					}
 				}
 			}
 			catch (Exception ex)
