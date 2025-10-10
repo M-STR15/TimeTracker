@@ -28,7 +28,9 @@ namespace TimeTracker.PC.Stories
 		{
 			createDb();
 
-			_container.Bind<SqliteDbContext>().To<SqliteDbContext>().InScope(ctx => ctx.Kernel);
+			_container.Bind<SqliteDbContext>()
+					  .ToMethod(ctx => new SqliteDbContext(ctx.Kernel.Get<DbContextOptions<SqliteDbContext>>()))
+					  .InTransientScope();
 			_container.Bind<Func<SqliteDbContext>>().ToMethod(ctx => new Func<SqliteDbContext>(() => ctx.Kernel.Get<SqliteDbContext>()));
 
 			//var dbContext = _container.Get<SqliteDbContext>();
@@ -39,27 +41,29 @@ namespace TimeTracker.PC.Stories
 
 			_container.Bind<MainWindow>().To<MainWindow>().InSingletonScope();
 			_container.Bind<RecordListWindow>().To<RecordListWindow>().InSingletonScope();
+
+			checkedDbConnection();
 		}
-
-
 
 		private void createDb()
 		{
-			var dbPath = getDatabasePath();
+
+			var dbPath = SqliteDbContext.GetDatabasePath();
 			var options = createDbContextOptions(dbPath);
 			initializeDatabase(options);
 			registerForDependencyInjection(options);
 		}
-		/// <summary>
-		/// Vypíše cestu k databázi
-		/// </summary>
-		/// <returns></returns>
-		private string getDatabasePath()
+
+		private void checkedDbConnection()
 		{
-			var folder = Environment.SpecialFolder.LocalApplicationData;
-			var path = Environment.GetFolderPath(folder);
-			return Path.Combine(path, "TimeTracker.db");
+			var dbContext = _container.Get<SqliteDbContext>();
+
+			if (dbContext.Database.CanConnect())
+				Console.WriteLine("DbContext je správně připojen a databáze dostupná.");
+			else
+				Console.WriteLine("DbContext není připojen nebo databáze není dostupná.");
 		}
+
 		/// <summary>
 		/// Vytvoření možností pro DbContext
 		/// </summary>

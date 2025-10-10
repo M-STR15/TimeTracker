@@ -35,21 +35,18 @@ namespace TimeTracker.PC.Windows
 				_shiftProvider = _mainStory.DIContainerStore.GetShiftRepository();
 				_typeShiftRepository = _mainStory.DIContainerStore.GetTypeShiftRepository();
 
-				_typeShifts = (await _typeShiftRepository.GetAllAsync()).Select(x => new TypeShiftRadioButton(x)).ToList();
-				if (_typeShifts.Count > 0)
-					_typeShifts.First().IsSelected = true;
-
-				lvTypeShifts.ItemsSource = _typeShifts;
-
-				var monthAndShift = new List<string>();
-				var countMountBack = 6;
-				var currentDate = DateTime.Now;
-				var currentMonth = new DateTime(currentDate.Year, currentDate.Month, 1);
-
-				for (int i = 0; i < countMountBack; i++)
+				var typeShifts = await _typeShiftRepository.GetAllAsync();
+				if (typeShifts != null)
 				{
-					monthAndShift.Add(currentMonth.AddMonths(-i).ToString("MM.yyyy"));
+					_typeShifts = typeShifts.Select(x => new TypeShiftRadioButton(x)).ToList();
+
+					if (_typeShifts.Count > 0)
+						_typeShifts.First().IsSelected = true;
+
+					lvTypeShifts.ItemsSource = _typeShifts;
 				}
+
+				var monthAndShift = generateMonthForCombobox();
 
 				cmbMontAndYear.ItemsSource = null;
 				cmbMontAndYear.ItemsSource = monthAndShift;
@@ -60,6 +57,22 @@ namespace TimeTracker.PC.Windows
 			{
 				_eventLogService.WriteError(new Guid("def4de22-6fc4-4ab4-9f7e-0aba95e5337c"), ex, "Problém při otvírání okna pro zadávání směn.");
 			}
+		}
+
+		// generování 2 měsíce do předu a 4 měsíce zpětně
+		private List<string> generateMonthForCombobox()
+		{
+			var monthAndShift = new List<string>();
+			var countMountBack = 6;
+			var currentDate = DateTime.Now;
+			var currentMonth = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(2);
+
+			for (int i = 0; i < countMountBack; i++)
+			{
+				monthAndShift.Add(currentMonth.AddMonths(-i).ToString("MM.yyyy"));
+			}
+
+			return monthAndShift;
 		}
 
 		private void generateButtonList()

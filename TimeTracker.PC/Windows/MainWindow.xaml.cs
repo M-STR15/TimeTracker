@@ -165,19 +165,33 @@ namespace TimeTracker.PC.Windows
 
 		private async void loadShifts()
 		{
-			var currentDate = DateTime.Now;
-			var getList = await _shiftRepository.GetAsync(currentDate.AddDays(-7), currentDate.AddDays(3));
-			_shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
-			_shiftCmbs.Add(new ShiftCmb());
-			cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
-			cmbShift.SelectedIndex = 0;
+			try
+			{
+				var currentDate = DateTime.Now;
+				var getList = await _shiftRepository.GetAsync(currentDate.AddDays(-7), currentDate.AddDays(3));
+				_shiftCmbs = getList.Select(x => new ShiftCmb(x)).OrderByDescending(x => x.StartDate).ToList();
+				_shiftCmbs.Add(new ShiftCmb());
+				cmbShift.ItemsSource = _shiftCmbs.OrderByDescending(x => x.StartDate);
+				cmbShift.SelectedIndex = 0;
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.WriteError(new Guid("bc8f173f-0943-49f5-ab01-4242e9a1a127"), ex, "Problém při načítání směn.");
+			}
 		}
 
 		private async void loadTypeShifts()
 		{
-			_typeShifts = (await _typeShiftRepository.GetTypeShiftsForMainWindowAsync()).ToList();
-			cmbTypeShift.ItemsSource = _typeShifts;
-			cmbTypeShift.SelectedIndex = 0;
+			try
+			{
+				_typeShifts = (await _typeShiftRepository.GetTypeShiftsForMainWindowAsync()).ToList();
+				cmbTypeShift.ItemsSource = _typeShifts;
+				cmbTypeShift.SelectedIndex = 0;
+			}
+			catch (Exception ex)
+			{
+				_eventLogService.WriteError(new Guid("bc8f173f-0943-49f5-ab01-4242e9a1a127"), ex, "Problém při načítání typů směn.");
+			}
 		}
 
 		private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
