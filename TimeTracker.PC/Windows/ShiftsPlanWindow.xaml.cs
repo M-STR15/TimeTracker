@@ -51,7 +51,7 @@ namespace TimeTracker.PC.Windows
 				cmbMontAndYear.ItemsSource = null;
 				cmbMontAndYear.ItemsSource = monthAndShift;
 
-				cmbMontAndYear.SelectedIndex = 0;
+				cmbMontAndYear.SelectedItem = monthAndShift.FirstOrDefault(x => x == getCurrentMonth().AddMonths(-2).ToString("MM.yyyy"));
 			}
 			catch (Exception ex)
 			{
@@ -64,8 +64,7 @@ namespace TimeTracker.PC.Windows
 		{
 			var monthAndShift = new List<string>();
 			var countMountBack = 6;
-			var currentDate = DateTime.Now;
-			var currentMonth = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(2);
+			var currentMonth = getCurrentMonth();
 
 			for (int i = 0; i < countMountBack; i++)
 			{
@@ -74,6 +73,9 @@ namespace TimeTracker.PC.Windows
 
 			return monthAndShift;
 		}
+
+		private DateTime getCurrentMonth() => new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(2);
+
 
 		private void generateButtonList()
 		{
