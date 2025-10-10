@@ -80,4 +80,8 @@
 	<ItemGroup>
 		<EditorConfigFiles Remove="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="_Documents\" />
+	</ItemGroup>
 </Project>
