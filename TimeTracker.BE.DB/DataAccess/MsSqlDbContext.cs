@@ -10,7 +10,7 @@ namespace TimeTracker.BE.DB.DataAccess
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlServer(@"Server=<server_name>;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB");
+				optionsBuilder.UseSqlServer(@"Server=.;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB");
 			}
 		}
 

@@ -19,9 +19,7 @@ namespace TimeTracker.BE.Web.Shared.Helpers
 #if RELEASE_TOS_SERVER
 			typeRelease = "";
 #endif
-
-			var dateVersion = new BuildInfo().BuildDate?.ToString("yyMMdd") ?? "";
-			return string.Format("v{0}.{1}{2}", versionStr, dateVersion, typeRelease);
+			return string.Format("v{0}.{1}", versionStr, typeRelease);
 		}
 	}
 }

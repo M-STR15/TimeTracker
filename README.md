@@ -70,6 +70,9 @@ Dodatečné info
 
 ***
 
+#### 0.0.3   (2025-10-25)
+Web verze:
+ - 🛠  úprava zobrazování verze aplikace v informačním panelu
 #### 0.0.2   (2025-10-11)
 
 PC verze:
