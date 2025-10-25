@@ -34,11 +34,6 @@ TimeTracker.BE.DB.DataAccess.MsSqlDbContext -> OnConfiguring()
 
 ## Installation for develop
 
-- Aby se při generování informací zobrazil název aktuální větve, je potřeba mít nainstalovaný [Git for Windows](https://gitforwindows.org/)
-
-- Někdy se nespustí kompilace hned na poprvé, je to z důvodu, že aplikace má nastavený powershell script, který generuje BuildInfo.cs.
- Někdy se stane, že se to nepovede na poprvé, je potřeba spustit znovu kompilaci.
-
 
 ## Release
 
