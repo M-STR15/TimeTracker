@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Documents", "_Documents", "{3C409BD9-6E53-4D3E-B992-FA59249E0366}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		GALLERY.md = GALLERY.md
+		CHANGELOG.md = CHANGELOG.md
+		ARCHITECTURE.md = ARCHITECTURE.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BE", "BE", "{6C3DA257-6962-4EAA-9552-DDEA2495EDC6}"

@@ -11,10 +11,34 @@
 - Zobrazení reportu s výsledky aktivit
 - Podpora PC i Web verze
 
-
-## Installation
+## Technologie
 
 ### PC verze:
+- Backend: C# (.NET9.0-windows)
+- Architektura: „WBA“ (Windows-Based Application)
+    - tato architektura byla zvolena z důvodu, že MVVM architektura již je ukázana v jiném projektu
+- Databáze: SQLite
+- Licence: MIT
+
+### Web verze:
+- Backend: C# (.NET 9) — doplňte přesnou verzi
+- Frontend: Blazor(HTML, SCSS, JavaScript)
+- Architektura: MVC (Model-View-Controller)
+- Databáze: MS SQL
+- Licence: MIT
+
+## Gallery
+
+Odkaz na [GALLERY.md](GALLERY.md)
+
+## Rychlé spuštění (pro developery)
+
+### PC verze:
+1. Clone repo
+   git clone https://github.com/M-STR15/TimeTracker.git
+2. Zvolit projekt TimeTracker.PC a spustit aplikaci (F5 nebo Ctrl+F5)
+
+Poznámka:
 
 Po prvním spuštění aplikace automaticky vytvoří potřebné databázové soubory:
 
@@ -23,58 +47,26 @@ C:\Users\<user>\AppData\Local\TimeTracker.db
 C:\Users\<user>\AppData\Local\TimeTracker.db-wal
 C:\Users\<user>\AppData\Local\TimeTracker.db-shm
 ```
-
 ### Web verze:
+1. Clone repo
+   git clone https://github.com/M-STR15/TimeTracker.git
+2. Nainstalovat lokální databázi MS SQL. Uživatel musí mít admin práva do DB, aby byla vygenerována DB.
+3. Zvolit projekt TimeTracker.Web a spustit aplikaci (F5 nebo Ctrl+F5) 
+
+Poznámka:
 
 Po prvním spuštění aplikace se automaticky vytvoří databázové tabulky v MS SQL.
 Stačí upravit připojovací řetězec ve třídě:
 ```
 TimeTracker.BE.DB.DataAccess.MsSqlDbContext -> OnConfiguring()
 ```
+## Architektura & rozhodnutí
 
-## Installation for develop
+Odkaz na [ARCHITECTURE.md](ARCHITECTURE.md)
 
+## Changelog
 
-## Release
-
-### Changes
-Legend: 
-
-Hlavní kategorie 
-
-- 🚀 - Nová funkce
-- 🐞 - Oprava chyby
-- 📝 - Dokumentace
-- 🛠 - Úprava kódu
-- 🚨 - Bezpečnostní aktualizace
-- ❌ - Odstranění funkce
-- 🛢 - Databázové úpravy
-
-Dodatečné info
-- 🔒 - Nezveřejňovat informaci zákazníkovi
-- 🔥 – Kritická
-- ⚠ – Důležitá -> ovlivňující mnoho uživatelů
-- 🛑 – Zásadní
-- 🚨 – Bezpečnostní
-
-***
-
-#### 0.0.3 (2025-10-25) - Web verze:
- - 🛠  úprava zobrazování verze aplikace v informačním panelu
- 
-#### 0.0.2 (2025-10-11) - PC verze:
-- 🐞 vytvořen nový migrační balíček a oživení připojování k DB 
-- 🐞 při přepínání projektů, aby docházelo k aktualizaci tabulky (v případě neexistujících záznamů)
-
-***
-
-#### 0.0.1 (2025-10-10) – První betaverze
-
-PC verze: využívá MS SQL
-
-Web verze: využívá SQLite
-
-U webové aplikace je potřeba doladit informační panel po změně aktivity
+Odkaz na [CHANGELOG.md](CHANGELOG.md)
 
 ---
 
