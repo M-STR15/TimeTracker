@@ -1,50 +1,45 @@
 
 # TimerTracker (ve vývoji)
 
-Aplikace vznikla za účelem evidování aktivit při vývoji SWs. Následné zobrazení výsledků aktivit za jednotlivé dny. 
+💡 *Aplikace pro evidenci a sledování aktivit při vývoji softwaru. Umožňuje zaznamenávat činnosti na PC a zobrazovat reporty aktivit za jednotlivé dny. Projekt vznikl pro vlastní potřebu, ale je zdarma k užívání.*
 
-Tento program byl vytvořen za účelem vlastní potřeby.Ale může ho kdokoliv užívat zdarma.
-
-
-## Authors
-
-- [@M-STR](https://github.com/M-STR15)
-
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
+---
 
 ## Features
 
 - Zápis aktivit na PC
 - Zobrazení reportu s výsledky aktivit
+- Podpora PC i Web verze
 
 
 ## Installation
 
 ### PC verze:
 
-- aplikace sama po spuštění vytvoří potřebné databázové tabulky na uložišti:
- 
-   - "C:\Users\<user>\AppData\Local\TimeTracker.db"
-   - "C:\Users\<user>\AppData\Local\TimeTracker.db-wal"
-   - "C:\Users\<user>\AppData\Local\TimeTracker.db-shm"
+Po prvním spuštění aplikace automaticky vytvoří potřebné databázové soubory:
+
+```
+C:\Users\<user>\AppData\Local\TimeTracker.db
+C:\Users\<user>\AppData\Local\TimeTracker.db-wal
+C:\Users\<user>\AppData\Local\TimeTracker.db-shm
+```
 
 ### Web verze:
 
-- aplikace sama po spuštění vytvoří potřebné databázové tabulky v MS SQL databázi, jenom je potřeba změnit připojovací řetězec TimeTracker.BE.DB.DataAccess.MsSqlDbContext->OnConfiguring()
-
+Po prvním spuštění aplikace se automaticky vytvoří databázové tabulky v MS SQL.
+Stačí upravit připojovací řetězec ve třídě:
+```
+TimeTracker.BE.DB.DataAccess.MsSqlDbContext -> OnConfiguring()
+```
 
 ## Installation for develop
 
-- Aby u generovnání informace zobrazil vygenerovat název větve, je potřeba mít nainstalovaný https://gitforwindows.org/
+- Aby se při generování informací zobrazil název aktuální větve, je potřeba mít nainstalovaný [Git for Windows](https://gitforwindows.org/)
 
 - Někdy se nespustí kompilace hned na poprvé, je to z důvodu, že aplikace má nastavený powershell script, který generuje BuildInfo.cs.
  Někdy se stane, že se to nepovede na poprvé, je potřeba spustit znovu kompilaci.
 
-    
+
 ## Release
 
 ### Changes
@@ -66,34 +61,36 @@ Dodatečné info
 - ⚠ – Důležitá -> ovlivňující mnoho uživatelů
 - 🛑 – Zásadní
 - 🚨 – Bezpečnostní
-- ***
 
 ***
 
-#### 0.0.3   (2025-10-25)
-Web verze:
+#### 0.0.3 (2025-10-25) - Web verze:
  - 🛠  úprava zobrazování verze aplikace v informačním panelu
-#### 0.0.2   (2025-10-11)
-
-PC verze:
+ 
+#### 0.0.2 (2025-10-11) - PC verze:
 - 🐞 vytvořen nový migrační balíček a oživení připojování k DB 
-- 🐞 při přepínání projektů, aby 
+- 🐞 při přepínání projektů, aby docházelo k aktualizaci tabulky (v případě neexistujících záznamů)
 
 ***
 
-#### 0.0.1   (2025-10-10)
+#### 0.0.1 (2025-10-10) – První betaverze
 
--uvolněna první betaverze - u webové aplikace je ještě potřeba doladit některé funkce (informační panel po změně  aktivity)
+PC verze: využívá MS SQL
 
-PC verze:
+Web verze: využívá SQLite
 
--využívá MS SQL
+U webové aplikace je potřeba doladit informační panel po změně aktivity
 
-WEB verze:
+---
 
--využívá SQLite
+## Authors
 
+[@M-STR](https://github.com/M-STR15)
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/M-STR15/TimeTracker)
-
