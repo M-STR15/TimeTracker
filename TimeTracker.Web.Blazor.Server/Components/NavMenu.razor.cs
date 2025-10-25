@@ -1,10 +1,11 @@
-﻿using TimeTracker.BE.Web.Shared.Models;
+﻿using TimeTracker.BE.Web.Shared.Helpers;
+using TimeTracker.BE.Web.Shared.Models;
 
 namespace TimeTracker.Web.Blazor.Server.Components
 {
 	public partial class NavMenu
 	{
-		private BuildInfo _buildInfo = new();
+		private string versionSW = VersionSWHelper.GetVersionSW();
 		private bool collapseNavMenu = true;
 
 		private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

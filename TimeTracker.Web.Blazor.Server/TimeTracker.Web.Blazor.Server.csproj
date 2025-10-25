@@ -1,13 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 	<PropertyGroup>
-		<GenerateBuildInfoScript>$(MSBuildProjectDirectory)\PowerShellScripts\BuildDateGenerateClass.ps1</GenerateBuildInfoScript>
-	</PropertyGroup>
-
-	<Target Name="RunPowerShellScript" BeforeTargets="BeforeBuild">
-		<Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(GenerateBuildInfoScript)&quot;" />
-	</Target>
-
-	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>

@@ -10,7 +10,7 @@ namespace TimeTracker.BE.Web.Shared.Models
 		public string Version { get; private set; } = _appVersion;
 		public Guid GuidId { get; set; }
 		public string Message { get; set; } = string.Empty;
-		public DateTime? BuildDate { get; private set; } = new BuildInfo().BuildDate;
+		public DateTime? BuildDate { get; private set; }
 		private Exception? _exception;
 		public Exception? Exception
 		{
