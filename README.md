@@ -68,6 +68,10 @@ Odkaz na [ARCHITECTURE.md](ARCHITECTURE.md)
 
 Odkaz na [CHANGELOG.md](CHANGELOG.md)
 
+## Development note
+
+Odkaz na [DEVELOPMENT_NOTE.md](DEVELOPMENT_NOTE.md)
+
 ---
 
 ## Authors
