@@ -23,12 +23,16 @@
 	<ItemGroup>
 		<Compile Remove="wwwroot\NewFolder1\**" />
 		<Compile Remove="wwwroot\NewFolder\**" />
+		<Compile Remove="_Documents\**" />
 		<Content Remove="wwwroot\NewFolder1\**" />
 		<Content Remove="wwwroot\NewFolder\**" />
+		<Content Remove="_Documents\**" />
 		<EmbeddedResource Remove="wwwroot\NewFolder1\**" />
 		<EmbeddedResource Remove="wwwroot\NewFolder\**" />
+		<EmbeddedResource Remove="_Documents\**" />
 		<None Remove="wwwroot\NewFolder1\**" />
 		<None Remove="wwwroot\NewFolder\**" />
+		<None Remove="_Documents\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -71,9 +75,5 @@
 
 	<ItemGroup>
 		<EditorConfigFiles Remove="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="_Documents\" />
 	</ItemGroup>
 </Project>
