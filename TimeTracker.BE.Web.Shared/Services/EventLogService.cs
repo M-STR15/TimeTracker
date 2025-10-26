@@ -1,8 +1,8 @@
-﻿using Serilog;
+﻿using Newtonsoft.Json;
+using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using System.Configuration;
-using TimeTracker.BE.Web.Shared.Models;
 
 namespace TimeTracker.BE.Web.Shared.Services
 {
@@ -31,11 +31,18 @@ namespace TimeTracker.BE.Web.Shared.Services
 
 		public void LogFatal(Guid guidId, Exception exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null)
-				exception.Data.Add("InputObject", inputObject);
+			try
+			{
+				if (inputObject != null)
+					exception.Data.Add("InputObject", inputObject);
 
-			var eventLog = getEventLog(guidId, exception, message);
-			Log.Fatal("{@EventLog}", eventLog);
+				var eventLog = getEventLog(guidId, exception, message);
+				Log.Fatal("{@EventLog}", eventLog);
+			}
+			catch (Exception)
+			{
+
+			}
 		}
 
 
@@ -46,11 +53,28 @@ namespace TimeTracker.BE.Web.Shared.Services
 		/// <param name="message">Zpráva k dané události.</param>
 		public void LogError(Guid guidId, Exception exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null)
-				exception.Data.Add("InputObject", inputObject);
+			try
+			{
+				if (inputObject != null)
+					exception.Data.Add("InputObject", inputObject);
 
+				var json = getJson(guidId, exception, message);
+				Log.Error("EventLog: {Json}", json);
+			}
+			catch (Exception)
+			{
+
+			}
+		}
+
+		private string? getJson(Guid guidId, Exception? exception, string? message = null)
+		{
 			var eventLog = getEventLog(guidId, exception, message);
-			Log.Error("{@EventLog}", eventLog);
+			return JsonConvert.SerializeObject(eventLog, new JsonSerializerSettings
+			{
+				MaxDepth = 1,
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			});
 		}
 
 		/// <summary>
@@ -60,11 +84,18 @@ namespace TimeTracker.BE.Web.Shared.Services
 		/// <param name="message">Zpráva k dané události.</param>
 		public void LogWarning(Guid guidId, Exception exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null)
-				exception.Data.Add("InputObject", inputObject);
+			try
+			{
+				if (inputObject != null)
+					exception.Data.Add("InputObject", inputObject);
 
-			var eventLog = getEventLog(guidId, exception, message);
-			Log.Warning("{@EventLog}", eventLog);
+				var json = getJson(guidId, exception, message);
+				Log.Warning("EventLog: {Json}", json);
+			}
+			catch (Exception)
+			{
+
+			}
 		}
 
 		/// <summary>
@@ -74,32 +105,47 @@ namespace TimeTracker.BE.Web.Shared.Services
 		/// <param name="message">Zpráva k dané události.</param>
 		public void LogInformation(Guid guidId, Exception? exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null && exception != null)
-				exception.Data.Add("InputObject", inputObject);
+			try
+			{
+				if (inputObject != null && exception != null)
+					exception.Data.Add("InputObject", inputObject);
 
-			var eventLog = getEventLog(guidId, exception, message);
-			Log.Information("{@EventLog}", eventLog);
+				var json = getJson(guidId, exception, message);
+				Log.Information("EventLog: {Json}", json);
+			}
+			catch (Exception)
+			{
+
+			}
 		}
-
-
 
 		public void LogDebug(Guid guidId, Exception exception, string? message = null, object? inputObject = null)
 		{
-			if (inputObject != null)
-				exception.Data.Add("InputObject", inputObject);
+			try
+			{
+				if (inputObject != null)
+					exception.Data.Add("InputObject", inputObject);
 
-			var eventLog = getEventLog(guidId, exception, message);
-			Log.Debug("{@EventLog}", eventLog);
+				var json = getJson(guidId, exception, message);
+				Log.Debug("EventLog: {Json}", json);
+			}
+			catch (Exception)
+			{
+
+			}
 		}
 
-		private EventLog getEventLog(Guid guidId, Exception? exception, string? message = null)
+		private Models.EventLog getEventLog(Guid guidId, Exception? exception, string? message = null)
 		{
-			return new EventLog
+			var messageData = string.IsNullOrEmpty(message) ? (exception?.Message ?? "") : message;
+			var eventData = new Models.EventLog
 			{
 				GuidId = guidId,
-				Message = string.IsNullOrEmpty(message) ? (exception?.Message ?? "") : message,
+				Message = messageData,
 				Exception = exception,
 			};
+
+			return eventData;
 		}
 	}
 }

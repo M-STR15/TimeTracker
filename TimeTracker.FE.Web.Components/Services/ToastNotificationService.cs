@@ -76,8 +76,11 @@ namespace TimeTracker.FE.Web.Components.Services
 		/// <param name="message">Notifikace, která má být odstraněna.</param>
 		public void RemoveNotification(Notification message)
 		{
-			_notifications.Remove(message);
-			NotifyStateChanged();
+			if (_notifications.Count > 0)
+			{
+				_notifications.Remove(message);
+				NotifyStateChanged();
+			}
 		}
 
 		public void RemoveNotification(Guid guidId)

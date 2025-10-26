@@ -88,7 +88,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
-				_eventLogService.LogError(Guid.Parse("4f259ab6-4044-41a1-9f66-8eb1147f8132"), ex);
+				await _eventLogService.LogErrorAsync(Guid.Parse("4f259ab6-4044-41a1-9f66-8eb1147f8132"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
