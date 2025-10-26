@@ -1,4 +1,6 @@
-﻿namespace TimeTracker.Web.Blazor.Server.Models
+﻿using TimeTracker.Basic.Enums;
+
+namespace TimeTracker.Web.Blazor.Server.Models
 {
 	public class RecordListViewModel
 	{
@@ -8,6 +10,8 @@
 		public DateTime? EndDateTime { get; set; }
 		public Guid GuidId { get; set; }
 		public string ShiftDateStr { get; set; } = string.Empty;
+
+		public int ActivityId { get; set; }
 
 		public string ActivityName { get; set; } = string.Empty;
 
@@ -21,9 +25,12 @@
 		{
 			get
 			{
-				var time = (DateTime.Now - StartDateTime);
-				var actualActivityInSeconds = time.TotalSeconds;
-				return time.ToString(@"hh\:mm\:ss");
+				TimeSpan? time = null;
+				if (ActivityId != (int)eActivity.Stop)
+				{
+					time = (DateTime.Now - StartDateTime);
+				}
+				return time?.ToString(@"hh\:mm\:ss") ?? "00:00:00";
 			}
 		}
 

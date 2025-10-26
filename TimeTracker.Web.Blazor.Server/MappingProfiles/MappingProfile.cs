@@ -11,6 +11,7 @@ namespace TimeTracker.Web.Blazor.Server.MappingProfiles
 			CreateMap<RecordActivityDetailDto, RecordListViewModel>()
 					.ForMember(dest => dest.ShiftDateStr, opt => opt.MapFrom(src => src.Shift.StartDate.ToString("dd.MM.yyyy")))
 					.ForMember(dest => dest.ActivityName, opt => opt.MapFrom(src => src.Activity.Name))
+				    .ForMember(dest => dest.ActivityId, opt => opt.MapFrom(src => src.Activity.Id))
 					.ForMember(dest => dest.ProjectName, opt => opt.MapFrom(src => src.Project.Name))
 					.ForMember(dest => dest.SubModuleName, opt => opt.MapFrom(src => src.SubModule.Name))
 					.ForMember(dest => dest.TypeShiftName, opt => opt.MapFrom(src => src.TypeShift.Name));

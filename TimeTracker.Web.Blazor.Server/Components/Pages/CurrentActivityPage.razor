@@ -15,8 +15,8 @@
 
     <div>
         <MButton Text="Change" OnClick="onOpenAddActvityModal" Style="width:150px"></MButton>
-        <MButton Text="Pause" Style="width:150px" IsDisabled=isDisableButtons OnClick="onChangeActivityOnPause"></MButton>
-        <MButton Text="End of shift" Style="width:150px" IsDisabled=isDisableButtons OnClick="onChangeActivityOnEndShift"></MButton>
+        <MButton Text="Pause" Style="width:150px" IsDisabled=_isDisableButtonPause OnClick="onChangeActivityOnPause"></MButton>
+        <MButton Text="End of shift" Style="width:150px" IsDisabled=_isDisableButtonStop OnClick="onChangeActivityOnEndShift"></MButton>
     </div>
 
     @if (_lastRecordActivity == null)
@@ -32,7 +32,7 @@
     }
     else
     {
-        <InfoBoard _lastRecordActivity="_lastRecordActivity" _totalTime="_totalTime" />
+        <InfoBoard LastRecordActivity="_lastRecordActivity" TotalTime="_totalTime" />
     }
 
 </div>
@@ -41,120 +41,3 @@
                   @bind-Visible="_isOpenAddActivityModal"
                   @key="_isOpenAddActivityModal"
                   OnModalClosed="onAfterCloseModalAddActivity_Changed" />
-@code {
-    private bool _isOpenAddActivityModal;
-    private void onOpenAddActvityModal() => _isOpenAddActivityModal = true;
-    private RecordListViewModel? _lastRecordActivity;
-    private TotalTimesViewModel? _totalTime;
-    private HttpStatusCode _responsevLastRecordActivityStatusCode;
-    private bool isDisableButtons => _lastRecordActivity == null;
-
-    protected async override Task OnInitializedAsync()
-    {
-        await loadDataAsync();
-        await base.OnInitializedAsync();
-    }
-
-    private async void onChangeActivityOnPause()
-    {
-        try
-        {
-            var result = await _httpClient.PostAsync("api/v1/record-activity/pause", null);
-
-            changeActivity(result);
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            _eventLogService?.LogError(Guid.Parse("7b101d6a-3e6a-4afd-83f6-dc7037b511cd"), ex);
-        }
-    }
-
-    private async void onChangeActivityOnEndShift()
-    {
-        try
-        {
-            var result = await _httpClient.PostAsync("api/v1/record-activity/end-shift", null);
-
-            changeActivity(result);
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            _eventLogService?.LogError(Guid.Parse("0e50d97b-979e-434d-aa32-76bf0a04c35b"), ex);
-        }
-    }
-
-    private async void changeActivity(HttpResponseMessage? result)
-    {
-        if (result != null && result.StatusCode == HttpStatusCode.OK)
-        {
-            _toastNotificationService?.AddNotification(eNotificationType.Success, "Success", "Data byla upraveny.");
-            var recordActivityBaseDto = await result.Content.ReadFromJsonAsync<RecordActivityDetailDto>();
-
-            _lastRecordActivity = _mapper.Map<RecordListViewModel>(recordActivityBaseDto);
-        }
-        else
-            _toastNotificationService?.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
-    }
-
-
-    private async Task loadDataAsync()
-    {
-        try
-        {
-            if (_httpClient != null)
-            {
-                var urlApiLastRecordActivity = "/api/v1/last-record-activity";
-                var urlApiTotalTime = "/api/v1/reports/total-times";
-
-                var responsevLastRecordActivity = await _httpClient.GetAsync(urlApiLastRecordActivity);
-                var responsevApiTotalTime = await _httpClient.GetAsync(urlApiTotalTime);
-
-                if (responsevLastRecordActivity.StatusCode == HttpStatusCode.OK && responsevApiTotalTime.StatusCode == HttpStatusCode.OK)
-                {
-                    // Status 200 OK
-                    var recordActivityDetailDto = await responsevLastRecordActivity.Content.ReadFromJsonAsync<RecordActivityDetailDto>();
-                    var totalTimesDto = await responsevApiTotalTime.Content.ReadFromJsonAsync<TotalTimesDto>();
-                    if (recordActivityDetailDto != null && totalTimesDto != null)
-                    {
-                        _totalTime = _mapper.Map<TotalTimesViewModel>(totalTimesDto);
-                        _lastRecordActivity = _mapper.Map<RecordListViewModel>(recordActivityDetailDto);
-                    }
-
-                    _responsevLastRecordActivityStatusCode = HttpStatusCode.OK;
-                    _toastNotificationService?.AddNotification(eNotificationType.Success, "Success", "Data byla načtena.");
-                }
-                else if (responsevLastRecordActivity.StatusCode == HttpStatusCode.NotFound)
-                {
-                    // Status 404 Not Found
-                    _responsevLastRecordActivityStatusCode = HttpStatusCode.NotFound;
-                    _toastNotificationService?.AddNotification(eNotificationType.Info, "Not Found", "Data nebyla nalezena.");
-                }
-                else if (responsevLastRecordActivity.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    _responsevLastRecordActivityStatusCode = HttpStatusCode.BadRequest;
-                    // Status 400 Bad Request
-                    _toastNotificationService?.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
-                }
-                else
-                {
-                    _responsevLastRecordActivityStatusCode = HttpStatusCode.InternalServerError;
-                    // Ostatní chyby
-                    _toastNotificationService?.AddNotification(eNotificationType.Error, "Error", "Chybný požadavek.");
-                }
-            }
-
-            StateHasChanged();
-        }
-        catch (Exception ex)
-        {
-            _eventLogService?.LogError(Guid.Parse("d58ce7fb-9d3e-4947-82a6-346a78d3a4d3"), ex);
-        }
-    }
-
-    private async void onAfterCloseModalAddActivity_Changed()
-    {
-        await loadDataAsync();
-    }
-}

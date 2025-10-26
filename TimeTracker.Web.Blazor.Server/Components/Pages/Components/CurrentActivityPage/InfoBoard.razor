@@ -11,9 +11,9 @@
         <th class="col-3">Time</th>
     </tr>
     <tr>
-        <td class="col-1">@(_lastRecordActivity.ShiftDateStr)</td>
-        <td class="col-2">@(_lastRecordActivity?.ActivityName ?? "")</td>
-        <td class="col-3">@(_lastRecordActivity?.Time ?? "")</td>
+        <td class="col-1">@(LastRecordActivity?.ShiftDateStr)</td>
+        <td class="col-2">@(LastRecordActivity?.ActivityName ?? "")</td>
+        <td class="col-3">@(LastRecordActivity?.Time ?? "")</td>
     </tr>
     <tr>
         <th class="col-1">Project</th>
@@ -21,9 +21,9 @@
         <th class="col-3">Act. time</th>
     </tr>
     <tr>
-        <td class="col-1">@(_lastRecordActivity?.ProjectName ?? "")</td>
-        <td class="col-2">@(_lastRecordActivity?.SubModuleName ?? "")</td>
-        <td class="col-3">@(_lastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
+        <td class="col-1">@(LastRecordActivity?.ProjectName ?? "")</td>
+        <td class="col-2">@(LastRecordActivity?.SubModuleName ?? "")</td>
+        <td class="col-3">@(LastRecordActivity?.StartDateTime.ToString("dd.MM.yyyy HH:mm:ss") ?? "")</td>
     </tr>
 </table>
 
@@ -38,26 +38,26 @@
     </tr>
     <tr>
         <th class="col-1">Work</th>
-        <td class="col-2">@_totalTime?.WorkTimeStr</td>
-        <td class="col-3">@_totalTime?.WorkShiftTimeStr</td>
+        <td class="col-2">@TotalTime?.WorkTimeStr</td>
+        <td class="col-3">@TotalTime?.WorkShiftTimeStr</td>
     </tr>
     <tr>
         <th class="col-1">Pause</th>
-        <td class="col-2">@_totalTime?.PauseTimeStr</td>
-        <td class="col-3">@_totalTime?.PauseShiftTimeStr</td>
+        <td class="col-2">@TotalTime?.PauseTimeStr</td>
+        <td class="col-3">@TotalTime?.PauseShiftTimeStr</td>
     </tr>
     <tr>
         <th class="col-1">Total</th>
-        <td class="col-2">@_totalTime?.TotalTimeStr</td>
-        <td class="col-3">@_totalTime?.TotalShiftTimeStr</td>
+        <td class="col-2">@TotalTime?.TotalTimeStr</td>
+        <td class="col-3">@TotalTime?.TotalShiftTimeStr</td>
     </tr>
 </table>
 
 @code {
     [Parameter]
-    public TotalTimesViewModel? _totalTime { get; set; }
+    public TotalTimesViewModel? TotalTime { get; set; }
     [Parameter]
-    public RecordListViewModel? _lastRecordActivity { get; set; }
+    public RecordListViewModel? LastRecordActivity { get; set; }
     [Inject]
     protected IEventLogService? _eventLogService { get; set; }
     private bool isRunning = true;
@@ -67,11 +67,11 @@
         try
         {
             var timer = new PeriodicTimer(TimeSpan.FromSeconds(1)); // každé 1 sekundy
-            if (_totalTime != null)
+            if (TotalTime != null)
             {
                 while (await timer.WaitForNextTickAsync() && isRunning)
                 {
-                    _totalTime.Update();
+                    TotalTime.Update();
                     await InvokeAsync(StateHasChanged);
                 }
             }

@@ -186,7 +186,15 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		try
 		{
 			var context = _contextFactory();
-			var item = new RecordActivity(DateTime.Now, (int)eActivity.Pause);
+			var lastRecordActivity = context.RecordActivities
+										.OrderByDescending(x => x.StartDateTime)
+										.FirstOrDefault();
+			var shiftGuidId = (Guid)lastRecordActivity.ShiftGuidId;
+			var item = new RecordActivity(
+											DateTime.Now,
+											(int)eActivity.Pause,
+											shiftGuidId,
+											lastRecordActivity.ProjectId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();
 			await updateRefreshEndTimeAsync();
@@ -218,7 +226,15 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 		try
 		{
 			var context = _contextFactory();
-			var item = new RecordActivity(DateTime.Now, (int)eActivity.Stop);
+			var lastRecordActivity = context.RecordActivities
+										.OrderByDescending(x => x.StartDateTime)
+										.FirstOrDefault();
+			var shiftGuidId = (Guid)lastRecordActivity.ShiftGuidId;
+			var item = new RecordActivity(
+											DateTime.Now,
+											(int)eActivity.Stop,
+											shiftGuidId,
+											lastRecordActivity.ProjectId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();
 			await updateRefreshEndTimeAsync();

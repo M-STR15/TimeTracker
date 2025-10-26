@@ -2,15 +2,15 @@
 @using TimeTracker.FE.Web.Components.Services
 
 @code {
-    protected HttpClient? _httpClient;
+    protected HttpClient _httpClient = null!;
     [Inject]
-    protected IEventLogService? _eventLogService { get; set; }
+    protected IEventLogService _eventLogService { get; set; } = null!;
     [Inject]
-    protected ToastNotificationService? _toastNotificationService { get; set; }
+    protected ToastNotificationService _toastNotificationService { get; set; } = null!;
     [Inject]
-    private IHttpClientFactory? _httpClientFactory { get; set; }
+    private IHttpClientFactory _httpClientFactory { get; set; } = null!;
     [Inject]
-    protected NavigationManager? _navigationManager { get; set; }
+    protected NavigationManager _navigationManager { get; set; } = null!;
 
     protected override void OnInitialized()
     {

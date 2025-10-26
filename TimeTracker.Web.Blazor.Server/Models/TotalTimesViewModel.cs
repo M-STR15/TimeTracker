@@ -20,10 +20,10 @@ namespace TimeTracker.Web.Blazor.Server.Models
 		public void Update()
 		{
 			var addTime = new TimeSpan(0, 0, 0, 1);
-			ActualTime = ActualTime.Add(addTime);
-
 			if (ActivityId != (int)eActivity.Stop)
 			{
+				ActualTime = ActualTime.Add(addTime);
+
 
 				if (ActivityId == (int)eActivity.Start)
 					WorkTime = WorkTime.Add(addTime);
@@ -32,16 +32,19 @@ namespace TimeTracker.Web.Blazor.Server.Models
 
 				TotalTime = TotalTime.Add(addTime);
 
-				if (ShiftGuidId != null)
-				{
-					if (ActivityId == (int)eActivity.Start)
-						WorkShiftTime = WorkShiftTime.Add(addTime);
-					else if (ActivityId == (int)eActivity.Pause)
-						PauseShiftTime = PauseShiftTime.Add(addTime);
 
-					TotalShiftTime = TotalShiftTime.Add(addTime);
-				}
+				if (ActivityId == (int)eActivity.Start)
+					WorkShiftTime = WorkShiftTime.Add(addTime);
+				else if (ActivityId == (int)eActivity.Pause)
+					PauseShiftTime = PauseShiftTime.Add(addTime);
+
+				TotalShiftTime = TotalShiftTime.Add(addTime);
 			}
+		}
+
+		public void UpdateActivityId(eActivity eActivity)
+		{
+			ActivityId = (int)eActivity;
 		}
 	}
 }

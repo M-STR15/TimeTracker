@@ -169,7 +169,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			}
 			catch (Exception ex)
 			{
-				_eventLogService.LogError(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
+				await _eventLogService.LogErrorAsync(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
 				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
 			}
 		}
