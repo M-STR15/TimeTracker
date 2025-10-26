@@ -194,6 +194,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 											DateTime.Now,
 											(int)eActivity.Pause,
 											shiftGuidId,
+											null,
 											lastRecordActivity.ProjectId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();
@@ -215,7 +216,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 
 			return recordActivity;
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
 			throw;
 		}
@@ -234,6 +235,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 											DateTime.Now,
 											(int)eActivity.Stop,
 											shiftGuidId,
+											null,
 											lastRecordActivity.ProjectId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();

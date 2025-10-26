@@ -40,7 +40,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			}
 		}
 
-
 		private async void postApi_EndShiftOrPause(string urlApi)
 		{
 			_isPosting = true;
@@ -61,6 +60,7 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 			finally
 			{
 				_isPosting = false;
+				base.StateHasChanged();
 			}
 		}
 

@@ -11,10 +11,6 @@ namespace TimeTracker.BE.DB.Models.Interfaces
 		/// Dlouhý řetězec s datem a časem začátku směny.
 		/// </summary>
 		string StartDateLongStr { get; }
-		/// <summary>
-		/// Kolekce směn.
-		/// </summary>
-		ICollection<Shift>? Shifts { get; set; }
 
 		/// <summary>
 		/// Typ směny.

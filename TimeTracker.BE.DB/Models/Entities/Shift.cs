@@ -17,8 +17,6 @@ namespace TimeTracker.BE.DB.Models.Entities
 		[Column("Guid_ID")]
 		public Guid GuidId { get; protected set; }
 		/// <inheritdoc />
-		public ICollection<Shift>? Shifts { get; set; }
-		/// <inheritdoc />
 		[Required]
 		[Column("Start_date")]
 		public DateTime StartDate { get; set; }
@@ -45,9 +43,6 @@ namespace TimeTracker.BE.DB.Models.Entities
 			TypeShiftId = typeShiftId;
 		}
 
-		public override string ToString()
-		{
-			return StartDate.ToString();
-		}
+		public override string ToString() => StartDate.ToString();
 	}
 }
