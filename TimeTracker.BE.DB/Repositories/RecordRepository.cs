@@ -172,8 +172,7 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 
 			await updateRefreshEndTimeAsync();
 
-			var getDat = item;
-			return getDat;
+			return item;
 		}
 		catch (Exception)
 		{

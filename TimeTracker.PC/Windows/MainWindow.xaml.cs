@@ -130,7 +130,7 @@ namespace TimeTracker.PC.Windows
 
 		#endregion Timer
 
-		#region LoadData
+		#region Load data
 		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
@@ -222,6 +222,7 @@ namespace TimeTracker.PC.Windows
 				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
+					updateLastRecordActivity(selRecordActivity.GuidId);
 					rtbDescription.Document.Blocks.Clear();
 					setLastSettingLabels();
 					setTotalTimesLabels();
@@ -238,6 +239,11 @@ namespace TimeTracker.PC.Windows
 				btnEndShift.IsEnabled = true;
 				btnActivate.IsEnabled = true;
 			}
+		}
+
+		private async void updateLastRecordActivity(Guid guidId)
+		{
+			_lastRecordActivity = await _recordRepository.GetAsync(guidId);
 		}
 
 		private async void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
@@ -258,6 +264,7 @@ namespace TimeTracker.PC.Windows
 				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
+					updateLastRecordActivity(selRecordActivity.GuidId);
 					setLastSettingLabels();
 					setTotalTimesLabels();
 					_dispatcherTimer.Stop();
@@ -295,6 +302,7 @@ namespace TimeTracker.PC.Windows
 				var result = await addActiviteAsync(selRecordActivity);
 				if (result)
 				{
+					updateLastRecordActivity(selRecordActivity.GuidId);
 					setLastSettingLabels();
 					setTotalTimesLabels();
 					startTimer();
@@ -389,7 +397,7 @@ namespace TimeTracker.PC.Windows
 		private void onSetLabelsHandler(object sender, EventArgs eventArgs) => setLastSettingLabels();
 		#endregion EventHandlers
 
-		#region SettingLabels
+		#region Setting labels
 		private void setLastSettingLabels()
 		{
 			if (_lastRecordActivity != null)
@@ -467,8 +475,6 @@ namespace TimeTracker.PC.Windows
 					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
 				var result = await _recordRepository.SaveAsync(record);
-				if (result != null)
-					_lastRecordActivity = result;
 
 				return result != null;
 			}

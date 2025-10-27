@@ -15,33 +15,36 @@ namespace TimeTracker.PC.Services
 		/// <returns></returns>
 		public static TotalTimes Get(CalcHours calcHours, CalcHours calcHoursShift, RecordActivity? _lastRecordActivity)
 		{
+			var totalTimes = new TotalTimes();
 			var filterToday = DateTime.Now;
 			var actualTime = GetActualTime(filterToday, _lastRecordActivity).TotalSeconds;
 
 			var selShift = _lastRecordActivity?.Shift;
-			var activity = (eActivity)_lastRecordActivity?.ActivityId;
+			if (_lastRecordActivity != null)
+			{
+				var activity = (eActivity)_lastRecordActivity?.ActivityId;
 
-			var workHours_actual = ((activity == eActivity.Start) ? actualTime : 0);
-			var pauseHours_actual = ((activity == eActivity.Pause) ? actualTime : 0);
+				var workHours_actual = ((activity == eActivity.Start) ? actualTime : 0);
+				var pauseHours_actual = ((activity == eActivity.Pause) ? actualTime : 0);
 
-			var workShiftHours_actual = getWorkTimeShift(selShift, activity, actualTime);
-			var pauseShifteHours_actual = getPauseTimeShift(selShift, activity, actualTime);
+				var workShiftHours_actual = getWorkTimeShift(selShift, activity, actualTime);
+				var pauseShifteHours_actual = getPauseTimeShift(selShift, activity, actualTime);
 
-			var workShiftHours_fromDB = calcHoursShift.WorkHours;
-			var pauseShiftHours_fromDB = calcHoursShift.PauseHours;
+				var workShiftHours_fromDB = calcHoursShift.WorkHours;
+				var pauseShiftHours_fromDB = calcHoursShift.PauseHours;
 
-			var totalTimes = new TotalTimes();
-			totalTimes.ActivityId = _lastRecordActivity.ActivityId;
-			totalTimes.ShiftGuidId = _lastRecordActivity.ShiftGuidId;
-			totalTimes.ActualTime = GetActualTime(filterToday, _lastRecordActivity);
+				totalTimes.ActivityId = _lastRecordActivity.ActivityId;
+				totalTimes.ShiftGuidId = _lastRecordActivity.ShiftGuidId;
+				totalTimes.ActualTime = GetActualTime(filterToday, _lastRecordActivity);
 
-			totalTimes.WorkTime = TimeSpan.FromSeconds(calcHours.WorkHours + workHours_actual);
-			totalTimes.PauseTime = TimeSpan.FromSeconds(calcHours.PauseHours + pauseHours_actual);
-			totalTimes.TotalTime = TimeSpan.FromSeconds(calcHours.WorkHours + calcHours.PauseHours + workHours_actual + pauseHours_actual);
+				totalTimes.WorkTime = TimeSpan.FromSeconds(calcHours.WorkHours + workHours_actual);
+				totalTimes.PauseTime = TimeSpan.FromSeconds(calcHours.PauseHours + pauseHours_actual);
+				totalTimes.TotalTime = TimeSpan.FromSeconds(calcHours.WorkHours + calcHours.PauseHours + workHours_actual + pauseHours_actual);
 
-			totalTimes.WorkShiftTime = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual);
-			totalTimes.PauseShiftTime = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual);
-			totalTimes.TotalShiftTime = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual);
+				totalTimes.WorkShiftTime = TimeSpan.FromSeconds(workShiftHours_fromDB + workShiftHours_actual);
+				totalTimes.PauseShiftTime = TimeSpan.FromSeconds(pauseShiftHours_fromDB + pauseShifteHours_actual);
+				totalTimes.TotalShiftTime = TimeSpan.FromSeconds(workShiftHours_fromDB + pauseShiftHours_fromDB + workShiftHours_actual + pauseShifteHours_actual);
+			}
 
 			return totalTimes;
 		}
