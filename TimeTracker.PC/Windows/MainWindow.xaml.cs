@@ -17,6 +17,8 @@ namespace TimeTracker.PC.Windows
 {
 	public partial class MainWindow : Window, IDisposable
 	{
+
+		#region Fields & Properties
 		private const string _formTime = @"hh\:mm\:ss";
 		private readonly Func<SqliteDbContext> _context;
 		private readonly MainStory _mainStory;
@@ -25,15 +27,11 @@ namespace TimeTracker.PC.Windows
 		private EventHandler? _lastRecordActivityHangler;
 		private RecordActivity? _lra;
 		private ProjectRepository<SqliteDbContext> _projectRepository;
-		private SubModuleRepository<SqliteDbContext> _subModuleRepository;
-
 		private RecordRepository<SqliteDbContext> _recordRepository;
-
 		private ReportRepository<SqliteDbContext> _reportRepository;
-
 		private List<ShiftCmb> _shiftCmbs = new();
-
 		private ShiftRepository<SqliteDbContext> _shiftRepository;
+		private SubModuleRepository<SqliteDbContext> _subModuleRepository;
 		private TypeShiftRepository<SqliteDbContext> _typeShiftRepository;
 
 		//private int _totalActivityTimeBeforeInSecond;
@@ -49,6 +47,9 @@ namespace TimeTracker.PC.Windows
 			}
 		}
 
+		#endregion Fields & Properties
+
+		#region Inicializationon & Dispose
 		public MainWindow(MainStory mainStory, Func<SqliteDbContext> context)
 		{
 			_context = context;
@@ -61,64 +62,6 @@ namespace TimeTracker.PC.Windows
 		{
 			if (_lastRecordActivityHangler != null)
 				_lastRecordActivityHangler -= onSetLabelsHandler;
-		}
-
-		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
-		{
-			setTotalTimesLabels();
-		}
-
-		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
-		{
-			if (recordActivity.Activity != null)
-				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
-			else
-				return false;
-		}
-
-		private async Task<bool> addActiviteAsync(Activity activity, TypeShift? typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
-		{
-			try
-			{
-				var startTimeActivity = DateTime.Now;
-
-				var record = new RecordActivity();
-				if (shift != null && shift.GuidId != Guid.Empty)
-					record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift.Id, project?.Id ?? null, subModule?.Id ?? null, description);
-				else
-					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
-
-				var result = await _recordRepository.SaveAsync(record);
-				if (result != null)
-				{
-					_lastRecordActivity = new RecordActivity(result.GuidId, startTimeActivity, null, activity, typeShift, shift, project, subModule, description);
-				}
-
-				return result != null;
-			}
-			catch (Exception)
-			{
-				throw;
-			}
-		}
-
-		private string getShiftDateText()
-		{
-			var shift = _lastRecordActivity?.Shift;
-			var shiftDate = "";
-
-			if (shift != null)
-			{
-				var cmdShift = new ShiftCmb(shift);
-				shiftDate = cmdShift?.StartDateStr ?? "";
-			}
-			return shiftDate;
-		}
-
-		private string getTextFromRichTextBox(RichTextBox richTextBox)
-		{
-			var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-			return textRange.Text;
 		}
 
 		private async void inicialization()
@@ -160,6 +103,34 @@ namespace TimeTracker.PC.Windows
 				_eventLogService.WriteError(new Guid("def4de22-6fc4-4ab4-9f7e-0aba95e5337c"), ex, "Problém při otevírání hlavního okna.");
 			}
 		}
+
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			var screenWidth = SystemParameters.WorkArea.Width;
+			var screenHeight = SystemParameters.WorkArea.Height;
+
+			// Umístění okna na pravý dolní roh
+			this.Left = screenWidth - this.Width;
+			this.Top = screenHeight - this.Height;
+		}
+
+		#endregion Inicializationon & Dispose
+
+		#region Timer
+		private void _dispatcherTimer_Tick(object? sender, EventArgs e)
+		{
+			setTotalTimesLabels();
+		}
+
+		private void startTimer()
+		{
+			if (!_dispatcherTimer.IsEnabled)
+				_dispatcherTimer.Start();
+		}
+
+		#endregion Timer
+
+		#region LoadData
 		private async void loadProjects()
 		{
 			cmbProjects.ItemsSource = null;
@@ -198,6 +169,9 @@ namespace TimeTracker.PC.Windows
 			}
 		}
 
+		#endregion LoadDaa
+
+		#region EventHandlers
 		private void mbtnActivitiesOverDays_Click(object sender, RoutedEventArgs e)
 		{
 			try
@@ -228,6 +202,10 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
+				btnPause.IsEnabled = false;
+				btnEndShift.IsEnabled = false;
+				btnActivate.IsEnabled = false;
+
 				var startTimeActivity = DateTime.Now;
 				var id = (int)eActivity.Start;
 				var name = eActivity.Start.ToString();
@@ -254,12 +232,22 @@ namespace TimeTracker.PC.Windows
 			{
 				_eventLogService.WriteError(new Guid("51905c9e-51c5-4fa4-bac2-fe60543bc170"), ex, "Problém při vkláání akivity.");
 			}
+			finally
+			{
+				btnPause.IsEnabled = true;
+				btnEndShift.IsEnabled = true;
+				btnActivate.IsEnabled = true;
+			}
 		}
 
 		private async void onActionAfterClickEndShift_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
+				btnPause.IsEnabled = false;
+				btnEndShift.IsEnabled = false;
+				btnActivate.IsEnabled = false;
+
 				var startTimeActivity = DateTime.Now;
 				var id = (int)eActivity.Stop;
 				var name = eActivity.Stop.ToString();
@@ -274,10 +262,17 @@ namespace TimeTracker.PC.Windows
 					setTotalTimesLabels();
 					_dispatcherTimer.Stop();
 				}
+
 			}
 			catch (Exception ex)
 			{
 				_eventLogService.WriteError(new Guid("d769b7d8-adea-4011-babe-4415f3258467"), ex, "Problém při ukládání konce směny.");
+				btnPause.IsEnabled = true;
+				btnEndShift.IsEnabled = true;
+			}
+			finally
+			{
+				btnActivate.IsEnabled = true;
 			}
 		}
 
@@ -285,6 +280,10 @@ namespace TimeTracker.PC.Windows
 		{
 			try
 			{
+				btnPause.IsEnabled = false;
+				btnEndShift.IsEnabled = false;
+				btnActivate.IsEnabled = false;
+
 				var startTimeActivity = DateTime.Now;
 				var id = (int)eActivity.Pause;
 				var name = eActivity.Pause.ToString();
@@ -304,14 +303,16 @@ namespace TimeTracker.PC.Windows
 			catch (Exception ex)
 			{
 				_eventLogService.WriteError(new Guid("aa2467f9-bddd-4c6b-a3bd-b4554936314f"), ex, "Problém při ukládání pauzy.");
+
+
+			}
+			finally
+			{
+				btnPause.IsEnabled = true;
+				btnEndShift.IsEnabled = true;
+				btnActivate.IsEnabled = true;
 			}
 		}
-
-		private void onLasRecordActivityChange()
-		{
-			_lastRecordActivityHangler.Invoke(this, EventArgs.Empty);
-		}
-
 		private async void onLoadDataAfterChangeProject_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			try
@@ -385,9 +386,10 @@ namespace TimeTracker.PC.Windows
 				_eventLogService.WriteError(new Guid("1234980a-9768-40b0-bbb6-9ab6927adb1a"), ex, "Problém při otvírání okna se směnami.");
 			}
 		}
-
 		private void onSetLabelsHandler(object sender, EventArgs eventArgs) => setLastSettingLabels();
+		#endregion EventHandlers
 
+		#region SettingLabels
 		private void setLastSettingLabels()
 		{
 			if (_lastRecordActivity != null)
@@ -421,20 +423,61 @@ namespace TimeTracker.PC.Windows
 			lblTotalShiftTime.Content = totalTimes.TotalShiftTime.ToString(_formTime);
 		}
 
-		private void startTimer()
+		#endregion SettingLabels
+
+		#region Methods
+		private void onLasRecordActivityChange() => _lastRecordActivityHangler?.Invoke(this, EventArgs.Empty);
+		private string getShiftDateText()
 		{
-			if (!_dispatcherTimer.IsEnabled)
-				_dispatcherTimer.Start();
+			var shift = _lastRecordActivity?.Shift;
+			var shiftDate = "";
+
+			if (shift != null)
+			{
+				var cmdShift = new ShiftCmb(shift);
+				shiftDate = cmdShift?.StartDateStr ?? "";
+			}
+			return shiftDate;
 		}
 
-		private void Window_Loaded(object sender, RoutedEventArgs e)
+		private string getTextFromRichTextBox(RichTextBox richTextBox)
 		{
-			var screenWidth = SystemParameters.WorkArea.Width;
-			var screenHeight = SystemParameters.WorkArea.Height;
-
-			// Umístění okna na pravý dolní roh
-			this.Left = screenWidth - this.Width;
-			this.Top = screenHeight - this.Height;
+			var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
+			return textRange.Text;
 		}
+
+		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
+		{
+			if (recordActivity.Activity != null)
+				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
+			else
+				return false;
+		}
+
+		private async Task<bool> addActiviteAsync(Activity activity, TypeShift? typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+		{
+			try
+			{
+				var startTimeActivity = DateTime.Now;
+
+				var record = new RecordActivity();
+				if (shift != null && shift.GuidId != Guid.Empty)
+					record = new RecordActivity(startTimeActivity, activity.Id, shift.GuidId, typeShift?.Id, project?.Id ?? null, subModule?.Id ?? null, description);
+				else
+					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
+
+				var result = await _recordRepository.SaveAsync(record);
+				if (result != null)
+					_lastRecordActivity = result;
+
+				return result != null;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+		}
+
+		#endregion Methods
 	}
 }
