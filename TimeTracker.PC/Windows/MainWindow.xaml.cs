@@ -220,9 +220,9 @@ namespace TimeTracker.PC.Windows
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity, selTypeShift, selShift, selProject, selSubmodule, description);
 
 				var result = await addActiviteAsync(selRecordActivity);
-				if (result)
+				if (result != null)
 				{
-					updateLastRecordActivity(selRecordActivity.GuidId);
+					updateLastRecordActivity(result.GuidId);
 					rtbDescription.Document.Blocks.Clear();
 					setLastSettingLabels();
 					setTotalTimesLabels();
@@ -262,9 +262,9 @@ namespace TimeTracker.PC.Windows
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
 				var result = await addActiviteAsync(selRecordActivity);
-				if (result)
+				if (result != null)
 				{
-					updateLastRecordActivity(selRecordActivity.GuidId);
+					updateLastRecordActivity(result.GuidId);
 					setLastSettingLabels();
 					setTotalTimesLabels();
 					_dispatcherTimer.Stop();
@@ -300,9 +300,9 @@ namespace TimeTracker.PC.Windows
 				var selRecordActivity = new RecordActivity(startTimeActivity, activity);
 
 				var result = await addActiviteAsync(selRecordActivity);
-				if (result)
+				if (result != null)
 				{
-					updateLastRecordActivity(selRecordActivity.GuidId);
+					updateLastRecordActivity(result.GuidId);
 					setLastSettingLabels();
 					setTotalTimesLabels();
 					startTimer();
@@ -454,15 +454,15 @@ namespace TimeTracker.PC.Windows
 			return textRange.Text;
 		}
 
-		private async Task<bool> addActiviteAsync(RecordActivity recordActivity)
+		private async Task<RecordActivity?> addActiviteAsync(RecordActivity recordActivity)
 		{
 			if (recordActivity.Activity != null)
 				return await addActiviteAsync(recordActivity.Activity, recordActivity.TypeShift, recordActivity.Project, recordActivity.SubModule, recordActivity.Shift, recordActivity?.Description ?? "");
 			else
-				return false;
+				return default;
 		}
 
-		private async Task<bool> addActiviteAsync(Activity activity, TypeShift? typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
+		private async Task<RecordActivity?> addActiviteAsync(Activity activity, TypeShift? typeShift, Project? project = null, SubModule? subModule = null, Shift? shift = null, string description = "")
 		{
 			try
 			{
@@ -474,9 +474,9 @@ namespace TimeTracker.PC.Windows
 				else
 					record = new RecordActivity(startTimeActivity, activity.Id, typeShift?.Id ?? null, project?.Id ?? null, subModule?.Id ?? null, description);
 
-				var result = await _recordRepository.SaveAsync(record);
+				_ = await _recordRepository.SaveAsync(record);
 
-				return result != null;
+				return record;
 			}
 			catch (Exception)
 			{
