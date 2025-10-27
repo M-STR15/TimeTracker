@@ -195,7 +195,8 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 											(int)eActivity.Pause,
 											shiftGuidId,
 											null,
-											lastRecordActivity.ProjectId);
+											lastRecordActivity.ProjectId,
+											lastRecordActivity.SubModuleId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();
 			await updateRefreshEndTimeAsync();
@@ -236,7 +237,8 @@ public class RecordRepository<T>(Func<T> contextFactory) : aRepository<T>(contex
 											(int)eActivity.Stop,
 											shiftGuidId,
 											null,
-											lastRecordActivity.ProjectId);
+											lastRecordActivity.ProjectId, 
+											lastRecordActivity.SubModuleId);
 			await context.RecordActivities.AddAsync(item);
 			await context.SaveChangesAsync();
 			await updateRefreshEndTimeAsync();
