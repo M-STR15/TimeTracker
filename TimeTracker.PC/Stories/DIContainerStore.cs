@@ -2,7 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ninject;
+using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using TimeTracker.BE.DB.DataAccess;
 using TimeTracker.BE.DB.Infrastructure;
 using TimeTracker.BE.DB.Repositories;
@@ -81,10 +83,18 @@ namespace TimeTracker.PC.Stories
 		/// <param name="options"></param>
 		private void initializeDatabase(DbContextOptions<SqliteDbContext> options)
 		{
-			using (var context = new SqliteDbContext(options))
+			try
 			{
-				// Pokud používáte migrace, zajistíte migrace
-				context.Database.Migrate();
+				using (var context = new SqliteDbContext(options))
+				{
+					// Pokud používáte migrace, zajistíte migrace
+					context.Database.Migrate();
+				}
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine($"DB init error: {ex}");
+				MessageBox.Show(ex.ToString(), "Database Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 		}
 		/// <summary>
