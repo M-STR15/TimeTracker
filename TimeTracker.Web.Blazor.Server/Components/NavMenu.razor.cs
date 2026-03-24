@@ -1,5 +1,4 @@
 ﻿using TimeTracker.BE.Web.Shared.Helpers;
-using TimeTracker.BE.Web.Shared.Models;
 
 namespace TimeTracker.Web.Blazor.Server.Components
 {
@@ -22,6 +21,5 @@ namespace TimeTracker.Web.Blazor.Server.Components
 		private void onOpenReportRecordList_Click() => NavigationManager.NavigateTo("/reports/record-list");
 		private void onOpenReportActivitiesOverDays_Click() => NavigationManager.NavigateTo("/reports/activities-over-days");
 		private void onOpenReportPlanVsRealityWorkHours_Click() => NavigationManager.NavigateTo("/reports/plan-vs-reality-work-hours");
-
 	}
 }

@@ -48,7 +48,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
+		<None Include="..\TimeTracker.Web.Blazor.Server\.editorconfig" />
 		<None Include="compilerconfig.json" />
 	</ItemGroup>
 
@@ -74,6 +74,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<EditorConfigFiles Remove="C:\Users\miros\OneDrive\repos\TimerTracker\TimeTracker.Web.Blazor.Server\.editorconfig" />
+		<EditorConfigFiles Remove="..\\TimeTracker.Web.Blazor.Server\.editorconfig" />
 	</ItemGroup>
 </Project>

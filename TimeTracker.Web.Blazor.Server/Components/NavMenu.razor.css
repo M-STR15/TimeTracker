@@ -50,12 +50,6 @@
 			color: white;
 		}
 
-
-.btn {
-	width: 300px;
-}
-
-
 .center-container {
 	display: flex;
 	flex-direction: column; /* Tlačítka pod sebe */
