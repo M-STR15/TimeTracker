@@ -18,7 +18,6 @@ namespace TimeTracker.BE.DB.Infrastructure
 			services.AddScoped<SubModuleRepository<TContext>>();
 			services.AddScoped<ReportRepository<TContext>>();
 
-
 			return services;
 		}
 
@@ -65,7 +64,5 @@ namespace TimeTracker.BE.DB.Infrastructure
 				}
 			}
 		}
-
-
 	}
 }

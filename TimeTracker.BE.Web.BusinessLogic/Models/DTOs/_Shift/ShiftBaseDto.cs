@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using TimeTracker.BE.DB.Models.Interfaces;
 
 namespace TimeTracker.BE.Web.BusinessLogic.Models.DTOs
