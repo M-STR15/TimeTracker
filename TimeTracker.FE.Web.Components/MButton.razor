@@ -1,4 +1,4 @@
-﻿<label @onclick="@OnClick" style="@Style" class="@($"btn {Class} {(IsDisabled ? "disabled" : "")}")" role="button">
+﻿<label @onclick="@OnClick" style="@Style" class="@($"m-btn {Class} {(IsDisabled ? "disabled" : "")}")" role="button">
     <span class="btn-text">
         @if (!string.IsNullOrEmpty(Text))
         {
@@ -8,6 +8,5 @@
         {
             @ChildContent
         }
-
     </span>
 </label>

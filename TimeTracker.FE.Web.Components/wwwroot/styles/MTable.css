@@ -1,21 +1,21 @@
-﻿table {
+﻿.m-table {
   width: 100%;
   border-collapse: collapse;
 }
-table thead {
+.m-table thead {
   background-color: #343a40;
   color: #ffffff;
 }
-table thead th {
+.m-table thead th {
   padding: 10px;
   text-align: left;
 }
-table tbody td {
+.m-table tbody td {
   padding: 10px;
   border-bottom: 1px solid #dee2e6;
   text-align: left;
 }
-table tbody tr:hover {
+.m-table tbody tr:hover {
   background-color: #e9ecef;
 }
 

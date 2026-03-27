@@ -3,7 +3,7 @@
 
         @foreach (MTabItem tabPage in Pages)
         {
-            <button type="button" class="btn @GetButtonClass(tabPage)" @onclick=@(() => ActivatePage(tabPage))>
+            <button type="button" class="btn @getButtonClass(tabPage)" @onclick=@(() => activatePage(tabPage))>
                 @tabPage.Title
             </button>
         }
@@ -29,12 +29,12 @@
         StateHasChanged();
     }
 
-    string GetButtonClass(MTabItem page)
+    private string getButtonClass(MTabItem page)
     {
         return page == ActivePage ? "btn-primary" : "btn-secondary";
     }
 
-    void ActivatePage(MTabItem page)
+    private void activatePage(MTabItem page)
     {
         ActivePage = page;
         StateHasChanged();

@@ -1,38 +1,38 @@
 ﻿[
   {
-    "outputFile": "MCombobox.razor.css",
+    "outputFile": "wwwroot/styles/MCombobox.css",
     "inputFile": "MCombobox.razor.scss"
   },
   {
-    "outputFile": "MButton.razor.css",
+    "outputFile": "wwwroot/styles/MButton.css",
     "inputFile": "MButton.razor.scss"
   },
   {
-    "outputFile": "MTabs.razor.css",
+    "outputFile": "wwwroot/styles/MTabs.css",
     "inputFile": "MTabs.razor.scss"
   },
   {
-    "outputFile": "MToast.razor.css",
+    "outputFile": "wwwroot/styles/MToast.css",
     "inputFile": "MToast.razor.scss"
   },
   {
-    "outputFile": "MToastComponent.razor.css",
+    "outputFile": "wwwroot/styles/MToastComponent.css",
     "inputFile": "MToastComponent.razor.scss"
   },
   {
-    "outputFile": "MTextArea.razor.css",
+    "outputFile": "wwwroot/styles/MTextArea.css",
     "inputFile": "MTextArea.razor.scss"
   },
   {
-    "outputFile": "MTextBox.razor.css",
+    "outputFile": "wwwroot/styles/MTextBox.css",
     "inputFile": "MTextBox.razor.scss"
   },
   {
-    "outputFile": "MRadioGroup.razor.css",
+    "outputFile": "wwwroot/styles/MRadioGroup.css",
     "inputFile": "MRadioGroup.razor.scss"
   },
   {
-    "outputFile": "MTable.razor.css",
+    "outputFile": "wwwroot/styles/MTable.css",
     "inputFile": "MTable.razor.scss"
   }
 ]

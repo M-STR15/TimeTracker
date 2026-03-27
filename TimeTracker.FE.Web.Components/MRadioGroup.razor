@@ -3,7 +3,7 @@
 @typeparam TItem where TItem : ITItemWithColor
 
 <InputRadioGroup @bind-Value="_selectId">
-    <div class="container">
+    <div class="m-radioGroup-container">
         @foreach (var item in ListItems)
         {
             <div style="background-color:@getColor(item)" class="column" @onclick="()=>onRadioButtonClicked(item)">

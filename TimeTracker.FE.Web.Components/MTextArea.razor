@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Components.Forms
 @typeparam T
 
-<input @bind="@Value" @oninput="HandleInput" class="form-control"></input>
+<input @bind="@Value" @oninput="HandleInput" class="m-textArea-form-control"></input>
 
 @code {
     [CascadingParameter] private EditContext? EditContext { get; set; }

@@ -130,7 +130,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="month">Měsíc, pro který se mají získat pracovní hodiny (1-12).</param>
 		/// <returns>Objekt WorkplaceHours obsahující seznamy pracovních hodin a plánovaných hodin.</returns>
 		[HttpGet("api/v1/reports/workplace-hours/{year}/{month}")]
-		public async Task<ActionResult<WorkplaceHours>> GetTotalTimesDtoAsync(int year, int month)
+		public ActionResult<WorkplaceHours> GetTotalTimesDto(int year, int month)
 		{
 			try
 			{
@@ -155,7 +155,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="dateTo">Koncové datum ve formátu ISO 8601.</param>
 		/// <returns>Seznam aktivit pro jednotlivé dny.</returns>
 		[HttpGet("api/v1/reports/activity-over-days/{dateFrom}/{dateTo}")]
-		public async Task<ActionResult<IEnumerable<SumInDay>>> GetActivityOverDaysAsync([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
+		public ActionResult<IEnumerable<SumInDay>> GetActivityOverDays([FromRoute] DateTime dateFrom, [FromRoute] DateTime dateTo)
 		{
 			try
 			{

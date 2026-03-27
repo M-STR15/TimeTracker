@@ -8,6 +8,7 @@ namespace TimeTracker.FE.Web.Components.Infrastructure
 	{
 		public static IServiceCollection AddTimeTrackerFeComponents(this IServiceCollection services)
 		{
+			services.AddScoped<CssLoaderInterop>();
 			services.AddScoped<ToastNotificationService>();
 			services.AddScoped<FocusJsInterop>();
 			services.AddScoped<ChartJsInterop>();

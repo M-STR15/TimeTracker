@@ -76,4 +76,11 @@
 	<ItemGroup>
 		<EditorConfigFiles Remove="..\\TimeTracker.Web.Blazor.Server\.editorconfig" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="libman.json" />
+		<None Include="libman.json">
+			<CopyToPublishDirectory>Never</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
 </Project>

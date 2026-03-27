@@ -3,11 +3,11 @@
 
 @typeparam TItem
 
-<div class="custom-combobox">
-    <div class="input-container">
+<div class="m-combobox">
+    <div class="m-combobox-input-container">
         <input @ref="inputRef"
                type="text"
-               class="form-control"
+               class="m-combobox-form-control"
                @bind="SearchText"
                @onfocus="onFocus"
                @oninput="OnInput"
@@ -15,7 +15,7 @@
                placeholder="Vyberte možnost..."
                disabled="@(IsEditable ? null : true)"
                readonly="@(IsEditable ? null : true)" />
-        <button type="button" class="dropdown-button"
+        <button type="button" class="m-combobox-dropdown-button"
                 @onclick="ToggleDropdown"
                 disabled="@(IsEditable ? null : true)"
                 readonly="@(IsEditable ? null : true)">
@@ -24,10 +24,10 @@
     </div>
     @if (IsDropdownVisible && Items != null && Items.Any())
     {
-        <ul class="dropdown-list" @onmousedown:preventDefault>
+        <ul class="m-combobox-dropdown-list" @onmousedown:preventDefault>
             @foreach (var item in Items)
             {
-                <li @onmousedown="(() => selectItem(item))" class="dropdown-item @getSelectedClass(item)">
+                <li @onmousedown="(() => selectItem(item))" class="m-combobox-dropdown-item @getSelectedClass(item)">
                     @ItemText(item)
                 </li>
             }
@@ -146,9 +146,9 @@
             SearchText = ItemText(item); // Nastavit text vybraného prvku
 
             var eventArgs = new ChangeEventArgs
-                {
-                    Value = item
-                };
+            {
+                Value = item
+            };
             await OnChange.InvokeAsync(eventArgs);
             await RemoveFocus();
         }

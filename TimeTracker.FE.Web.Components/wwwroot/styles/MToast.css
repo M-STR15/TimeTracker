@@ -1,4 +1,4 @@
-﻿.toast-message {
+﻿.m-toast-message {
   width: 300px;
   background-color: white;
   animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 125s forwards;
@@ -7,25 +7,25 @@
   transition: all 0.5s ease-in;
   overflow: hidden;
 }
-.toast-message .toast-header {
+.m-toast-message .m-toast-header {
   background-color: #17a2b8;
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 10px;
 }
-.toast-message .toast-header.toast-message-success {
+.m-toast-message .m-toast-header.toast-message-success {
   background-color: #28a745;
 }
-.toast-message .toast-header.toast-message-failure {
+.m-toast-message .m-toast-header.toast-message-failure {
   background-color: #dc3545;
 }
-.toast-message .toast-header.toast-message-alert {
+.m-toast-message .m-toast-header.toast-message-alert {
   background-color: #ffc107;
 }
-.toast-message .toast-header.toast-message-warning {
+.m-toast-message .m-toast-header.toast-message-warning {
   background-color: #ff8800;
 }
-.toast-message .toast-header .toast-close-button {
+.m-toast-message .m-toast-header .toast-close-button {
   background: none;
   border: none;
   color: white;
@@ -33,10 +33,10 @@
   font-weight: bold;
   cursor: pointer;
 }
-.toast-message .toast-header .toast-close-button:hover {
+.m-toast-message .m-toast-header .toast-close-button:hover {
   color: #000;
 }
-.toast-message .toast-message-box {
+.m-toast-message .m-toast-message-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,7 +47,7 @@
   padding-right: 10px;
   padding-bottom: 10px;
 }
-.toast-message .toast-message-box .toast-message-text {
+.m-toast-message .m-toast-message-box .toast-message-text {
   padding-top: 10px;
 }
 

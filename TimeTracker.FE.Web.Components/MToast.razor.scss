@@ -6,7 +6,7 @@ $toast-alert-text: #212529;
 $toast-warning: #ff8800;
 $toast-default: #17a2b8;
 
-.toast-message {
+.m-toast-message {
     width: 300px;
     background-color: white;
     animation: slide-in 0.5s ease-out, slide-out 0.5s ease-in 125s forwards;
@@ -15,7 +15,7 @@ $toast-default: #17a2b8;
     transition: all 0.5s ease-in;
     overflow: hidden;
 
-    .toast-header {
+    .m-toast-header {
         background-color: $toast-default;
         padding-left: 10px;
         padding-right: 10px;
@@ -51,7 +51,7 @@ $toast-default: #17a2b8;
         }
     }
 
-    .toast-message-box {
+    .m-toast-message-box {
         display: flex;
         align-items: center;
         justify-content: space-between;

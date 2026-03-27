@@ -27,7 +27,7 @@ namespace TimeTracker.BE.DB.Repositories
 		/// <summary>
 		/// Získá všechny typy směn, které jsou viditelné v hlavním okně.
 		/// </summary>
-		public async Task<IEnumerable<TypeShift>> GetTypeShiftsForMainWindowAsync()
+		public async Task<IEnumerable<TypeShift>?> GetTypeShiftsForMainWindowAsync()
 		{
 			try
 			{
