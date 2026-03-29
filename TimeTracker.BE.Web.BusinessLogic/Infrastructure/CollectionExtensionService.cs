@@ -29,7 +29,10 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 
 			//services.AddScoped<ProjectController>();
 			//services.AddScoped<ShiftController>();
-			services.AddAutoMapper(typeof(MappingProfile));
+			services.AddAutoMapper(cfg =>
+			{
+				cfg.AddProfile<MappingProfile>();
+			});
 
 			// Automatické vytvoření databáze
 			using (var serviceProvider = services.BuildServiceProvider())
