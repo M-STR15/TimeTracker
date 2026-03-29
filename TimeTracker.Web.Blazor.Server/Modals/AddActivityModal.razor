@@ -20,16 +20,14 @@
                 <DataAnnotationsValidator />
                 <div class="main">
                     <div class="row">
-                        <div class="col-6">
                             <h6>Type shift</h6>
                             <MCombobox Items="_typeShifts" ItemText="item => item.Name" OnChange="OnTypeShiftChanged" />
                             <ValidationMessage For="@(() => _recordActivityInsertDto.TypeShiftId)" />
-                        </div>
-                        <div class="col-6">
+                    </div>
+                    <div class="row">
                             <h6>Shifts</h6>
                             <MCombobox Items="_shifts" ItemText="item => item.StartDate.ToLongDateString()" OnChange="OnShiftChanged" />
                             <ValidationMessage For="@(() => _recordActivityInsertDto.ShiftGuidId)" />
-                        </div>
                     </div>
                     <div class="row">
                         <h6>Project</h6>
