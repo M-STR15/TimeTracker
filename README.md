@@ -3,6 +3,8 @@
 
 💡 *Aplikace pro evidenci a sledování aktivit při vývoji softwaru. Umožňuje zaznamenávat činnosti na PC a zobrazovat reporty aktivit za jednotlivé dny. Projekt vznikl pro vlastní potřebu, ale je zdarma k užívání.*
 
+Aplikace vznikla z důvodu, prezentace stylu psaní kódu, architektury a dalších aspektů vývoje softwaru. Projekt je stále ve vývoji, ale již nyní nabízí základní funkce pro evidenci a sledování aktivit.
+
 ---
 
 ## Features
@@ -21,15 +23,11 @@
 - Licence: MIT
 
 ### Web verze:
-- Backend: C# (.NET 9) — doplňte přesnou verzi
+- Backend: C# (.NET 9)
 - Frontend: Blazor(HTML, SCSS, JavaScript)
 - Architektura: MVC (Model-View-Controller)
 - Databáze: MS SQL
 - Licence: MIT
-
-## Gallery
-
-Odkaz na [GALLERY.md](GALLERY.md)
 
 ## Rychlé spuštění (pro developery)
 
@@ -84,4 +82,5 @@ Odkaz na [DEVELOPMENT_NOTE.md](DEVELOPMENT_NOTE.md)
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## 🔗 Links
+
 [![portfolio](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/M-STR15/TimeTracker)
