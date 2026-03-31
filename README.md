@@ -4,6 +4,7 @@
 💡 *Aplikace pro evidenci a sledování aktivit při vývoji softwaru. Umožňuje zaznamenávat činnosti na PC a zobrazovat reporty aktivit za jednotlivé dny. Projekt vznikl pro vlastní potřebu, ale je zdarma k užívání.*
 
 Aplikace vznikla z důvodu, prezentace stylu psaní kódu, architektury a dalších aspektů vývoje softwaru. Projekt je stále ve vývoji, ale již nyní nabízí základní funkce pro evidenci a sledování aktivit.
+Program není zamýšlen jako finální produkt, ale spíše jako ukázka a nástroj pro vlastní potřebu. Projekt je zdarma k užívání, ale není určen pro komerční využití.
 
 ---
 
