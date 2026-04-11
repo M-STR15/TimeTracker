@@ -57,7 +57,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("92344ec4-e18f-4cef-ab10-631c18775e67"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu aktivit.";
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu aktivit.");
 			}
 		}
 
