@@ -52,7 +52,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("45d8b704-b0d1-479c-b96a-ac812703fe13"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu projektů.");
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("926ba106-8798-4a51-97b2-49074d8c3f5b"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu sub modulů.");
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("5c5b560f-9f2d-4af6-8db2-4042f265210e"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání sub modulů k určitému projektu.");
 			}
 		}
 		#endregion GET
@@ -138,7 +138,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("afce10f7-12a0-45d5-9f1a-a47b8d91856e"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při vkládání projektu.");
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("71c4af17-9b5c-4ccc-a474-d5efcd8fb188"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při vkládání sub modulu.");
 			}
 		}
 		#endregion POST
@@ -184,7 +184,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("fd877d7c-3181-40f9-b849-31fe089608d2"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při aktualizování projektu.");
 			}
 		}
 
@@ -194,7 +194,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="subModuleBaseDto">Data podmodulu k aktualizaci.</param>
 		/// <returns>Aktualizovaný podmodul.</returns>
 		[HttpPut("api/v1/projects/submodule")]
-		public async Task<ActionResult<SubModuleBaseDto>> PutSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
+		public async Task<ActionResult<SubModuleBaseDto>> UpdateSubModulesAsync([FromBody] SubModuleBaseDto subModuleBaseDto)
 		{
 			try
 			{
@@ -206,7 +206,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("0a18c552-64c1-446e-96ce-3104b2cdae57"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při aktualizování sub modulu.");
 			}
 		}
 		#endregion PUT
@@ -228,7 +228,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("6e3750ab-5e5f-4736-ad17-de95590d7dfc"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při odstraňování projektu.");
 			}
 		}
 
@@ -243,12 +243,12 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			try
 			{
 				var result = await _subModuleRepository.DeleteAsync(submoduleId);
-				return result ? Ok() : Problem();
+				return result ? Ok() : NotFound();
 			}
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("9040f36f-e90f-4dc6-9211-f28f2bb2c25c"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při odstraňování sub modulu.");
 			}
 		}
 		#endregion DELETE

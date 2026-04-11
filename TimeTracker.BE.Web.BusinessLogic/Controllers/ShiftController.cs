@@ -55,7 +55,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("87dc3ad8-7ca7-426f-96cf-0e4d7bf9a8e4"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání typů směn.");
 			}
 		}
 	
@@ -83,7 +83,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("50a7d33c-e03d-4362-bc4b-652979794a6b"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání směn.");
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 		/// <param name="shiftsDto">Seznam směn k uložení.</param>
 		/// <returns>Seznam uložených směn.</returns>
 		[HttpPut("api/v1/shifts")]
-		public async Task<ActionResult<List<ShiftBaseDto>>> PutShiftsAsync([FromBody] List<ShiftBaseDto> shiftsDto)
+		public async Task<ActionResult<List<ShiftBaseDto>>> UpdateShiftsAsync([FromBody] List<ShiftBaseDto> shiftsDto)
 		{
 			try
 			{
@@ -112,7 +112,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				_eventLogService.LogError(Guid.Parse("9ab1191b-6ca7-48af-8d0d-083b9c8c9254"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při ukládání směn.");
 			}
 		}
 	}

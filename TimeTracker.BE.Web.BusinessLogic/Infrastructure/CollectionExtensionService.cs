@@ -8,7 +8,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Infrastructure
 {
 	public static class CollectionExtensionService
 	{
-		private const string _connectionString = @"Server=DESKTOP-JS0N1LD\SQLEXPRESS;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB";
+		private const string _connectionString = @"Server=.;Integrated Security=true;TrustServerCertificate=true;Database=TimeTrackerDB";
 
 		public static IServiceCollection AddTimeTrackerBeWebSharedBusinessLogic<TContext>(
 		this IServiceCollection services) // Parametr pro volbu mezi InMemory a MS SQL Server

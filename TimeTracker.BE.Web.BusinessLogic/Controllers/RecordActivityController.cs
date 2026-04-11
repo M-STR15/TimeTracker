@@ -57,7 +57,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("92344ec4-e18f-4cef-ab10-631c18775e67"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu aktivit.";
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("2df8ed97-a336-45f8-b939-0795846b92d2"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání seznamu aktivit.");
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("c9b777fa-2481-4ca1-845c-dbcc549131a9"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při získávání poslední aktivity.");
 			}
 		}
 
@@ -144,7 +144,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při vkládání záznamu aktivit.");
 			}
 		}
 
@@ -168,7 +168,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při vkládání aktivity: pauza.");
 			}
 		}
 
@@ -192,7 +192,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("77c48ffc-666e-4e91-accc-50565cfc3a72"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při vkládání aktivity: konec směny.");
 			}
 		}
 
@@ -223,7 +223,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 			catch (Exception ex)
 			{
 				await _eventLogService.LogErrorAsync(Guid.Parse("cac6b8ba-5ed2-41d2-8507-00218a8443ae"), ex);
-				return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+				return StatusCode(StatusCodes.Status500InternalServerError, "Chyba při mazání záznamu aktivity.");
 			}
 		}
 
