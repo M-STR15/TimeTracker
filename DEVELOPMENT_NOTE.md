@@ -17,4 +17,7 @@ Vývojové poznámky — výzvy, uživatel
 - Cílový uživatel: jednotlivci nebo malé týmy, kteøí chtìjí evidovat èas strávený na vývojových aktivitách a generovat reporty za dny/projekty.
 - Hlavní pøínos: snadné zapisování aktivit, pøehledné reporty, možnost exportu dat (viz Features v README).
 
-```
+## Konvence pojmenování
+- `aClassName` - abstraktní tøída
+- `privateMethodName()` - private metoda
+- `_fieldName` - private fields
