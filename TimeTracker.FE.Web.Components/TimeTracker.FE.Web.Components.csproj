@@ -33,9 +33,6 @@
 	</ItemGroup>-->
 	
 	<ItemGroup>
-		<Content Update="wwwroot\js\cssLoader.js">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Update="wwwroot\js\focusUtils.js">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>

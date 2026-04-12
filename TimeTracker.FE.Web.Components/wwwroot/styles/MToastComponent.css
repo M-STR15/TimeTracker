@@ -1,9 +1,0 @@
-﻿.m-toast-container-custom {
-  position: fixed;
-  top: 60px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  z-index: 1055;
-}

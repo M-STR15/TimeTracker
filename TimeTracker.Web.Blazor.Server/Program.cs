@@ -73,11 +73,14 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-	c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
-	c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
-});
+//if (builder.Environment.IsEnvironment("Testing"))
+//{
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+		c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+	});
+//}
 
 app.UseAntiforgery();
 app.MapStaticAssets();

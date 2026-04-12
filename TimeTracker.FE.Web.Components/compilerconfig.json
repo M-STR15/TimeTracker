@@ -1,38 +1,6 @@
 ﻿[
   {
-    "outputFile": "wwwroot/styles/MCombobox.css",
-    "inputFile": "MCombobox.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MButton.css",
-    "inputFile": "MButton.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MTabs.css",
-    "inputFile": "MTabs.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MToast.css",
-    "inputFile": "MToast.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MToastComponent.css",
-    "inputFile": "MToastComponent.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MTextArea.css",
-    "inputFile": "MTextArea.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MTextBox.css",
-    "inputFile": "MTextBox.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MRadioGroup.css",
-    "inputFile": "MRadioGroup.razor.scss"
-  },
-  {
-    "outputFile": "wwwroot/styles/MTable.css",
-    "inputFile": "MTable.razor.scss"
+    "outputFile": "wwwroot/styles/all.css",
+    "inputFile": "_Styles/main.scss"
   }
 ]
