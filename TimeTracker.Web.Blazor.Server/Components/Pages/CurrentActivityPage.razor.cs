@@ -34,10 +34,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 				changeActivity(recordActivityBaseDto);
 				StateHasChanged();
 			}
-			else
-			{
-				_toastNotificationService?.AddNotification(eNotificationType.Warning, "Bad Request", "Chyba při načítání požadavku.");
-			}
 		}
 
 		private async void postApi_EndShiftOrPause(string urlApi)
@@ -49,8 +45,6 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 
 				if (result.StatusCode == HttpStatusCode.OK)
 					readRequestRecordActivityDetailDto(result);
-				else
-					_toastNotificationService?.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
 			}
 			catch (Exception ex)
 			{
@@ -110,11 +104,11 @@ namespace TimeTracker.Web.Blazor.Server.Components.Pages
 						// Status 400 Bad Request
 						_toastNotificationService?.AddNotification(eNotificationType.Warning, "Bad Request", "Chybný požadavek.");
 					}
-					else
+					else if (responsevLastRecordActivity.StatusCode == HttpStatusCode.NoContent)
 					{
-						_responsevLastRecordActivityStatusCode = HttpStatusCode.InternalServerError;
+						_responsevLastRecordActivityStatusCode = HttpStatusCode.NoContent;
 						// Ostatní chyby
-						_toastNotificationService?.AddNotification(eNotificationType.Error, "Error", "Chybný požadavek.");
+						_toastNotificationService?.AddNotification(eNotificationType.Info, "Info", "Prozatím nejsou žádná data v databázi.");
 					}
 				}
 

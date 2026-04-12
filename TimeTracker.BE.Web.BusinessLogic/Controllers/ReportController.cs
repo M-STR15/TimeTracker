@@ -54,7 +54,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
@@ -83,7 +83,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
@@ -110,10 +110,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 
 				var totalTime = TotalTimesService.Get(calcHours_forToday_fromDb, calcHours_forShift_fromDb, _lastRecordActivity);
 
-				if (totalTime != null)
-					return totalTime != null ? Ok(totalTime) : Problem();
-				else
-					return NotFound();
+				return totalTime != null ? Ok(totalTime) : Problem();
 			}
 			catch (Exception ex)
 			{
@@ -139,7 +136,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (workplaceHours != null)
 					return workplaceHours != null ? Ok(workplaceHours) : Problem();
 				else
-					return NotFound();
+					return NoContent();
 			}
 			catch (Exception ex)
 			{
@@ -163,7 +160,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (list != null)
 					return list != null ? Ok(list) : Problem();
 				else
-					return NotFound();
+					return NoContent();
 			}
 			catch (Exception ex)
 			{

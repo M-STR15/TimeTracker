@@ -42,11 +42,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (projects != null)
 				{
 					var projectsDto = _mapper.Map<List<ProjectBaseDto>>(projects);
-					return projects != null ? Ok(projectsDto) : Problem();
+					return projects != null ? Ok(projectsDto) : BadRequest();
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
@@ -69,11 +69,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				if (subModules != null)
 				{
 					var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
-					return subModulesDto != null ? Ok(subModulesDto) : Problem();
+					return subModules != null ? Ok(subModulesDto) : BadRequest();
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
@@ -99,11 +99,11 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 					if (subModules != null)
 					{
 						var subModulesDto = _mapper.Map<List<SubModuleBaseDto>>(subModules);
-						return subModulesDto != null ? Ok(subModulesDto) : Problem();
+						return subModules != null ? Ok(subModulesDto) : BadRequest();
 					}
 					else
 					{
-						return NotFound();
+						return NoContent();
 					}
 				}
 				else

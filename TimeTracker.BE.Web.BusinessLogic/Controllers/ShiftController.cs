@@ -49,7 +49,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
@@ -77,7 +77,7 @@ namespace TimeTracker.BE.Web.BusinessLogic.Controllers
 				}
 				else
 				{
-					return NotFound();
+					return NoContent();
 				}
 			}
 			catch (Exception ex)
